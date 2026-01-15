@@ -1,0 +1,86 @@
+{
+  "name": "@forgestack/grid-table",
+  "version": "0.1.0",
+  "description": "A powerful, headless grid table component for React with Tailwind CSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./hooks": {
+      "import": "./dist/hooks/index.mjs",
+      "require": "./dist/hooks/index.js",
+      "types": "./dist/hooks/index.d.ts"
+    },
+    "./context": {
+      "import": "./dist/context/index.mjs",
+      "require": "./dist/context/index.js",
+      "types": "./dist/context/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "release": "npm run build && npm publish --access public",
+    "release:patch": "npm version patch && npm run release",
+    "release:minor": "npm version minor && npm run release",
+    "release:major": "npm version major && npm run release"
+  },
+  "keywords": [
+    "react",
+    "table",
+    "grid",
+    "data-table",
+    "tailwind",
+    "typescript",
+    "drag-drop",
+    "sorting",
+    "filtering",
+    "pagination",
+    "responsive",
+    "headless"
+  ],
+  "author": "John Yaghobieh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaghobieh/ForgeStack.git",
+    "directory": "packages/grid-table"
+  },
+  "bugs": {
+    "url": "https://github.com/yaghobieh/ForgeStack/issues"
+  },
+  "homepage": "https://forgestack.dev/table",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}

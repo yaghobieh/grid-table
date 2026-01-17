@@ -1,25 +1,25 @@
 {
-  "name": "@forgestack/grid-table",
-  "version": "0.1.0",
+  "name": "@forgedevstack/grid-table",
+  "version": "1.0.1",
   "description": "A powerful, headless grid table component for React with Tailwind CSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.mjs",
-      "require": "./dist/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts"
+      "require": "./dist/hooks/index.js"
     },
     "./context": {
+      "types": "./dist/context/index.d.ts",
       "import": "./dist/context/index.mjs",
-      "require": "./dist/context/index.js",
-      "types": "./dist/context/index.d.ts"
+      "require": "./dist/context/index.js"
     }
   },
   "files": [
@@ -56,13 +56,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yaghobieh/ForgeStack.git",
-    "directory": "packages/grid-table"
+    "url": "https://github.com/yaghobieh/grid-table.git"
   },
   "bugs": {
-    "url": "https://github.com/yaghobieh/ForgeStack/issues"
+    "url": "https://github.com/yaghobieh/grid-table/issues"
   },
-  "homepage": "https://forgestack.dev/table",
+  "homepage": "https://forgedevstack.dev/table",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

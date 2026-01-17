@@ -1,0 +1,10 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Grid Body
+.grid-body {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gt-bg-primary, #ffffff);
+  width: 100%;
+}

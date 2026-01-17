@@ -93,7 +93,7 @@ export function FilterPopup({
   return (
     <div
       ref={popupRef}
-      className={`filter-popup absolute z-50 bg-theme-primary border border-theme-border rounded-lg shadow-xl min-w-[280px] ${className}`}
+      className={`filter-popup ${className}`}
       style={{
         top: position?.top ?? '100%',
         left: position?.left ?? 0,
@@ -101,27 +101,27 @@ export function FilterPopup({
         ...style,
       }}
     >
-      <div className="filter-popup-header px-4 py-3 border-b border-theme-border">
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-theme-primary">{columnHeader}</span>
+      <div className="filter-popup-header">
+        <div className="header-content">
+          <span className="header-title">{columnHeader}</span>
           <button
             onClick={onClose}
-            className="p-1 rounded hover:bg-theme-hover text-theme-muted"
+            className="header-close"
             aria-label="Close"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
       </div>
 
-      <div className="filter-popup-body p-4 space-y-4">
+      <div className="filter-popup-body">
         {filterType === 'select' && filterOptions ? (
           <select
             value={String(value)}
             onChange={(e) => setValue(e.target.value)}
-            className="w-full px-3 py-2 text-sm rounded border border-theme-border bg-theme-secondary text-theme-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+            className="w-full px-3 py-2 text-sm rounded"
           >
             <option value="">Select...</option>
             {filterOptions.map((opt) => (
@@ -132,12 +132,12 @@ export function FilterPopup({
           </select>
         ) : (
           <>
-            <div>
-              <label className="block text-xs text-theme-muted mb-1">Operator</label>
+            <div className="filter-field">
+              <label>Operator</label>
               <select
                 value={operator}
                 onChange={(e) => setOperator(e.target.value as FilterOperator)}
-                className="w-full px-3 py-2 text-sm rounded border border-theme-border bg-theme-secondary text-theme-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                className="w-full px-3 py-2 text-sm rounded"
               >
                 {operators.map((op) => (
                   <option key={op} value={op}>
@@ -147,15 +147,15 @@ export function FilterPopup({
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs text-theme-muted mb-1">Value</label>
+            <div className="filter-field">
+              <label>Value</label>
               <input
                 type={filterType === 'number' ? 'number' : 'text'}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={`Filter ${columnHeader}...`}
-                className="w-full px-3 py-2 text-sm rounded border border-theme-border bg-theme-secondary text-theme-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                className="w-full px-3 py-2 text-sm rounded"
                 autoFocus
               />
             </div>
@@ -163,16 +163,16 @@ export function FilterPopup({
         )}
       </div>
 
-      <div className="filter-popup-footer px-4 py-3 border-t border-theme-border flex items-center justify-between">
+      <div className="filter-popup-footer">
         <button
           onClick={handleClear}
-          className="px-3 py-1.5 text-sm text-theme-muted hover:text-theme-primary transition-colors"
+          className="filter-clear"
         >
           {translations.clearFilter}
         </button>
         <button
           onClick={handleApply}
-          className="px-4 py-1.5 text-sm bg-accent-primary text-white rounded hover:opacity-90 transition-opacity"
+          className="filter-apply"
         >
           {translations.apply}
         </button>

@@ -130,24 +130,24 @@ export function GridRow<T extends RowData = RowData>({
         onMouseLeave={() => setIsHovered(false)}
       >
         {enableSelection && (
-          <div className="grid-row-select flex items-center px-2">
+          <div className="grid-row-select">
             <input
               type="checkbox"
               checked={isSelected}
               onChange={handleSelectChange}
               disabled={isDisabled}
-              className="w-4 h-4 rounded border-theme-border"
+              className="grid-row-checkbox"
               aria-label="Select row"
             />
           </div>
         )}
 
         {enableExpansion && renderExpansion && (
-          <div className="grid-row-expand flex items-center px-2">
+          <div className="grid-row-expand">
             <button
               onClick={handleExpandToggle}
               disabled={isDisabled}
-              className="w-6 h-6 flex items-center justify-center rounded hover:bg-theme-tertiary"
+              className="grid-row-expand-button"
               aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
               aria-expanded={isExpanded}
             >
@@ -199,7 +199,7 @@ export function GridRow<T extends RowData = RowData>({
               align={col.align}
               showLabel={isMobile && showMobileLabels && col.showLabelOnMobile !== false}
               labelText={typeof col.header === 'string' ? col.header : col.id}
-              className={isMobile ? 'w-full sm:w-auto flex-shrink-0' : 'flex-shrink-0'}
+              className={isMobile ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0'}
               sticky={col.sticky}
               stickyOffset={stickyOffset}
               onClick={onCellClick}
@@ -209,7 +209,7 @@ export function GridRow<T extends RowData = RowData>({
       </div>
 
       {isExpanded && renderExpansion && (
-        <div className="grid-row-expansion border-b border-theme-border bg-theme-secondary p-4">
+        <div className="grid-row-expansion">
           {renderExpansion(row)}
         </div>
       )}

@@ -1,0 +1,65 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Grid Row
+.grid-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+  @include transition(background-color);
+  cursor: default;
+  width: 100%;
+  min-width: 100%;
+
+  &:hover {
+    background-color: var(--gt-bg-hover, #4e4e4e);
+  }
+
+  &.selected {
+    background-color: rgba(24, 144, 255, 0.1);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+.grid-row-select {
+  @include flex-center;
+  padding: 0 0.5rem;
+}
+
+.grid-row-checkbox {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+}
+
+.grid-row-expand {
+  @include flex-center;
+  padding: 0 0.5rem;
+}
+
+.grid-row-expand-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  @include flex-center;
+  border-radius: 0.25rem;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--gt-bg-tertiary, #3c3c3c);
+  }
+}
+
+.grid-row-expansion {
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  background-color: var(--gt-bg-secondary, #2b2b2b);
+  padding: 1rem;
+}

@@ -1,0 +1,150 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Mobile Drawer
+.mobile-drawer-container {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.mobile-drawer-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: black;
+  @include transition(opacity);
+}
+
+.mobile-drawer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--gt-bg-primary, #1e1e1e);
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-header {
+  @include flex-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--gt-text-primary, #a9b7c6);
+  }
+
+  button {
+    @include button-base;
+    padding: 0.5rem;
+    background-color: transparent;
+    color: var(--gt-text-secondary, #808080);
+
+    &:hover {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+  }
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-filter-content,
+.drawer-sort-content,
+.drawer-columns-content {
+  padding: 1rem;
+
+  > div:first-child {
+    @include flex-between;
+    margin-bottom: 1rem;
+
+    button {
+      font-size: 0.875rem;
+      color: var(--gt-accent-primary, #1890ff);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.filter-item {
+  margin-bottom: 0.75rem;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gt-text-secondary, #808080);
+    margin-bottom: 0.25rem;
+  }
+
+  input {
+    @include input-base;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+.drawer-sort-content {
+  button {
+    @include button-base;
+    width: 100%;
+    @include flex-between;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+    color: var(--gt-text-primary, #a9b7c6);
+    font-size: 0.875rem;
+
+    &.active {
+      border-color: var(--gt-accent-primary, #1890ff);
+      background-color: rgba(24, 144, 255, 0.1);
+    }
+
+    &:hover:not(.active) {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+  }
+}
+
+.drawer-columns-content {
+  label {
+    @include flex-center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    @include transition(background-color);
+
+    &:hover {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+
+    input[type="checkbox"] {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+      border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+    }
+
+    span {
+      font-size: 0.875rem;
+      color: var(--gt-text-primary, #a9b7c6);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Base Grid Table
+.grid-table {
+  background-color: var(--gt-bg-primary, #ffffff);
+  border-radius: 0.5rem;
+  border: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-table-container {
+  overflow: auto;
+  width: 100%;
+}

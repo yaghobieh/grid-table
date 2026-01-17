@@ -1,0 +1,50 @@
+// SCSS Mixins
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin transition($properties...) {
+  transition: $properties;
+  transition-duration: 0.15s;
+}
+
+@mixin focus-ring {
+  outline: none;
+  border-color: var(--gt-accent-primary, #1890ff);
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+@mixin button-base {
+  border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  border-radius: 0.25rem;
+  cursor: pointer;
+  @include transition(background-color, color, border-color);
+}
+
+@mixin input-base {
+  border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  border-radius: 0.25rem;
+  background-color: var(--gt-bg-secondary, #2b2b2b);
+  color: var(--gt-text-primary, #a9b7c6);
+  outline: none;
+  @include transition(border-color, box-shadow);
+  
+  &:focus {
+    @include focus-ring;
+  }
+}

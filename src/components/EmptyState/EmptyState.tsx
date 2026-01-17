@@ -18,18 +18,18 @@ export function EmptyState({
 
   return (
     <div
-      className={`grid-empty-state flex flex-col items-center justify-center py-16 px-8 text-center ${className}`}
+      className={`grid-empty-state ${className}`}
       style={style}
       role="status"
     >
       {icon && (
-        <div className="grid-empty-icon mb-4 text-theme-muted text-4xl">{icon}</div>
+        <div className="grid-empty-icon">{icon}</div>
       )}
 
       {!icon && (
-        <div className="grid-empty-icon mb-4 text-theme-muted">
+        <div className="grid-empty-icon">
           <svg
-            className="w-16 h-16"
+            className="icon-lg"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -44,12 +44,12 @@ export function EmptyState({
         </div>
       )}
 
-      <h3 className="grid-empty-title text-lg font-medium text-theme-primary mb-2">
+      <h3 className="grid-empty-title">
         {displayTitle}
       </h3>
 
       {displayDescription && (
-        <p className="grid-empty-description text-sm text-theme-muted max-w-sm mb-4">
+        <p className="grid-empty-description">
           {displayDescription}
         </p>
       )}

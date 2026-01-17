@@ -5,6 +5,30 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-01-17
+
+### Changed
+
+- **BREAKING**: Migrated from Tailwind CSS to SCSS for zero-config styling
+  - Removed Tailwind CSS dependency completely
+  - All styles now self-contained in SCSS
+  - Compiled CSS included in package
+  - No Tailwind configuration required
+- Fixed package.json exports order - moved `types` before `import` and `require` to resolve TypeScript warnings
+- Updated package name to `@forgedevstack/grid-table` to match npm organization
+
+### Added
+
+- SCSS source files for better maintainability
+- Compiled CSS file in dist for zero-config usage
+- Build process now compiles SCSS to CSS automatically
+
+## [1.0.1] - 2026-01-17
+
+### Changed
+
+- Initial npm publication with `@forgedevstack` scope
+
 ## [0.1.0] - 2026-01-15
 
 ### Added

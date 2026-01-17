@@ -1,0 +1,126 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Grid Header
+.grid-header {
+  display: flex;
+  background-color: var(--gt-bg-secondary, #f5f5f5);
+  width: 100%;
+  min-width: 100%;
+}
+
+.grid-header-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--gt-text-secondary, #595959);
+  user-select: none;
+  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+  @include transition(color, background-color);
+  flex-shrink: 0;
+  min-width: 0;
+
+  &:hover {
+    color: var(--gt-text-primary, #262626);
+    background-color: var(--gt-bg-hover, #e0e0e0);
+  }
+
+  &.sticky-left,
+  &.sticky-right {
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Last column fills remaining space automatically
+.grid-header > .relative:last-child .grid-header-cell {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.grid-header-content {
+  @include truncate;
+  flex: 1;
+}
+
+.grid-header-sort {
+  @include flex-center;
+  gap: 0.125rem;
+}
+
+.grid-header-filter {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--gt-bg-tertiary, #3c3c3c);
+  }
+}
+
+.grid-header-resize {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.25rem;
+  cursor: col-resize;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--gt-accent-primary, #1890ff);
+  }
+}
+
+.grid-header-select {
+  @include flex-center;
+  padding: 0 0.5rem;
+  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+}
+
+.grid-header-checkbox {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+}
+
+.grid-header-actions {
+  @include flex-center;
+  gap: 0.25rem;
+
+  button {
+    @include button-base;
+    padding: 0.25rem;
+    background-color: transparent;
+    color: var(--gt-text-secondary, #808080);
+    width: 1.5rem;
+    height: 1.5rem;
+
+    &:hover {
+      background-color: var(--gt-bg-hover, #e0e0e0);
+      color: var(--gt-text-primary, #262626);
+    }
+  }
+}
+
+// Icon sizes
+.icon-sm {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.icon-md {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-lg {
+  width: 4rem;
+  height: 4rem;
+}

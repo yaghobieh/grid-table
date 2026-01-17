@@ -85,19 +85,15 @@ export function GridCell<T extends RowData = RowData>({
 
   const alignClass = ALIGN_CLASSES[align];
 
-  const stickyClasses = sticky
-    ? 'shadow-[2px_0_4px_-2px_rgba(0,0,0,0.2)]'
-    : '';
+  const stickyClass = sticky ? `sticky-${sticky}` : '';
 
   return (
     <div
       className={`
         grid-cell
-        px-4 py-3
-        flex items-center
         ${alignClass}
-        ${stickyClasses}
-        ${onClick ? 'cursor-pointer hover:bg-theme-hover' : ''}
+        ${stickyClass}
+        ${onClick ? 'cursor-pointer' : ''}
         ${column.cellClassName || ''}
         ${className}
       `.trim()}
@@ -106,7 +102,7 @@ export function GridCell<T extends RowData = RowData>({
       onClick={onClick ? handleClick : undefined}
     >
       {showLabel && labelText && (
-        <span className="grid-cell-label font-medium text-theme-muted mr-2 text-sm">
+        <span className="grid-cell-label">
           {labelText}:
         </span>
       )}

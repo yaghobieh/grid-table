@@ -1,0 +1,86 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Toolbar
+.grid-table-toolbar {
+  @include flex-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+
+  .toolbar-search-wrapper {
+    flex: 1;
+    position: relative;
+  }
+
+  input {
+    @include input-base;
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-right: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: var(--gt-text-muted, #606060);
+    pointer-events: none;
+  }
+
+  .clear-button {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gt-text-muted, #606060);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    @include flex-center;
+    @include transition(color);
+
+    &:hover {
+      color: var(--gt-text-primary, #a9b7c6);
+    }
+  }
+
+  .filter-badge {
+    @include flex-center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+    color: var(--gt-text-secondary, #808080);
+    @include transition(background-color);
+
+    &:hover {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+  }
+
+  .toolbar-actions {
+    @include flex-center;
+    gap: 0.5rem;
+  }
+
+  .toolbar-action-button {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+    background-color: transparent;
+    @include transition(background-color);
+
+    &:hover {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+  }
+}

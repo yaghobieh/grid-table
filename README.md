@@ -1,10 +1,10 @@
 # grid-table
 
-A powerful, headless grid table component for React with Tailwind CSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support.
+A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support. Zero-config - no Tailwind CSS required!
 
 ## Features
 
-- **Tailwind CSS + DIVs**: No `<table>` elements, fully customizable with Tailwind
+- **SCSS Styling**: Self-contained SCSS styles, no Tailwind CSS dependency required
 - **React 16.8+**: Works with all React versions that support hooks
 - **Dark/Light Theme**: Built-in theme support with customizable colors
 - **Filtering**: Column-level and global filtering with multiple operators
@@ -24,12 +24,23 @@ A powerful, headless grid table component for React with Tailwind CSS styling, d
 ## Installation
 
 ```bash
-npm install grid-table
+npm install @forgedevstack/grid-table
 # or
-pnpm add grid-table
+pnpm add @forgedevstack/grid-table
 # or
-yarn add grid-table
+yarn add @forgedevstack/grid-table
 ```
+
+### Import CSS (Required)
+
+**Zero-config setup** - No Tailwind CSS required! Import the compiled CSS file once in your app:
+
+```tsx
+// In your main entry file (e.g., main.tsx, App.tsx, or index.css)
+import '@forgedevstack/grid-table/grid-table.css';
+```
+
+This provides all the necessary styles. The package uses SCSS internally and compiles to CSS - no configuration needed!
 
 ## Quick Start
 

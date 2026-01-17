@@ -1,0 +1,33 @@
+// CSS Variables for theming
+:root {
+  // Theme Colors - Light (default)
+  --gt-bg-primary: #ffffff;
+  --gt-bg-secondary: #f5f5f5;
+  --gt-bg-tertiary: #ebebeb;
+  --gt-bg-hover: #e0e0e0;
+  --gt-text-primary: #262626;
+  --gt-text-secondary: #595959;
+  --gt-text-muted: #8c8c8c;
+  --gt-border-color: rgba(0, 0, 0, 0.06);
+  --gt-accent-primary: #1890ff;
+  --gt-accent-success: #52c41a;
+  --gt-accent-warning: #faad14;
+  --gt-accent-error: #ff4d4f;
+}
+
+html.dark,
+.dark {
+  // Theme Colors - Dark
+  --gt-bg-primary: #1e1e1e;
+  --gt-bg-secondary: #2b2b2b;
+  --gt-bg-tertiary: #3c3c3c;
+  --gt-bg-hover: #4e4e4e;
+  --gt-text-primary: #a9b7c6;
+  --gt-text-secondary: #808080;
+  --gt-text-muted: #606060;
+  --gt-border-color: rgba(255, 255, 255, 0.08);
+  --gt-accent-primary: #1890ff;
+  --gt-accent-success: #52c41a;
+  --gt-accent-warning: #faad14;
+  --gt-accent-error: #ff4d4f;
+}

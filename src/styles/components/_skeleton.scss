@@ -1,0 +1,59 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Skeleton
+.grid-skeleton {
+  background-color: var(--gt-bg-primary, #1e1e1e);
+}
+
+.grid-skeleton-header {
+  display: flex;
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  background-color: var(--gt-bg-secondary, #2b2b2b);
+
+  > div {
+    padding: 0.75rem 1rem;
+    flex-shrink: 0;
+
+    > div {
+      border-radius: 0.25rem;
+      background-color: var(--gt-bg-tertiary, #3c3c3c);
+
+      &.animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    }
+  }
+}
+
+.grid-skeleton-body {
+  background-color: var(--gt-bg-primary, #1e1e1e);
+}
+
+.grid-skeleton-row {
+  display: flex;
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+}
+
+.grid-skeleton-cell {
+  padding: 0.75rem 1rem;
+  flex-shrink: 0;
+
+  > div {
+    border-radius: 0.25rem;
+    background-color: var(--gt-bg-tertiary, #3c3c3c);
+
+    &.animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

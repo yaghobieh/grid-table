@@ -33,6 +33,7 @@ export interface GridHeaderCellProps<T extends RowData = RowData> {
   hasFilter?: boolean;
   isDragging?: boolean;
   isDragOver?: boolean;
+  isLastColumn?: boolean;
   onSort?: () => void;
   onFilterOpen?: () => void;
   onResizeStart?: (event: React.MouseEvent) => void;

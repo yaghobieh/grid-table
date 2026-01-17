@@ -9,7 +9,7 @@ import { FilterPopup } from '../FilterPopup';
 
 const FilterIcon = ({ active = false }: { active?: boolean }) => (
   <svg
-    className={`w-3.5 h-3.5 ${active ? 'text-accent-primary' : 'text-theme-muted'}`}
+    className={`icon-sm ${active ? 'text-accent-primary' : 'text-theme-muted'}`}
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -25,7 +25,7 @@ const FilterIcon = ({ active = false }: { active?: boolean }) => (
 
 const SortIcon = ({ direction }: { direction: SortDirection }) => (
   <svg
-    className={`w-3.5 h-3.5 ${direction ? 'text-accent-primary' : 'text-theme-muted'}`}
+    className={`icon-sm ${direction ? 'text-accent-primary' : 'text-theme-muted'}`}
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -42,7 +42,7 @@ const SortIcon = ({ direction }: { direction: SortDirection }) => (
 );
 
 const DragIcon = () => (
-  <svg className="w-3.5 h-3.5 text-theme-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+  <svg className="icon-sm text-theme-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
   </svg>
 );
@@ -101,24 +101,11 @@ function HeaderCell<T extends RowData>({
   const cellClasses = useMemo(() => {
     const classes = [
       'grid-header-cell',
-      'relative',
-      'flex',
-      'items-center',
-      'gap-2',
-      'px-4',
-      'py-3',
-      'font-medium',
-      'text-sm',
-      'text-theme-secondary',
-      'select-none',
-      'border-b',
-      'border-theme-border',
-      'transition-colors',
       ALIGN_CLASSES[column.align || 'left'],
     ];
 
     if (isSortable) {
-      classes.push('cursor-pointer', 'hover:text-theme-primary', 'hover:bg-theme-hover');
+      classes.push('cursor-pointer');
     }
 
     if (isDragging) {
@@ -126,7 +113,7 @@ function HeaderCell<T extends RowData>({
     }
 
     if (isDragOver) {
-      classes.push('bg-accent-primary/10', 'border-l-2', 'border-l-accent-primary');
+      classes.push('bg-accent-primary/10');
     }
 
     return classes.join(' ');
@@ -134,7 +121,7 @@ function HeaderCell<T extends RowData>({
 
   return (
     <div
-      className={`${cellClasses} ${column.headerClassName || ''} ${column.sticky ? 'shadow-[2px_0_4px_-2px_rgba(0,0,0,0.2)]' : ''}`}
+      className={`${cellClasses} ${column.headerClassName || ''} ${column.sticky ? `sticky-${column.sticky}` : ''}`}
       style={{
         width: columnState.width,
         minWidth: column.minWidth || MIN_COLUMN_WIDTH,
@@ -153,10 +140,10 @@ function HeaderCell<T extends RowData>({
       onClick={handleClick}
       {...(isDraggable ? { ...dragHandleProps, ...dropTargetProps } : {})}
     >
-      <span className="grid-header-content truncate flex-1">{headerContent}</span>
+      <span className="grid-header-content">{headerContent}</span>
 
       {isSortable && (
-        <span className="grid-header-sort flex items-center gap-0.5">
+        <span className="grid-header-sort">
           <SortIcon direction={sortDirection ?? null} />
           {isMultiSort && sortIndex !== undefined && sortIndex >= 0 && sortDirection && (
             <span className="text-xs text-theme-muted">{sortIndex + 1}</span>
@@ -167,7 +154,7 @@ function HeaderCell<T extends RowData>({
       {isFilterable && (
         <button
           onClick={handleFilterClick}
-          className="grid-header-filter p-1 rounded hover:bg-theme-tertiary"
+          className="grid-header-filter"
           aria-label="Filter column"
         >
           <FilterIcon active={hasFilter} />
@@ -176,7 +163,7 @@ function HeaderCell<T extends RowData>({
 
       {isResizable && (
         <div
-          className="grid-header-resize absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-accent-primary"
+          className="grid-header-resize"
           onMouseDown={onResizeStart}
           onClick={(e) => e.stopPropagation()}
         />
@@ -283,7 +270,7 @@ export function GridHeader<T extends RowData = RowData>({
   return (
     <div className={`${headerClasses} ${className}`} style={style} role="row">
       {enableSelection && (
-        <div className="grid-header-select flex items-center px-2 border-b border-theme-border">
+        <div className="grid-header-select">
           <input
             type="checkbox"
             checked={allSelected}
@@ -291,7 +278,7 @@ export function GridHeader<T extends RowData = RowData>({
               if (el) el.indeterminate = someSelected && !allSelected;
             }}
             onChange={onSelectAll}
-            className="w-4 h-4 rounded border-theme-border"
+            className="grid-header-checkbox"
             aria-label="Select all rows"
           />
         </div>
@@ -314,7 +301,7 @@ export function GridHeader<T extends RowData = RowData>({
         const headerText = typeof col.header === 'string' ? col.header : col.id;
 
         return (
-          <div key={col.id} className="relative">
+          <div key={col.id} className="relative" style={{ position: 'relative' }}>
             <HeaderCell
               column={col}
               columnState={colState}

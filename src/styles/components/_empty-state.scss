@@ -1,0 +1,42 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Empty State
+.grid-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: var(--gt-bg-primary, #1e1e1e);
+}
+
+.grid-empty-icon {
+  margin-bottom: 1rem;
+  color: var(--gt-text-muted, #606060);
+  font-size: 2.25rem;
+
+  svg {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.grid-empty-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--gt-text-primary, #a9b7c6);
+  margin-bottom: 0.5rem;
+}
+
+.grid-empty-description {
+  font-size: 0.875rem;
+  color: var(--gt-text-muted, #606060);
+  max-width: 24rem;
+  margin-bottom: 1rem;
+}
+
+.grid-empty-action {
+  margin-top: 1rem;
+}

@@ -98,25 +98,25 @@ export function Pagination({
 
   return (
     <div
-      className={`grid-pagination flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-theme-border ${className}`}
+      className={`grid-pagination ${className}`}
       style={style}
       role="navigation"
       aria-label="Pagination"
     >
-      <div className="grid-pagination-info flex items-center gap-4">
-        <div className="grid-pagination-range text-sm text-theme-secondary">
+      <div className="grid-pagination-info">
+        <div className="grid-pagination-range">
           {startItem}-{endItem} {translations.of} {totalItems}
         </div>
 
-        <div className="grid-pagination-size flex items-center gap-2">
-          <label htmlFor="page-size" className="text-sm text-theme-muted">
+        <div className="grid-pagination-size">
+          <label htmlFor="page-size">
             {translations.rowsPerPage}:
           </label>
           <select
             id="page-size"
             value={pageSize}
             onChange={handlePageSizeChange}
-            className="px-2 py-1 text-sm rounded border border-theme-border bg-theme-primary text-theme-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+            className="px-2 py-1 text-sm rounded"
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
@@ -127,12 +127,12 @@ export function Pagination({
         </div>
       </div>
 
-      <div className="grid-pagination-controls flex items-center gap-1">
+      <div className="grid-pagination-controls">
         {showFirstLast && (
           <button
             onClick={handleFirstPage}
             disabled={!canGoPrevious}
-            className="p-2 rounded hover:bg-theme-hover disabled:opacity-50 disabled:cursor-not-allowed text-theme-secondary"
+            className="p-2 rounded text-theme-secondary"
             aria-label={translations.first}
           >
             &lt;&lt;
@@ -142,14 +142,14 @@ export function Pagination({
         <button
           onClick={handlePreviousPage}
           disabled={!canGoPrevious}
-          className="p-2 rounded hover:bg-theme-hover disabled:opacity-50 disabled:cursor-not-allowed text-theme-secondary"
+          className="p-2 rounded text-theme-secondary"
           aria-label={translations.previous}
         >
           &lt;
         </button>
 
         {showPageNumbers && (
-          <div className="grid-pagination-pages flex items-center gap-1">
+          <div className="grid-pagination-pages">
             {pageNumbers.map((pageNum, index) =>
               pageNum === 'ellipsis' ? (
                 <span key={`ellipsis-${index}`} className="px-2 text-theme-muted">
@@ -159,11 +159,7 @@ export function Pagination({
                 <button
                   key={pageNum}
                   onClick={() => onPageChange(pageNum)}
-                  className={`min-w-[32px] h-8 px-2 rounded text-sm transition-colors ${
-                    pageNum === page
-                      ? 'bg-accent-primary text-white'
-                      : 'hover:bg-theme-hover text-theme-secondary'
-                  }`}
+                  className={`min-w-[32px] h-8 px-2 rounded text-sm ${pageNum === page ? 'active' : ''}`}
                   aria-current={pageNum === page ? 'page' : undefined}
                 >
                   {pageNum}
@@ -176,7 +172,7 @@ export function Pagination({
         <button
           onClick={handleNextPage}
           disabled={!canGoNext}
-          className="p-2 rounded hover:bg-theme-hover disabled:opacity-50 disabled:cursor-not-allowed text-theme-secondary"
+          className="p-2 rounded text-theme-secondary"
           aria-label={translations.next}
         >
           &gt;
@@ -186,7 +182,7 @@ export function Pagination({
           <button
             onClick={handleLastPage}
             disabled={!canGoNext}
-            className="p-2 rounded hover:bg-theme-hover disabled:opacity-50 disabled:cursor-not-allowed text-theme-secondary"
+            className="p-2 rounded text-theme-secondary"
             aria-label={translations.last}
           >
             &gt;&gt;

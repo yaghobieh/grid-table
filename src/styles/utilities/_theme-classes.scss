@@ -1,0 +1,19 @@
+@import '../base/variables';
+
+// Map Tailwind theme classes to CSS variables (for backward compatibility)
+.bg-theme-primary { background-color: var(--gt-bg-primary, #1e1e1e) !important; }
+.bg-theme-secondary { background-color: var(--gt-bg-secondary, #2b2b2b) !important; }
+.bg-theme-tertiary { background-color: var(--gt-bg-tertiary, #3c3c3c) !important; }
+.bg-theme-hover { background-color: var(--gt-bg-hover, #4e4e4e) !important; }
+.text-theme-primary { color: var(--gt-text-primary, #a9b7c6) !important; }
+.text-theme-secondary { color: var(--gt-text-secondary, #808080) !important; }
+.text-theme-muted { color: var(--gt-text-muted, #606060) !important; }
+.border-theme-border { border-color: var(--gt-border-color, rgba(255, 255, 255, 0.08)) !important; }
+.bg-accent-primary { background-color: var(--gt-accent-primary, #1890ff) !important; }
+.text-accent-primary { color: var(--gt-accent-primary, #1890ff) !important; }
+.bg-accent-primary\/10 { background-color: rgba(24, 144, 255, 0.1) !important; }
+.hover\:bg-theme-hover:hover { background-color: var(--gt-bg-hover, #4e4e4e) !important; }
+.hover\:text-theme-primary:hover { color: var(--gt-text-primary, #a9b7c6) !important; }
+.hover\:bg-accent-primary\/90:hover { background-color: rgba(24, 144, 255, 0.9) !important; }
+.hover\:bg-theme-tertiary:hover { background-color: var(--gt-bg-tertiary, #3c3c3c) !important; }
+.hover\:opacity-90:hover { opacity: 0.9; }

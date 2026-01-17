@@ -134,7 +134,7 @@ function GridTableContent<T extends RowData>({
             onRetry && (
               <button
                 onClick={onRetry}
-                className="px-4 py-2 bg-accent-primary text-white rounded hover:bg-accent-primary/90"
+                className="px-4 py-2 bg-accent-primary text-white rounded hover:opacity-90 cursor-pointer"
               >
                 {state.translations.retry}
               </button>
@@ -173,17 +173,17 @@ function GridTableContent<T extends RowData>({
 
   return (
     <div
-      className={`grid-table bg-theme-primary rounded-lg border border-theme-border overflow-hidden ${classNames.root || ''} ${className}`}
+      className={`grid-table rounded-lg border overflow-hidden ${classNames.root || ''} ${className}`}
       style={containerStyle}
       role="table"
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
 
       {showGlobalFilter && (
-        <div className="grid-table-toolbar flex items-center gap-4 px-4 py-3 border-b border-theme-border">
-          <div className="flex-1 relative">
+        <div className="grid-table-toolbar">
+          <div className="toolbar-search-wrapper">
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-muted"
+              className="search-icon"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -196,15 +196,15 @@ function GridTableContent<T extends RowData>({
               value={state.globalFilter}
               onChange={(e) => actions.setGlobalFilter(e.target.value)}
               placeholder={state.translations.search}
-              className="w-full pl-10 pr-3 py-2 text-sm rounded border border-theme-border bg-theme-secondary text-theme-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+              className="w-full pl-10 pr-3 py-2 text-sm rounded"
             />
             {state.globalFilter && (
               <button
                 onClick={() => actions.setGlobalFilter('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme-primary"
+                className="clear-button"
                 aria-label="Clear search"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -214,9 +214,9 @@ function GridTableContent<T extends RowData>({
           {state.filters.length > 0 && (
             <button
               onClick={() => actions.clearFilters()}
-              className="flex items-center gap-2 px-3 py-2 text-sm rounded border border-theme-border hover:bg-theme-hover text-theme-secondary"
+              className="filter-badge"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
               <span>{state.filters.length} filter{state.filters.length > 1 ? 's' : ''}</span>
@@ -224,31 +224,31 @@ function GridTableContent<T extends RowData>({
           )}
 
           {shouldShowMobileView && (
-            <div className="flex items-center gap-2">
+            <div className="toolbar-actions">
               <button
                 onClick={() => actions.openMobileDrawer('filter')}
-                className="p-2 rounded border border-theme-border hover:bg-theme-hover"
+                className="toolbar-action-button"
                 aria-label={state.translations.filter}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
               </button>
               <button
                 onClick={() => actions.openMobileDrawer('sort')}
-                className="p-2 rounded border border-theme-border hover:bg-theme-hover"
+                className="toolbar-action-button"
                 aria-label={state.translations.sort}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                 </svg>
               </button>
               <button
                 onClick={() => actions.openMobileDrawer('columns')}
-                className="p-2 rounded border border-theme-border hover:bg-theme-hover"
+                className="toolbar-action-button"
                 aria-label={state.translations.columns}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
               </button>

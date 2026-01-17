@@ -1,0 +1,76 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+// Pagination (updated with all classes)
+.grid-pagination {
+  @include flex-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  background-color: var(--gt-bg-secondary, #2b2b2b);
+  font-size: 0.875rem;
+  color: var(--gt-text-secondary, #808080);
+}
+
+.grid-pagination-info {
+  @include flex-center;
+  gap: 1rem;
+}
+
+.grid-pagination-range {
+  font-size: 0.875rem;
+  color: var(--gt-text-secondary, #808080);
+}
+
+.grid-pagination-size {
+  @include flex-center;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    color: var(--gt-text-muted, #606060);
+  }
+
+  select {
+    @include input-base;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+.grid-pagination-controls {
+  @include flex-center;
+  gap: 0.25rem;
+}
+
+.grid-pagination-pages {
+  @include flex-center;
+  gap: 0.25rem;
+}
+
+.grid-pagination {
+  button {
+    @include button-base;
+    padding: 0.5rem;
+    background-color: var(--gt-bg-primary, #1e1e1e);
+    color: var(--gt-text-primary, #a9b7c6);
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.875rem;
+
+    &:hover:not(:disabled) {
+      background-color: var(--gt-bg-hover, #4e4e4e);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background-color: var(--gt-accent-primary, #1890ff);
+      color: white;
+    }
+  }
+}

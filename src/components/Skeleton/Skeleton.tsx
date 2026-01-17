@@ -11,7 +11,7 @@ function SkeletonCell({ width = DEFAULT_COLUMN_WIDTH, height = 16, animate = tru
       style={{ width: widthStyle }}
     >
       <div
-        className={`rounded bg-theme-tertiary ${animate ? 'animate-pulse' : ''}`}
+        className={`rounded ${animate ? 'animate-pulse' : ''}`}
         style={{ height: `${height}px`, width: '80%' }}
       />
     </div>
@@ -20,7 +20,7 @@ function SkeletonCell({ width = DEFAULT_COLUMN_WIDTH, height = 16, animate = tru
 
 function SkeletonRow({ columns, columnWidths, height = 16, animate = true }: SkeletonRowProps): ReactNode {
   return (
-    <div className="grid-skeleton-row flex border-b border-theme-border">
+    <div className="grid-skeleton-row">
       {Array.from({ length: columns }).map((_, index) => (
         <SkeletonCell
           key={index}
@@ -46,7 +46,7 @@ export function Skeleton({
   return (
     <div className={`grid-skeleton ${className}`} style={style} role="status" aria-label="Loading">
       {showHeader && (
-        <div className="grid-skeleton-header flex border-b border-theme-border bg-theme-secondary">
+        <div className="grid-skeleton-header">
           {Array.from({ length: columns }).map((_, index) => (
             <div
               key={index}
@@ -54,7 +54,7 @@ export function Skeleton({
               style={{ width: columnWidths?.[index] ?? DEFAULT_COLUMN_WIDTH }}
             >
               <div
-                className={`rounded bg-theme-tertiary ${animate ? 'animate-pulse' : ''}`}
+                className={`rounded ${animate ? 'animate-pulse' : ''}`}
                 style={{ height: '12px', width: '60%' }}
               />
             </div>

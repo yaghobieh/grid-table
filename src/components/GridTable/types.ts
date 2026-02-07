@@ -72,5 +72,7 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   globalFilterColumns?: string[];
   themeOverride?: Record<string, unknown>;
   studio?: boolean;
+  /** Applied to theme wrapper so themeOverride colors affect grid cells (internal use) */
+  gridThemeVars?: CSSProperties;
 }
 

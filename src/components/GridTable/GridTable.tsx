@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import type { GridTableComponentProps } from './types';
 import type { RowData } from '../../types';
@@ -56,11 +56,13 @@ function GridTableContent<T extends RowData>({
   expandRowOnDoubleClick,
   themeMode,
   paginationConfig,
+  gridThemeVars,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
 
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
+  const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
 
   const getRowIdFn = useCallback(
     (row: T): string | number => {
@@ -390,8 +392,12 @@ function GridTableContent<T extends RowData>({
     </div>
   );
 
-  if (themeClass) {
-    return <div className={themeClass}>{tableContent}</div>;
+  if (themeClass || hasGridThemeVars) {
+    return (
+      <div className={themeClass ?? undefined} style={hasGridThemeVars ? gridThemeVars : undefined}>
+        {tableContent}
+      </div>
+    );
   }
   return tableContent;
 }
@@ -426,6 +432,23 @@ export function GridTable<T extends RowData = RowData>({
 
   const effectiveData = studio ? studioData : data;
 
+  const gridThemeVars = useMemo((): CSSProperties => {
+    if (!themeOverride || typeof themeOverride !== 'object') return {};
+    const c = (themeOverride as Record<string, unknown>).colors as Record<string, Record<string, string>> | undefined;
+    if (!c) return {};
+    const vars: Record<string, string> = {};
+    if (c.text?.primary) vars['--gt-text-primary' as string] = c.text.primary;
+    if (c.text?.secondary) vars['--gt-text-secondary' as string] = c.text.secondary;
+    if (c.text?.muted) vars['--gt-text-muted' as string] = c.text.muted;
+    if (c.background?.primary) vars['--gt-bg-primary' as string] = c.background.primary;
+    if (c.background?.secondary) vars['--gt-bg-secondary' as string] = c.background.secondary;
+    if (c.background?.tertiary) vars['--gt-bg-tertiary' as string] = c.background.tertiary;
+    if (c.background?.hover) vars['--gt-bg-hover' as string] = c.background.hover;
+    if (c.border?.default) vars['--gt-border-color' as string] = c.border.default;
+    if (c.accent?.primary) vars['--gt-accent-primary' as string] = c.accent.primary;
+    return vars as CSSProperties;
+  }, [themeOverride]);
+
   const tableContent = (
     <TableProvider
       data={effectiveData}
@@ -454,13 +477,15 @@ export function GridTable<T extends RowData = RowData>({
         getRowId={getRowId}
         themeMode={themeMode}
         paginationConfig={paginationConfig}
+        gridThemeVars={gridThemeVars}
         {...props}
       />
     </TableProvider>
   );
 
+  const hasThemeOverride = themeOverride && Object.keys(themeOverride).length > 0;
   const withTheme =
-    themeOverride && Object.keys(themeOverride).length > 0 ? (
+    hasThemeOverride ? (
       <BearProvider theme={themeOverride as Record<string, unknown>} defaultMode={themeMode === 'dark' ? 'dark' : 'light'}>
         {tableContent}
       </BearProvider>

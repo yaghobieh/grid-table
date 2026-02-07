@@ -1,6 +1,10 @@
 # grid-table
 
-A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support. Zero-config - no Tailwind CSS required!
+<p align="center">
+  <img src="https://github.com/yaghobieh/grid-table/docs/logo.svg" alt="Grid Table logo" width="120" />
+</p>
+
+**@forgedevstack/grid-table** v1.0.5 — A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support. Zero-config — no Tailwind CSS required. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
@@ -25,20 +29,11 @@ A powerful, headless grid table component for React with SCSS styling, drag-and-
 
 ## Installation
 
-```bash
-npm install @forgedevstack/grid-table
-# or
-pnpm add @forgedevstack/grid-table
-# or
-yarn add @forgedevstack/grid-table
-```
-
-### Dependencies
-
-Grid-table is part of ForgeStack and uses **@forgedevstack/bear** for checkboxes, tooltips, and theming. Install Bear (peer dependency):
+One install only — no need to install Bear separately; it’s included as a dependency.
 
 ```bash
-npm install @forgedevstack/grid-table @forgedevstack/bear
+npm i @forgedevstack/grid-table
+# or: npm install / pnpm add / yarn add
 ```
 
 ### Import CSS (Required)
@@ -138,6 +133,54 @@ const customTheme: Partial<Theme> = {
 <GridTable data={data} columns={columns} theme={customTheme} />;
 ```
 
+## Integration with Bear
+
+Grid-table uses **@forgedevstack/bear** for controls (Select, Pagination, Checkbox, Tooltip, Typography) and can **drive Bear’s theme from the table**. You don’t need a separate Bear `ThemeProvider` for the table — the table can control it.
+
+### Benefits
+
+- **Single place for theme** — Set `themeMode` and optionally `themeOverride` on `GridTable`; Bear components inside the table (filters, pagination, row selection) use that theme.
+- **Light / dark from the table** — `themeMode="light"` or `themeMode="dark"` applies to both the grid and all Bear UI inside it (no extra provider).
+- **Full Bear theme override** — Pass `themeOverride` (Bear theme shape) and the table wraps its content in Bear’s provider, so every Bear component in the table respects your custom theme.
+- **Consistent look** — Table and Bear controls share the same design tokens and mode.
+
+### Control Bear theme via the table
+
+**Light or dark mode** (table + Bear components):
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  themeMode="dark"
+/>
+```
+
+**System (follow OS preference):**
+
+```tsx
+<GridTable data={data} columns={columns} themeMode="system" />
+```
+
+**Custom Bear theme** (table wraps content in Bear’s provider):
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  themeMode="dark"
+  themeOverride={{
+    colors: {
+      primary: '#b91c1c',
+      background: { default: '#1c1917', paper: '#292524' },
+      text: { primary: '#fafaf9', secondary: '#a8a29e' },
+    },
+  }}
+/>
+```
+
+So yes: **Bear’s theme for the table can be fully controlled via the table** — `themeMode` for light/dark/system, and `themeOverride` for a custom Bear theme object.
+
 ## Translations
 
 ```tsx
@@ -224,6 +267,34 @@ const columns: ColumnDefinition<User>[] = [
 ];
 ```
 
+## Studio
+
+**Studio** is an optional side panel for development and prototyping. Enable it with the `studio` prop:
+
+- **Data** — Inspect the current table data (JSON).
+- **Props** — View a snapshot of the GridTable props.
+- **Generate** — Generate sample data from your column definitions (1–100 rows) and push it into the table.
+
+The panel is fixed on the right, collapsible via a toggle, and uses the table’s theme. Use it to try different data shapes without touching your backend.
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  studio={true}
+/>
+```
+
+![Studio panel](./docs/screenshots/studio-panel.png)
+
+## Screenshots
+
+| Full table | Studio panel | Mobile view |
+|-----------|--------------|-------------|
+| ![Full table](./docs/screenshots/full-table.png) | ![Studio](./docs/screenshots/studio-panel.png) | ![Mobile](./docs/screenshots/mobile-view.png) |
+
+_Add your own screenshots to `docs/screenshots/` (e.g. `full-table.png`, `studio-panel.png`, `mobile-view.png`) to show the table in action._
+
 ## API Reference
 
 ### GridTable Props
@@ -248,8 +319,10 @@ const columns: ColumnDefinition<User>[] = [
 | `enableCellAutoSizeOnDoubleClick` | `boolean` | `false` | Double-click cell to expand width to fit content |
 | `subCellExpandTrigger` | `'doubleClick' \| 'arrow' \| 'both'` | `'both'` | Default trigger for sub-cell expand |
 | `expandRowOnDoubleClick` | `boolean` | `false` | Double-click row to toggle row expansion |
-| `themeMode` | `'light' \| 'dark' \| 'system'` | — | Control theme for table (and Bear components) |
+| `themeMode` | `'light' \| 'dark' \| 'system'` | — | Control light/dark for table and Bear components inside it |
+| `themeOverride` | `Record<string, unknown>` | — | Bear theme object; table wraps content in BearProvider with this theme |
 | `stickyHeader` | `boolean` | `true` | Sticky header on scroll |
+| `studio` | `boolean` | `false` | Show Studio side panel (data preview, props snapshot, generate sample data) |
 
 ### ColumnDefinition
 

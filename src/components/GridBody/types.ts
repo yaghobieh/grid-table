@@ -23,6 +23,6 @@ export interface GridBodyProps<T extends RowData = RowData> {
   getRowClassName?: (row: T, index: number) => string;
   getRowStyle?: (row: T, index: number) => CSSProperties;
   isRowDisabled?: (row: T) => boolean;
-  renderRowExpansion?: (row: T) => ReactNode;
+  renderRowExpansion?: (row: T, rowId: string | number) => ReactNode;
 }
 

@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { RowData, ColumnState, FilterValue, SortValue, SortDirection, FilterOperator } from '../types';
-import type { TableContextState, TableContextActions, TableContextValue, TableProviderProps } from './types';
+import type { TableContextState, TableContextActions, TableContextValue, TableProviderProps, TableOptions } from './types';
 import { DEFAULT_THEME, DEFAULT_TRANSLATIONS, DEFAULT_TABLE_CONFIG } from '../constants';
 import { ZERO, ONE, MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants';
 
@@ -23,6 +23,8 @@ type Action<T extends RowData = RowData> =
   | { type: 'SET_PAGE_SIZE'; payload: number }
   | { type: 'SET_SELECTED_IDS'; payload: Set<string | number> }
   | { type: 'SET_EXPANDED_IDS'; payload: Set<string | number> }
+  | { type: 'SET_EXPANDED_CELL_IDS'; payload: Set<string> }
+  | { type: 'SET_AUTO_SIZED_COLUMN_IDS'; payload: Set<string> }
   | { type: 'SET_COLUMN_STATES'; payload: ColumnState[] }
   | { type: 'SET_DRAGGING_COLUMN'; payload: string | null }
   | { type: 'SET_RESIZING_COLUMN'; payload: string | null }
@@ -56,6 +58,10 @@ function reducer<T extends RowData>(
       return { ...state, selectedIds: action.payload };
     case 'SET_EXPANDED_IDS':
       return { ...state, expandedIds: action.payload };
+    case 'SET_EXPANDED_CELL_IDS':
+      return { ...state, expandedCellIds: action.payload };
+    case 'SET_AUTO_SIZED_COLUMN_IDS':
+      return { ...state, autoSizedColumnIds: action.payload };
     case 'SET_COLUMN_STATES':
       return { ...state, columnStates: action.payload };
     case 'SET_DRAGGING_COLUMN':
@@ -96,7 +102,22 @@ export function TableProvider<T extends RowData>({
   enableMultiSort = false,
   getRowId,
   onStateChange,
+  showOverflowTooltip = true,
+  enableCellAutoSizeOnDoubleClick = false,
+  subCellExpandTrigger = 'both',
+  expandRowOnDoubleClick = false,
+  globalFilterColumns = undefined,
 }: TableProviderProps<T>): ReactNode {
+  const tableOptions: TableOptions = useMemo(
+    () => ({
+      showOverflowTooltip,
+      enableCellAutoSizeOnDoubleClick,
+      subCellExpandTrigger,
+      expandRowOnDoubleClick,
+      globalFilterColumns,
+    }),
+    [showOverflowTooltip, enableCellAutoSizeOnDoubleClick, subCellExpandTrigger, expandRowOnDoubleClick, globalFilterColumns]
+  );
   const initialColumnStates: ColumnState[] = columns.map((col, index) => ({
     id: col.id,
     visible: !col.hidden,
@@ -128,6 +149,8 @@ export function TableProvider<T extends RowData>({
     totalItems: data.length,
     selectedIds: new Set(),
     expandedIds: new Set(),
+    expandedCellIds: new Set(),
+    autoSizedColumnIds: new Set(),
     loading,
     error,
     theme: mergedTheme,
@@ -284,6 +307,27 @@ export function TableProvider<T extends RowData>({
         }
       },
 
+      toggleCellExpansion: (rowId: string | number, columnId: string) => {
+        const key = `${String(rowId)}-${columnId}`;
+        const next = new Set(state.expandedCellIds);
+        if (next.has(key)) {
+          next.delete(key);
+        } else {
+          next.add(key);
+        }
+        dispatch({ type: 'SET_EXPANDED_CELL_IDS', payload: next });
+      },
+
+      toggleColumnAutoSize: (columnId: string) => {
+        const next = new Set(state.autoSizedColumnIds);
+        if (next.has(columnId)) {
+          next.delete(columnId);
+        } else {
+          next.add(columnId);
+        }
+        dispatch({ type: 'SET_AUTO_SIZED_COLUMN_IDS', payload: next });
+      },
+
       reorderColumn: (sourceId: string, targetId: string) => {
         const newStates = [...state.columnStates];
         const sourceIndex = newStates.findIndex((c) => c.id === sourceId);
@@ -332,6 +376,8 @@ export function TableProvider<T extends RowData>({
             page: ONE,
             selectedIds: new Set(),
             expandedIds: new Set(),
+            expandedCellIds: new Set(),
+            autoSizedColumnIds: new Set(),
             columnStates: initialColumnStates,
           },
         }),
@@ -344,11 +390,17 @@ export function TableProvider<T extends RowData>({
 
     if (state.globalFilter) {
       const searchLower = state.globalFilter.toLowerCase();
-      filteredData = filteredData.filter((row) =>
-        Object.values(row).some((val) =>
-          String(val).toLowerCase().includes(searchLower)
-        )
-      );
+      const columnIds = tableOptions.globalFilterColumns;
+      filteredData = filteredData.filter((row) => {
+        const colsToSearch = columnIds && columnIds.length > 0
+          ? state.columns.filter((c) => columnIds.includes(c.id))
+          : state.columns;
+        return colsToSearch.some((col) => {
+          const accessor = col.accessor;
+          const value = typeof accessor === 'function' ? accessor(row) : row[accessor as keyof T];
+          return String(value ?? '').toLowerCase().includes(searchLower);
+        });
+      });
     }
 
     state.filters.forEach((filter) => {
@@ -451,11 +503,12 @@ export function TableProvider<T extends RowData>({
       isTablet,
       isDesktop,
     };
-  }, [state, columns]);
+  }, [state, columns, tableOptions]);
 
   const contextValue: TableContextValue<T> = {
     state: state as TableContextState<T>,
     actions: actions as TableContextActions<T>,
+    tableOptions,
     computed,
   };
 

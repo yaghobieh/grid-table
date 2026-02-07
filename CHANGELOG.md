@@ -5,6 +5,19 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-02-07
+
+### Added
+
+- **Overflow tooltip**: When cell content is truncated, show full content on hover. Table prop `showOverflowTooltip` (default `true`); override per column with `showOverflowTooltip: true | false`.
+- **Expandable sub-cell**: Optional extra content per cell, expandable by double-click or arrow. Column: `renderSubCell: (row) => ReactNode`, `subCellExpandTrigger: 'doubleClick' | 'arrow' | 'both'`. Table prop `subCellExpandTrigger` sets default for all columns. State in context (`expandedCellIds`, `toggleCellExpansion`).
+- **Cell auto-size on double-click**: Table prop `enableCellAutoSizeOnDoubleClick`. When `true`, double-clicking a truncated cell (without sub-cell) expands that cell to fit content. State: `autoSizedCellIds`, `toggleCellAutoSize` in context.
+- **Expand row on double-click**: Table prop `expandRowOnDoubleClick`. When `true`, double-clicking a row toggles row expansion (`renderRowExpansion`). All rows can show one full-width sub-row when expanded.
+- **Table-level options**: All cell/row expand and tooltip options are configurable via GridTable props: `showOverflowTooltip`, `enableCellAutoSizeOnDoubleClick`, `subCellExpandTrigger`, `expandRowOnDoubleClick`. Column definitions can override where applicable.
+- **@forgedevstack/bear integration**: Grid-table uses Bear (ForgeStack) for checkboxes, overflow tooltip, and theme. Peer dependency `@forgedevstack/bear`; Bear styles are imported from grid-table entry so one import brings them in. Theme controllable via `themeMode: 'light' | 'dark' | 'system'` prop.
+- **Header/body alignment**: Expand column spacer in header when `enableRowExpansion` so column names align with data. Header cell widths use explicit px for consistency.
+- **Sub-row (renderRowExpansion)**: Signature is now `(row: T, rowId: string | number) => ReactNode`. User controls content (editable form, sub-table, etc.) and can use `rowId` for save/update.
+
 ## [1.0.2] - 2026-01-17
 
 ### Changed

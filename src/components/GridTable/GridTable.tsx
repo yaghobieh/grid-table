@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import type { GridTableComponentProps } from './types';
-import type { RowData, SortDirection, Breakpoint } from '../../types';
+import type { RowData } from '../../types';
 import { TableProvider, useTableContext } from '../../context';
 import { useBreakpoint } from '../../hooks';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
-import { Pagination } from '../Pagination';
+import { Pagination as BearPagination, Typography, Select, BearProvider } from '@forgedevstack/bear';
 import { Skeleton } from '../Skeleton';
+import { TableStudioPanel } from '../TableStudioPanel';
 import { EmptyState } from '../EmptyState';
 import { MobileDrawer } from '../MobileDrawer';
 
@@ -49,9 +50,17 @@ function GridTableContent<T extends RowData>({
   renderFooter,
   className = '',
   style,
-}: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'paginationConfig' | 'filterConfig' | 'sortConfig'>): ReactNode {
+  showOverflowTooltip,
+  enableCellAutoSizeOnDoubleClick,
+  subCellExpandTrigger,
+  expandRowOnDoubleClick,
+  themeMode,
+  paginationConfig,
+}: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
+
+  const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
 
   const getRowIdFn = useCallback(
     (row: T): string | number => {
@@ -83,6 +92,24 @@ function GridTableContent<T extends RowData>({
     },
     [actions]
   );
+
+  const handleRowDoubleClick = useCallback(
+    (row: T, index: number) => {
+      if (expandRowOnDoubleClick) {
+        actions.toggleRowExpansion(getRowIdFn(row));
+      }
+      onRowDoubleClick?.(row, index);
+    },
+    [expandRowOnDoubleClick, actions, getRowIdFn, onRowDoubleClick]
+  );
+
+  const handleSelectAll = useCallback(() => {
+    if (computed.allSelected) {
+      actions.deselectAll();
+    } else {
+      actions.selectAll();
+    }
+  }, [computed.allSelected, actions]);
 
   const handleFilterOpen = useCallback(
     (columnId: string) => {
@@ -171,7 +198,7 @@ function GridTableContent<T extends RowData>({
 
   const isEmpty = computed.paginatedData.length === 0;
 
-  return (
+  const tableContent = (
     <div
       className={`grid-table rounded-lg border overflow-hidden ${classNames.root || ''} ${className}`}
       style={containerStyle}
@@ -270,9 +297,10 @@ function GridTableContent<T extends RowData>({
             enableDragDrop={enableDragDrop}
             enableResize={enableColumnResize}
             enableSelection={enableRowSelection}
+            enableExpansion={enableRowExpansion}
             allSelected={computed.allSelected}
             someSelected={computed.someSelected}
-            onSelectAll={actions.selectAll}
+            onSelectAll={handleSelectAll}
             onFilterOpen={handleFilterOpen}
             getSortDirection={(colId) => {
               const sort = state.sorting.find((s) => s.columnId === colId);
@@ -302,7 +330,7 @@ function GridTableContent<T extends RowData>({
             selectedIds={state.selectedIds}
             expandedIds={state.expandedIds}
             onRowClick={onRowClick}
-            onRowDoubleClick={onRowDoubleClick}
+            onRowDoubleClick={handleRowDoubleClick}
             onCellClick={onCellClick}
             onRowSelect={handleRowSelect}
             onRowExpand={handleRowExpand}
@@ -316,22 +344,38 @@ function GridTableContent<T extends RowData>({
       </div>
 
       {showPagination && !isEmpty && (
-        <Pagination
-          page={state.page}
-          pageSize={state.pageSize}
-          totalItems={computed.sortedData.length}
-          totalPages={computed.totalPages}
-          className={classNames.pagination}
-          style={styles.pagination}
-          onPageChange={(page) => {
-            actions.setPage(page);
-            onPageChange?.(page, state.pageSize);
-          }}
-          onPageSizeChange={(pageSize) => {
-            actions.setPageSize(pageSize);
-            onPageChange?.(1, pageSize);
-          }}
-        />
+        <div className={`grid-pagination ${classNames.pagination ?? ''}`} style={styles.pagination} role="navigation" aria-label="Pagination">
+          <div className="grid-pagination-info">
+            <Typography component="span" variant="body2" color="secondary">
+              {(state.page - 1) * state.pageSize + 1}-{Math.min(state.page * state.pageSize, computed.sortedData.length)} {state.translations.of} {computed.sortedData.length}
+            </Typography>
+            <Typography component="span" variant="caption" color="secondary" className="bear-sr-only">{state.translations.rowsPerPage}</Typography>
+            <Select
+              value={String(state.pageSize)}
+              onChange={(value) => {
+                const pageSize = Number(value);
+                actions.setPageSize(pageSize);
+                onPageChange?.(1, pageSize);
+              }}
+              options={(paginationConfig?.pageSizeOptions ?? [10, 20, 50, 100]).map((size) => ({ value: String(size), label: String(size) }))}
+              size="sm"
+            />
+          </div>
+          <div className="grid-pagination-controls">
+            <BearPagination
+              count={Math.max(1, computed.totalPages)}
+              page={state.page}
+              onChange={(page) => {
+                actions.setPage(page);
+                onPageChange?.(page, state.pageSize);
+              }}
+              showFirstLast
+              showPrevNext
+              size="sm"
+              variant="outlined"
+            />
+          </div>
+        </div>
       )}
 
       {renderFooter && <div className="grid-table-custom-footer">{renderFooter()}</div>}
@@ -345,6 +389,11 @@ function GridTableContent<T extends RowData>({
       />
     </div>
   );
+
+  if (themeClass) {
+    return <div className={themeClass}>{tableContent}</div>;
+  }
+  return tableContent;
 }
 
 export function GridTable<T extends RowData = RowData>({
@@ -360,11 +409,26 @@ export function GridTable<T extends RowData = RowData>({
   sortConfig,
   enableMultiSelect = false,
   getRowId,
+  showOverflowTooltip,
+  enableCellAutoSizeOnDoubleClick,
+  subCellExpandTrigger,
+  expandRowOnDoubleClick,
+  themeMode,
+  themeOverride,
+  studio = false,
   ...props
 }: GridTableComponentProps<T>): ReactNode {
-  return (
+  const [studioData, setStudioData] = useState(data);
+  const [studioOpen, setStudioOpen] = useState(true);
+  useEffect(() => {
+    if (studio) setStudioData(data);
+  }, [data, studio]);
+
+  const effectiveData = studio ? studioData : data;
+
+  const tableContent = (
     <TableProvider
-      data={data}
+      data={effectiveData}
       columns={columns}
       loading={loading}
       error={error}
@@ -377,16 +441,58 @@ export function GridTable<T extends RowData = RowData>({
       enableMultiSort={sortConfig?.multiSort}
       enableMultiSelect={enableMultiSelect}
       getRowId={getRowId}
+      showOverflowTooltip={showOverflowTooltip}
+      enableCellAutoSizeOnDoubleClick={enableCellAutoSizeOnDoubleClick}
+      subCellExpandTrigger={subCellExpandTrigger}
+      expandRowOnDoubleClick={expandRowOnDoubleClick}
     >
       <GridTableContent
-        data={data}
+        data={effectiveData}
         columns={columns}
         loading={loading}
         error={error}
         getRowId={getRowId}
+        themeMode={themeMode}
+        paginationConfig={paginationConfig}
         {...props}
       />
     </TableProvider>
   );
+
+  const withTheme =
+    themeOverride && Object.keys(themeOverride).length > 0 ? (
+      <BearProvider theme={themeOverride as Record<string, unknown>} defaultMode={themeMode === 'dark' ? 'dark' : 'light'}>
+        {tableContent}
+      </BearProvider>
+    ) : (
+      tableContent
+    );
+
+  if (studio) {
+    return (
+      <>
+        <div className="grid-table-studio-main" style={{ width: '100%' }}>
+          {withTheme}
+        </div>
+        <TableStudioPanel
+          data={studioData}
+          columns={columns}
+          propsSnapshot={{
+            themeMode,
+            themeOverride,
+            showPagination: props.showPagination ?? true,
+            showGlobalFilter: props.showGlobalFilter ?? true,
+            enableRowSelection: props.enableRowSelection,
+            enableRowExpansion: props.enableRowExpansion,
+          }}
+          onDataChange={setStudioData}
+          open={studioOpen}
+          onOpenChange={setStudioOpen}
+        />
+      </>
+    );
+  }
+
+  return withTheme;
 }
 

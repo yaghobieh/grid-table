@@ -17,6 +17,8 @@ A powerful, headless grid table component for React with SCSS styling, drag-and-
 - **Responsive**: Mobile-first design with drawer for filters/sorting
 - **Skeleton Loading**: Beautiful loading states
 - **Empty States**: Customizable empty state component
+- **Overflow tooltip**: Show full cell content on hover when truncated (per-column `showOverflowTooltip`)
+- **Expandable sub-cell**: Extra content per cell via double-click or arrow; `renderSubCell` and `subCellExpandTrigger`
 - **Context API**: No prop drilling, access state from anywhere
 - **TypeScript**: Full type safety
 - **Accessible**: ARIA attributes and keyboard navigation
@@ -31,16 +33,23 @@ pnpm add @forgedevstack/grid-table
 yarn add @forgedevstack/grid-table
 ```
 
+### Dependencies
+
+Grid-table is part of ForgeStack and uses **@forgedevstack/bear** for checkboxes, tooltips, and theming. Install Bear (peer dependency):
+
+```bash
+npm install @forgedevstack/grid-table @forgedevstack/bear
+```
+
 ### Import CSS (Required)
 
-**Zero-config setup** - No Tailwind CSS required! Import the compiled CSS file once in your app:
+Import the grid-table CSS once in your app. Bear styles are loaded automatically when you import from grid-table:
 
 ```tsx
-// In your main entry file (e.g., main.tsx, App.tsx, or index.css)
 import '@forgedevstack/grid-table/grid-table.css';
 ```
 
-This provides all the necessary styles. The package uses SCSS internally and compiles to CSS - no configuration needed!
+No need to import Bear styles separately; the grid-table entry pulls them in.
 
 ## Quick Start
 
@@ -235,6 +244,11 @@ const columns: ColumnDefinition<User>[] = [
 | `showPagination` | `boolean` | `true` | Show pagination controls |
 | `showFilter` | `boolean` | `true` | Show filter controls |
 | `showGlobalFilter` | `boolean` | `true` | Show global search |
+| `showOverflowTooltip` | `boolean` | `true` | Show full content on hover when cell is truncated |
+| `enableCellAutoSizeOnDoubleClick` | `boolean` | `false` | Double-click cell to expand width to fit content |
+| `subCellExpandTrigger` | `'doubleClick' \| 'arrow' \| 'both'` | `'both'` | Default trigger for sub-cell expand |
+| `expandRowOnDoubleClick` | `boolean` | `false` | Double-click row to toggle row expansion |
+| `themeMode` | `'light' \| 'dark' \| 'system'` | — | Control theme for table (and Bear components) |
 | `stickyHeader` | `boolean` | `true` | Sticky header on scroll |
 
 ### ColumnDefinition
@@ -257,6 +271,9 @@ const columns: ColumnDefinition<User>[] = [
 | `filterOptions` | `FilterOption[]` | Options for select filter |
 | `sortFn` | `(a, b, dir) => number` | Custom sort function |
 | `filterFn` | `(value, filter, op) => boolean` | Custom filter function |
+| `showOverflowTooltip` | `boolean` | When truncated, show full content on hover (default true) |
+| `renderSubCell` | `(row) => ReactNode` | Optional expandable sub-content below cell |
+| `subCellExpandTrigger` | `'doubleClick' \| 'arrow' \| 'both'` | How to expand sub-cell (default `'both'`) |
 
 ## License
 

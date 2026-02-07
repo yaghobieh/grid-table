@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+  <defs>
+    <linearGradient id="gt-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7f1d1d"/>
+      <stop offset="50%" style="stop-color:#b91c1c"/>
+      <stop offset="100%" style="stop-color:#e11d48"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="16" fill="url(#gt-gradient)"/>
+  <g fill="rgba(255,255,255,0.92)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5">
+    <rect x="20" y="24" width="24" height="18" rx="2"/>
+    <rect x="48" y="24" width="24" height="18" rx="2"/>
+    <rect x="76" y="24" width="24" height="18" rx="2"/>
+    <rect x="20" y="48" width="24" height="18" rx="2"/>
+    <rect x="48" y="48" width="24" height="18" rx="2"/>
+    <rect x="76" y="48" width="24" height="18" rx="2"/>
+    <rect x="20" y="72" width="24" height="18" rx="2"/>
+    <rect x="48" y="72" width="24" height="18" rx="2"/>
+    <rect x="76" y="72" width="24" height="18" rx="2"/>
+  </g>
+</svg>

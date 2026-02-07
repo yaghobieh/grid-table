@@ -31,6 +31,9 @@ export interface ColumnDefinition<T = unknown> {
   sortFn?: (a: unknown, b: unknown, direction: SortDirection) => number;
   filterFn?: (value: unknown, filterValue: unknown, operator: FilterOperator) => boolean;
   meta?: Record<string, unknown>;
+  showOverflowTooltip?: boolean;
+  renderSubCell?: (row: T) => ReactNode;
+  subCellExpandTrigger?: 'doubleClick' | 'arrow' | 'both';
 }
 
 export interface FilterOption {

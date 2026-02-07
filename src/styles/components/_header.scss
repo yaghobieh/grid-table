@@ -83,6 +83,13 @@
   border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
 }
 
+.grid-header-expand-spacer {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+}
+
 .grid-header-checkbox {
   width: 1rem;
   height: 1rem;

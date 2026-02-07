@@ -1,3 +1,5 @@
+import '@forgedevstack/bear/styles.css';
+
 // Main component
 export { GridTable } from './components';
 export type { GridTableComponentProps } from './components';

@@ -12,6 +12,7 @@ export interface GridCellProps<T extends RowData = RowData> {
   column: ColumnDefinition<T>;
   row: T;
   rowIndex: number;
+  rowId: string | number;
   value: unknown;
   width?: number | string;
   align?: Alignment;

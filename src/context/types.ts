@@ -28,6 +28,8 @@ export interface TableContextState<T extends RowData = RowData> {
   totalItems: number;
   selectedIds: Set<string | number>;
   expandedIds: Set<string | number>;
+  expandedCellIds: Set<string>;
+  autoSizedColumnIds: Set<string>;
   loading: boolean;
   error: Error | string | null;
   theme: Theme;
@@ -62,6 +64,8 @@ export interface TableContextActions<T extends RowData = RowData> {
   expandRow: (id: string | number) => void;
   collapseRow: (id: string | number) => void;
   toggleRowExpansion: (id: string | number) => void;
+  toggleCellExpansion: (rowId: string | number, columnId: string) => void;
+  toggleColumnAutoSize: (columnId: string) => void;
   reorderColumn: (sourceId: string, targetId: string) => void;
   resizeColumn: (columnId: string, width: number) => void;
   toggleColumnVisibility: (columnId: string) => void;
@@ -75,9 +79,20 @@ export interface TableContextActions<T extends RowData = RowData> {
   reset: () => void;
 }
 
+export type SubCellExpandTrigger = 'doubleClick' | 'arrow' | 'both';
+
+export interface TableOptions {
+  showOverflowTooltip?: boolean;
+  enableCellAutoSizeOnDoubleClick?: boolean;
+  subCellExpandTrigger?: SubCellExpandTrigger;
+  expandRowOnDoubleClick?: boolean;
+  globalFilterColumns?: string[];
+}
+
 export interface TableContextValue<T extends RowData = RowData> {
   state: TableContextState<T>;
   actions: TableContextActions<T>;
+  tableOptions: TableOptions;
   computed: {
     filteredData: T[];
     sortedData: T[];
@@ -111,5 +126,10 @@ export interface TableProviderProps<T extends RowData = RowData> {
   enableMultiSelect?: boolean;
   getRowId?: (row: T) => string | number;
   onStateChange?: (state: TableContextState<T>) => void;
+  showOverflowTooltip?: boolean;
+  enableCellAutoSizeOnDoubleClick?: boolean;
+  subCellExpandTrigger?: SubCellExpandTrigger;
+  expandRowOnDoubleClick?: boolean;
+  globalFilterColumns?: string[];
 }
 

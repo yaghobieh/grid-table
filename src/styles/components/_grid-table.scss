@@ -19,3 +19,57 @@
   overflow: auto;
   width: 100%;
 }
+
+.grid-table-studio-layout {
+  background-color: var(--gt-bg-primary);
+}
+
+.grid-table-studio-main {
+  overflow: auto;
+}
+
+// Light mode: force high-contrast text and controls (overrides Bear/Tailwind when app is dark)
+.light .grid-table {
+  color: var(--gt-text-primary);
+
+  .grid-cell-value,
+  .grid-cell-value *,
+  .grid-cell-label,
+  .grid-header-cell,
+  .grid-header-content,
+  .grid-pagination,
+  .grid-pagination *,
+  .grid-table-toolbar,
+  .grid-table-toolbar input,
+  .grid-table-toolbar .search-icon,
+  .grid-table-toolbar .clear-button,
+  .grid-table-toolbar .filter-badge,
+  .grid-cell-subcell {
+    color: var(--gt-text-primary);
+  }
+
+  .grid-pagination-info span,
+  .grid-table-toolbar input::placeholder {
+    color: var(--gt-text-secondary);
+  }
+
+  input,
+  select,
+  button:not(.grid-cell-expand-trigger) {
+    color: var(--gt-text-primary);
+    background-color: var(--gt-bg-primary);
+    border-color: var(--gt-border-color);
+  }
+
+  .grid-header-cell {
+    background-color: var(--gt-bg-secondary);
+  }
+
+  .grid-row {
+    background-color: var(--gt-bg-primary);
+  }
+
+  .grid-row:hover {
+    background-color: var(--gt-bg-hover);
+  }
+}

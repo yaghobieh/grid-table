@@ -22,7 +22,7 @@ export interface GridRowProps<T extends RowData = RowData> {
   onExpand?: (expanded: boolean) => void;
   enableSelection?: boolean;
   enableExpansion?: boolean;
-  renderExpansion?: (row: T) => ReactNode;
+  renderExpansion?: (row: T, rowId: string | number) => ReactNode;
   getRowId: (row: T) => string | number;
 }
 

@@ -12,6 +12,7 @@ export interface GridHeaderProps<T extends RowData = RowData> {
   enableDragDrop?: boolean;
   enableResize?: boolean;
   enableSelection?: boolean;
+  enableExpansion?: boolean;
   allSelected?: boolean;
   someSelected?: boolean;
   onSelectAll?: () => void;
@@ -34,6 +35,7 @@ export interface GridHeaderCellProps<T extends RowData = RowData> {
   isDragging?: boolean;
   isDragOver?: boolean;
   isLastColumn?: boolean;
+  isColumnAutoSized?: boolean;
   onSort?: () => void;
   onFilterOpen?: () => void;
   onResizeStart?: (event: React.MouseEvent) => void;

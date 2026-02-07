@@ -4,7 +4,8 @@
 // Grid Cell
 .grid-cell {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   padding: 0.75rem 1rem;
   flex-shrink: 0;
   min-width: 0;
@@ -13,6 +14,13 @@
   &.sticky-right {
     box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.2);
   }
+}
+
+.grid-cell-inner {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.25rem;
 }
 
 // Last column fills remaining space automatically
@@ -24,8 +32,39 @@
 }
 
 .grid-cell-value {
-  @include truncate;
   color: var(--gt-text-primary, #262626);
+  display: block;
+  min-width: 0;
+}
+
+.grid-cell-value--truncate {
+  @include truncate;
+  min-width: 0;
+  display: block;
+}
+
+// Ensure inner content (Typography span) truncates with ellipsis
+.grid-cell-value--truncate > *,
+.grid-cell-value-text {
+  display: block !important;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid-cell-value-wrapper {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.grid-cell-highlight {
+  background-color: var(--gt-accent-primary, #1890ff);
+  color: inherit;
+  padding: 0 0.125em;
+  border-radius: 0.125rem;
+  font-weight: 500;
 }
 
 .grid-cell-label {
@@ -33,4 +72,53 @@
   color: var(--gt-text-muted, #606060);
   margin-right: 0.5rem;
   font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.grid-cell-expand-trigger {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+  color: var(--gt-text-muted, #606060);
+  @include transition(transform, color, background-color);
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    margin-left: 0.25rem;
+  }
+
+  &:hover {
+    color: var(--gt-accent-primary, #1890ff);
+    background-color: var(--gt-bg-tertiary, #3c3c3c);
+  }
+
+  &--expanded::after {
+    transform: rotate(-135deg);
+  }
+}
+
+.grid-cell--auto-sized .grid-cell-value {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.grid-cell-subcell {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+  font-size: 0.8125rem;
+  color: var(--gt-text-secondary, #808080);
+  min-width: 0;
 }

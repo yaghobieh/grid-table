@@ -5,6 +5,7 @@ import type { RowData, ColumnDefinition, ColumnState, SortDirection, FilterOpera
 import { useTableContext } from '../../context';
 import { useDragDrop } from '../../hooks';
 import { MIN_COLUMN_WIDTH, MAX_COLUMN_WIDTH } from '../../constants';
+import { Checkbox } from '@forgedevstack/bear';
 import { FilterPopup } from '../FilterPopup';
 
 const FilterIcon = ({ active = false }: { active?: boolean }) => (
@@ -66,6 +67,7 @@ function HeaderCell<T extends RowData>({
   hasFilter = false,
   isDragging = false,
   isDragOver = false,
+  isColumnAutoSized = false,
   onSort,
   onFilterOpen,
   onResizeStart,
@@ -119,22 +121,33 @@ function HeaderCell<T extends RowData>({
     return classes.join(' ');
   }, [column.align, isSortable, isDragging, isDragOver]);
 
+  const cellStyle = useMemo(() => {
+    const base: React.CSSProperties = {
+      flexShrink: 0,
+      ...(column.sticky && {
+        position: 'sticky',
+        [column.sticky]: 0,
+        zIndex: 2,
+        backgroundColor: 'var(--gt-bg-secondary, #2b2b2b)',
+      }),
+      ...column.headerStyle,
+    };
+    if (isColumnAutoSized) {
+      base.width = 'auto';
+      base.minWidth = 'max-content';
+      base.maxWidth = 'none';
+    } else {
+      base.width = typeof columnState.width === 'number' ? `${columnState.width}px` : columnState.width;
+      base.minWidth = column.minWidth || MIN_COLUMN_WIDTH;
+      base.maxWidth = column.maxWidth || MAX_COLUMN_WIDTH;
+    }
+    return base;
+  }, [column, columnState.width, isColumnAutoSized]);
+
   return (
     <div
       className={`${cellClasses} ${column.headerClassName || ''} ${column.sticky ? `sticky-${column.sticky}` : ''}`}
-      style={{
-        width: columnState.width,
-        minWidth: column.minWidth || MIN_COLUMN_WIDTH,
-        maxWidth: column.maxWidth || MAX_COLUMN_WIDTH,
-        flexShrink: 0,
-        ...(column.sticky && {
-          position: 'sticky',
-          [column.sticky]: 0,
-          zIndex: 2,
-          backgroundColor: 'var(--bg-secondary, #2b2b2b)',
-        }),
-        ...column.headerStyle,
-      }}
+      style={cellStyle}
       role="columnheader"
       aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : 'none'}
       onClick={handleClick}
@@ -183,6 +196,7 @@ export function GridHeader<T extends RowData = RowData>({
   enableDragDrop = true,
   enableResize = true,
   enableSelection = false,
+  enableExpansion = false,
   allSelected = false,
   someSelected = false,
   onSelectAll,
@@ -271,17 +285,18 @@ export function GridHeader<T extends RowData = RowData>({
     <div className={`${headerClasses} ${className}`} style={style} role="row">
       {enableSelection && (
         <div className="grid-header-select">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={allSelected}
-            ref={(el) => {
-              if (el) el.indeterminate = someSelected && !allSelected;
-            }}
-            onChange={onSelectAll}
-            className="grid-header-checkbox"
+            indeterminate={someSelected && !allSelected}
+            onChange={() => onSelectAll?.()}
+            size="sm"
             aria-label="Select all rows"
           />
         </div>
+      )}
+
+      {enableExpansion && (
+        <div className="grid-header-expand-spacer" aria-hidden />
       )}
 
       {visibleColumns.map((col, index) => {
@@ -315,6 +330,7 @@ export function GridHeader<T extends RowData = RowData>({
               hasFilter={hasFilter}
               isDragging={dragDrop.draggingColumnId === col.id}
               isDragOver={dragDrop.dragOverColumnId === col.id}
+              isColumnAutoSized={state.autoSizedColumnIds.has(col.id)}
               onSort={() => actions.toggleSorting(col.id)}
               onFilterOpen={() => handleFilterClick(col.id)}
               onResizeStart={handleResizeStart(col.id, colState.width)}

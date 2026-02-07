@@ -4,5 +4,7 @@ export type {
   TableContextActions,
   TableContextValue,
   TableProviderProps,
+  TableOptions,
+  SubCellExpandTrigger,
 } from './types';
 

@@ -2,6 +2,7 @@ import type { ReactNode, MouseEvent } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import type { GridRowProps } from './types';
 import type { RowData } from '../../types';
+import { Checkbox } from '@forgedevstack/bear';
 import { GridCell } from '../GridCell';
 
 export function GridRow<T extends RowData = RowData>({
@@ -47,10 +48,13 @@ export function GridRow<T extends RowData = RowData>({
     [onContextMenu, row, rowIndex, isDisabled]
   );
 
-  const handleSelectChange = useCallback(() => {
-    if (isDisabled) return;
-    onSelect?.(!isSelected);
-  }, [onSelect, isSelected, isDisabled]);
+  const handleSelectChange = useCallback(
+    (selected: boolean) => {
+      if (isDisabled) return;
+      onSelect?.(selected);
+    },
+    [onSelect, isDisabled]
+  );
 
   const handleExpandToggle = useCallback(() => {
     if (isDisabled) return;
@@ -131,12 +135,11 @@ export function GridRow<T extends RowData = RowData>({
       >
         {enableSelection && (
           <div className="grid-row-select">
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={handleSelectChange}
+            <Checkbox
+              checked={isSelected ?? false}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelectChange(e.target.checked)}
               disabled={isDisabled}
-              className="grid-row-checkbox"
+              size="sm"
               aria-label="Select row"
             />
           </div>
@@ -194,6 +197,7 @@ export function GridRow<T extends RowData = RowData>({
               column={col}
               row={row}
               rowIndex={rowIndex}
+              rowId={getRowId(row)}
               value={getCellValue(col)}
               width={width}
               align={col.align}
@@ -210,7 +214,7 @@ export function GridRow<T extends RowData = RowData>({
 
       {isExpanded && renderExpansion && (
         <div className="grid-row-expansion">
-          {renderExpansion(row)}
+          {renderExpansion(row, getRowId(row))}
         </div>
       )}
     </>

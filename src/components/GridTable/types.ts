@@ -14,6 +14,7 @@ import type {
   SortDirection,
   GridTableRef,
 } from '../../types';
+import type { SubCellExpandTrigger } from '../../context/types';
 
 export interface GridTableComponentProps<T extends RowData = RowData> {
   data: T[];
@@ -57,11 +58,19 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   getRowClassName?: (row: T, index: number) => string;
   getRowStyle?: (row: T, index: number) => CSSProperties;
   isRowDisabled?: (row: T) => boolean;
-  renderRowExpansion?: (row: T) => ReactNode;
+  renderRowExpansion?: (row: T, rowId: string | number) => ReactNode;
+  themeMode?: 'light' | 'dark' | 'system';
   renderHeader?: () => ReactNode;
   renderFooter?: () => ReactNode;
   tableRef?: RefObject<GridTableRef<T>>;
   className?: string;
   style?: CSSProperties;
+  showOverflowTooltip?: boolean;
+  enableCellAutoSizeOnDoubleClick?: boolean;
+  subCellExpandTrigger?: SubCellExpandTrigger;
+  expandRowOnDoubleClick?: boolean;
+  globalFilterColumns?: string[];
+  themeOverride?: Record<string, unknown>;
+  studio?: boolean;
 }
 

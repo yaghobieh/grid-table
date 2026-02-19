@@ -1,87 +1,67 @@
-# grid-table
+# @forgedevstack/grid-table
 
 <p align="center">
   <img src="https://github.com/yaghobieh/grid-table/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.0.5 — A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support. Zero-config — no Tailwind CSS required. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.0.6 — A powerful, feature-rich data grid for React with cell editing, CSV/JSON export, sort/hover/row animations, tree data, lazy loading, and theme builder. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
-- **SCSS Styling**: Self-contained SCSS styles, no Tailwind CSS dependency required
-- **React 16.8+**: Works with all React versions that support hooks
-- **Dark/Light Theme**: Built-in theme support with customizable colors
-- **Filtering**: Column-level and global filtering with multiple operators
-- **Sorting**: Single and multi-column sorting with custom sort functions
-- **Drag & Drop**: Reorder columns by dragging
-- **Column Resize**: Adjust column widths by dragging
-- **Pagination**: Built-in pagination with customizable page sizes
-- **Row Selection**: Single and multi-select support
-- **Row Expansion**: Expandable rows with custom content
-- **Responsive**: Mobile-first design with drawer for filters/sorting
-- **Skeleton Loading**: Beautiful loading states
-- **Empty States**: Customizable empty state component
-- **Overflow tooltip**: Show full cell content on hover when truncated (per-column `showOverflowTooltip`)
-- **Expandable sub-cell**: Extra content per cell via double-click or arrow; `renderSubCell` and `subCellExpandTrigger`
-- **Context API**: No prop drilling, access state from anywhere
-- **TypeScript**: Full type safety
-- **Accessible**: ARIA attributes and keyboard navigation
+- **Cell Editing** — Double-click to edit inline with validation (text, number, select, date, boolean)
+- **CSV / JSON Export** — One-click export with `enableExport` prop
+- **Table Effects** — Sort animations, row entry effects, hover highlights via `tableEffects` prop
+- **Tree Data** — Hierarchical views with `defaultExpandedIds`, expand/collapse all
+- **Lazy Load** — Infinite scroll with `lazyLoad` prop (configurable batch size and loader)
+- **Dark/Light Theme** — Built-in theme support with customizable colors
+- **Filtering** — Column-level and global filtering with multiple operators
+- **Sorting** — Single and multi-column sorting with custom sort functions
+- **Drag & Drop** — Reorder columns by dragging
+- **Column Resize** — Adjust column widths by dragging
+- **Pagination** — Built-in pagination with customizable page sizes
+- **Row Selection** — Single and multi-select support
+- **Row Expansion** — Expandable rows with custom content
+- **Responsive** — Mobile-first design with drawer for filters/sorting
+- **Skeleton Loading** — Beautiful loading states
+- **Overflow Tooltip** — Show full cell content on hover when truncated
+- **Expandable Sub-cell** — Extra content per cell via double-click or arrow
+- **Studio Panel** — Development/prototyping side panel
+- **Context API** — No prop drilling, access state from anywhere
+- **TypeScript** — Full type safety
+- **Accessible** — ARIA attributes and keyboard navigation
 
 ## Installation
 
-One install only — no need to install Bear separately; it’s included as a dependency.
-
 ```bash
 npm i @forgedevstack/grid-table
-# or: npm install / pnpm add / yarn add
 ```
 
 ### Import CSS (Required)
-
-Import the grid-table CSS once in your app. Bear styles are loaded automatically when you import from grid-table:
 
 ```tsx
 import '@forgedevstack/grid-table/grid-table.css';
 ```
 
-No need to import Bear styles separately; the grid-table entry pulls them in.
+Bear styles are loaded automatically.
 
 ## Quick Start
 
 ```tsx
-import { GridTable, ColumnDefinition } from 'grid-table';
+import { GridTable } from '@forgedevstack/grid-table';
+import type { ColumnDefinition } from '@forgedevstack/grid-table';
 
 interface User {
   id: number;
   name: string;
   email: string;
   role: string;
+  [key: string]: unknown;
 }
 
 const columns: ColumnDefinition<User>[] = [
-  {
-    id: 'name',
-    accessor: 'name',
-    header: 'Name',
-    sortable: true,
-    filterable: true,
-  },
-  {
-    id: 'email',
-    accessor: 'email',
-    header: 'Email',
-    sortable: true,
-  },
-  {
-    id: 'role',
-    accessor: 'role',
-    header: 'Role',
-    filterType: 'select',
-    filterOptions: [
-      { value: 'admin', label: 'Admin' },
-      { value: 'user', label: 'User' },
-    ],
-  },
+  { id: 'name', accessor: 'name', header: 'Name', sortable: true, filterable: true },
+  { id: 'email', accessor: 'email', header: 'Email', sortable: true },
+  { id: 'role', accessor: 'role', header: 'Role', filterType: 'select', filterOptions: [{ value: 'admin', label: 'Admin' }, { value: 'user', label: 'User' }] },
 ];
 
 const data: User[] = [
@@ -97,72 +77,147 @@ function App() {
       enableRowSelection
       showPagination
       showFilter
+      enableExport
+      tableEffects={{ hover: true, sort: true, row: true }}
     />
   );
 }
 ```
 
-## Theming
+## Cell Editing
+
+Double-click any editable cell to edit inline. Press Enter to save, Escape to cancel.
 
 ```tsx
-import { GridTable, Theme } from 'grid-table';
-
-const customTheme: Partial<Theme> = {
-  mode: 'dark',
-  colors: {
-    background: {
-      primary: '#1a1a2e',
-      secondary: '#16213e',
-      tertiary: '#0f3460',
-      hover: '#1a1a2e',
-    },
-    text: {
-      primary: '#eaeaea',
-      secondary: '#a0a0a0',
-      muted: '#707070',
-    },
-    accent: {
-      primary: '#e94560',
-      success: '#4ade80',
-      warning: '#fbbf24',
-      error: '#f87171',
+const columns: ColumnDefinition<User>[] = [
+  {
+    id: 'name',
+    accessor: 'name',
+    header: 'Name',
+    editable: true,
+  },
+  {
+    id: 'role',
+    accessor: 'role',
+    header: 'Role',
+    editable: {
+      enabled: true,
+      type: 'select',
+      options: [
+        { value: 'admin', label: 'Admin' },
+        { value: 'editor', label: 'Editor' },
+        { value: 'viewer', label: 'Viewer' },
+      ],
+      validate: (value) => value ? true : 'Role is required',
+      onSave: (row, columnId, oldValue, newValue) => {
+        console.log('Saved:', { row, columnId, oldValue, newValue });
+      },
     },
   },
-};
+];
 
-<GridTable data={data} columns={columns} theme={customTheme} />;
+<GridTable
+  data={data}
+  columns={columns}
+  enableCellEdit
+  onCellEdit={(row, columnId, oldValue, newValue) => {
+    console.log('Cell edited:', { row, columnId, oldValue, newValue });
+  }}
+/>
 ```
 
-## Integration with Bear
-
-Grid-table uses **@forgedevstack/bear** for controls (Select, Pagination, Checkbox, Tooltip, Typography) and can **drive Bear’s theme from the table**. You don’t need a separate Bear `ThemeProvider` for the table — the table can control it.
-
-### Benefits
-
-- **Single place for theme** — Set `themeMode` and optionally `themeOverride` on `GridTable`; Bear components inside the table (filters, pagination, row selection) use that theme.
-- **Light / dark from the table** — `themeMode="light"` or `themeMode="dark"` applies to both the grid and all Bear UI inside it (no extra provider).
-- **Full Bear theme override** — Pass `themeOverride` (Bear theme shape) and the table wraps its content in Bear’s provider, so every Bear component in the table respects your custom theme.
-- **Consistent look** — Table and Bear controls share the same design tokens and mode.
-
-### Control Bear theme via the table
-
-**Light or dark mode** (table + Bear components):
+## CSV / JSON Export
 
 ```tsx
 <GridTable
   data={data}
   columns={columns}
-  themeMode="dark"
+  enableExport
+  exportFileName="my-data"
 />
 ```
 
-**System (follow OS preference):**
+Or use the utilities directly:
 
 ```tsx
-<GridTable data={data} columns={columns} themeMode="system" />
+import { exportToCSV, exportToJSON } from '@forgedevstack/grid-table';
+
+exportToCSV(data, columns, 'my-report');
+exportToJSON(data, columns, 'my-report');
 ```
 
-**Custom Bear theme** (table wraps content in Bear’s provider):
+## Table Effects
+
+Unified `tableEffects` prop controls all animations:
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  tableEffects={{
+    hover: true,
+    sort: true,
+    row: true,
+  }}
+/>
+```
+
+Each effect accepts `true` for defaults or a config object:
+
+```tsx
+tableEffects={{
+  hover: { enabled: true, bgColor: '#1a1a2e', accentBorder: true, className: 'my-hover' },
+  sort: { enabled: true, flash: true, bounce: true },
+  row: { enabled: true, staggerMs: 50, className: 'my-row-enter' },
+  className: 'effects-active',
+}}
+```
+
+## Tree Data / Expand
+
+```tsx
+<GridTable
+  data={employees}
+  columns={columns}
+  enableRowExpansion
+  defaultExpandedIds={[1, 5]}
+  renderRowExpansion={(row) => <EmployeeDetail employee={row} />}
+/>
+```
+
+## Lazy Load / Infinite Scroll
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  lazyLoad={{
+    enabled: true,
+    initialRows: 10,
+    batchSize: 10,
+    showLoader: true,
+  }}
+/>
+```
+
+## Theming
+
+```tsx
+const customTheme: Partial<Theme> = {
+  mode: 'dark',
+  colors: {
+    background: { primary: '#1a1a2e', secondary: '#16213e', tertiary: '#0f3460', hover: '#1a1a2e' },
+    text: { primary: '#eaeaea', secondary: '#a0a0a0', muted: '#707070' },
+    accent: { primary: '#22c55e', success: '#4ade80', warning: '#fbbf24', error: '#f87171' },
+  },
+};
+
+<GridTable data={data} columns={columns} theme={customTheme} />
+```
+
+## Bear Integration
+
+Grid-table uses **@forgedevstack/bear** for UI controls. Set `themeMode` and `themeOverride` on GridTable to control Bear components inside:
 
 ```tsx
 <GridTable
@@ -171,21 +226,17 @@ Grid-table uses **@forgedevstack/bear** for controls (Select, Pagination, Checkb
   themeMode="dark"
   themeOverride={{
     colors: {
-      primary: '#b91c1c',
-      background: { default: '#1c1917', paper: '#292524' },
-      text: { primary: '#fafaf9', secondary: '#a8a29e' },
+      primary: '#22c55e',
+      background: { default: '#0a0a14', paper: '#1a1a2e' },
+      text: { primary: '#f8fafc', secondary: '#94a3b8' },
     },
   }}
 />
 ```
 
-So yes: **Bear’s theme for the table can be fully controlled via the table** — `themeMode` for light/dark/system, and `themeOverride` for a custom Bear theme object.
-
 ## Translations
 
 ```tsx
-import { GridTable, Translations } from 'grid-table';
-
 const customTranslations: Partial<Translations> = {
   empty: 'No records found',
   loading: 'Fetching data...',
@@ -193,7 +244,7 @@ const customTranslations: Partial<Translations> = {
   rowsPerPage: 'Show',
 };
 
-<GridTable data={data} columns={columns} translations={customTranslations} />;
+<GridTable data={data} columns={columns} translations={customTranslations} />
 ```
 
 ## Responsive Breakpoints
@@ -202,8 +253,8 @@ const customTranslations: Partial<Translations> = {
 <GridTable
   data={data}
   columns={columns}
-  mobileBreakpoint="tablet" // 'mobile' | 'tablet' | 'desktop'
-  showMobileLabels={true} // Show column labels on mobile cards
+  mobileBreakpoint="tablet"
+  showMobileLabels={true}
   dimensions={{
     width: { mobile: '100%', tablet: '100%', desktop: 800 },
     height: { mobile: 400, tablet: 500, desktop: 600 },
@@ -213,14 +264,11 @@ const customTranslations: Partial<Translations> = {
 
 ## Using Hooks
 
-Access table state and actions from any child component:
-
 ```tsx
-import { TableProvider, useTable, ColumnDefinition } from 'grid-table';
+import { TableProvider, useTable } from '@forgedevstack/grid-table';
 
 function TableControls() {
-  const { filter, sort, pagination, selection } = useTable();
-
+  const { filter, sort, selection } = useTable();
   return (
     <div>
       <button onClick={() => filter.clearFilters()}>Clear Filters</button>
@@ -229,71 +277,15 @@ function TableControls() {
     </div>
   );
 }
-
-function App() {
-  return (
-    <TableProvider data={data} columns={columns}>
-      <TableControls />
-      <GridTableContent {...props} />
-    </TableProvider>
-  );
-}
-```
-
-## Custom Cell Rendering
-
-```tsx
-const columns: ColumnDefinition<User>[] = [
-  {
-    id: 'status',
-    accessor: 'status',
-    header: 'Status',
-    render: (value, row, index) => (
-      <span className={value === 'active' ? 'text-green-500' : 'text-red-500'}>
-        {value}
-      </span>
-    ),
-  },
-  {
-    id: 'actions',
-    accessor: (row) => row.id,
-    header: 'Actions',
-    sortable: false,
-    filterable: false,
-    render: (value, row) => (
-      <button onClick={() => handleEdit(row)}>Edit</button>
-    ),
-  },
-];
 ```
 
 ## Studio
 
-**Studio** is an optional side panel for development and prototyping. Enable it with the `studio` prop:
-
-- **Data** — Inspect the current table data (JSON).
-- **Props** — View a snapshot of the GridTable props.
-- **Generate** — Generate sample data from your column definitions (1–100 rows) and push it into the table.
-
-The panel is fixed on the right, collapsible via a toggle, and uses the table’s theme. Use it to try different data shapes without touching your backend.
+Development panel for inspecting data, props, and generating sample rows:
 
 ```tsx
-<GridTable
-  data={data}
-  columns={columns}
-  studio={true}
-/>
+<GridTable data={data} columns={columns} studio />
 ```
-
-![Studio panel](./docs/screenshots/studio-panel.png)
-
-## Screenshots
-
-| Full table | Studio panel | Mobile view |
-|-----------|--------------|-------------|
-| ![Full table](./docs/screenshots/full-table.png) | ![Studio](./docs/screenshots/studio-panel.png) | ![Mobile](./docs/screenshots/mobile-view.png) |
-
-_Add your own screenshots to `docs/screenshots/` (e.g. `full-table.png`, `studio-panel.png`, `mobile-view.png`) to show the table in action._
 
 ## API Reference
 
@@ -307,48 +299,126 @@ _Add your own screenshots to `docs/screenshots/` (e.g. `full-table.png`, `studio
 | `error` | `Error \| string` | `null` | Error to display |
 | `theme` | `Partial<Theme>` | Dark theme | Custom theme colors |
 | `translations` | `Partial<Translations>` | English | Custom text labels |
-| `mobileBreakpoint` | `Breakpoint` | `'tablet'` | When to switch to mobile view |
-| `enableDragDrop` | `boolean` | `true` | Allow column reordering |
-| `enableColumnResize` | `boolean` | `true` | Allow column resizing |
-| `enableRowSelection` | `boolean` | `false` | Enable row selection |
-| `enableMultiSelect` | `boolean` | `false` | Allow multi-row selection |
-| `showPagination` | `boolean` | `true` | Show pagination controls |
-| `showFilter` | `boolean` | `true` | Show filter controls |
-| `showGlobalFilter` | `boolean` | `true` | Show global search |
-| `showOverflowTooltip` | `boolean` | `true` | Show full content on hover when cell is truncated |
-| `enableCellAutoSizeOnDoubleClick` | `boolean` | `false` | Double-click cell to expand width to fit content |
-| `subCellExpandTrigger` | `'doubleClick' \| 'arrow' \| 'both'` | `'both'` | Default trigger for sub-cell expand |
-| `expandRowOnDoubleClick` | `boolean` | `false` | Double-click row to toggle row expansion |
-| `themeMode` | `'light' \| 'dark' \| 'system'` | — | Control light/dark for table and Bear components inside it |
-| `themeOverride` | `Record<string, unknown>` | — | Bear theme object; table wraps content in BearProvider with this theme |
-| `stickyHeader` | `boolean` | `true` | Sticky header on scroll |
-| `studio` | `boolean` | `false` | Show Studio side panel (data preview, props snapshot, generate sample data) |
+| `themeMode` | `'light' \| 'dark' \| 'system'` | — | Light/dark mode |
+| `themeOverride` | `Record<string, unknown>` | — | Bear theme object |
+| `enableDragDrop` | `boolean` | `true` | Column reordering |
+| `enableColumnResize` | `boolean` | `true` | Column resizing |
+| `enableRowSelection` | `boolean` | `false` | Row selection |
+| `enableMultiSelect` | `boolean` | `false` | Multi-row selection |
+| `enableRowExpansion` | `boolean` | `false` | Row expansion |
+| `enableCellEdit` | `boolean` | `false` | Enable inline cell editing |
+| `enableExport` | `boolean` | `false` | Show CSV/JSON export buttons |
+| `exportFileName` | `string` | `'grid-table-export'` | Export file name |
+| `showPagination` | `boolean` | `true` | Pagination controls |
+| `showFilter` | `boolean` | `true` | Filter controls |
+| `showGlobalFilter` | `boolean` | `true` | Global search |
+| `showOverflowTooltip` | `boolean` | `true` | Tooltip on truncated cells |
+| `stickyHeader` | `boolean` | `true` | Sticky header |
+| `tableEffects` | `TableEffects` | — | Sort/hover/row animations |
+| `defaultExpandedIds` | `Array<string \| number>` | — | IDs to expand on mount |
+| `lazyLoad` | `LazyLoadConfig` | — | Infinite scroll config |
+| `onCellEdit` | `(row, colId, old, new) => void` | — | Cell edit callback |
+| `onRowClick` | `(row, index) => void` | — | Row click callback |
+| `onRowSelect` | `(selectedRows) => void` | — | Selection callback |
+| `onSort` | `(sorting) => void` | — | Sort change callback |
+| `onPageChange` | `(page, pageSize) => void` | — | Page change callback |
+| `studio` | `boolean` | `false` | Show Studio panel |
 
 ### ColumnDefinition
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `id` | `string` | Unique column identifier |
-| `accessor` | `string \| (row) => any` | Data accessor |
+| `accessor` | `string \| (row) => unknown` | Data accessor |
 | `header` | `ReactNode \| () => ReactNode` | Header content |
 | `width` | `ResponsiveValue<number \| string>` | Column width |
 | `align` | `'left' \| 'center' \| 'right'` | Text alignment |
 | `sortable` | `boolean` | Enable sorting |
 | `filterable` | `boolean` | Enable filtering |
-| `draggable` | `boolean` | Allow drag to reorder |
+| `draggable` | `boolean` | Allow drag reorder |
 | `resizable` | `boolean` | Allow resize |
 | `hidden` | `boolean` | Initially hidden |
-| `hiddenOnMobile` | `boolean` | Hide on mobile |
+| `editable` | `boolean \| CellEditConfig` | Enable inline editing |
 | `render` | `(value, row, index) => ReactNode` | Custom cell renderer |
 | `filterType` | `'text' \| 'number' \| 'select' \| ...` | Filter input type |
-| `filterOptions` | `FilterOption[]` | Options for select filter |
-| `sortFn` | `(a, b, dir) => number` | Custom sort function |
-| `filterFn` | `(value, filter, op) => boolean` | Custom filter function |
-| `showOverflowTooltip` | `boolean` | When truncated, show full content on hover (default true) |
-| `renderSubCell` | `(row) => ReactNode` | Optional expandable sub-content below cell |
-| `subCellExpandTrigger` | `'doubleClick' \| 'arrow' \| 'both'` | How to expand sub-cell (default `'both'`) |
+| `showOverflowTooltip` | `boolean` | Tooltip on truncated cell |
+| `renderSubCell` | `(row) => ReactNode` | Expandable sub-content |
+
+### TableEffects
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `hover` | `boolean \| HoverEffectConfig` | Hover highlight effect |
+| `sort` | `boolean \| SortEffectConfig` | Sort animation effect |
+| `row` | `boolean \| RowEffectConfig` | Row entry animation |
+| `className` | `string` | Custom class on root |
+
+### LazyLoadConfig
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `enabled` | `boolean` | Required | Enable lazy loading |
+| `initialRows` | `number` | `20` | Rows shown initially |
+| `batchSize` | `number` | `10` | Rows per scroll load |
+| `showLoader` | `boolean` | `true` | Show loading indicator |
+| `loadingContent` | `ReactNode` | — | Custom loader |
+
+### CellEditConfig
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `enabled` | `boolean` | Enable editing for this column |
+| `type` | `'text' \| 'number' \| 'select' \| 'date' \| 'boolean'` | Input type |
+| `options` | `Array<{ value, label }>` | Options for select type |
+| `validate` | `(value, row) => string \| true` | Validation function |
+| `onSave` | `(row, colId, old, new) => void` | Save callback |
+| `placeholder` | `string` | Input placeholder |
+
+### Exports
+
+```tsx
+import {
+  GridTable,
+  EditableCell,
+  GridHeader,
+  GridBody,
+  GridRow,
+  GridCell,
+  Pagination,
+  Skeleton,
+  EmptyState,
+  TableProvider,
+  useTableContext,
+  useTable,
+  useSort,
+  useFilter,
+  usePagination,
+  useDragDrop,
+  useBreakpoint,
+  exportToCSV,
+  exportToJSON,
+} from '@forgedevstack/grid-table';
+```
+
+## Portal
+
+The grid-table portal is a full documentation + demo website:
+
+- **Home** — Feature showcase, demo mesh, ecosystem banner
+- **Demos** — Finance (live data), HR (tree view), Basic (all props)
+- **Playground** — Toggle props live, auto-generated code
+- **Theme Builder** — Customize colors and export code
+- **Docs** — Getting started, API reference, guides
+- **Changelog** — Full version history
+- **i18n** — English and Spanish
+- **Cmd+K** — Quick search across all pages
+
+Run the portal:
+
+```bash
+cd portal && npm i && npm run dev
+```
 
 ## License
 
 MIT
-

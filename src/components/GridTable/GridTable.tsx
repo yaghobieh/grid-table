@@ -1,7 +1,7 @@
 import type { ReactNode, CSSProperties } from 'react';
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './types';
-import type { RowData } from '../../types';
+import type { RowData, TableEffects } from '../../types';
 import { TableProvider, useTableContext } from '../../context';
 import { useBreakpoint } from '../../hooks';
 import { GridHeader } from '../GridHeader';
@@ -11,6 +11,26 @@ import { Skeleton } from '../Skeleton';
 import { TableStudioPanel } from '../TableStudioPanel';
 import { EmptyState } from '../EmptyState';
 import { MobileDrawer } from '../MobileDrawer';
+import { exportToCSV, exportToJSON } from '../../utils/export.utils';
+
+function isEffectEnabled(cfg: boolean | Record<string, unknown> | undefined): boolean {
+  if (cfg === true) return true;
+  if (cfg && typeof cfg === 'object' && cfg.enabled !== false) return true;
+  return false;
+}
+
+function resolveEffects(te?: TableEffects) {
+  if (!te) return { sort: false, row: false, hover: false, className: '' };
+  return {
+    sort: isEffectEnabled(te.sort as boolean | Record<string, unknown> | undefined),
+    row: isEffectEnabled(te.row as boolean | Record<string, unknown> | undefined),
+    hover: isEffectEnabled(te.hover as boolean | Record<string, unknown> | undefined),
+    className: te.className ?? '',
+  };
+}
+
+const DEFAULT_LAZY_INITIAL = 20;
+const DEFAULT_LAZY_BATCH = 10;
 
 function GridTableContent<T extends RowData>({
   data,
@@ -57,12 +77,61 @@ function GridTableContent<T extends RowData>({
   themeMode,
   paginationConfig,
   gridThemeVars,
+  tableEffects,
+  defaultExpandedIds,
+  lazyLoad,
+  enableExport,
+  exportFileName,
+  enableCellEdit,
+  onCellEdit,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
 
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
   const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
+
+  const fx = useMemo(() => resolveEffects(tableEffects), [tableEffects]);
+
+  const didInitExpand = useRef(false);
+  useEffect(() => {
+    if (defaultExpandedIds && defaultExpandedIds.length > 0 && !didInitExpand.current) {
+      didInitExpand.current = true;
+      defaultExpandedIds.forEach((id) => actions.expandRow(id));
+    }
+  }, [defaultExpandedIds, actions]);
+
+  const lazyEnabled = lazyLoad?.enabled ?? false;
+  const lazyInitial = lazyLoad?.initialRows ?? DEFAULT_LAZY_INITIAL;
+  const lazyBatch = lazyLoad?.batchSize ?? DEFAULT_LAZY_BATCH;
+  const [lazyVisibleCount, setLazyVisibleCount] = useState(lazyEnabled ? lazyInitial : Infinity);
+  const [lazyLoading, setLazyLoading] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Reset lazy count when data changes
+  useEffect(() => {
+    if (lazyEnabled) setLazyVisibleCount(lazyInitial);
+  }, [lazyEnabled, lazyInitial, state.data.length]);
+
+  // Intersection observer for infinite scroll
+  useEffect(() => {
+    if (!lazyEnabled || !sentinelRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !lazyLoading) {
+          setLazyLoading(true);
+          // Simulate a tiny delay so the loader is visible
+          setTimeout(() => {
+            setLazyVisibleCount((prev) => prev + lazyBatch);
+            setLazyLoading(false);
+          }, 300);
+        }
+      },
+      { rootMargin: '100px' }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [lazyEnabled, lazyBatch, lazyLoading]);
 
   const getRowIdFn = useCallback(
     (row: T): string | number => {
@@ -200,9 +269,16 @@ function GridTableContent<T extends RowData>({
 
   const isEmpty = computed.paginatedData.length === 0;
 
+  const displayData = useMemo(() => {
+    if (!lazyEnabled) return computed.paginatedData;
+    return computed.paginatedData.slice(0, lazyVisibleCount);
+  }, [lazyEnabled, lazyVisibleCount, computed.paginatedData]);
+
+  const hasMoreLazy = lazyEnabled && lazyVisibleCount < computed.paginatedData.length;
+
   const tableContent = (
     <div
-      className={`grid-table rounded-lg border overflow-hidden ${classNames.root || ''} ${className}`}
+      className={`grid-table rounded-lg border overflow-hidden ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
       style={containerStyle}
       role="table"
     >
@@ -239,6 +315,31 @@ function GridTableContent<T extends RowData>({
               </button>
             )}
           </div>
+
+          {enableExport && (
+            <div className="toolbar-export-actions" style={{ display: 'flex', gap: '0.25rem' }}>
+              <button
+                onClick={() => exportToCSV(computed.sortedData, columns, exportFileName)}
+                className="toolbar-action-button"
+                aria-label="Export CSV"
+                title="Export CSV"
+              >
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </button>
+              <button
+                onClick={() => exportToJSON(computed.sortedData, columns, exportFileName)}
+                className="toolbar-action-button"
+                aria-label="Export JSON"
+                title="Export JSON"
+              >
+                <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </button>
+            </div>
+          )}
 
           {state.filters.length > 0 && (
             <button
@@ -319,29 +420,45 @@ function GridTableContent<T extends RowData>({
             />
           )
         ) : (
-          <GridBody
-            data={computed.paginatedData}
-            columns={columns}
-            columnStates={state.columnStates}
-            className={classNames.body}
-            style={styles.body}
-            isMobile={shouldShowMobileView}
-            showMobileLabels={showMobileLabels}
-            enableSelection={enableRowSelection}
-            enableExpansion={enableRowExpansion}
-            selectedIds={state.selectedIds}
-            expandedIds={state.expandedIds}
-            onRowClick={onRowClick}
-            onRowDoubleClick={handleRowDoubleClick}
-            onCellClick={onCellClick}
-            onRowSelect={handleRowSelect}
-            onRowExpand={handleRowExpand}
-            getRowId={getRowIdFn}
-            getRowClassName={getRowClassName}
-            getRowStyle={getRowStyle}
-            isRowDisabled={isRowDisabled}
-            renderRowExpansion={renderRowExpansion}
-          />
+          <>
+            <GridBody
+              data={displayData}
+              columns={columns}
+              columnStates={state.columnStates}
+              className={classNames.body}
+              style={styles.body}
+              isMobile={shouldShowMobileView}
+              showMobileLabels={showMobileLabels}
+              enableSelection={enableRowSelection}
+              enableExpansion={enableRowExpansion}
+              selectedIds={state.selectedIds}
+              expandedIds={state.expandedIds}
+              onRowClick={onRowClick}
+              onRowDoubleClick={handleRowDoubleClick}
+              onCellClick={onCellClick}
+              onRowSelect={handleRowSelect}
+              onRowExpand={handleRowExpand}
+              getRowId={getRowIdFn}
+              getRowClassName={getRowClassName}
+              getRowStyle={getRowStyle}
+              isRowDisabled={isRowDisabled}
+              renderRowExpansion={renderRowExpansion}
+            />
+            {hasMoreLazy && (
+              <div ref={sentinelRef} className="gt-lazy-sentinel" style={{ padding: '0.75rem', textAlign: 'center' }}>
+                {lazyLoading && (
+                  lazyLoad?.loadingContent ?? (
+                    <div className="gt-lazy-loader" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.6 }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="gt-spin">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                      </svg>
+                      <span style={{ fontSize: '0.8rem' }}>Loading…</span>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -468,6 +585,7 @@ export function GridTable<T extends RowData = RowData>({
       enableCellAutoSizeOnDoubleClick={enableCellAutoSizeOnDoubleClick}
       subCellExpandTrigger={subCellExpandTrigger}
       expandRowOnDoubleClick={expandRowOnDoubleClick}
+      defaultExpandedIds={props.defaultExpandedIds}
     >
       <GridTableContent
         data={effectiveData}

@@ -107,6 +107,7 @@ export function TableProvider<T extends RowData>({
   subCellExpandTrigger = 'both',
   expandRowOnDoubleClick = false,
   globalFilterColumns = undefined,
+  defaultExpandedIds,
 }: TableProviderProps<T>): ReactNode {
   const tableOptions: TableOptions = useMemo(
     () => ({
@@ -148,7 +149,7 @@ export function TableProvider<T extends RowData>({
     pageSize: paginationConfig?.initialPageSize ?? DEFAULT_TABLE_CONFIG.pageSize,
     totalItems: data.length,
     selectedIds: new Set(),
-    expandedIds: new Set(),
+    expandedIds: new Set(defaultExpandedIds ?? []),
     expandedCellIds: new Set(),
     autoSizedColumnIds: new Set(),
     loading,
@@ -305,6 +306,15 @@ export function TableProvider<T extends RowData>({
         } else {
           actions.expandRow(id);
         }
+      },
+
+      expandAllRows: () => {
+        const allIds = new Set(state.data.map(getRowIdFn));
+        dispatch({ type: 'SET_EXPANDED_IDS', payload: allIds });
+      },
+
+      collapseAllRows: () => {
+        dispatch({ type: 'SET_EXPANDED_IDS', payload: new Set() });
       },
 
       toggleCellExpansion: (rowId: string | number, columnId: string) => {

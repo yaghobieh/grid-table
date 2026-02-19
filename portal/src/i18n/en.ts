@@ -1,0 +1,196 @@
+import type { TranslationStrings } from './types';
+
+export const en: TranslationStrings = {
+  nav: {
+    demos: 'Demos',
+    playground: 'Playground',
+    themeBuilder: 'Theme Builder',
+    docs: 'Docs',
+    api: 'API',
+    changelog: 'Changelog',
+    getStarted: 'Get Started',
+    gridTable: 'Grid Table',
+    toggleTheme: 'Toggle theme',
+    language: 'Language',
+  },
+
+  home: {
+    badgeText: 'Sort Animations, Tree Data, Theme Builder',
+    title: 'Grid Table',
+    subtitle: 'The React Data Grid for ForgeStack',
+    typewriterTexts: [
+      'Sort animations, tree data, theme builder.',
+      'Finance dashboards & HR org charts.',
+      'Drag & drop, resize, row selection.',
+      'Fully customizable via props.',
+      'Zero dependencies. 100% TypeScript.',
+    ],
+    viewDemos: 'View Demos',
+    documentation: 'Documentation',
+    themeBuilder: 'Theme Builder',
+    seeItInAction: 'See It in Action',
+    seeItDescription: 'From finance dashboards to HR org charts — Grid Table handles any data scenario.',
+    interactivePreview: 'Interactive demo preview',
+    launchFinanceDemo: 'Launch Finance Demo',
+    demosAndExamples: 'Demos & Examples',
+    exploreExamples: 'Explore real-world scenarios powered by Grid Table.',
+    clickToLaunch: 'Click to launch →',
+    everythingYouNeed: 'Everything You Need',
+    featureRichDataGrid: 'Feature-Rich Data Grid',
+    builtForReal: 'Built for real-world applications — every feature is customizable via props.',
+    forgeStackEcosystem: 'ForgeStack Ecosystem',
+    worksWith: 'Part of the Full ForgeStack',
+    showcaseTitle: 'Built for Every Data Scenario',
+    showcaseDescription: 'Finance, HR, effects, lazy loading — everything in one powerful grid.',
+    showcase: {
+      finance: { title: 'Finance Mode', description: 'Real-time tickers, sparklines, live P&L — data that never sleeps.' },
+      hr: { title: 'HR & Tree Data', description: 'Org charts, expand/collapse, hierarchy — visualize your organization.' },
+      effects: { title: 'Table Effects', description: 'Sort animations, row entry, hover accents — configurable via tableEffects prop.' },
+      lazyLoad: { title: 'Lazy Loading', description: 'Infinite scroll, batch loading, skeleton loaders — handle 100k+ rows.' },
+    },
+    demoPreview: {
+      finance: 'AAPL +2.34%  ·  MSFT −0.12%  ·  GOOG +1.87%',
+      hr: 'CEO → VP Eng → Sr. Dev → Jr. Dev',
+      basic: 'Sort · Filter · Paginate · Select · Drag',
+      themeBuilder: '🎨  bg · accent · border · radius',
+    },
+    viewLive: 'View Live →',
+    ecosystemBanner: 'Fully compatible with the entire ForgeStack ecosystem.',
+    visitForgeStack: 'Visit ForgeStack',
+  },
+
+  stats: {
+    features: 'Features',
+    dependencies: 'Dependencies',
+    bundleSize: 'Bundle Size',
+    typescript: 'TypeScript',
+  },
+
+  features: {
+    sort: { title: 'Sort Animations', description: 'Smooth animated transitions when sorting columns — arrow rotation, column highlight, and flash effects.' },
+    tree: { title: 'Tree Data', description: 'Hierarchical data with expand/collapse, indentation levels, and parent-child relationships.' },
+    filter: { title: 'Advanced Filtering', description: 'Column-level and global filtering with 12+ operators, custom filter functions, and filter panel.' },
+    drag: { title: 'Drag & Drop', description: 'Reorder columns by dragging, with visual feedback and threshold to prevent accidental moves.' },
+    theme: { title: 'Theme Builder', description: 'Customize every aspect — colors, fonts, spacing, borders. Export ready-to-use code.' },
+    responsive: { title: 'Responsive Design', description: 'Mobile card layout with drawer for filters/sorting, configurable breakpoints.' },
+    selection: { title: 'Row Selection', description: 'Single and multi-select with checkboxes, select-all, and indeterminate state.' },
+    pagination: { title: 'Pagination', description: 'Built-in pagination with customizable page sizes, first/last buttons.' },
+    resize: { title: 'Column Resize', description: 'Drag column edges to resize with min/max width constraints.' },
+    expand: { title: 'Row Expansion', description: 'Expand rows to show detailed content with custom render functions.' },
+    skeleton: { title: 'Skeleton Loading', description: 'Beautiful animated loading placeholder that matches table structure.' },
+    typescript: { title: 'Full TypeScript', description: 'Generic type support, strict type checking, and exported type definitions.' },
+  },
+
+  demos: {
+    finance: { title: 'Finance', description: 'Live-updating financial data with P&L, sparklines, and real-time tickers.' },
+    hr: { title: 'HR / Org Chart', description: 'Hierarchical employee data with tree view, expand/collapse, and reporting lines.' },
+    basic: { title: 'Basic Table', description: 'Full-featured grid with sorting, filtering, pagination, and row selection.' },
+    themeBuilder: { title: 'Theme Builder', description: 'Customize every color, font, and spacing — export code for your project.' },
+  },
+
+  tags: {
+    popular: 'Popular',
+    new: 'New',
+    interactive: 'Interactive',
+  },
+
+  footer: {
+    partOfForgeStack: 'Part of ForgeStack',
+    mitLicense: 'MIT License',
+    builtWith: 'Built with',
+    ecosystemText: 'Grid Table, Bear UI, Harbor, Synapse, Compass, Relay, Crucible, and Forge CLI are part of the',
+  },
+
+  themeBuilderPage: {
+    title: 'Theme Builder',
+    description: 'Customize every color, font, and spacing. Preview live and export ready-to-use code.',
+    presets: 'Presets',
+    colors: 'Colors',
+    layout: 'Layout',
+    background: 'Background',
+    foreground: 'Foreground',
+    accent: 'Accent',
+    border: 'Border',
+    headerBg: 'Header BG',
+    headerText: 'Header Text',
+    rowHover: 'Row Hover',
+    fontSize: 'Font Size',
+    radius: 'Radius',
+    spacing: 'Spacing',
+    stripedRows: 'Striped Rows',
+    mode: 'Mode',
+    dark: 'Dark',
+    light: 'Light',
+    livePreview: 'Live Preview',
+    exportCode: 'Export Code',
+    hideCode: 'Hide Code',
+  },
+
+  docsPage: {
+    documentation: 'Documentation',
+    pageNotFound: 'Page Not Found',
+    pageNotFoundDesc: 'The documentation page doesn\'t exist.',
+    goToGettingStarted: 'Go to Getting Started',
+    apiReference: 'API Reference',
+    apiDescription: 'Complete reference for all Grid Table props, column definitions, and hooks.',
+    selectSection: 'Select Section',
+    prop: 'Prop',
+    type: 'Type',
+    default: 'Default',
+    description: 'Description',
+    required: 'required',
+  },
+
+  financeDemo: {
+    title: 'Finance Dashboard',
+    description: 'Live-updating stock data with sparklines, P/E ratios, and 52-week ranges.',
+    live: 'LIVE',
+    pause: 'Pause',
+    resume: 'Resume',
+    refresh: 'Refresh',
+  },
+
+  hrDemo: {
+    title: 'HR / Org Chart',
+    description: 'Hierarchical employee data with tree view, expand/collapse, and reporting lines.',
+    expandAll: 'Expand All',
+    collapseAll: 'Collapse All',
+    employees: 'employees',
+  },
+
+  basicDemo: {
+    title: 'Basic Table',
+    description: 'Full-featured grid with sorting, filtering, pagination, drag & drop, and row selection.',
+    testLoading: 'Test Loading',
+    rows: 'rows',
+  },
+
+  demosIndex: {
+    title: 'Demos & Examples',
+    description: 'Explore interactive demos showcasing Grid Table in real-world scenarios — from finance dashboards to HR org charts.',
+    viewDemo: 'View Demo',
+  },
+
+  changelog: {
+    title: 'Changelog',
+    description: 'Every release, every improvement — tracked here.',
+    latest: 'Latest',
+  },
+
+  playground: {
+    title: 'Playground',
+    description: 'Toggle props, effects, and themes — see the result live.',
+    props: 'Props',
+    effects: 'Effects',
+    theme: 'Theme',
+    reset: 'Reset to Defaults',
+    generatedCode: 'Generated Code',
+    livePreview: 'Live Preview',
+  },
+
+  common: {
+    demos: 'Demos',
+    back: 'Back',
+    modeLabel: 'mode',
+  },
+};

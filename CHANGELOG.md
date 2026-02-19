@@ -5,6 +5,45 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-02-19
+
+### Added
+
+- **Cell Editing** — Inline edit with `editable` on `ColumnDefinition`. Supports `text`, `number`, `select`, `date`, `boolean` types. Validates via `validate` callback, saves via `onSave`. Double-click to edit, Enter to save, Escape to cancel.
+- **CSV / JSON Export** — `exportToCSV()` and `exportToJSON()` utilities. `enableExport` prop adds toolbar buttons. `exportFileName` for custom download name.
+- **Table Effects (TE)** — Unified `tableEffects` prop replaces individual animation booleans. Supports `{ hover, sort, row }` with `boolean` or config object per effect. Custom `className` on root when effects are active.
+- **Lazy Load / Infinite Scroll** — `lazyLoad` prop with `enabled`, `initialRows`, `batchSize`, `showLoader`, `loadingContent`. Uses `IntersectionObserver` internally.
+- **Tree Data Expand** — `defaultExpandedIds` prop sets which rows are expanded on mount. `expandAllRows` and `collapseAllRows` actions in context.
+- **EditableCell component** — Standalone component for custom compositions.
+- **Editable cell styles** — `_editable-cell.scss` with dashed hover outline and green focus ring.
+
+### Portal
+
+- **Playground page** (`/playground`) — Toggle every prop live, auto-generated code, dark/light switch.
+- **Changelog page** (`/changelog`) — Timeline with version history.
+- **Cmd+K search modal** — Keyboard shortcut to search all pages, demos, docs.
+- **i18n** — English and Spanish translations via context + hook.
+- **Navbar** — Language dropdown (Bear `Dropdown`), GitHub icon, npm icon, `⌘K` search button.
+- **Routing** — Migrated from `react-router-dom` to `@forgedevstack/forge-compass`.
+- **Home page** — Showcase mesh, demo previews, ForgeStack ecosystem banner, typewriter effect.
+- **Finance demo** — Live-updating stock data with sparklines.
+- **HR demo** — Hierarchical tree view with expand/collapse.
+- **Basic demo** — Full-featured table with all props.
+- **Theme Builder** — Interactive theme customization with code export.
+- **Docs page** — Sidebar navigation with Bear UI, mobile drawer.
+
+## [1.0.5] - 2026-02-15
+
+### Added
+
+- **Portal** — Full documentation website built with Bear UI and Vite.
+- **Demos** — Finance, HR, Basic Table, Theme Builder pages.
+- **Documentation** — Getting Started, API Reference, installation guides.
+- **Theme Builder** — Interactive theme customization with live preview and code export.
+- **Global filter columns** — `globalFilterColumns` prop to limit which columns global search applies to.
+- **Striped rows** — `gt-striped` CSS class for alternating row colors.
+- **Row color customization** — CSS custom properties for row backgrounds.
+
 ## [1.0.3] - 2026-02-07
 
 ### Added
@@ -114,15 +153,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Virtualization for large datasets
-- Column pinning (left/right)
-- Column groups
-- Export to CSV/Excel
-- Keyboard navigation (full)
+- Virtualization for large datasets (DOM-level)
+- Column pinning (left/right) enhancements
+- Column groups (grouped headers)
+- Clipboard copy/paste support
+- Full keyboard navigation (arrow keys between cells)
 - Touch gestures for mobile
 - Row reordering via drag and drop
-- Infinite scroll pagination
 - Server-side data support
-- Column search
-- Saved views/presets
+- Master-detail (nested grids in expanded rows)
+- Status bar / footer aggregates (SUM, AVG, COUNT)
+- Context menu (right-click on rows/cells)
+- Print mode (optimized CSS)
+- Column auto-size (double-click header edge)
 

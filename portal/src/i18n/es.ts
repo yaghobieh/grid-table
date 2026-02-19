@@ -1,0 +1,196 @@
+import type { TranslationStrings } from './types';
+
+export const es: TranslationStrings = {
+  nav: {
+    demos: 'Demos',
+    playground: 'Playground',
+    themeBuilder: 'Constructor de Temas',
+    docs: 'Documentación',
+    api: 'API',
+    changelog: 'Cambios',
+    getStarted: 'Comenzar',
+    gridTable: 'Grid Table',
+    toggleTheme: 'Cambiar tema',
+    language: 'Idioma',
+  },
+
+  home: {
+    badgeText: 'Animaciones de Orden, Datos Jerárquicos, Constructor de Temas',
+    title: 'Grid Table',
+    subtitle: 'El Data Grid de React para ForgeStack',
+    typewriterTexts: [
+      'Animaciones de orden, datos jerárquicos, temas.',
+      'Paneles financieros y organigramas de RRHH.',
+      'Arrastrar y soltar, redimensionar, selección de filas.',
+      'Totalmente personalizable vía props.',
+      'Sin dependencias. 100% TypeScript.',
+    ],
+    viewDemos: 'Ver Demos',
+    documentation: 'Documentación',
+    themeBuilder: 'Constructor de Temas',
+    seeItInAction: 'Véalo en Acción',
+    seeItDescription: 'Desde paneles financieros hasta organigramas — Grid Table maneja cualquier escenario de datos.',
+    interactivePreview: 'Vista previa interactiva',
+    launchFinanceDemo: 'Abrir Demo Financiero',
+    demosAndExamples: 'Demos y Ejemplos',
+    exploreExamples: 'Escenarios reales impulsados por Grid Table.',
+    clickToLaunch: 'Clic para abrir →',
+    everythingYouNeed: 'Todo lo que Necesitas',
+    featureRichDataGrid: 'Data Grid Completo',
+    builtForReal: 'Construido para aplicaciones reales — cada función es personalizable vía props.',
+    forgeStackEcosystem: 'Ecosistema ForgeStack',
+    worksWith: 'Parte del ForgeStack Completo',
+    showcaseTitle: 'Diseñado para Cada Escenario de Datos',
+    showcaseDescription: 'Finanzas, RRHH, efectos, carga diferida — todo en un solo grid poderoso.',
+    showcase: {
+      finance: { title: 'Modo Finanzas', description: 'Cotizaciones en tiempo real, gráficos, P&L en vivo — datos que nunca duermen.' },
+      hr: { title: 'RRHH y Datos Jerárquicos', description: 'Organigramas, expandir/contraer, jerarquía — visualiza tu organización.' },
+      effects: { title: 'Efectos de Tabla', description: 'Animaciones de orden, entrada de filas, acentos hover — configurable vía tableEffects.' },
+      lazyLoad: { title: 'Carga Diferida', description: 'Scroll infinito, carga por lotes, esqueletos — maneja 100k+ filas.' },
+    },
+    demoPreview: {
+      finance: 'AAPL +2.34%  ·  MSFT −0.12%  ·  GOOG +1.87%',
+      hr: 'CEO → VP Ing → Sr. Dev → Jr. Dev',
+      basic: 'Ordenar · Filtrar · Paginar · Seleccionar · Arrastrar',
+      themeBuilder: '🎨  fondo · acento · borde · radio',
+    },
+    viewLive: 'Ver en Vivo →',
+    ecosystemBanner: 'Totalmente compatible con todo el ecosistema ForgeStack.',
+    visitForgeStack: 'Visitar ForgeStack',
+  },
+
+  stats: {
+    features: 'Funciones',
+    dependencies: 'Dependencias',
+    bundleSize: 'Tamaño',
+    typescript: 'TypeScript',
+  },
+
+  features: {
+    sort: { title: 'Animaciones de Orden', description: 'Transiciones suaves al ordenar columnas — rotación de flechas, resaltado de columnas y efectos flash.' },
+    tree: { title: 'Datos Jerárquicos', description: 'Datos jerárquicos con expandir/contraer, niveles de indentación y relaciones padre-hijo.' },
+    filter: { title: 'Filtrado Avanzado', description: 'Filtrado a nivel de columna y global con 12+ operadores, funciones personalizadas y panel de filtros.' },
+    drag: { title: 'Arrastrar y Soltar', description: 'Reordena columnas arrastrando, con retroalimentación visual y umbral para prevenir movimientos accidentales.' },
+    theme: { title: 'Constructor de Temas', description: 'Personaliza cada aspecto — colores, fuentes, espaciado, bordes. Exporta código listo para usar.' },
+    responsive: { title: 'Diseño Responsivo', description: 'Diseño de tarjetas móviles con cajón para filtros/orden, puntos de quiebre configurables.' },
+    selection: { title: 'Selección de Filas', description: 'Selección simple y múltiple con casillas, seleccionar todo y estado indeterminado.' },
+    pagination: { title: 'Paginación', description: 'Paginación incorporada con tamaños de página personalizables, botones de primero/último.' },
+    resize: { title: 'Redimensionar Columnas', description: 'Arrastra los bordes de las columnas para redimensionar con restricciones de ancho mín/máx.' },
+    expand: { title: 'Expansión de Filas', description: 'Expande filas para mostrar contenido detallado con funciones de renderizado personalizadas.' },
+    skeleton: { title: 'Carga Esqueleto', description: 'Hermoso marcador de posición de carga animado que coincide con la estructura de la tabla.' },
+    typescript: { title: 'TypeScript Completo', description: 'Soporte de tipos genéricos, verificación de tipos estricta y definiciones de tipos exportadas.' },
+  },
+
+  demos: {
+    finance: { title: 'Finanzas', description: 'Datos financieros en tiempo real con P&L, gráficos y cotizaciones en vivo.' },
+    hr: { title: 'RRHH / Organigrama', description: 'Datos jerárquicos de empleados con vista de árbol, expandir/contraer y líneas de reporte.' },
+    basic: { title: 'Tabla Básica', description: 'Tabla completa con ordenamiento, filtrado, paginación y selección de filas.' },
+    themeBuilder: { title: 'Constructor de Temas', description: 'Personaliza cada color, fuente y espaciado — exporta código para tu proyecto.' },
+  },
+
+  tags: {
+    popular: 'Popular',
+    new: 'Nuevo',
+    interactive: 'Interactivo',
+  },
+
+  footer: {
+    partOfForgeStack: 'Parte de ForgeStack',
+    mitLicense: 'Licencia MIT',
+    builtWith: 'Construido con',
+    ecosystemText: 'Grid Table, Bear UI, Harbor, Synapse, Compass, Relay, Crucible y Forge CLI son parte del',
+  },
+
+  themeBuilderPage: {
+    title: 'Constructor de Temas',
+    description: 'Personaliza cada color, fuente y espaciado. Vista previa en vivo y exporta código listo para usar.',
+    presets: 'Preajustes',
+    colors: 'Colores',
+    layout: 'Diseño',
+    background: 'Fondo',
+    foreground: 'Texto Principal',
+    accent: 'Acento',
+    border: 'Borde',
+    headerBg: 'Fondo Encabezado',
+    headerText: 'Texto Encabezado',
+    rowHover: 'Hover de Fila',
+    fontSize: 'Tamaño de Fuente',
+    radius: 'Radio',
+    spacing: 'Espaciado',
+    stripedRows: 'Filas Rayadas',
+    mode: 'Modo',
+    dark: 'Oscuro',
+    light: 'Claro',
+    livePreview: 'Vista Previa',
+    exportCode: 'Exportar Código',
+    hideCode: 'Ocultar Código',
+  },
+
+  docsPage: {
+    documentation: 'Documentación',
+    pageNotFound: 'Página No Encontrada',
+    pageNotFoundDesc: 'La página de documentación no existe.',
+    goToGettingStarted: 'Ir a Comenzar',
+    apiReference: 'Referencia de API',
+    apiDescription: 'Referencia completa para todos los props de Grid Table, definiciones de columnas y hooks.',
+    selectSection: 'Seleccionar Sección',
+    prop: 'Prop',
+    type: 'Tipo',
+    default: 'Defecto',
+    description: 'Descripción',
+    required: 'requerido',
+  },
+
+  financeDemo: {
+    title: 'Panel Financiero',
+    description: 'Datos bursátiles en tiempo real con gráficos, ratios P/E y rangos de 52 semanas.',
+    live: 'EN VIVO',
+    pause: 'Pausar',
+    resume: 'Reanudar',
+    refresh: 'Actualizar',
+  },
+
+  hrDemo: {
+    title: 'RRHH / Organigrama',
+    description: 'Datos jerárquicos de empleados con vista de árbol, expandir/contraer y líneas de reporte.',
+    expandAll: 'Expandir Todo',
+    collapseAll: 'Contraer Todo',
+    employees: 'empleados',
+  },
+
+  basicDemo: {
+    title: 'Tabla Básica',
+    description: 'Tabla completa con ordenamiento, filtrado, paginación, arrastrar y soltar, y selección de filas.',
+    testLoading: 'Probar Carga',
+    rows: 'filas',
+  },
+
+  demosIndex: {
+    title: 'Demos y Ejemplos',
+    description: 'Explora demos interactivos que muestran Grid Table en escenarios del mundo real — desde paneles financieros hasta organigramas de RRHH.',
+    viewDemo: 'Ver Demo',
+  },
+
+  changelog: {
+    title: 'Historial de Cambios',
+    description: 'Cada versión, cada mejora — registrada aquí.',
+    latest: 'Última',
+  },
+
+  playground: {
+    title: 'Playground',
+    description: 'Activa props, efectos y temas — ve el resultado en vivo.',
+    props: 'Props',
+    effects: 'Efectos',
+    theme: 'Tema',
+    reset: 'Restaurar valores',
+    generatedCode: 'Código Generado',
+    livePreview: 'Vista Previa',
+  },
+
+  common: {
+    demos: 'Demos',
+    back: 'Volver',
+    modeLabel: 'modo',
+  },
+};

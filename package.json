@@ -1,6 +1,6 @@
 {
   "name": "@forgedevstack/grid-table",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -35,6 +35,8 @@
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
+    "portal:build": "cd portal && npm run build",
+    "portal:install": "cd portal && npm install",
     "release": "npm run build && npm publish --access public",
     "release:patch": "npm version patch && npm run release",
     "release:minor": "npm version minor && npm run release",
@@ -63,7 +65,7 @@
   "bugs": {
     "url": "https://github.com/yaghobieh/grid-table/issues"
   },
-  "homepage": "https://forgedevstack.dev/table",
+  "homepage": "https://forgedevstack.com",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

@@ -118,8 +118,13 @@ function HeaderCell<T extends RowData>({
       classes.push('bg-accent-primary/10');
     }
 
+    // Add gt-sorted class when column has an active sort direction
+    if (sortDirection) {
+      classes.push('gt-sorted');
+    }
+
     return classes.join(' ');
-  }, [column.align, isSortable, isDragging, isDragOver]);
+  }, [column.align, isSortable, isDragging, isDragOver, sortDirection]);
 
   const cellStyle = useMemo(() => {
     const base: React.CSSProperties = {

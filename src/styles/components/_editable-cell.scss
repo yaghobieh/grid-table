@@ -1,0 +1,47 @@
+.gt-editable-cell {
+  cursor: default;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    outline: 1px dashed var(--gt-accent-primary, #22c55e);
+    outline-offset: -1px;
+    border-radius: 3px;
+  }
+}
+
+.gt-edit-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.gt-edit-input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--gt-text-primary, #f8fafc);
+  background: var(--gt-bg-secondary, #1a1a2e);
+  border: 1px solid var(--gt-accent-primary, #22c55e);
+  border-radius: 4px;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+  }
+}
+
+.gt-edit-select {
+  appearance: auto;
+}
+
+.gt-edit-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  font-size: 0.7rem;
+  color: #ef4444;
+  white-space: nowrap;
+  margin-top: 2px;
+}

@@ -1,6 +1,15 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { Alignment, FilterOperator, ResponsiveValue, RenderFunction, SortDirection } from './common.types';
 
+export interface CellEditConfig<T = unknown> {
+  enabled?: boolean;
+  type?: 'text' | 'number' | 'select' | 'date' | 'boolean';
+  options?: Array<{ value: string | number; label: string }>;
+  validate?: (value: unknown, row: T) => string | true;
+  onSave?: (row: T, columnId: string, oldValue: unknown, newValue: unknown) => void | Promise<void>;
+  placeholder?: string;
+}
+
 export interface ColumnDefinition<T = unknown> {
   id: string;
   accessor: string | ((row: T) => unknown);
@@ -34,6 +43,7 @@ export interface ColumnDefinition<T = unknown> {
   showOverflowTooltip?: boolean;
   renderSubCell?: (row: T) => ReactNode;
   subCellExpandTrigger?: 'doubleClick' | 'arrow' | 'both';
+  editable?: boolean | CellEditConfig<T>;
 }
 
 export interface FilterOption {

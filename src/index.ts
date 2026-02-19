@@ -4,7 +4,6 @@ import '@forgedevstack/bear/styles.css';
 export { GridTable } from './components';
 export type { GridTableComponentProps } from './components';
 
-// Sub-components for custom compositions
 export {
   GridHeader,
   GridBody,
@@ -15,6 +14,8 @@ export {
   EmptyState,
   MobileDrawer,
 } from './components';
+
+export { EditableCell } from './components/EditableCell';
 
 export type {
   GridHeaderProps,
@@ -71,8 +72,8 @@ export type {
   ClassNames,
   Styles,
   RenderFunction,
-  // Column types
   ColumnDefinition,
+  CellEditConfig,
   FilterOption,
   ColumnState,
   ColumnReorderEvent,
@@ -107,6 +108,12 @@ export type {
   TableState,
   TableInstance,
   GridTableRef,
+  // v1.0.6 — Effects, Lazy Load
+  TableEffects,
+  HoverEffectConfig,
+  SortEffectConfig,
+  RowEffectConfig,
+  LazyLoadConfig,
 } from './types';
 
 // Constants
@@ -128,3 +135,4 @@ export {
   DESKTOP_BREAKPOINT,
 } from './constants';
 
+export { exportToCSV, exportToJSON } from './utils';

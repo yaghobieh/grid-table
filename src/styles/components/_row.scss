@@ -1,19 +1,41 @@
 @import '../base/variables';
 @import '../base/mixins';
 
+// ── Keyframes ────────────────────────────────────────
+@keyframes gt-row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  60% {
+    opacity: 0.7;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gt-row-flash {
+  0%   { background-color: rgba(var(--gt-accent-rgb, 24, 144, 255), 0.12); }
+  100% { background-color: transparent; }
+}
+
+@keyframes gt-hover-glow {
+  from { box-shadow: inset 3px 0 0 transparent; }
+  to   { box-shadow: inset 3px 0 0 var(--gt-accent-primary, #1890ff); }
+}
+
 // Grid Row
 .grid-row {
   display: flex;
   align-items: stretch;
   border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
-  @include transition(background-color);
+  @include transition(background-color, box-shadow);
   cursor: default;
   width: 100%;
   min-width: 100%;
-
-  &:hover {
-    background-color: var(--gt-bg-hover, #4e4e4e);
-  }
 
   &.selected {
     background-color: rgba(24, 144, 255, 0.1);
@@ -26,6 +48,31 @@
 
   &.clickable {
     cursor: pointer;
+  }
+
+  // ── Flash effect (applied via JS on data update) ───
+  &.gt-flash {
+    animation: gt-row-flash 0.6s ease-out;
+  }
+}
+
+// ── Row entry animation (opt-in via parent .gt-row-animated) ──
+.gt-row-animated .grid-row {
+  animation: gt-row-enter 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+
+  @for $i from 1 through 60 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 20}ms;
+    }
+  }
+}
+
+// ── Enhanced hover effect (opt-in via parent .gt-hover-effect) ──
+.gt-hover-effect .grid-row {
+  &:hover {
+    background-color: var(--gt-bg-hover, #4e4e4e);
+    box-shadow: inset 3px 0 0 var(--gt-accent-primary, #1890ff);
+    animation: gt-hover-glow 0.2s ease-out;
   }
 }
 
@@ -62,4 +109,18 @@
   border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
   background-color: var(--gt-bg-secondary, #2b2b2b);
   padding: 1rem;
+}
+
+// ── Lazy-load spin animation ─────────────────────────
+@keyframes gt-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.gt-spin {
+  animation: gt-spin 0.8s linear infinite;
+}
+
+.gt-lazy-sentinel {
+  min-height: 1px;
 }

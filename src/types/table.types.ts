@@ -13,6 +13,41 @@ import type {
   Styles,
 } from './common.types';
 
+export interface HoverEffectConfig {
+  enabled?: boolean;
+  bgColor?: string;
+  accentBorder?: boolean;
+  className?: string;
+}
+
+export interface SortEffectConfig {
+  enabled?: boolean;
+  flash?: boolean;
+  bounce?: boolean;
+  className?: string;
+}
+
+export interface RowEffectConfig {
+  enabled?: boolean;
+  staggerMs?: number;
+  className?: string;
+}
+
+export interface TableEffects {
+  hover?: boolean | HoverEffectConfig;
+  sort?: boolean | SortEffectConfig;
+  row?: boolean | RowEffectConfig;
+  className?: string;
+}
+
+export interface LazyLoadConfig {
+  enabled: boolean;
+  initialRows?: number;
+  batchSize?: number;
+  showLoader?: boolean;
+  loadingContent?: ReactNode;
+}
+
 export interface GridTableProps<T extends RowData = RowData> {
   data: T[];
   columns: ColumnDefinition<T>[];
@@ -72,6 +107,14 @@ export interface GridTableProps<T extends RowData = RowData> {
   renderEmpty?: () => ReactNode;
   renderLoading?: () => ReactNode;
   renderError?: (error: Error | string) => ReactNode;
+
+  tableEffects?: TableEffects;
+  defaultExpandedIds?: Array<string | number>;
+  lazyLoad?: LazyLoadConfig;
+  enableCellEdit?: boolean;
+  onCellEdit?: (row: T, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  enableExport?: boolean;
+  exportFileName?: string;
   children?: ReactNode;
 }
 

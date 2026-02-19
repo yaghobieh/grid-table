@@ -64,6 +64,8 @@ export interface TableContextActions<T extends RowData = RowData> {
   expandRow: (id: string | number) => void;
   collapseRow: (id: string | number) => void;
   toggleRowExpansion: (id: string | number) => void;
+  expandAllRows: () => void;
+  collapseAllRows: () => void;
   toggleCellExpansion: (rowId: string | number, columnId: string) => void;
   toggleColumnAutoSize: (columnId: string) => void;
   reorderColumn: (sourceId: string, targetId: string) => void;
@@ -131,5 +133,7 @@ export interface TableProviderProps<T extends RowData = RowData> {
   subCellExpandTrigger?: SubCellExpandTrigger;
   expandRowOnDoubleClick?: boolean;
   globalFilterColumns?: string[];
+  /** IDs to expand by default on mount */
+  defaultExpandedIds?: Array<string | number>;
 }
 

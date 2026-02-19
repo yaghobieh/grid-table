@@ -13,6 +13,8 @@ import type {
   SortConfig,
   SortDirection,
   GridTableRef,
+  TableEffects,
+  LazyLoadConfig,
 } from '../../types';
 import type { SubCellExpandTrigger } from '../../context/types';
 
@@ -72,7 +74,12 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   globalFilterColumns?: string[];
   themeOverride?: Record<string, unknown>;
   studio?: boolean;
-  /** Applied to theme wrapper so themeOverride colors affect grid cells (internal use) */
   gridThemeVars?: CSSProperties;
+  tableEffects?: TableEffects;
+  defaultExpandedIds?: Array<string | number>;
+  lazyLoad?: LazyLoadConfig;
+  enableCellEdit?: boolean;
+  onCellEdit?: (row: T, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  enableExport?: boolean;
+  exportFileName?: string;
 }
-

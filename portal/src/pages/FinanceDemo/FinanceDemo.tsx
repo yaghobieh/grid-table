@@ -71,13 +71,13 @@ const columns: ColumnDefinition<FinanceRow>[] = [
   },
   {
     id: 'pe', accessor: 'pe', header: 'P/E', sortable: true, align: 'right', width: 80,
-    render: (val) => {
+    render: (val: unknown) => {
       const pe = Number(val);
       return <span style={{ color: pe < 0 ? '#ef4444' : pe > 50 ? '#eab308' : 'inherit' }}>{pe.toFixed(1)}</span>;
     },
   },
-  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
-  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
 ];
 
 export const FinanceDemo: FC = () => {

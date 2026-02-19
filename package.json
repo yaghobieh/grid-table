@@ -65,7 +65,7 @@
   "bugs": {
     "url": "https://github.com/yaghobieh/grid-table/issues"
   },
-  "homepage": "https://forgedevstack.com",
+  "homepage": "https://grid-table.com",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

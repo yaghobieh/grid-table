@@ -35,7 +35,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "portal:build": "cd portal && npm run build",
+    "portal:build": "cd portal && npm install && npm run build",
     "portal:install": "cd portal && npm install",
     "release": "npm run build && npm publish --access public",
     "release:patch": "npm version patch && npm run release",

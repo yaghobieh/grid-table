@@ -7,8 +7,7 @@ import {
   Badge,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { HR_DATA, buildHierarchy } from '@/data/hr.data';
 import type { Employee } from '@/data/hr.data';

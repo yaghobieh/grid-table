@@ -11,8 +11,7 @@ import {
   CodeBlock,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { THEME_PRESETS, THEME_EXPORT_TEMPLATE } from '@/constants';
 import type { ThemeExportConfig, ThemePreset } from '@/types';

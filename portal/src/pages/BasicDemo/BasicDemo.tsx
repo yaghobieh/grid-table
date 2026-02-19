@@ -7,8 +7,7 @@ import {
   Badge,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { BASIC_DEMO_ROWS, DEMO_PAGE_SIZE, DEMO_PAGE_SIZES } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';

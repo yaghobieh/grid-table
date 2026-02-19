@@ -12,8 +12,7 @@ import {
   GradientText,
   CodeBlock,
 } from '@forgedevstack/bear';
-import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { useI18n } from '@/i18n';
 import { TOGGLE_OPTIONS, EFFECT_OPTIONS, DEFAULT_PLAYGROUND_ROWS } from './Playground.const';

@@ -40,29 +40,29 @@ const SectorBadge: FC<{ sector: string }> = ({ sector }) => (
 const columns: ColumnDefinition<FinanceRow>[] = [
   {
     id: 'ticker', accessor: 'ticker', header: 'Ticker', sortable: true, filterable: true, width: 90, sticky: 'left',
-    render: (val) => <span className="font-mono font-bold" style={{ color: 'var(--grid-accent)' }}>{String(val)}</span>,
+    render: (val: unknown) => <span className="font-mono font-bold" style={{ color: 'var(--grid-accent)' }}>{String(val)}</span>,
   },
   { id: 'company', accessor: 'company', header: 'Company', sortable: true, filterable: true, width: 200 },
   {
     id: 'sector', accessor: 'sector', header: 'Sector', sortable: true, filterable: true,
     filterType: 'select', filterOptions: [...SECTOR_OPTIONS], width: 130,
-    render: (val) => <SectorBadge sector={String(val)} />,
+    render: (val: unknown) => <SectorBadge sector={String(val)} />,
   },
   {
     id: 'price', accessor: 'price', header: 'Price', sortable: true, align: 'right', width: 110,
-    render: (val) => <span className="font-mono font-semibold">${Number(val).toFixed(2)}</span>,
+    render: (val: unknown) => <span className="font-mono font-semibold">${Number(val).toFixed(2)}</span>,
   },
   {
     id: 'change', accessor: 'change', header: 'Change', sortable: true, align: 'right', width: 160,
-    render: (val, row) => <PriceChange value={Number(val)} percent={(row as FinanceRow).changePercent} />,
+    render: (val: unknown, row: Record<string, unknown>) => <PriceChange value={Number(val)} percent={(row as FinanceRow).changePercent} />,
   },
   {
     id: 'sparkline', accessor: 'sparkline', header: 'Trend (20pts)', width: 120,
-    render: (val) => <Sparkline data={val as number[]} width={100} height={28} />,
+    render: (val: unknown) => <Sparkline data={val as number[]} width={100} height={28} />,
   },
   {
     id: 'volume', accessor: 'volume', header: 'Volume', sortable: true, align: 'right', width: 120,
-    render: (val) => {
+    render: (val: unknown) => {
       const v = Number(val);
       if (v >= VOLUME_MILLION) return `${(v / VOLUME_MILLION).toFixed(1)}M`;
       if (v >= VOLUME_THOUSAND) return `${(v / VOLUME_THOUSAND).toFixed(0)}K`;
@@ -71,13 +71,13 @@ const columns: ColumnDefinition<FinanceRow>[] = [
   },
   {
     id: 'pe', accessor: 'pe', header: 'P/E', sortable: true, align: 'right', width: 80,
-    render: (val) => {
+    render: (val: unknown) => {
       const pe = Number(val);
       return <span style={{ color: pe < 0 ? '#ef4444' : pe > 50 ? '#eab308' : 'inherit' }}>{pe.toFixed(1)}</span>;
     },
   },
-  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
-  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
 ];
 
 export const FinanceDemo: FC = () => {

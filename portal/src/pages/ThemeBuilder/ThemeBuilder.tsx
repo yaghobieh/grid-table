@@ -49,7 +49,7 @@ const previewColumns: ColumnDefinition<PreviewRow>[] = [
   { id: 'role', accessor: 'role', header: 'Role', sortable: true, width: 160 },
   { id: 'department', accessor: 'department', header: 'Dept', sortable: true, filterable: true, width: 120 },
   { id: 'status', accessor: 'status', header: 'Status', sortable: true, width: 100 },
-  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 110, render: (val) => `$${Number(val).toLocaleString()}` },
+  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 110, render: (val: unknown) => `$${Number(val).toLocaleString()}` },
 ];
 
 // ── Helpers ──────────────────────────────────────────

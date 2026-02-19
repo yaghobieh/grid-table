@@ -17,7 +17,8 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@forgedevstack/grid-table": ["../dist/index.d.ts"]
     }
   },
   "include": ["src"],

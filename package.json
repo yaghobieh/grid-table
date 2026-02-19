@@ -30,8 +30,8 @@
     "src/grid-table.scss"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean && npx sass src/grid-table.scss dist/grid-table.css --style compressed --no-source-map",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "npx tsup src/index.ts --format cjs,esm --dts --clean && npx sass src/grid-table.scss dist/grid-table.css --style compressed --no-source-map",
+    "dev": "npx tsup src/index.ts --format cjs,esm --dts --watch",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",

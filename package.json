@@ -37,6 +37,7 @@
     "portal": "cd portal && npm run dev",
     "portal:install": "cd portal && npm install",
     "portal:build": "cd portal && npm run build",
+    "vercel-build": "npm run build && npm run portal:install && npm run portal:build",
     "prepublishOnly": "npm run build",
     "release": "npm run build && npm publish --access public",
     "release:patch": "npm version patch && npm run release",

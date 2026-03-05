@@ -60,11 +60,11 @@ const StatusDot: FC<{ status: string }> = ({ status }) => (
 const columns: ColumnDefinition<BasicUser>[] = [
   { id: 'name', accessor: 'name', header: 'Name', sortable: true, filterable: true, width: 180, sticky: 'left' },
   { id: 'email', accessor: 'email', header: 'Email', sortable: true, filterable: true, width: 240 },
-  { id: 'role', accessor: 'role', header: 'Role', sortable: true, filterable: true, filterType: 'select', filterOptions: [...ROLE_OPTIONS], width: 100, render: (val) => <RoleBadge role={String(val)} /> },
-  { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, width: 120, render: (val) => <StatusDot status={String(val)} /> },
+  { id: 'role', accessor: 'role', header: 'Role', sortable: true, filterable: true, filterType: 'select', filterOptions: [...ROLE_OPTIONS], width: 100, render: (val: unknown) => <RoleBadge role={String(val)} /> },
+  { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, width: 120, render: (val: unknown) => <StatusDot status={String(val)} /> },
   { id: 'department', accessor: 'department', header: 'Department', sortable: true, filterable: true, width: 130 },
-  { id: 'joinDate', accessor: 'joinDate', header: 'Join Date', sortable: true, width: 120, render: (val) => new Date(String(val)).toLocaleDateString() },
-  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val) => `$${Number(val).toLocaleString()}` },
+  { id: 'joinDate', accessor: 'joinDate', header: 'Join Date', sortable: true, width: 120, render: (val: unknown) => new Date(String(val)).toLocaleDateString() },
+  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val: unknown) => `$${Number(val).toLocaleString()}` },
 ];
 
 export const BasicDemo: FC = () => {
@@ -107,8 +107,8 @@ export const BasicDemo: FC = () => {
             themeMode="dark"
             paginationConfig={{ initialPageSize: DEMO_PAGE_SIZE, pageSizeOptions: [...DEMO_PAGE_SIZES] }}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
-            onRowClick={(row, index) => console.log('Row clicked:', { row, index })}
-            onRowSelect={(rows) => console.log('Selected:', rows)}
+            onRowClick={(row: BasicUser, index: number) => console.log('Row clicked:', { row, index })}
+            onRowSelect={(rows: BasicUser[]) => console.log('Selected:', rows)}
             enableExport={['csv', 'json', 'excel', 'pdf']}
             enableCopy
             enableCellEdit
@@ -119,8 +119,8 @@ export const BasicDemo: FC = () => {
               showSelectedCount: true,
               showFilteredCount: true,
               aggregations: [
-                { columnId: 'salary', type: 'sum', label: 'Total Salary', format: (v) => `$${v.toLocaleString()}` },
-                { columnId: 'salary', type: 'avg', label: 'Avg Salary', format: (v) => `$${Math.round(v).toLocaleString()}` },
+                { columnId: 'salary', type: 'sum', label: 'Total Salary', format: (v: number) => `$${v.toLocaleString()}` },
+                { columnId: 'salary', type: 'avg', label: 'Avg Salary', format: (v: number) => `$${Math.round(v).toLocaleString()}` },
               ],
             }}
             keyboardNavigation={{ enabled: true, enableEditOnEnter: true }}

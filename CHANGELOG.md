@@ -5,6 +5,52 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2026-02-24
+
+### Added
+
+- **Keyboard Navigation** — Arrow keys to move between cells, Enter to edit, Escape to cancel, Tab to move, Home/End/PageUp/PageDown. Configurable via `keyboardNavigation` prop.
+- **Column Pinning UI** — Runtime pin/unpin columns via `pinColumn` action on context. Right-click context menu includes pin left/right options.
+- **Context Menu** — Right-click on any cell for built-in actions: copy value, filter by value, pin column, hide column. Custom actions supported via `contextMenu.actions`. Toggle individual defaults with `showCopy`, `showFilter`, `showPin`, `showHide`.
+- **Tree Data** — Hierarchical rows with expand/collapse. `treeData` prop with `childrenField`, `idField`, `indentSize`, `expandAll`. Visual tree toggle arrows with indentation.
+- **Status Bar** — Footer bar showing row count, filtered count, selected count, and column aggregations (sum, avg, min, max, count). Configurable via `statusBar` prop.
+- **Row Reordering** — Drag-and-drop row reordering with visual drag handle. `rowReorder` prop and `onRowReorder` callback.
+- **Excel Export** — Export to SpreadsheetML XML (`.xls`) with `exportToExcel()` utility. No external dependencies required.
+- **PDF Export** — Export to PDF via print dialog with `exportToPDF()` utility. Styled HTML table in new window.
+- **Copy to Clipboard** — `copyToClipboard()` utility copies table data as tab-separated values. `enableCopy` prop adds toolbar button.
+- **Undo/Redo** — Edit history for cell edits with Ctrl+Z / Ctrl+Y (Cmd on Mac). `undoRedo` prop, `onUndo`/`onRedo` callbacks. Max history configurable.
+- **Column Auto-Fit** — Double-click column edge to auto-fit width. Enhanced with `autoFit` config for global auto-fit.
+- **Frozen Rows** — Pin rows to top or bottom of table via `frozenRows` prop with `{ top, bottom }` arrays. Frozen rows stay visible while scrolling.
+- **Print Mode** — `printConfig` prop adds print button. Opens styled printable view with optional title and date. Configurable page size and orientation.
+- **Enhanced Export** — `enableExport` now accepts `true`, a single format string, or an array: `['csv', 'json', 'excel', 'pdf']`.
+
+### Types
+
+- `ContextMenuConfig`, `ContextMenuAction`, `ContextMenuContext` — Context menu configuration.
+- `StatusBarConfig`, `AggregationType` — Status bar configuration.
+- `FrozenRowsConfig` — Frozen row configuration.
+- `TreeConfig`, `FlatTreeRow` — Tree data types.
+- `KeyboardNavConfig`, `FocusedCell` — Keyboard navigation types.
+- `RowReorderConfig` — Row reorder config.
+- `EditHistoryEntry`, `UndoRedoConfig` — Undo/redo types.
+- `PrintConfig`, `AutoFitConfig`, `ColumnAggregation` — Print and auto-fit types.
+
+### Hooks
+
+- `useKeyboardNavigation` — Cell focus and keyboard event handling.
+- `useRowReorder` — Row drag-and-drop state and handlers.
+- `useUndoRedo` — Edit history with undo/redo and keyboard shortcuts.
+- `useTreeData` — Tree flattening, expand/collapse, indent calculation.
+
+### Components
+
+- `ContextMenu` — Floating right-click menu with configurable actions.
+- `StatusBar` — Footer status bar with counts and aggregations.
+
+### Context
+
+- `pinColumn(columnId, side)` action added to `TableContextActions`.
+
 ## [1.0.6] - 2026-02-19
 
 ### Added
@@ -153,17 +199,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Virtualization for large datasets (DOM-level)
-- Column pinning (left/right) enhancements
+- Virtualization for large datasets (virtual scrolling)
 - Column groups (grouped headers)
-- Clipboard copy/paste support
-- Full keyboard navigation (arrow keys between cells)
 - Touch gestures for mobile
-- Row reordering via drag and drop
 - Server-side data support
 - Master-detail (nested grids in expanded rows)
-- Status bar / footer aggregates (SUM, AVG, COUNT)
-- Context menu (right-click on rows/cells)
-- Print mode (optimized CSS)
-- Column auto-size (double-click header edge)
+- Conditional formatting
+- Multi-column header groups
 

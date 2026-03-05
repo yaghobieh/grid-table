@@ -13,6 +13,8 @@ export {
   Skeleton,
   EmptyState,
   MobileDrawer,
+  ContextMenu,
+  StatusBar,
 } from './components';
 
 export { EditableCell } from './components/EditableCell';
@@ -26,6 +28,8 @@ export type {
   SkeletonProps,
   EmptyStateProps,
   MobileDrawerProps,
+  ContextMenuProps,
+  StatusBarProps,
 } from './components';
 
 // Context and Provider
@@ -45,6 +49,10 @@ export {
   usePagination,
   useDragDrop,
   useBreakpoint,
+  useKeyboardNavigation,
+  useRowReorder,
+  useUndoRedo,
+  useTreeData,
 } from './hooks';
 
 export type {
@@ -54,6 +62,10 @@ export type {
   UsePaginationReturn,
   UseDragDropReturn,
   UseBreakpointReturn,
+  UseKeyboardNavigationReturn,
+  UseRowReorderReturn,
+  UseUndoRedoReturn,
+  UseTreeDataReturn,
 } from './hooks';
 
 // Types
@@ -114,6 +126,23 @@ export type {
   SortEffectConfig,
   RowEffectConfig,
   LazyLoadConfig,
+  // v1.0.7 — New feature types
+  ContextMenuAction,
+  ContextMenuContext,
+  ContextMenuConfig,
+  StatusBarConfig,
+  AggregationType,
+  FrozenRowsConfig,
+  TreeConfig,
+  FlatTreeRow,
+  KeyboardNavConfig,
+  FocusedCell,
+  RowReorderConfig,
+  EditHistoryEntry,
+  UndoRedoConfig,
+  PrintConfig,
+  AutoFitConfig,
+  ColumnAggregation,
 } from './types';
 
 // Constants
@@ -135,4 +164,12 @@ export {
   DESKTOP_BREAKPOINT,
 } from './constants';
 
-export { exportToCSV, exportToJSON } from './utils';
+export {
+  exportToCSV,
+  exportToJSON,
+  exportToExcel,
+  exportToPDF,
+  copyToClipboard,
+  printTable,
+  computeAggregation,
+} from './utils';

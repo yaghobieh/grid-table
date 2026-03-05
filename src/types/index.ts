@@ -5,4 +5,5 @@ export * from './filter.types';
 export * from './sort.types';
 export * from './pagination.types';
 export * from './table.types';
+export * from './features.types';
 

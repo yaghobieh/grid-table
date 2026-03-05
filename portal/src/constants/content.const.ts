@@ -18,6 +18,26 @@ export const FOOTER_LINKS: FooterLink[] = [
 
 export const VERSIONS: VersionInfo[] = [
   {
+    version: '1.0.7',
+    date: '2026-02-24',
+    highlights: [
+      'Keyboard navigation — arrow keys, Tab, Enter, Escape, Home/End, PageUp/Down',
+      'Context menu — right-click for copy, filter, pin, hide with custom actions',
+      'Tree data — hierarchical rows with expand/collapse and indentation',
+      'Status bar — footer with row count, selected count, and aggregations (sum, avg, min, max)',
+      'Row reordering — drag-and-drop rows with visual handle',
+      'Excel export — SpreadsheetML XML, no dependencies',
+      'PDF export — styled printable view via print dialog',
+      'Copy to clipboard — tab-separated values',
+      'Undo/redo — cell edit history with Ctrl+Z/Y (Cmd on Mac)',
+      'Column pinning — runtime pin/unpin via context menu or API',
+      'Frozen rows — pin rows to top or bottom of viewport',
+      'Print mode — toolbar button for styled print view',
+      'Column auto-fit enhancements',
+      'Mobile breakpoint "none" option to keep table layout',
+    ],
+  },
+  {
     version: '1.0.6',
     date: '2026-02-19',
     highlights: [
@@ -67,12 +87,27 @@ export const VERSIONS: VersionInfo[] = [
 
 export const DEMOS: DemoMeta[] = [
   {
+    id: 'features',
+    title: 'v1.0.7 Features',
+    description: 'Context menu, status bar, tree data, row reorder, keyboard nav, undo/redo, frozen rows, multi-export, and print mode.',
+    icon: 'SparklesIcon',
+    path: '/demos/features',
+    tag: 'New',
+  },
+  {
+    id: 'basic',
+    title: 'Full-Featured Table',
+    description: 'All features enabled — sorting, filtering, pagination, selection, export, context menu, status bar, undo/redo.',
+    icon: 'TableIcon',
+    path: '/demos/basic',
+    tag: 'Popular',
+  },
+  {
     id: 'finance',
-    title: 'Finance',
+    title: 'Finance Dashboard',
     description: 'Live-updating financial data with P&L, sparklines, and real-time tickers.',
     icon: 'TrendingUpIcon',
     path: '/demos/finance',
-    tag: 'Popular',
   },
   {
     id: 'hr',
@@ -80,14 +115,6 @@ export const DEMOS: DemoMeta[] = [
     description: 'Hierarchical employee data with tree view, expand/collapse, and reporting lines.',
     icon: 'UsersIcon',
     path: '/demos/hr',
-    tag: 'New',
-  },
-  {
-    id: 'basic',
-    title: 'Basic Table',
-    description: 'Full-featured grid with sorting, filtering, pagination, and row selection.',
-    icon: 'TableIcon',
-    path: '/demos/basic',
   },
   {
     id: 'theme-builder',
@@ -97,12 +124,20 @@ export const DEMOS: DemoMeta[] = [
     path: '/theme-builder',
     tag: 'Interactive',
   },
+  {
+    id: 'playground',
+    title: 'Playground',
+    description: 'Toggle every prop live and get auto-generated code for your configuration.',
+    icon: 'CodeIcon',
+    path: '/playground',
+    tag: 'Interactive',
+  },
 ];
 
 export const STATS: Stat[] = [
-  { value: '25+', label: 'Features' },
+  { value: '40+', label: 'Features' },
   { value: '0', label: 'Dependencies' },
-  { value: '42KB', label: 'Bundle Size' },
+  { value: '45KB', label: 'Bundle Size' },
   { value: '100%', label: 'TypeScript' },
 ];
 
@@ -161,6 +196,46 @@ export const FEATURES: FeatureItem[] = [
     icon: 'skeleton',
     title: 'Skeleton Loading',
     description: 'Beautiful animated loading placeholder that matches table structure.',
+  },
+  {
+    icon: 'keyboard',
+    title: 'Keyboard Navigation',
+    description: 'Arrow keys, Tab, Enter to edit, Escape, Home/End, PageUp/Down for full keyboard control.',
+  },
+  {
+    icon: 'menu',
+    title: 'Context Menu',
+    description: 'Right-click for copy, filter by value, pin column, hide column. Add custom actions.',
+  },
+  {
+    icon: 'export',
+    title: 'Multi-Format Export',
+    description: 'Export to CSV, JSON, Excel (SpreadsheetML), and PDF. Copy to clipboard.',
+  },
+  {
+    icon: 'undo',
+    title: 'Undo / Redo',
+    description: 'Cell edit history with Ctrl+Z / Ctrl+Y. Configurable max history depth.',
+  },
+  {
+    icon: 'pin',
+    title: 'Frozen Rows',
+    description: 'Pin summary or total rows to top or bottom of viewport while scrolling.',
+  },
+  {
+    icon: 'reorder',
+    title: 'Row Reordering',
+    description: 'Drag-and-drop row reordering with visual handle and drop target.',
+  },
+  {
+    icon: 'print',
+    title: 'Print Mode',
+    description: 'Styled printable table view with title, date, and page size options.',
+  },
+  {
+    icon: 'bar',
+    title: 'Status Bar',
+    description: 'Footer showing row count, selection count, and column aggregations (sum, avg, min, max).',
   },
   {
     icon: 'typescript',
@@ -295,6 +370,16 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'getRowClassName', type: '(row, index) => string', default: '—', description: 'Dynamic class name per row.' },
       { name: 'getRowStyle', type: '(row, index) => CSSProperties', default: '—', description: 'Dynamic inline style per row.' },
       { name: 'studio', type: 'boolean', default: 'false', description: 'Enable studio panel for live editing.' },
+      { name: 'contextMenu', type: 'ContextMenuConfig', default: '—', description: 'Right-click context menu with copy, filter, pin, hide, and custom actions.' },
+      { name: 'statusBar', type: 'StatusBarConfig', default: '—', description: 'Footer bar with row count, selected count, and aggregations.' },
+      { name: 'frozenRows', type: 'FrozenRowsConfig', default: '—', description: 'Pin rows to top or bottom of viewport.' },
+      { name: 'treeData', type: 'TreeConfig', default: '—', description: 'Hierarchical tree data with expand/collapse.' },
+      { name: 'keyboardNavigation', type: 'KeyboardNavConfig', default: '—', description: 'Keyboard navigation between cells.' },
+      { name: 'rowReorder', type: 'RowReorderConfig', default: '—', description: 'Drag-and-drop row reordering.' },
+      { name: 'undoRedo', type: 'UndoRedoConfig', default: '—', description: 'Undo/redo for cell edits.' },
+      { name: 'printConfig', type: 'PrintConfig', default: '—', description: 'Print mode with title and date.' },
+      { name: 'enableCopy', type: 'boolean', default: 'false', description: 'Show copy-to-clipboard button in toolbar.' },
+      { name: 'enableExport', type: "boolean | string | string[]", default: 'false', description: "Export: true, 'csv', ['csv','excel','pdf']." },
     ],
   },
   {
@@ -330,6 +415,10 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'usePagination', type: 'hook', default: '—', description: 'Pagination state and handlers.' },
       { name: 'useDragDrop', type: 'hook', default: '—', description: 'Column drag-and-drop logic.' },
       { name: 'useBreakpoint', type: 'hook', default: '—', description: 'Responsive breakpoint detection.' },
+      { name: 'useKeyboardNavigation', type: 'hook', default: '—', description: 'Arrow key navigation, focus management, edit mode.' },
+      { name: 'useRowReorder', type: 'hook', default: '—', description: 'Row drag-and-drop state and handlers.' },
+      { name: 'useUndoRedo', type: 'hook', default: '—', description: 'Edit history with undo/redo and keyboard shortcuts.' },
+      { name: 'useTreeData', type: 'hook', default: '—', description: 'Tree flattening, expand/collapse, indent calculation.' },
     ],
   },
 ];

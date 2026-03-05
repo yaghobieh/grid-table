@@ -1,9 +1,9 @@
 import type { ReactNode, CSSProperties } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './types';
-import type { RowData, TableEffects } from '../../types';
+import type { RowData, TableEffects, ContextMenuContext as CtxMenuCtx, ContextMenuAction, EditHistoryEntry } from '../../types';
 import { TableProvider, useTableContext } from '../../context';
-import { useBreakpoint } from '../../hooks';
+import { useBreakpoint, useKeyboardNavigation, useRowReorder, useUndoRedo, useTreeData } from '../../hooks';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
 import { Pagination as BearPagination, Typography, Select, BearProvider } from '@forgedevstack/bear';
@@ -11,7 +11,9 @@ import { Skeleton } from '../Skeleton';
 import { TableStudioPanel } from '../TableStudioPanel';
 import { EmptyState } from '../EmptyState';
 import { MobileDrawer } from '../MobileDrawer';
-import { exportToCSV, exportToJSON } from '../../utils/export.utils';
+import { ContextMenu } from '../ContextMenu';
+import { StatusBar } from '../StatusBar';
+import { exportToCSV, exportToJSON, exportToExcel, exportToPDF, copyToClipboard, printTable } from '../../utils/export.utils';
 
 function isEffectEnabled(cfg: boolean | Record<string, unknown> | undefined): boolean {
   if (cfg === true) return true;
@@ -84,14 +86,124 @@ function GridTableContent<T extends RowData>({
   exportFileName,
   enableCellEdit,
   onCellEdit,
+  contextMenu: contextMenuConfig,
+  statusBar: statusBarConfig,
+  frozenRows,
+  treeData: treeConfig,
+  keyboardNavigation: kbConfig,
+  rowReorder: rowReorderConfig,
+  onRowReorder,
+  undoRedo: undoRedoConfig,
+  onUndo,
+  onRedo,
+  printConfig,
+  autoFit: _autoFit,
+  enableCopy,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
+
+  // -- Context menu state --
+  const [ctxMenu, setCtxMenu] = useState<{ visible: boolean; x: number; y: number; context: CtxMenuCtx<T> | null }>({
+    visible: false, x: 0, y: 0, context: null,
+  });
+
+  // -- Keyboard navigation --
+  const visibleCols = useMemo(() => columns.filter(c => !c.hidden), [columns]);
+  const { focusedCell, setFocusedCell, handleKeyDown: kbHandleKeyDown, containerRef: kbRef } =
+    useKeyboardNavigation(computed.paginatedData.length, visibleCols.length, kbConfig);
+
+  // -- Undo / Redo --
+  const onCellEditRef = useRef(onCellEdit);
+  onCellEditRef.current = onCellEdit;
+  const undoRedo = useUndoRedo(
+    undoRedoConfig?.maxHistory,
+    (e: EditHistoryEntry) => {
+      onCellEditRef.current?.(e.rowId, e.columnId, e.oldValue);
+      onUndo?.(e.rowId, e.columnId, e.oldValue);
+    },
+    (e: EditHistoryEntry) => {
+      onCellEditRef.current?.(e.rowId, e.columnId, e.newValue);
+      onRedo?.(e.rowId, e.columnId, e.newValue);
+    },
+  );
+
+  // -- Tree data --
+  const tree = useTreeData(data, treeConfig);
+
+  // -- Default context menu actions --
+  const defaultCtxActions = useMemo((): ContextMenuAction<T>[] => {
+    const acts: ContextMenuAction<T>[] = [];
+    if (contextMenuConfig?.showCopy !== false) {
+      acts.push({
+        id: 'copy',
+        label: 'Copy cell value',
+        shortcut: '⌘C',
+        onClick: (ctx) => navigator.clipboard?.writeText(ctx.value == null ? '' : String(ctx.value)),
+      });
+    }
+    if (contextMenuConfig?.showFilter !== false) {
+      acts.push({
+        id: 'filter',
+        label: 'Filter by this value',
+        onClick: (ctx) => actions.setFilter(ctx.columnId, ctx.value, 'equals'),
+      });
+    }
+    if (contextMenuConfig?.showPin !== false) {
+      acts.push({
+        id: 'pin-left',
+        label: 'Pin column left',
+        onClick: (ctx) => {
+          const cs = state.columnStates.find(c => c.id === ctx.columnId);
+          actions.pinColumn(ctx.columnId, cs?.pinned === 'left' ? null : 'left');
+        },
+      });
+      acts.push({
+        id: 'pin-right',
+        label: 'Pin column right',
+        onClick: (ctx) => {
+          const cs = state.columnStates.find(c => c.id === ctx.columnId);
+          actions.pinColumn(ctx.columnId, cs?.pinned === 'right' ? null : 'right');
+        },
+      });
+    }
+    if (contextMenuConfig?.showHide !== false) {
+      acts.push({
+        id: 'divider-hide',
+        label: '',
+        divider: true,
+        onClick: () => {},
+      });
+      acts.push({
+        id: 'hide',
+        label: 'Hide column',
+        onClick: (ctx) => actions.toggleColumnVisibility(ctx.columnId),
+      });
+    }
+    return [...acts, ...(contextMenuConfig?.actions ?? [])];
+  }, [contextMenuConfig, actions, state.columnStates]);
+
+  const handleContextMenu = useCallback((row: T, rowIndex: number, e: React.MouseEvent) => {
+    if (!contextMenuConfig?.enabled) return;
+    e.preventDefault();
+    const target = (e.target as HTMLElement).closest('[data-column-id]') as HTMLElement | null;
+    const columnId = target?.dataset.columnId ?? '';
+    const col = columns.find(c => c.id === columnId);
+    const value = col ? (typeof col.accessor === 'function' ? col.accessor(row) : (row as Record<string, unknown>)[col.accessor as string]) : undefined;
+    setCtxMenu({ visible: true, x: e.clientX, y: e.clientY, context: { row, rowIndex, columnId, value } });
+  }, [contextMenuConfig, columns]);
 
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
   const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
 
   const fx = useMemo(() => resolveEffects(tableEffects), [tableEffects]);
+
+  const shouldShowExport = useCallback((format: 'csv' | 'json' | 'excel' | 'pdf'): boolean => {
+    if (enableExport === true) return true;
+    if (enableExport === format) return true;
+    if (Array.isArray(enableExport)) return enableExport.includes(format);
+    return false;
+  }, [enableExport]);
 
   const didInitExpand = useRef(false);
   useEffect(() => {
@@ -140,6 +252,20 @@ function GridTableContent<T extends RowData>({
       return data.indexOf(row);
     },
     [getRowId, data]
+  );
+
+  // -- Row reorder --
+  const rowReorder = useRowReorder<T>(data, getRowIdFn, onRowReorder);
+
+  // -- Cell edit + undo/redo integration --
+  const handleCellSave = useCallback(
+    (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => {
+      if (undoRedoConfig?.enabled) {
+        undoRedo.pushEdit({ rowId, columnId, oldValue, newValue });
+      }
+      onCellEdit?.(rowId, columnId, newValue);
+    },
+    [undoRedoConfig?.enabled, undoRedo, onCellEdit],
   );
 
   const handleRowSelect = useCallback(
@@ -278,9 +404,12 @@ function GridTableContent<T extends RowData>({
 
   const tableContent = (
     <div
-      className={`grid-table rounded-lg border overflow-hidden ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
+      ref={kbConfig?.enabled ? kbRef as React.RefObject<HTMLDivElement> : undefined}
+      className={`grid-table rounded-lg border overflow-hidden ${shouldShowMobileView ? 'gt-mobile' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
       style={containerStyle}
       role="table"
+      tabIndex={kbConfig?.enabled ? 0 : undefined}
+      onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
 
@@ -318,24 +447,107 @@ function GridTableContent<T extends RowData>({
 
           {enableExport && (
             <div className="toolbar-export-actions" style={{ display: 'flex', gap: '0.25rem' }}>
+              {shouldShowExport('csv') && (
+                <button
+                  onClick={() => exportToCSV(computed.sortedData, columns, exportFileName)}
+                  className="toolbar-action-button"
+                  aria-label="Export CSV"
+                  title="Export CSV"
+                >
+                  <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </button>
+              )}
+              {shouldShowExport('json') && (
+                <button
+                  onClick={() => exportToJSON(computed.sortedData, columns, exportFileName)}
+                  className="toolbar-action-button"
+                  aria-label="Export JSON"
+                  title="Export JSON"
+                >
+                  <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </button>
+              )}
+              {shouldShowExport('excel') && (
+                <button
+                  onClick={() => exportToExcel(computed.sortedData, columns, exportFileName)}
+                  className="toolbar-action-button"
+                  aria-label="Export Excel"
+                  title="Export Excel"
+                >
+                  <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </button>
+              )}
+              {shouldShowExport('pdf') && (
+                <button
+                  onClick={() => exportToPDF(computed.sortedData, columns, exportFileName, printConfig?.title)}
+                  className="toolbar-action-button"
+                  aria-label="Export PDF"
+                  title="Export PDF"
+                >
+                  <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
+
+          {enableCopy && (
+            <button
+              onClick={() => copyToClipboard(computed.sortedData, columns)}
+              className="toolbar-action-button"
+              aria-label="Copy to clipboard"
+              title="Copy to clipboard"
+            >
+              <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+          )}
+
+          {printConfig?.enabled && (
+            <button
+              onClick={() => printTable(computed.sortedData, columns, printConfig?.title)}
+              className="toolbar-action-button"
+              aria-label="Print"
+              title="Print"
+            >
+              <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+            </button>
+          )}
+
+          {undoRedoConfig?.enabled && (
+            <div className="toolbar-undo-redo" style={{ display: 'flex', gap: '0.25rem' }}>
               <button
-                onClick={() => exportToCSV(computed.sortedData, columns, exportFileName)}
+                onClick={() => undoRedo.undo()}
                 className="toolbar-action-button"
-                aria-label="Export CSV"
-                title="Export CSV"
+                aria-label="Undo"
+                title="Undo (Ctrl+Z)"
+                disabled={!undoRedo.canUndo}
+                style={{ opacity: undoRedo.canUndo ? 1 : 0.4 }}
               >
                 <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                 </svg>
               </button>
               <button
-                onClick={() => exportToJSON(computed.sortedData, columns, exportFileName)}
+                onClick={() => undoRedo.redo()}
                 className="toolbar-action-button"
-                aria-label="Export JSON"
-                title="Export JSON"
+                aria-label="Redo"
+                title="Redo (Ctrl+Y)"
+                disabled={!undoRedo.canRedo}
+                style={{ opacity: undoRedo.canRedo ? 1 : 0.4 }}
               >
                 <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" />
                 </svg>
               </button>
             </div>
@@ -421,8 +633,34 @@ function GridTableContent<T extends RowData>({
           )
         ) : (
           <>
+            {frozenRows?.top && frozenRows.top.length > 0 && (
+              <GridBody
+                data={frozenRows.top}
+                columns={columns}
+                columnStates={state.columnStates}
+                className={`gt-frozen-top ${classNames.body || ''}`}
+                style={{ ...styles.body, position: 'sticky', top: stickyHeader ? 'var(--gt-header-height, 40px)' : 0, zIndex: 1, background: 'var(--gt-bg-primary, #fff)' }}
+                isMobile={shouldShowMobileView}
+                showMobileLabels={showMobileLabels}
+                enableSelection={enableRowSelection}
+                enableExpansion={enableRowExpansion}
+                selectedIds={state.selectedIds}
+                expandedIds={state.expandedIds}
+                onRowClick={onRowClick}
+                onRowDoubleClick={handleRowDoubleClick}
+                onCellClick={onCellClick}
+                onRowSelect={handleRowSelect}
+                onRowExpand={handleRowExpand}
+                getRowId={getRowIdFn}
+                getRowClassName={getRowClassName}
+                getRowStyle={getRowStyle}
+                isRowDisabled={isRowDisabled}
+                renderRowExpansion={renderRowExpansion}
+              />
+            )}
+
             <GridBody
-              data={displayData}
+              data={treeConfig?.enabled ? tree.flatRows.map(r => r.data) : displayData}
               columns={columns}
               columnStates={state.columnStates}
               className={classNames.body}
@@ -443,6 +681,17 @@ function GridTableContent<T extends RowData>({
               getRowStyle={getRowStyle}
               isRowDisabled={isRowDisabled}
               renderRowExpansion={renderRowExpansion}
+              onRowContextMenu={contextMenuConfig?.enabled ? handleContextMenu : undefined}
+              rowDragProps={rowReorderConfig?.enabled ? rowReorder.getRowDragProps : undefined}
+              draggingRowId={rowReorder.draggingRowId}
+              dragOverRowId={rowReorder.dragOverRowId}
+              treeIndents={treeConfig?.enabled ? new Map(tree.flatRows.map(r => [getRowIdFn(r.data), tree.getIndent(r.depth)])) : undefined}
+              treeToggle={treeConfig?.enabled ? tree.toggleExpand : undefined}
+              treeHasChildren={treeConfig?.enabled ? ((id) => tree.flatRows.some(r => getRowIdFn(r.data) === id && r.hasChildren)) : undefined}
+              treeIsExpanded={treeConfig?.enabled ? tree.isExpanded : undefined}
+              focusedCell={focusedCell}
+              enableCellEdit={enableCellEdit}
+              onCellSave={handleCellSave}
             />
             {hasMoreLazy && (
               <div ref={sentinelRef} className="gt-lazy-sentinel" style={{ padding: '0.75rem', textAlign: 'center' }}>
@@ -457,6 +706,32 @@ function GridTableContent<T extends RowData>({
                   )
                 )}
               </div>
+            )}
+
+            {frozenRows?.bottom && frozenRows.bottom.length > 0 && (
+              <GridBody
+                data={frozenRows.bottom}
+                columns={columns}
+                columnStates={state.columnStates}
+                className={`gt-frozen-bottom ${classNames.body || ''}`}
+                style={{ ...styles.body, position: 'sticky', bottom: 0, zIndex: 1, background: 'var(--gt-bg-primary, #fff)' }}
+                isMobile={shouldShowMobileView}
+                showMobileLabels={showMobileLabels}
+                enableSelection={enableRowSelection}
+                enableExpansion={enableRowExpansion}
+                selectedIds={state.selectedIds}
+                expandedIds={state.expandedIds}
+                onRowClick={onRowClick}
+                onRowDoubleClick={handleRowDoubleClick}
+                onCellClick={onCellClick}
+                onRowSelect={handleRowSelect}
+                onRowExpand={handleRowExpand}
+                getRowId={getRowIdFn}
+                getRowClassName={getRowClassName}
+                getRowStyle={getRowStyle}
+                isRowDisabled={isRowDisabled}
+                renderRowExpansion={renderRowExpansion}
+              />
             )}
           </>
         )}
@@ -497,6 +772,18 @@ function GridTableContent<T extends RowData>({
         </div>
       )}
 
+      {statusBarConfig?.enabled && (
+        <StatusBar
+          config={statusBarConfig}
+          data={computed.sortedData}
+          totalCount={data.length}
+          filteredCount={computed.sortedData.length}
+          selectedCount={state.selectedIds.size}
+          columns={columns}
+          className={classNames.footer}
+        />
+      )}
+
       {renderFooter && <div className="grid-table-custom-footer">{renderFooter()}</div>}
 
       <MobileDrawer
@@ -506,6 +793,17 @@ function GridTableContent<T extends RowData>({
         className={classNames.drawer}
         style={styles.drawer}
       />
+
+      {contextMenuConfig?.enabled && (
+        <ContextMenu
+          visible={ctxMenu.visible}
+          x={ctxMenu.x}
+          y={ctxMenu.y}
+          context={ctxMenu.context}
+          actions={defaultCtxActions}
+          onClose={() => setCtxMenu(prev => ({ ...prev, visible: false }))}
+        />
+      )}
     </div>
   );
 

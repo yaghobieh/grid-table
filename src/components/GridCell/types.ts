@@ -23,6 +23,8 @@ export interface GridCellProps<T extends RowData = RowData> {
   sticky?: 'left' | 'right';
   stickyOffset?: number;
   onClick?: (event: CellClickEvent<T>) => void;
+  enableCellEdit?: boolean;
+  onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
 }
 
 export interface GridCellRenderProps {

@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from '@forgedevstack/forge-compass/react';
+import { useNavigate } from '@forgedevstack/forge-compass/react';
 import {
   Button,
   Typography,
@@ -7,7 +7,8 @@ import {
   Badge,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable } from '@forgedevstack/grid-table';
+import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { Sparkline } from '@/components/Sparkline';
 import { generateFinanceData, updateFinanceData } from '@/data/finance.data';
@@ -39,29 +40,29 @@ const SectorBadge: FC<{ sector: string }> = ({ sector }) => (
 const columns: ColumnDefinition<FinanceRow>[] = [
   {
     id: 'ticker', accessor: 'ticker', header: 'Ticker', sortable: true, filterable: true, width: 90, sticky: 'left',
-    render: (val: unknown) => <span className="font-mono font-bold" style={{ color: 'var(--grid-accent)' }}>{String(val)}</span>,
+    render: (val) => <span className="font-mono font-bold" style={{ color: 'var(--grid-accent)' }}>{String(val)}</span>,
   },
   { id: 'company', accessor: 'company', header: 'Company', sortable: true, filterable: true, width: 200 },
   {
     id: 'sector', accessor: 'sector', header: 'Sector', sortable: true, filterable: true,
     filterType: 'select', filterOptions: [...SECTOR_OPTIONS], width: 130,
-    render: (val: unknown) => <SectorBadge sector={String(val)} />,
+    render: (val) => <SectorBadge sector={String(val)} />,
   },
   {
     id: 'price', accessor: 'price', header: 'Price', sortable: true, align: 'right', width: 110,
-    render: (val: unknown) => <span className="font-mono font-semibold">${Number(val).toFixed(2)}</span>,
+    render: (val) => <span className="font-mono font-semibold">${Number(val).toFixed(2)}</span>,
   },
   {
     id: 'change', accessor: 'change', header: 'Change', sortable: true, align: 'right', width: 160,
-    render: (val: unknown, row: Record<string, unknown>) => <PriceChange value={Number(val)} percent={(row as FinanceRow).changePercent} />,
+    render: (val, row) => <PriceChange value={Number(val)} percent={(row as FinanceRow).changePercent} />,
   },
   {
     id: 'sparkline', accessor: 'sparkline', header: 'Trend (20pts)', width: 120,
-    render: (val: unknown) => <Sparkline data={val as number[]} width={100} height={28} />,
+    render: (val) => <Sparkline data={val as number[]} width={100} height={28} />,
   },
   {
     id: 'volume', accessor: 'volume', header: 'Volume', sortable: true, align: 'right', width: 120,
-    render: (val: unknown) => {
+    render: (val) => {
       const v = Number(val);
       if (v >= VOLUME_MILLION) return `${(v / VOLUME_MILLION).toFixed(1)}M`;
       if (v >= VOLUME_THOUSAND) return `${(v / VOLUME_THOUSAND).toFixed(0)}K`;
@@ -70,17 +71,18 @@ const columns: ColumnDefinition<FinanceRow>[] = [
   },
   {
     id: 'pe', accessor: 'pe', header: 'P/E', sortable: true, align: 'right', width: 80,
-    render: (val: unknown) => {
+    render: (val) => {
       const pe = Number(val);
       return <span style={{ color: pe < 0 ? '#ef4444' : pe > 50 ? '#eab308' : 'inherit' }}>{pe.toFixed(1)}</span>;
     },
   },
-  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
-  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val: unknown) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'high52', accessor: 'high52', header: '52W High', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
+  { id: 'low52', accessor: 'low52', header: '52W Low', sortable: true, align: 'right', width: 100, render: (val) => <span className="font-mono text-xs">${Number(val).toFixed(2)}</span> },
 ];
 
 export const FinanceDemo: FC = () => {
   const { t } = useI18n();
+  const { navigate } = useNavigate();
   const [data, setData] = useState<FinanceRow[]>(() => generateFinanceData());
   const [isLive, setIsLive] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -103,9 +105,7 @@ export const FinanceDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Link to="/demos">
-                <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />}>{t.common.demos}</Button>
-              </Link>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
               <Badge variant="success">{t.demos.finance.title}</Badge>
               {isLive && <Badge variant="error" className="animate-pulse text-xs">● {t.financeDemo.live}</Badge>}
             </Flex>
@@ -140,6 +140,7 @@ export const FinanceDemo: FC = () => {
             stickyHeader
             tableEffects={{ hover: true, sort: true, row: true }}
             themeMode="dark"
+            mobileBreakpoint="none"
             paginationConfig={{ initialPageSize: 20, pageSizeOptions: [10, 20, 50] }}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
           />

@@ -1,10 +1,10 @@
-export const CURRENT_VERSION = '1.0.6';
+export const CURRENT_VERSION = '1.0.7';
 export const INITIAL_VERSION = '1.0.0';
 
-export const TOTAL_FEATURES = 25;
-export const TOTAL_HOOKS = 6;
-export const TOTAL_COMPONENTS = 10;
-export const TOTAL_TYPES = 30;
+export const TOTAL_FEATURES = 40;
+export const TOTAL_HOOKS = 10;
+export const TOTAL_COMPONENTS = 12;
+export const TOTAL_TYPES = 45;
 export const WEEKLY_DOWNLOADS = '2.5K+';
 export const BUNDLE_SIZE_KB = 42;
 export const ZERO_DEPENDENCIES = 0;

@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+---
+# Project Structure
+
+## Library (src/)
+- src/components/{Name}/{Name}.tsx + types.ts + index.ts
+- src/types/*.types.ts
+- src/constants/*.const.ts
+- src/hooks/use{Name}.ts
+- src/utils/*.utils.ts
+- src/styles/components/_{name}.scss
+
+## Portal (portal/src/)
+- portal/src/pages/{Name}/{Name}.tsx + {Name}.const.ts + {Name}.types.ts + index.ts
+- portal/src/components/{Name}/{Name}.tsx + index.ts
+- portal/src/constants/content.const.ts, numbers.const.ts
+- portal/src/i18n/en.ts, es.ts, types.ts, I18nProvider.tsx
+- portal/src/hooks/use{Name}.ts + index.ts
+- portal/src/data/{name}.data.ts
+
+Every page and component folder has an index.ts barrel export.

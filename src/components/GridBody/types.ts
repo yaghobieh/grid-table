@@ -24,5 +24,22 @@ export interface GridBodyProps<T extends RowData = RowData> {
   getRowStyle?: (row: T, index: number) => CSSProperties;
   isRowDisabled?: (row: T) => boolean;
   renderRowExpansion?: (row: T, rowId: string | number) => ReactNode;
+  onRowContextMenu?: (row: T, index: number, event: React.MouseEvent) => void;
+  rowDragProps?: (rowId: string | number) => {
+    draggable: boolean;
+    onDragStart: () => void;
+    onDragOver: (e: React.DragEvent) => void;
+    onDragEnd: () => void;
+    onDrop: (e: React.DragEvent) => void;
+  };
+  draggingRowId?: string | number | null;
+  dragOverRowId?: string | number | null;
+  treeIndents?: Map<string | number, number>;
+  treeToggle?: (id: string | number) => void;
+  treeHasChildren?: (id: string | number) => boolean;
+  treeIsExpanded?: (id: string | number) => boolean;
+  focusedCell?: { rowIndex: number; colIndex: number } | null;
+  enableCellEdit?: boolean;
+  onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
 }
 

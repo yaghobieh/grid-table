@@ -15,6 +15,15 @@ import type {
   GridTableRef,
   TableEffects,
   LazyLoadConfig,
+  ContextMenuConfig,
+  StatusBarConfig,
+  FrozenRowsConfig,
+  TreeConfig,
+  KeyboardNavConfig,
+  RowReorderConfig,
+  UndoRedoConfig,
+  PrintConfig,
+  AutoFitConfig,
 } from '../../types';
 import type { SubCellExpandTrigger } from '../../context/types';
 
@@ -79,7 +88,22 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   defaultExpandedIds?: Array<string | number>;
   lazyLoad?: LazyLoadConfig;
   enableCellEdit?: boolean;
-  onCellEdit?: (row: T, columnId: string, oldValue: unknown, newValue: unknown) => void;
-  enableExport?: boolean;
+  onCellEdit?: (rowId: string | number, columnId: string, newValue: unknown) => void;
+  enableExport?: boolean | 'csv' | 'json' | 'excel' | 'pdf' | Array<'csv' | 'json' | 'excel' | 'pdf'>;
   exportFileName?: string;
+
+  // v1.0.7 — New features
+  contextMenu?: ContextMenuConfig<T>;
+  statusBar?: StatusBarConfig;
+  frozenRows?: FrozenRowsConfig<T>;
+  treeData?: TreeConfig;
+  keyboardNavigation?: KeyboardNavConfig;
+  rowReorder?: RowReorderConfig;
+  onRowReorder?: (reordered: T[]) => void;
+  undoRedo?: UndoRedoConfig;
+  onUndo?: (rowId: string | number, columnId: string, value: unknown) => void;
+  onRedo?: (rowId: string | number, columnId: string, value: unknown) => void;
+  printConfig?: PrintConfig;
+  autoFit?: AutoFitConfig;
+  enableCopy?: boolean;
 }

@@ -28,3 +28,9 @@ export type { MobileDrawerProps, DrawerContent } from './MobileDrawer';
 export { FilterPopup } from './FilterPopup';
 export type { FilterPopupProps } from './FilterPopup';
 
+export { ContextMenu } from './ContextMenu';
+export type { ContextMenuProps } from './ContextMenu';
+
+export { StatusBar } from './StatusBar';
+export type { StatusBarProps } from './StatusBar';
+

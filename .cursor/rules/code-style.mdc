@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+---
+# Code Style Rules
+
+No comments in code. No section dividers. No JSDoc comments.
+No unnecessary symbols like `//`, `/* */`, or `/** */`.
+Code should be self-documenting through clear naming.
+
+All constants, types, and numbers go into dedicated files:
+- `*.const.ts` for constants
+- `*.types.ts` for interfaces and types
+- Numbers in `numbers.const.ts`
+
+No inline magic numbers. Extract to named constants.
+
+Prefer `type` imports: `import type { X } from ...`
+
+No `any`. Use `unknown` when needed.
+
+Clean exports: barrel `index.ts` in every folder.

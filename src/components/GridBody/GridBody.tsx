@@ -26,6 +26,16 @@ export function GridBody<T extends RowData = RowData>({
   getRowStyle,
   isRowDisabled,
   renderRowExpansion,
+  onRowContextMenu,
+  rowDragProps,
+  draggingRowId,
+  dragOverRowId,
+  treeIndents,
+  treeToggle,
+  treeHasChildren,
+  treeIsExpanded,
+  enableCellEdit,
+  onCellSave,
 }: GridBodyProps<T>): ReactNode {
   const handleRowSelect = useCallback(
     (row: T) => (selected: boolean) => {
@@ -57,6 +67,13 @@ export function GridBody<T extends RowData = RowData>({
         const rowClassName = getRowClassName?.(row, index) ?? '';
         const rowStyle = getRowStyle?.(row, index);
 
+        const dragProps = rowDragProps?.(rowId);
+        const isDragging = draggingRowId === rowId;
+        const isDragOver = dragOverRowId === rowId;
+        const indent = treeIndents?.get(rowId) ?? 0;
+        const hasChildren = treeHasChildren?.(rowId) ?? false;
+        const isTreeExpanded = treeIsExpanded?.(rowId) ?? false;
+
         return (
           <GridRow
             key={rowId}
@@ -69,8 +86,8 @@ export function GridBody<T extends RowData = RowData>({
             isDisabled={isDisabled}
             isMobile={isMobile}
             showMobileLabels={showMobileLabels}
-            className={rowClassName}
-            style={rowStyle}
+            className={`${rowClassName} ${isDragging ? 'gt-row-dragging' : ''} ${isDragOver ? 'gt-row-drag-over' : ''}`}
+            style={{ ...rowStyle, ...(indent > 0 ? { paddingLeft: indent } : {}) }}
             onClick={onRowClick}
             onDoubleClick={onRowDoubleClick}
             onCellClick={onCellClick}
@@ -80,6 +97,14 @@ export function GridBody<T extends RowData = RowData>({
             enableExpansion={enableExpansion && !!renderRowExpansion}
             renderExpansion={renderRowExpansion}
             getRowId={getRowId}
+            onContextMenu={onRowContextMenu ? (r: T, idx: number, e: React.MouseEvent) => onRowContextMenu(r, idx, e) : undefined}
+            {...(dragProps ?? {})}
+            treeToggle={hasChildren ? () => treeToggle?.(rowId) : undefined}
+            treeHasChildren={hasChildren}
+            treeIsExpanded={isTreeExpanded}
+            treeIndent={indent}
+            enableCellEdit={enableCellEdit}
+            onCellSave={onCellSave}
           />
         );
       })}

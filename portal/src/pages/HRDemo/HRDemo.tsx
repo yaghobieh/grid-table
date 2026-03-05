@@ -1,5 +1,5 @@
 import { FC, useState, useMemo } from 'react';
-import { Link } from '@forgedevstack/forge-compass/react';
+import { useNavigate } from '@forgedevstack/forge-compass/react';
 import {
   Button,
   Typography,
@@ -7,7 +7,8 @@ import {
   Badge,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable } from '@forgedevstack/grid-table';
+import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { HR_DATA, buildHierarchy } from '@/data/hr.data';
 import type { Employee } from '@/data/hr.data';
@@ -18,6 +19,7 @@ import { StatusBadge, DeptTag, ExpandToggle } from './helpers';
 
 export const HRDemo: FC = () => {
   const { t } = useI18n();
+  const { navigate } = useNavigate();
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set([1]));
 
   const orderedData = useMemo(() => buildHierarchy(HR_DATA), []);
@@ -51,7 +53,7 @@ export const HRDemo: FC = () => {
   const columns: ColumnDefinition<Employee>[] = [
     {
       id: 'name', accessor: 'name', header: 'Employee', sortable: true, filterable: true, width: 280, sticky: 'left',
-      render: (_val: unknown, row: Record<string, unknown>) => {
+      render: (_val, row) => {
         const emp = row as Employee;
         return (
           <ExpandToggle
@@ -66,12 +68,12 @@ export const HRDemo: FC = () => {
       },
     },
     { id: 'title', accessor: 'title', header: 'Title', sortable: true, filterable: true, width: 200 },
-    { id: 'department', accessor: 'department', header: 'Department', sortable: true, filterable: true, filterType: 'select', filterOptions: [...DEPT_OPTIONS], width: 140, render: (val: unknown) => <DeptTag dept={String(val)} /> },
-    { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, filterType: 'select', filterOptions: [...STATUS_OPTIONS], width: 110, render: (val: unknown) => <StatusBadge status={String(val)} /> },
+    { id: 'department', accessor: 'department', header: 'Department', sortable: true, filterable: true, filterType: 'select', filterOptions: [...DEPT_OPTIONS], width: 140, render: (val) => <DeptTag dept={String(val)} /> },
+    { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, filterType: 'select', filterOptions: [...STATUS_OPTIONS], width: 110, render: (val) => <StatusBadge status={String(val)} /> },
     { id: 'location', accessor: 'location', header: 'Location', sortable: true, filterable: true, width: 140 },
-    { id: 'email', accessor: 'email', header: 'Email', sortable: true, width: 220, render: (val: unknown) => <a href={`mailto:${val}`} className="hover:underline" style={{ color: 'var(--grid-accent)' }}>{String(val)}</a> },
-    { id: 'startDate', accessor: 'startDate', header: 'Start Date', sortable: true, width: 120, render: (val: unknown) => new Date(String(val)).toLocaleDateString() },
-    { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val: unknown) => `$${Number(val).toLocaleString()}` },
+    { id: 'email', accessor: 'email', header: 'Email', sortable: true, width: 220, render: (val) => <a href={`mailto:${val}`} className="hover:underline" style={{ color: 'var(--grid-accent)' }}>{String(val)}</a> },
+    { id: 'startDate', accessor: 'startDate', header: 'Start Date', sortable: true, width: 120, render: (val) => new Date(String(val)).toLocaleDateString() },
+    { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val) => `$${Number(val).toLocaleString()}` },
   ];
 
   return (
@@ -80,7 +82,7 @@ export const HRDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Link to="/demos"><Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />}>{t.common.demos}</Button></Link>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
               <Badge variant="info">{t.demos.hr.title}</Badge>
               <Badge variant="secondary" className="text-xs">{DEFAULT_HR_ROWS} {t.hrDemo.employees}</Badge>
             </Flex>

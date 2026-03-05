@@ -363,6 +363,13 @@ export function TableProvider<T extends RowData>({
         dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
       },
 
+      pinColumn: (columnId: string, side: 'left' | 'right' | null) => {
+        const newStates = state.columnStates.map((col) =>
+          col.id === columnId ? { ...col, pinned: side } : col
+        );
+        dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
+      },
+
       resetColumns: () => dispatch({ type: 'SET_COLUMN_STATES', payload: initialColumnStates }),
 
       setDraggingColumn: (columnId) => dispatch({ type: 'SET_DRAGGING_COLUMN', payload: columnId }),

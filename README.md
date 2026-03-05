@@ -4,15 +4,12 @@
   <img src="https://github.com/yaghobieh/grid-table/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.0.6 — A powerful, feature-rich data grid for React with cell editing, CSV/JSON export, sort/hover/row animations, tree data, lazy loading, and theme builder. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.0.7 — A powerful, feature-rich data grid for React with 30+ features including cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, and print mode. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
+### Core
 - **Cell Editing** — Double-click to edit inline with validation (text, number, select, date, boolean)
-- **CSV / JSON Export** — One-click export with `enableExport` prop
-- **Table Effects** — Sort animations, row entry effects, hover highlights via `tableEffects` prop
-- **Tree Data** — Hierarchical views with `defaultExpandedIds`, expand/collapse all
-- **Lazy Load** — Infinite scroll with `lazyLoad` prop (configurable batch size and loader)
 - **Dark/Light Theme** — Built-in theme support with customizable colors
 - **Filtering** — Column-level and global filtering with multiple operators
 - **Sorting** — Single and multi-column sorting with custom sort functions
@@ -21,7 +18,27 @@
 - **Pagination** — Built-in pagination with customizable page sizes
 - **Row Selection** — Single and multi-select support
 - **Row Expansion** — Expandable rows with custom content
-- **Responsive** — Mobile-first design with drawer for filters/sorting
+- **Responsive** — Mobile-first design with drawer for filters/sorting (disable with `mobileBreakpoint="none"`)
+
+### v1.0.7
+- **Keyboard Navigation** — Arrow keys, Tab, Enter to edit, Escape, Home/End, PageUp/Down
+- **Context Menu** — Right-click for copy, filter, pin, hide. Custom actions supported
+- **Tree Data** — Hierarchical rows with expand/collapse, indentation, and toggle arrows
+- **Status Bar** — Footer with row count, selected count, and column aggregations (sum, avg, min, max)
+- **Row Reordering** — Drag-and-drop rows with visual handle
+- **Excel Export** — SpreadsheetML XML export, no dependencies
+- **PDF Export** — Print-dialog-based PDF with styled table
+- **CSV / JSON Export** — One-click export with `enableExport`
+- **Copy to Clipboard** — Tab-separated clipboard copy
+- **Undo/Redo** — Edit history with Ctrl+Z / Ctrl+Y (Cmd on Mac)
+- **Column Pinning** — Runtime pin/unpin columns left or right
+- **Column Auto-Fit** — Double-click to auto-size, or global auto-fit
+- **Frozen Rows** — Pin rows to top or bottom of viewport
+- **Print Mode** — Styled printable view with title and date
+
+### Display
+- **Table Effects** — Sort animations, row entry effects, hover highlights
+- **Lazy Load** — Infinite scroll with configurable batch size
 - **Skeleton Loading** — Beautiful loading states
 - **Overflow Tooltip** — Show full cell content on hover when truncated
 - **Expandable Sub-cell** — Extra content per cell via double-click or arrow
@@ -126,24 +143,30 @@ const columns: ColumnDefinition<User>[] = [
 />
 ```
 
-## CSV / JSON Export
+## Export (CSV, JSON, Excel, PDF)
 
 ```tsx
 <GridTable
   data={data}
   columns={columns}
-  enableExport
+  enableExport={['csv', 'json', 'excel', 'pdf']}
   exportFileName="my-data"
+  enableCopy
+  printConfig={{ enabled: true, title: 'My Report' }}
 />
 ```
 
 Or use the utilities directly:
 
 ```tsx
-import { exportToCSV, exportToJSON } from '@forgedevstack/grid-table';
+import { exportToCSV, exportToJSON, exportToExcel, exportToPDF, copyToClipboard, printTable } from '@forgedevstack/grid-table';
 
 exportToCSV(data, columns, 'my-report');
 exportToJSON(data, columns, 'my-report');
+exportToExcel(data, columns, 'my-report');
+exportToPDF(data, columns, 'my-report', 'Report Title');
+copyToClipboard(data, columns);
+printTable(data, columns, 'Print Title');
 ```
 
 ## Table Effects
@@ -173,7 +196,28 @@ tableEffects={{
 }}
 ```
 
-## Tree Data / Expand
+## Tree Data
+
+Render hierarchical data with expand/collapse:
+
+```tsx
+const treeData = [
+  { id: 1, name: 'CEO', children: [
+    { id: 2, name: 'CTO', children: [
+      { id: 3, name: 'Lead Dev' },
+    ]},
+    { id: 4, name: 'CFO' },
+  ]},
+];
+
+<GridTable
+  data={treeData}
+  columns={columns}
+  treeData={{ enabled: true, childrenField: 'children', expandAll: false }}
+/>
+```
+
+## Row Expansion
 
 ```tsx
 <GridTable
@@ -182,6 +226,107 @@ tableEffects={{
   enableRowExpansion
   defaultExpandedIds={[1, 5]}
   renderRowExpansion={(row) => <EmployeeDetail employee={row} />}
+/>
+```
+
+## Keyboard Navigation
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  keyboardNavigation={{ enabled: true, enableEditOnEnter: true, wrap: true }}
+/>
+```
+
+Arrow keys move between cells. Enter starts editing. Tab moves to next cell. Escape cancels editing.
+
+## Context Menu
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  contextMenu={{
+    enabled: true,
+    showCopy: true,
+    showFilter: true,
+    showPin: true,
+    showHide: true,
+    actions: [
+      { id: 'custom', label: 'Custom Action', onClick: (ctx) => console.log(ctx.value) },
+    ],
+  }}
+/>
+```
+
+## Status Bar
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  statusBar={{
+    enabled: true,
+    showRowCount: true,
+    showSelectedCount: true,
+    showFilteredCount: true,
+    aggregations: [
+      { columnId: 'salary', type: 'sum', label: 'Total Salary', format: (v) => `$${v.toLocaleString()}` },
+      { columnId: 'age', type: 'avg', label: 'Avg Age' },
+    ],
+  }}
+/>
+```
+
+## Row Reordering
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  rowReorder={{ enabled: true }}
+  onRowReorder={(newOrder) => setData(newOrder)}
+/>
+```
+
+## Undo/Redo
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  enableCellEdit
+  undoRedo={{ enabled: true, maxHistory: 50 }}
+  onUndo={(rowId, colId, value) => console.log('Undone:', rowId, colId, value)}
+  onRedo={(rowId, colId, value) => console.log('Redone:', rowId, colId, value)}
+/>
+```
+
+## Frozen Rows
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  frozenRows={{
+    top: [summaryRow],
+    bottom: [totalRow],
+  }}
+/>
+```
+
+## Print Mode
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  printConfig={{
+    enabled: true,
+    title: 'Sales Report',
+    showDate: true,
+  }}
 />
 ```
 
@@ -307,8 +452,21 @@ Development panel for inspecting data, props, and generating sample rows:
 | `enableMultiSelect` | `boolean` | `false` | Multi-row selection |
 | `enableRowExpansion` | `boolean` | `false` | Row expansion |
 | `enableCellEdit` | `boolean` | `false` | Enable inline cell editing |
-| `enableExport` | `boolean` | `false` | Show CSV/JSON export buttons |
+| `enableExport` | `boolean \| string \| string[]` | `false` | Export buttons: `true`, `'csv'`, `['csv','excel','pdf']` |
 | `exportFileName` | `string` | `'grid-table-export'` | Export file name |
+| `enableCopy` | `boolean` | `false` | Show copy-to-clipboard button |
+| `contextMenu` | `ContextMenuConfig` | — | Right-click context menu |
+| `statusBar` | `StatusBarConfig` | — | Footer status bar |
+| `frozenRows` | `FrozenRowsConfig` | — | Pin rows to top/bottom |
+| `treeData` | `TreeConfig` | — | Hierarchical tree data |
+| `keyboardNavigation` | `KeyboardNavConfig` | — | Arrow key navigation |
+| `rowReorder` | `RowReorderConfig` | — | Drag-and-drop row reorder |
+| `onRowReorder` | `(rows) => void` | — | Row reorder callback |
+| `undoRedo` | `UndoRedoConfig` | — | Edit undo/redo |
+| `onUndo` | `(rowId, colId, value) => void` | — | Undo callback |
+| `onRedo` | `(rowId, colId, value) => void` | — | Redo callback |
+| `printConfig` | `PrintConfig` | — | Print mode config |
+| `autoFit` | `AutoFitConfig` | — | Column auto-fit |
 | `showPagination` | `boolean` | `true` | Pagination controls |
 | `showFilter` | `boolean` | `true` | Filter controls |
 | `showGlobalFilter` | `boolean` | `true` | Global search |
@@ -378,6 +536,7 @@ Development panel for inspecting data, props, and generating sample rows:
 
 ```tsx
 import {
+  // Components
   GridTable,
   EditableCell,
   GridHeader,
@@ -387,16 +546,30 @@ import {
   Pagination,
   Skeleton,
   EmptyState,
+  ContextMenu,
+  StatusBar,
+  // Context
   TableProvider,
   useTableContext,
+  // Hooks
   useTable,
   useSort,
   useFilter,
   usePagination,
   useDragDrop,
   useBreakpoint,
+  useKeyboardNavigation,
+  useRowReorder,
+  useUndoRedo,
+  useTreeData,
+  // Utils
   exportToCSV,
   exportToJSON,
+  exportToExcel,
+  exportToPDF,
+  copyToClipboard,
+  printTable,
+  computeAggregation,
 } from '@forgedevstack/grid-table';
 ```
 

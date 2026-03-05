@@ -2,7 +2,7 @@ import type { ReactNode, CSSProperties } from 'react';
 
 export type ThemeMode = 'light' | 'dark';
 
-export type Breakpoint = 'mobile' | 'tablet' | 'desktop';
+export type Breakpoint = 'mobile' | 'tablet' | 'desktop' | 'none';
 
 export type ResponsiveValue<T> = T | Partial<Record<Breakpoint, T>>;
 

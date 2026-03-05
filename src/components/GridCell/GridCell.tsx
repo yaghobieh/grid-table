@@ -5,6 +5,7 @@ import type { RowData } from '../../types';
 import { Tooltip, Typography } from '@forgedevstack/bear';
 import { useTableContext } from '../../context';
 import { highlightMatch } from '../../utils';
+import { EditableCell } from '../EditableCell';
 
 const ALIGN_CLASSES = {
   left: 'text-left justify-start',
@@ -27,6 +28,8 @@ export function GridCell<T extends RowData = RowData>({
   sticky,
   stickyOffset = 0,
   onClick,
+  enableCellEdit,
+  onCellSave,
 }: GridCellProps<T>): ReactNode {
   const valueRef = useRef<HTMLSpanElement>(null);
   const [overflowTitle, setOverflowTitle] = useState<string | undefined>(undefined);
@@ -145,6 +148,58 @@ export function GridCell<T extends RowData = RowData>({
     ? highlightMatch(String(formattedValue), state.globalFilter)
     : formattedValue;
 
+  const isEditable = enableCellEdit && column.editable;
+  const editConfig = typeof column.editable === 'object' ? column.editable : { type: 'text' as const };
+
+  const handleCellSave = useCallback(
+    (_row: T, colId: string, oldVal: unknown, newVal: unknown) => {
+      onCellSave?.(rowId, colId, oldVal, newVal);
+    },
+    [onCellSave, rowId],
+  );
+
+  const innerContent = (
+    <div className="grid-cell-inner">
+      {showLabel && labelText && (
+        <Typography component="span" variant="body2" color="secondary" className="grid-cell-label">
+          {labelText}:
+        </Typography>
+      )}
+      <div className="grid-cell-value-wrapper" style={{ minWidth: 0, overflow: 'hidden' }}>
+        {overflowTitle ? (
+          <Tooltip content={overflowTitle} placement="top" delay={200}>
+            <span
+              ref={valueRef}
+              className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
+            >
+              <Typography component="span" variant="body2" className="grid-cell-value-text">
+                {cellContent}
+              </Typography>
+            </span>
+          </Tooltip>
+        ) : (
+          <span
+            ref={valueRef}
+            className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
+          >
+            <Typography component="span" variant="body2">
+              {cellContent}
+            </Typography>
+          </span>
+        )}
+      </div>
+      {showArrow && (
+        <button
+          type="button"
+          className={`grid-cell-expand-trigger ${isSubCellExpanded ? 'grid-cell-expand-trigger--expanded' : ''}`}
+          onClick={handleExpandClick}
+          aria-label={isSubCellExpanded ? 'Collapse' : 'Expand'}
+          aria-expanded={isSubCellExpanded}
+        />
+      )}
+    </div>
+  );
+
   return (
     <div
       className={`
@@ -159,48 +214,23 @@ export function GridCell<T extends RowData = RowData>({
       `.trim()}
       style={{ ...cellStyle, ...column.cellStyle }}
       role="cell"
+      data-column-id={column.id}
       onClick={onClick ? handleClick : undefined}
-      onDoubleClick={handleDoubleClick}
+      onDoubleClick={!isEditable ? handleDoubleClick : undefined}
     >
-      <div className="grid-cell-inner">
-        {showLabel && labelText && (
-          <Typography component="span" variant="body2" color="secondary" className="grid-cell-label">
-            {labelText}:
-          </Typography>
-        )}
-        <div className="grid-cell-value-wrapper" style={{ minWidth: 0, overflow: 'hidden' }}>
-          {overflowTitle ? (
-            <Tooltip content={overflowTitle} placement="top" delay={200}>
-              <span
-                ref={valueRef}
-                className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
-              >
-                <Typography component="span" variant="body2" className="grid-cell-value-text">
-                  {cellContent}
-                </Typography>
-              </span>
-            </Tooltip>
-          ) : (
-            <span
-              ref={valueRef}
-              className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
-            >
-              <Typography component="span" variant="body2">
-                {cellContent}
-              </Typography>
-            </span>
-          )}
-        </div>
-        {showArrow && (
-          <button
-            type="button"
-            className={`grid-cell-expand-trigger ${isSubCellExpanded ? 'grid-cell-expand-trigger--expanded' : ''}`}
-            onClick={handleExpandClick}
-            aria-label={isSubCellExpanded ? 'Collapse' : 'Expand'}
-            aria-expanded={isSubCellExpanded}
-          />
-        )}
-      </div>
+      {isEditable ? (
+        <EditableCell
+          value={value}
+          row={row}
+          columnId={column.id}
+          config={editConfig}
+          onSave={handleCellSave}
+        >
+          {innerContent}
+        </EditableCell>
+      ) : (
+        innerContent
+      )}
       {hasSubCell && isSubCellExpanded && column.renderSubCell && (
         <div className="grid-cell-subcell">
           {column.renderSubCell(row as T)}

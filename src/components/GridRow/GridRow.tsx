@@ -27,6 +27,17 @@ export function GridRow<T extends RowData = RowData>({
   enableExpansion = false,
   renderExpansion,
   getRowId,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDragEnd,
+  onDrop,
+  treeToggle,
+  treeHasChildren,
+  treeIsExpanded,
+  treeIndent = 0,
+  enableCellEdit,
+  onCellSave,
 }: GridRowProps<T>): ReactNode {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -132,7 +143,37 @@ export function GridRow<T extends RowData = RowData>({
         onContextMenu={handleContextMenu}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        draggable={draggable}
+        onDragStart={onDragStart}
+        onDragOver={onDragOver}
+        onDragEnd={onDragEnd}
+        onDrop={onDrop}
       >
+        {draggable && (
+          <div className="gt-drag-handle" style={{ display: 'flex', alignItems: 'center', padding: '0 4px', cursor: 'grab' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity={0.4}>
+              <circle cx="8" cy="4" r="2" /><circle cx="16" cy="4" r="2" />
+              <circle cx="8" cy="12" r="2" /><circle cx="16" cy="12" r="2" />
+              <circle cx="8" cy="20" r="2" /><circle cx="16" cy="20" r="2" />
+            </svg>
+          </div>
+        )}
+
+        {treeHasChildren && treeToggle && (
+          <button
+            className="gt-tree-toggle"
+            onClick={(e) => { e.stopPropagation(); treeToggle(); }}
+            style={{ display: 'flex', alignItems: 'center', padding: '0 4px', marginLeft: treeIndent, border: 'none', background: 'none', cursor: 'pointer' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ transform: treeIsExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }}>
+              <path d="M8 5l8 7-8 7z" />
+            </svg>
+          </button>
+        )}
+        {!treeHasChildren && treeIndent > 0 && (
+          <div style={{ width: treeIndent + 20, flexShrink: 0 }} />
+        )}
+
         {enableSelection && (
           <div className="grid-row-select">
             <Checkbox
@@ -207,6 +248,8 @@ export function GridRow<T extends RowData = RowData>({
               sticky={col.sticky}
               stickyOffset={stickyOffset}
               onClick={onCellClick}
+              enableCellEdit={enableCellEdit}
+              onCellSave={onCellSave}
             />
           );
         })}

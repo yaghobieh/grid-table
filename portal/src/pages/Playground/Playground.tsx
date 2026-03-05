@@ -12,7 +12,8 @@ import {
   GradientText,
   CodeBlock,
 } from '@forgedevstack/bear';
-import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable } from '@forgedevstack/grid-table';
+import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { useI18n } from '@/i18n';
 import { TOGGLE_OPTIONS, EFFECT_OPTIONS, DEFAULT_PLAYGROUND_ROWS } from './Playground.const';
@@ -37,7 +38,7 @@ const columns: ColumnDefinition<PlaygroundRow>[] = [
   { id: 'role', accessor: 'role', header: 'Role', sortable: true, filterable: true, width: 100, editable: { enabled: true, type: 'select', options: [{ value: 'Admin', label: 'Admin' }, { value: 'Editor', label: 'Editor' }, { value: 'Viewer', label: 'Viewer' }] } },
   { id: 'department', accessor: 'department', header: 'Department', sortable: true, filterable: true, width: 130 },
   { id: 'status', accessor: 'status', header: 'Status', sortable: true, width: 100 },
-  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (v: unknown) => `$${Number(v).toLocaleString()}` },
+  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (v) => `$${Number(v).toLocaleString()}` },
 ];
 
 const DEFAULT_CONFIG: PlaygroundConfig = {
@@ -226,7 +227,7 @@ export const Playground: FC = () => {
                     themeMode={config.themeMode}
                     paginationConfig={{ initialPageSize: 5, pageSizeOptions: [5, 10] }}
                     dimensions={{ maxHeight: 'calc(100vh - 300px)' }}
-                    onCellEdit={(row: PlaygroundRow, col: string, _old: unknown, _new: unknown) => console.log('Cell edit:', { row, col, _old, _new })}
+                    onCellEdit={(rowId, col, newVal) => console.log('Cell edit:', { rowId, col, newVal })}
                   />
                 </div>
               </CardBody>

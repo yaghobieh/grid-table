@@ -71,6 +71,7 @@ export interface TableContextActions<T extends RowData = RowData> {
   reorderColumn: (sourceId: string, targetId: string) => void;
   resizeColumn: (columnId: string, width: number) => void;
   toggleColumnVisibility: (columnId: string) => void;
+  pinColumn: (columnId: string, side: 'left' | 'right' | null) => void;
   resetColumns: () => void;
   setDraggingColumn: (columnId: string | null) => void;
   setResizingColumn: (columnId: string | null) => void;

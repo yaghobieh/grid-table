@@ -50,6 +50,8 @@ export function useBreakpoint(): UseBreakpointReturn {
   );
 
   const shouldShowMobileView = useMemo(() => {
+    if (state.mobileBreakpoint === 'none') return false;
+
     const mobileBreakpoints: Breakpoint[] = ['mobile'];
     if (state.mobileBreakpoint === 'tablet') {
       mobileBreakpoints.push('tablet');

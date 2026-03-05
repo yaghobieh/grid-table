@@ -1,0 +1,15 @@
+---
+globs: src/**/*.ts,src/**/*.tsx,src/**/*.scss
+---
+# Grid Table Library Rules
+
+Every prop must be optional (except data and columns).
+All new features must be additive, never breaking.
+No external runtime dependencies beyond @forgedevstack/bear.
+All effects controlled via tableEffects prop.
+Tree/expand via defaultExpandedIds prop.
+Lazy load via lazyLoad prop.
+Cell editing via editable on ColumnDefinition.
+Export via enableExport prop.
+CSS class prefix: gt- for library styles.
+Animations conditional on parent class (gt-sort-animated, gt-row-animated, gt-hover-effect).

@@ -1,13 +1,14 @@
 @import 'base/variables';
 
-// Mobile View
-@media (max-width: 768px) {
+// Mobile layout scoped to .gt-mobile class (added by JS when mobileBreakpoint is active).
+// This avoids @media queries that would override mobileBreakpoint="none".
+.gt-mobile {
   .grid-row {
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 1rem;
   }
-  
+
   .grid-cell {
     width: 100%;
     padding: 0.25rem 0;

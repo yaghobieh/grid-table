@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { FinanceDemo } from './pages/FinanceDemo';
 import { HRDemo } from './pages/HRDemo';
 import { BasicDemo } from './pages/BasicDemo';
+import { FeaturesDemo } from './pages/FeaturesDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
@@ -15,6 +16,7 @@ const routes = [
   { path: '/demos/finance', name: 'demos-finance', component: FinanceDemo },
   { path: '/demos/hr', name: 'demos-hr', component: HRDemo },
   { path: '/demos/basic', name: 'demos-basic', component: BasicDemo },
+  { path: '/demos/features', name: 'demos-features', component: FeaturesDemo },
   { path: '/theme-builder', name: 'theme-builder', component: ThemeBuilder },
   { path: '/playground', name: 'playground', component: Playground },
   { path: '/changelog', name: 'changelog', component: Changelog },

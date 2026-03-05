@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Link } from '@forgedevstack/forge-compass/react';
+import { useNavigate } from '@forgedevstack/forge-compass/react';
 import {
   Button,
   Typography,
@@ -7,12 +7,24 @@ import {
   Badge,
   BearIcons,
 } from '@forgedevstack/bear';
-import { GridTable, ColumnDefinition } from '@forgedevstack/grid-table';
+import { GridTable } from '@forgedevstack/grid-table';
+import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { BASIC_DEMO_ROWS, DEMO_PAGE_SIZE, DEMO_PAGE_SIZES } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
 import { ROLE_VARIANT, STATUS_COLORS, ROLE_OPTIONS, LOADING_SIMULATION_MS } from './BasicDemo.const';
 import type { BasicUser } from './BasicDemo.types';
+
+const TOTAL_ROW: BasicUser = {
+  id: 999,
+  name: 'TOTAL',
+  email: '',
+  role: 'admin',
+  status: 'active',
+  department: '',
+  joinDate: '',
+  salary: 0,
+};
 
 // ── Data ─────────────────────────────────────────────
 const BASIC_DATA: BasicUser[] = [
@@ -48,15 +60,16 @@ const StatusDot: FC<{ status: string }> = ({ status }) => (
 const columns: ColumnDefinition<BasicUser>[] = [
   { id: 'name', accessor: 'name', header: 'Name', sortable: true, filterable: true, width: 180, sticky: 'left' },
   { id: 'email', accessor: 'email', header: 'Email', sortable: true, filterable: true, width: 240 },
-  { id: 'role', accessor: 'role', header: 'Role', sortable: true, filterable: true, filterType: 'select', filterOptions: [...ROLE_OPTIONS], width: 100, render: (val: unknown) => <RoleBadge role={String(val)} /> },
-  { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, width: 120, render: (val: unknown) => <StatusDot status={String(val)} /> },
+  { id: 'role', accessor: 'role', header: 'Role', sortable: true, filterable: true, filterType: 'select', filterOptions: [...ROLE_OPTIONS], width: 100, render: (val) => <RoleBadge role={String(val)} /> },
+  { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true, width: 120, render: (val) => <StatusDot status={String(val)} /> },
   { id: 'department', accessor: 'department', header: 'Department', sortable: true, filterable: true, width: 130 },
-  { id: 'joinDate', accessor: 'joinDate', header: 'Join Date', sortable: true, width: 120, render: (val: unknown) => new Date(String(val)).toLocaleDateString() },
-  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val: unknown) => `$${Number(val).toLocaleString()}` },
+  { id: 'joinDate', accessor: 'joinDate', header: 'Join Date', sortable: true, width: 120, render: (val) => new Date(String(val)).toLocaleDateString() },
+  { id: 'salary', accessor: 'salary', header: 'Salary', sortable: true, align: 'right', width: 120, render: (val) => `$${Number(val).toLocaleString()}` },
 ];
 
 export const BasicDemo: FC = () => {
   const { t } = useI18n();
+  const { navigate } = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const simulateLoading = () => {
@@ -70,7 +83,7 @@ export const BasicDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Link to="/demos"><Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />}>{t.common.demos}</Button></Link>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
               <Badge variant="secondary">{t.demos.basic.title}</Badge>
               <Badge variant="secondary" className="text-xs">{BASIC_DEMO_ROWS} {t.basicDemo.rows}</Badge>
             </Flex>
@@ -94,8 +107,26 @@ export const BasicDemo: FC = () => {
             themeMode="dark"
             paginationConfig={{ initialPageSize: DEMO_PAGE_SIZE, pageSizeOptions: [...DEMO_PAGE_SIZES] }}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
-            onRowClick={(row: BasicUser, index: number) => console.log('Row clicked:', { row, index })}
-            onRowSelect={(rows: BasicUser[]) => console.log('Selected:', rows)}
+            onRowClick={(row, index) => console.log('Row clicked:', { row, index })}
+            onRowSelect={(rows) => console.log('Selected:', rows)}
+            enableExport={['csv', 'json', 'excel', 'pdf']}
+            enableCopy
+            enableCellEdit
+            contextMenu={{ enabled: true, showCopy: true, showFilter: true, showPin: true, showHide: true }}
+            statusBar={{
+              enabled: true,
+              showRowCount: true,
+              showSelectedCount: true,
+              showFilteredCount: true,
+              aggregations: [
+                { columnId: 'salary', type: 'sum', label: 'Total Salary', format: (v) => `$${v.toLocaleString()}` },
+                { columnId: 'salary', type: 'avg', label: 'Avg Salary', format: (v) => `$${Math.round(v).toLocaleString()}` },
+              ],
+            }}
+            keyboardNavigation={{ enabled: true, enableEditOnEnter: true }}
+            undoRedo={{ enabled: true, maxHistory: 50 }}
+            printConfig={{ enabled: true, title: 'Basic Demo Report' }}
+            frozenRows={{ bottom: [{ ...TOTAL_ROW, salary: BASIC_DATA.reduce((s, r) => s + r.salary, 0) }] }}
           />
         </div>
       </div>

@@ -24,5 +24,16 @@ export interface GridRowProps<T extends RowData = RowData> {
   enableExpansion?: boolean;
   renderExpansion?: (row: T, rowId: string | number) => ReactNode;
   getRowId: (row: T) => string | number;
+  draggable?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDragEnd?: () => void;
+  onDrop?: (e: React.DragEvent) => void;
+  treeToggle?: () => void;
+  treeHasChildren?: boolean;
+  treeIsExpanded?: boolean;
+  treeIndent?: number;
+  enableCellEdit?: boolean;
+  onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
 }
 

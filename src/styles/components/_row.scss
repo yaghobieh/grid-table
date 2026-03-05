@@ -111,6 +111,34 @@
   padding: 1rem;
 }
 
+// ── Drag-and-drop row reorder ────────────────────────
+.gt-drag-handle {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  cursor: grab;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.gt-row-dragging {
+  opacity: 0.4;
+  background-color: var(--gt-bg-tertiary, #3c3c3c) !important;
+}
+
+.gt-row-drag-over {
+  border-top: 2px solid var(--gt-accent-primary, #1890ff) !important;
+}
+
 // ── Lazy-load spin animation ─────────────────────────
 @keyframes gt-spin {
   from { transform: rotate(0deg); }

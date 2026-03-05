@@ -1,0 +1,14 @@
+---
+globs: portal/**/*.ts,portal/**/*.tsx
+---
+# Portal Rules
+
+Built with @forgedevstack/bear and @forgedevstack/grid-table.
+Routing via @forgedevstack/forge-compass (not react-router-dom).
+All strings in i18n files (en.ts, es.ts), never hardcoded.
+No pink or indigo colors. Green theme only (#22c55e, #16a34a).
+Light/dark mode: code examples and text adapt automatically.
+Use Bear UI components: Button, Typography, Card, Flex, Badge, Dropdown, etc.
+Footer links use Button with leftIcon.
+Navbar language selector uses Bear Dropdown.
+Mobile responsive: Drawer for docs sidebar, responsive grids.

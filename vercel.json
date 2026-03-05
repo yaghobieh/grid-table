@@ -1,5 +1,8 @@
 {
   "installCommand": "npm install",
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": "portal/dist"
+  "outputDirectory": "portal/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

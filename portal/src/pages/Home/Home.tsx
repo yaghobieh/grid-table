@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import {
   Button,
@@ -11,9 +11,10 @@ import {
   GradientText,
   CodeBlock,
   BearIcons,
-  Masonry,
+  Carousel,
 } from '@forgedevstack/bear';
 import { Layout } from '@/components/Layout';
+import { HomeSectionHashTitle } from '@/components/HomeSectionHashTitle';
 import {
   STATS,
   FEATURES,
@@ -36,11 +37,18 @@ export const Home: FC = () => {
   const { t } = useI18n();
   const { displayed: typewriterText } = useTypewriter({ texts: t.home.typewriterTexts, loop: true });
 
+  useEffect(() => {
+    const id = window.location.hash?.replace(/^#/, '');
+    if (!id) return;
+    window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
+
   const statLabels = [t.stats.features, t.stats.dependencies, t.stats.bundleSize, t.stats.typescript];
 
   return (
     <Layout>
-      {/* ── Hero ────────────────────────────── */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
         {/* Animated mesh bg — CSS only */}
         <div
@@ -53,8 +61,8 @@ export const Home: FC = () => {
         <Container className="relative z-10 text-center" style={{ maxWidth: '72rem' }}>
           <Flex justify="center" className="mb-6">
             <Badge variant="success" className="px-4 py-1.5 text-sm">
-              <Flex align="center" gap={2}>
-                <BearIcons.ZapIcon size="xs" />
+              <Flex align="center" gap={3}>
+                <BearIcons.ZapIcon size="sm" />
                 v{CURRENT_VERSION} — {t.home.badgeText}
               </Flex>
             </Badge>
@@ -71,7 +79,7 @@ export const Home: FC = () => {
           </Typography>
 
           {/* Typewriter */}
-          <div className="text-lg max-w-2xl mx-auto mb-10" style={{ minHeight: '2rem' }}>
+          <div className="text-lg max-w-2xl mx-auto mb-6" style={{ minHeight: '2rem' }}>
             <span className="font-medium" style={{ color: 'var(--grid-accent)', opacity: 0.8 }}>
               {typewriterText}
               <span className="animate-pulse ml-0.5">|</span>
@@ -91,17 +99,17 @@ export const Home: FC = () => {
 
           <Flex justify="center" gap={4} wrap="wrap" className="mb-12">
             <Link to="/demos">
-              <Button variant="grid" size="lg" spotlight leftIcon={<BearIcons.PlayIcon size="xs" />}>
+              <Button variant="grid" size="lg" spotlight leftIcon={<BearIcons.PlayIcon size="sm" className="mr-2" />} style={{ gap: '0.5rem' }}>
                 {t.home.viewDemos}
               </Button>
             </Link>
             <Link to="/docs/getting-started">
-              <Button variant="outline" size="lg" leftIcon={<BearIcons.BookOpenIcon size="xs" />}>
+              <Button variant="outline" size="lg" leftIcon={<BearIcons.BookOpenIcon size="sm" className="mr-2" />} style={{ gap: '0.5rem' }}>
                 {t.home.documentation}
               </Button>
             </Link>
             <Link to="/theme-builder">
-              <Button variant="gridGhost" size="lg" leftIcon={<BearIcons.PaletteIcon size="xs" />} className="border" style={{ borderColor: 'var(--border-color)' }}>
+              <Button variant="gridGhost" size="lg" leftIcon={<BearIcons.PaletteIcon size="sm" className="mr-2" />} className="border" style={{ borderColor: 'var(--border-color)', gap: '0.5rem' }}>
                 {t.home.themeBuilder}
               </Button>
             </Link>
@@ -122,19 +130,24 @@ export const Home: FC = () => {
         </Container>
       </section>
 
-      {/* ── Showcase — Capabilities Mesh ──── */}
-      <section className="py-24 relative overflow-hidden" style={{ background: 'var(--bg-secondary)' }}>
+      <section
+        id="built-for-every-data-scenario"
+        className="py-24 relative overflow-hidden"
+        style={{ background: 'var(--bg-secondary)' }}
+      >
         {/* Decorative radial */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(34,197,94,0.06), transparent 60%)' }} />
 
         <Container className="relative z-10" style={{ maxWidth: '72rem' }}>
           <div className="text-center mb-16">
-            <Typography variant="overline" className="mb-2" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>
+            <Typography variant="overline" className="mb-2 block" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>
               {t.home.seeItInAction}
             </Typography>
-            <Typography variant="h2" className="text-3xl md:text-5xl font-extrabold mb-4">
-              <GradientText colors={GRADIENT_PRIMARY}>{t.home.showcaseTitle}</GradientText>
-            </Typography>
+            <HomeSectionHashTitle sectionId="built-for-every-data-scenario" className="mb-4">
+              <Typography variant="h2" className="text-3xl md:text-5xl font-extrabold">
+                <GradientText colors={GRADIENT_PRIMARY}>{t.home.showcaseTitle}</GradientText>
+              </Typography>
+            </HomeSectionHashTitle>
             <Typography style={{ color: 'var(--text-secondary)' }} className="max-w-xl mx-auto text-lg">
               {t.home.showcaseDescription}
             </Typography>
@@ -204,13 +217,14 @@ export const Home: FC = () => {
         </Container>
       </section>
 
-      {/* ── Demos & Examples ──────────────── */}
-      <section className="py-20">
+      <section id="demos-and-examples" className="py-20">
         <Container style={{ maxWidth: '72rem' }}>
           <div className="text-center mb-12">
-            <Typography variant="h2" className="text-3xl md:text-4xl font-bold mb-4">
-              <GradientText colors={GRADIENT_PRIMARY}>{t.home.demosAndExamples}</GradientText>
-            </Typography>
+            <HomeSectionHashTitle sectionId="demos-and-examples" className="mb-4">
+              <Typography variant="h2" className="text-3xl md:text-4xl font-bold">
+                <GradientText colors={GRADIENT_PRIMARY}>{t.home.demosAndExamples}</GradientText>
+              </Typography>
+            </HomeSectionHashTitle>
             <Typography style={{ color: 'var(--text-secondary)' }}>{t.home.exploreExamples}</Typography>
           </div>
 
@@ -279,46 +293,68 @@ export const Home: FC = () => {
         </Container>
       </section>
 
-      {/* ── Features ─────────────────────── */}
-      <section className="py-20" style={{ background: 'var(--bg-secondary)' }}>
+      <section
+        id="feature-rich-data-grid"
+        className="py-20"
+        style={{ background: 'var(--bg-secondary)' }}
+      >
         <Container style={{ maxWidth: '72rem' }}>
-          <div className="text-center mb-12">
-            <Typography variant="overline" className="mb-2" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>{t.home.everythingYouNeed}</Typography>
-            <Typography variant="h2" className="text-3xl md:text-4xl font-bold mb-4">
-              <GradientText colors={GRADIENT_SECONDARY}>{t.home.featureRichDataGrid}</GradientText>
-            </Typography>
-            <Typography style={{ color: 'var(--text-secondary)' }} className="max-w-xl mx-auto">
-              {t.home.builtForReal}
-            </Typography>
+          <div className="mb-12 text-center px-2">
+            <Typography variant="overline" className="mb-3 block" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>{t.home.everythingYouNeed}</Typography>
+            <div className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-2">
+              <HomeSectionHashTitle sectionId="feature-rich-data-grid" className="inline-flex">
+                <Typography variant="h2" className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-center">
+                  <GradientText colors={GRADIENT_SECONDARY}>{t.home.featureRichDataGrid}</GradientText>
+                </Typography>
+              </HomeSectionHashTitle>
+              <span className="hidden sm:inline select-none opacity-40" style={{ color: 'var(--text-secondary)' }} aria-hidden>·</span>
+              <Typography variant="body2" className="text-center sm:text-start max-w-[min(36rem,100%)] sm:max-w-xl leading-snug md:whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>
+                {t.home.builtForReal}
+              </Typography>
+            </div>
           </div>
 
-          <Masonry columns={{ base: 1, sm: 2, lg: 3 }} gap={16}>
+          <Carousel
+            slidesToShow={4}
+            gap={16}
+            autoPlay={3600}
+            loop
+            transition="slide"
+            transitionDuration={420}
+            showArrows
+            indicator="dots"
+            pauseOnHover
+            activeColor="var(--grid-accent)"
+            className="w-full"
+            style={{ minHeight: 300 }}
+          >
             {FEATURES.map((feature) => {
               const featureT = t.features[feature.icon];
               return (
-                <Card key={feature.icon} variant="ghost" interactive padding="lg" radius="2xl">
-                  <CardBody>
-                    <Flex align="start" gap={4}>
+                <div key={feature.icon} className="h-full px-0.5">
+                  <Card variant="ghost" interactive padding="lg" radius="2xl" className="h-full border transition-shadow hover:shadow-lg" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-primary)', minHeight: 260 }}>
+                    <CardBody className="h-full">
+                      <Flex direction="column" align="center" gap={4} className="h-full text-center">
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.15), rgba(22,163,74,0.08))' }}
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                        style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.2), rgba(22,163,74,0.1))' }}
                       >
                         {FEATURE_ICONS[feature.icon] || <BearIcons.ZapIcon size="md" color="var(--grid-accent)" />}
                       </div>
-                      <div>
-                        <Typography variant="h4" className="font-bold mb-1">{featureT?.title ?? feature.title}</Typography>
-                        <Typography variant="body2" style={{ color: 'var(--text-secondary)' }} className="leading-relaxed">{featureT?.description ?? feature.description}</Typography>
+                      <div className="flex flex-col gap-2 min-h-0">
+                        <Typography variant="h4" className="font-bold leading-snug">{featureT?.title ?? feature.title}</Typography>
+                        <Typography variant="body2" style={{ color: 'var(--text-secondary)' }} className="leading-relaxed text-sm md:text-base">{featureT?.description ?? feature.description}</Typography>
                       </div>
-                    </Flex>
-                  </CardBody>
-                </Card>
+                      </Flex>
+                    </CardBody>
+                  </Card>
+                </div>
               );
             })}
-          </Masonry>
+          </Carousel>
         </Container>
       </section>
 
-      {/* ── ForgeStack Ecosystem — Clean Banner */}
       <section className="py-20">
         <Container style={{ maxWidth: '72rem' }}>
           <div
@@ -334,7 +370,7 @@ export const Home: FC = () => {
             <div className="relative px-8 py-12 md:py-16">
               {/* Header */}
               <div className="text-center mb-10">
-                <Typography variant="overline" className="mb-2" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>
+                <Typography variant="overline" className="mb-2 block" style={{ color: 'var(--grid-accent)', opacity: 0.7 }}>
                   {t.home.forgeStackEcosystem}
                 </Typography>
                 <Typography variant="h2" className="text-3xl md:text-4xl font-bold mb-3">

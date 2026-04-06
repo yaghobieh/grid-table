@@ -3,40 +3,44 @@ import { useCallback } from 'react';
 import type { GridBodyProps } from './types';
 import type { RowData } from '../../types';
 import { GridRow } from '../GridRow';
+import { getGridBodyRowDerivedState } from './gridBody.utils';
 
-export function GridBody<T extends RowData = RowData>({
-  data,
-  columns,
-  columnStates,
-  className = '',
-  style,
-  isMobile = false,
-  showMobileLabels = true,
-  enableSelection = false,
-  enableExpansion = false,
-  selectedIds = new Set(),
-  expandedIds = new Set(),
-  onRowClick,
-  onRowDoubleClick,
-  onCellClick,
-  onRowSelect,
-  onRowExpand,
-  getRowId,
-  getRowClassName,
-  getRowStyle,
-  isRowDisabled,
-  renderRowExpansion,
-  onRowContextMenu,
-  rowDragProps,
-  draggingRowId,
-  dragOverRowId,
-  treeIndents,
-  treeToggle,
-  treeHasChildren,
-  treeIsExpanded,
-  enableCellEdit,
-  onCellSave,
-}: GridBodyProps<T>): ReactNode {
+export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): ReactNode {
+  const {
+    data,
+    columns,
+    columnStates,
+    className = '',
+    style,
+    applyHiddenOnMobile = false,
+    stackedMobileLayout = false,
+    showMobileLabels = true,
+    enableSelection = false,
+    enableExpansion = false,
+    selectedIds = new Set(),
+    expandedIds = new Set(),
+    onRowClick,
+    onRowDoubleClick,
+    onCellClick,
+    onRowSelect,
+    onRowExpand,
+    getRowId,
+    getRowClassName,
+    getRowStyle,
+    isRowDisabled,
+    renderRowExpansion,
+    onRowContextMenu,
+    rowDragProps,
+    draggingRowId,
+    dragOverRowId,
+    treeIndents,
+    treeToggle,
+    treeHasChildren,
+    treeIsExpanded,
+    enableCellEdit,
+    onCellSave,
+  } = props;
+
   const handleRowSelect = useCallback(
     (row: T) => (selected: boolean) => {
       const id = getRowId(row);
@@ -60,34 +64,38 @@ export function GridBody<T extends RowData = RowData>({
   return (
     <div className={`grid-body ${className}`} style={style} role="rowgroup">
       {data.map((row, index) => {
-        const rowId = getRowId(row);
-        const isSelected = selectedIds.has(rowId);
-        const isExpanded = expandedIds.has(rowId);
-        const isDisabled = isRowDisabled?.(row) ?? false;
-        const rowClassName = getRowClassName?.(row, index) ?? '';
-        const rowStyle = getRowStyle?.(row, index);
-
-        const dragProps = rowDragProps?.(rowId);
-        const isDragging = draggingRowId === rowId;
-        const isDragOver = dragOverRowId === rowId;
-        const indent = treeIndents?.get(rowId) ?? 0;
-        const hasChildren = treeHasChildren?.(rowId) ?? false;
-        const isTreeExpanded = treeIsExpanded?.(rowId) ?? false;
+        const d = getGridBodyRowDerivedState(
+          row,
+          index,
+          getRowId,
+          selectedIds,
+          expandedIds,
+          isRowDisabled,
+          getRowClassName,
+          getRowStyle,
+          rowDragProps,
+          draggingRowId,
+          dragOverRowId,
+          treeIndents,
+          treeHasChildren,
+          treeIsExpanded,
+        );
 
         return (
           <GridRow
-            key={rowId}
+            key={d.rowId}
             row={row}
             rowIndex={index}
             columns={columns}
             columnStates={columnStates}
-            isSelected={isSelected}
-            isExpanded={isExpanded}
-            isDisabled={isDisabled}
-            isMobile={isMobile}
+            isSelected={d.isSelected}
+            isExpanded={d.isExpanded}
+            isDisabled={d.isDisabled}
+            applyHiddenOnMobile={applyHiddenOnMobile}
+            stackedMobileLayout={stackedMobileLayout}
             showMobileLabels={showMobileLabels}
-            className={`${rowClassName} ${isDragging ? 'gt-row-dragging' : ''} ${isDragOver ? 'gt-row-drag-over' : ''}`}
-            style={{ ...rowStyle, ...(indent > 0 ? { paddingLeft: indent } : {}) }}
+            className={`${d.rowClassName} ${d.isDragging ? 'gt-row-dragging' : ''} ${d.isDragOver ? 'gt-row-drag-over' : ''}`}
+            style={{ ...d.rowStyle, ...(d.indent > 0 ? { paddingLeft: d.indent } : {}) }}
             onClick={onRowClick}
             onDoubleClick={onRowDoubleClick}
             onCellClick={onCellClick}
@@ -98,11 +106,11 @@ export function GridBody<T extends RowData = RowData>({
             renderExpansion={renderRowExpansion}
             getRowId={getRowId}
             onContextMenu={onRowContextMenu ? (r: T, idx: number, e: React.MouseEvent) => onRowContextMenu(r, idx, e) : undefined}
-            {...(dragProps ?? {})}
-            treeToggle={hasChildren ? () => treeToggle?.(rowId) : undefined}
-            treeHasChildren={hasChildren}
-            treeIsExpanded={isTreeExpanded}
-            treeIndent={indent}
+            {...(d.dragProps ?? {})}
+            treeToggle={d.hasChildren ? () => treeToggle?.(d.rowId) : undefined}
+            treeHasChildren={d.hasChildren}
+            treeIsExpanded={d.isTreeExpanded}
+            treeIndent={d.indent}
             enableCellEdit={enableCellEdit}
             onCellSave={onCellSave}
           />
@@ -111,4 +119,3 @@ export function GridBody<T extends RowData = RowData>({
     </div>
   );
 }
-

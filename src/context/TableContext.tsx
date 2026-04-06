@@ -7,83 +7,19 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
-import type { RowData, ColumnState, FilterValue, SortValue, SortDirection, FilterOperator } from '../types';
-import type { TableContextState, TableContextActions, TableContextValue, TableProviderProps, TableOptions } from './types';
+import type { RowData, ColumnState, SortDirection, FilterOperator } from '../types';
+import type {
+  TableContextState,
+  TableContextActions,
+  TableContextValue,
+  TableProviderProps,
+  TableOptions,
+  TableReducerAction,
+} from './TableContext.types';
+import { tableReducer } from './tableReducer';
+import { TABLE_ACTION } from './TableContext.constants';
 import { DEFAULT_THEME, DEFAULT_TRANSLATIONS, DEFAULT_TABLE_CONFIG } from '../constants';
-import { ZERO, ONE, MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from '../constants';
-
-type Action<T extends RowData = RowData> =
-  | { type: 'SET_DATA'; payload: T[] }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: Error | string | null }
-  | { type: 'SET_SORTING'; payload: SortValue[] }
-  | { type: 'SET_FILTERS'; payload: FilterValue[] }
-  | { type: 'SET_GLOBAL_FILTER'; payload: string }
-  | { type: 'SET_PAGE'; payload: number }
-  | { type: 'SET_PAGE_SIZE'; payload: number }
-  | { type: 'SET_SELECTED_IDS'; payload: Set<string | number> }
-  | { type: 'SET_EXPANDED_IDS'; payload: Set<string | number> }
-  | { type: 'SET_EXPANDED_CELL_IDS'; payload: Set<string> }
-  | { type: 'SET_AUTO_SIZED_COLUMN_IDS'; payload: Set<string> }
-  | { type: 'SET_COLUMN_STATES'; payload: ColumnState[] }
-  | { type: 'SET_DRAGGING_COLUMN'; payload: string | null }
-  | { type: 'SET_RESIZING_COLUMN'; payload: string | null }
-  | { type: 'SET_ACTIVE_FILTER_COLUMN'; payload: string | null }
-  | { type: 'SET_CURRENT_BREAKPOINT'; payload: 'mobile' | 'tablet' | 'desktop' }
-  | { type: 'SET_MOBILE_DRAWER'; payload: { show: boolean; content: 'filter' | 'sort' | 'columns' | null } }
-  | { type: 'RESET'; payload: Partial<TableContextState<T>> };
-
-function reducer<T extends RowData>(
-  state: TableContextState<T>,
-  action: Action<T>
-): TableContextState<T> {
-  switch (action.type) {
-    case 'SET_DATA':
-      return { ...state, data: action.payload, originalData: action.payload };
-    case 'SET_LOADING':
-      return { ...state, loading: action.payload };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload };
-    case 'SET_SORTING':
-      return { ...state, sorting: action.payload };
-    case 'SET_FILTERS':
-      return { ...state, filters: action.payload };
-    case 'SET_GLOBAL_FILTER':
-      return { ...state, globalFilter: action.payload };
-    case 'SET_PAGE':
-      return { ...state, page: action.payload };
-    case 'SET_PAGE_SIZE':
-      return { ...state, pageSize: action.payload, page: ONE };
-    case 'SET_SELECTED_IDS':
-      return { ...state, selectedIds: action.payload };
-    case 'SET_EXPANDED_IDS':
-      return { ...state, expandedIds: action.payload };
-    case 'SET_EXPANDED_CELL_IDS':
-      return { ...state, expandedCellIds: action.payload };
-    case 'SET_AUTO_SIZED_COLUMN_IDS':
-      return { ...state, autoSizedColumnIds: action.payload };
-    case 'SET_COLUMN_STATES':
-      return { ...state, columnStates: action.payload };
-    case 'SET_DRAGGING_COLUMN':
-      return { ...state, draggingColumnId: action.payload };
-    case 'SET_RESIZING_COLUMN':
-      return { ...state, resizingColumnId: action.payload };
-    case 'SET_ACTIVE_FILTER_COLUMN':
-      return { ...state, activeFilterColumnId: action.payload };
-    case 'SET_CURRENT_BREAKPOINT':
-      return { ...state, currentBreakpoint: action.payload };
-    case 'SET_MOBILE_DRAWER':
-      return {
-        ...state,
-        showMobileDrawer: action.payload.show,
-        mobileDrawerContent: action.payload.content,
-      };
-    case 'RESET':
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-}
+import { ZERO, ONE, MOBILE_BREAKPOINT, DESKTOP_BREAKPOINT } from '../constants';
 
 const TableContext = createContext<TableContextValue<RowData> | null>(null);
 
@@ -165,18 +101,21 @@ export function TableProvider<T extends RowData>({
     mobileDrawerContent: null,
   };
 
-  const [state, dispatch] = useReducer(reducer<T>, initialState);
+  const [state, dispatch] = useReducer(
+    (s: TableContextState<T>, a: TableReducerAction<T>) => tableReducer(s, a),
+    initialState
+  );
 
   useEffect(() => {
-    dispatch({ type: 'SET_DATA', payload: data });
+    dispatch({ type: TABLE_ACTION.SET_DATA, payload: data });
   }, [data]);
 
   useEffect(() => {
-    dispatch({ type: 'SET_LOADING', payload: loading });
+    dispatch({ type: TABLE_ACTION.SET_LOADING, payload: loading });
   }, [loading]);
 
   useEffect(() => {
-    dispatch({ type: 'SET_ERROR', payload: error });
+    dispatch({ type: TABLE_ACTION.SET_ERROR, payload: error });
   }, [error]);
 
   useEffect(() => {
@@ -185,10 +124,10 @@ export function TableProvider<T extends RowData>({
       let breakpoint: 'mobile' | 'tablet' | 'desktop' = 'desktop';
       if (width < MOBILE_BREAKPOINT) {
         breakpoint = 'mobile';
-      } else if (width < TABLET_BREAKPOINT) {
+      } else if (width < DESKTOP_BREAKPOINT) {
         breakpoint = 'tablet';
       }
-      dispatch({ type: 'SET_CURRENT_BREAKPOINT', payload: breakpoint });
+      dispatch({ type: TABLE_ACTION.SET_CURRENT_BREAKPOINT, payload: breakpoint });
     };
 
     handleResize();
@@ -211,9 +150,9 @@ export function TableProvider<T extends RowData>({
 
   const actions: TableContextActions<T> = useMemo(
     () => ({
-      setData: (newData) => dispatch({ type: 'SET_DATA', payload: newData }),
-      setLoading: (value) => dispatch({ type: 'SET_LOADING', payload: value }),
-      setError: (value) => dispatch({ type: 'SET_ERROR', payload: value }),
+      setData: (newData) => dispatch({ type: TABLE_ACTION.SET_DATA, payload: newData }),
+      setLoading: (value) => dispatch({ type: TABLE_ACTION.SET_LOADING, payload: value }),
+      setError: (value) => dispatch({ type: TABLE_ACTION.SET_ERROR, payload: value }),
 
       setSorting: (columnId: string, direction: SortDirection) => {
         const newSorting = enableMultiSort
@@ -221,7 +160,7 @@ export function TableProvider<T extends RowData>({
           : direction
           ? [{ columnId, direction }]
           : [];
-        dispatch({ type: 'SET_SORTING', payload: newSorting.filter((s) => s.direction !== null) });
+        dispatch({ type: TABLE_ACTION.SET_SORTING, payload: newSorting.filter((s) => s.direction !== null) });
       },
 
       toggleSorting: (columnId: string) => {
@@ -232,45 +171,45 @@ export function TableProvider<T extends RowData>({
         actions.setSorting(columnId, newDirection);
       },
 
-      clearSorting: () => dispatch({ type: 'SET_SORTING', payload: [] }),
+      clearSorting: () => dispatch({ type: TABLE_ACTION.SET_SORTING, payload: [] }),
 
       setFilter: (columnId: string, value: unknown, operator: FilterOperator = 'contains') => {
         const newFilters = [
           ...state.filters.filter((f) => f.columnId !== columnId),
           { columnId, value, operator },
         ];
-        dispatch({ type: 'SET_FILTERS', payload: newFilters });
-        dispatch({ type: 'SET_PAGE', payload: ONE });
+        dispatch({ type: TABLE_ACTION.SET_FILTERS, payload: newFilters });
+        dispatch({ type: TABLE_ACTION.SET_PAGE, payload: ONE });
       },
 
       removeFilter: (columnId: string) => {
         const newFilters = state.filters.filter((f) => f.columnId !== columnId);
-        dispatch({ type: 'SET_FILTERS', payload: newFilters });
+        dispatch({ type: TABLE_ACTION.SET_FILTERS, payload: newFilters });
       },
 
       clearFilters: () => {
-        dispatch({ type: 'SET_FILTERS', payload: [] });
-        dispatch({ type: 'SET_GLOBAL_FILTER', payload: '' });
+        dispatch({ type: TABLE_ACTION.SET_FILTERS, payload: [] });
+        dispatch({ type: TABLE_ACTION.SET_GLOBAL_FILTER, payload: '' });
       },
 
       setGlobalFilter: (value: string) => {
-        dispatch({ type: 'SET_GLOBAL_FILTER', payload: value });
-        dispatch({ type: 'SET_PAGE', payload: ONE });
+        dispatch({ type: TABLE_ACTION.SET_GLOBAL_FILTER, payload: value });
+        dispatch({ type: TABLE_ACTION.SET_PAGE, payload: ONE });
       },
 
-      setPage: (page: number) => dispatch({ type: 'SET_PAGE', payload: page }),
-      setPageSize: (pageSize: number) => dispatch({ type: 'SET_PAGE_SIZE', payload: pageSize }),
+      setPage: (page: number) => dispatch({ type: TABLE_ACTION.SET_PAGE, payload: page }),
+      setPageSize: (pageSize: number) => dispatch({ type: TABLE_ACTION.SET_PAGE_SIZE, payload: pageSize }),
 
       selectRow: (id: string | number) => {
         const newSet = new Set(state.selectedIds);
         newSet.add(id);
-        dispatch({ type: 'SET_SELECTED_IDS', payload: newSet });
+        dispatch({ type: TABLE_ACTION.SET_SELECTED_IDS, payload: newSet });
       },
 
       deselectRow: (id: string | number) => {
         const newSet = new Set(state.selectedIds);
         newSet.delete(id);
-        dispatch({ type: 'SET_SELECTED_IDS', payload: newSet });
+        dispatch({ type: TABLE_ACTION.SET_SELECTED_IDS, payload: newSet });
       },
 
       toggleRow: (id: string | number) => {
@@ -283,21 +222,21 @@ export function TableProvider<T extends RowData>({
 
       selectAll: () => {
         const allIds = new Set(state.data.map(getRowIdFn));
-        dispatch({ type: 'SET_SELECTED_IDS', payload: allIds });
+        dispatch({ type: TABLE_ACTION.SET_SELECTED_IDS, payload: allIds });
       },
 
-      deselectAll: () => dispatch({ type: 'SET_SELECTED_IDS', payload: new Set() }),
+      deselectAll: () => dispatch({ type: TABLE_ACTION.SET_SELECTED_IDS, payload: new Set() }),
 
       expandRow: (id: string | number) => {
         const newSet = new Set(state.expandedIds);
         newSet.add(id);
-        dispatch({ type: 'SET_EXPANDED_IDS', payload: newSet });
+        dispatch({ type: TABLE_ACTION.SET_EXPANDED_IDS, payload: newSet });
       },
 
       collapseRow: (id: string | number) => {
         const newSet = new Set(state.expandedIds);
         newSet.delete(id);
-        dispatch({ type: 'SET_EXPANDED_IDS', payload: newSet });
+        dispatch({ type: TABLE_ACTION.SET_EXPANDED_IDS, payload: newSet });
       },
 
       toggleRowExpansion: (id: string | number) => {
@@ -310,11 +249,11 @@ export function TableProvider<T extends RowData>({
 
       expandAllRows: () => {
         const allIds = new Set(state.data.map(getRowIdFn));
-        dispatch({ type: 'SET_EXPANDED_IDS', payload: allIds });
+        dispatch({ type: TABLE_ACTION.SET_EXPANDED_IDS, payload: allIds });
       },
 
       collapseAllRows: () => {
-        dispatch({ type: 'SET_EXPANDED_IDS', payload: new Set() });
+        dispatch({ type: TABLE_ACTION.SET_EXPANDED_IDS, payload: new Set() });
       },
 
       toggleCellExpansion: (rowId: string | number, columnId: string) => {
@@ -325,7 +264,7 @@ export function TableProvider<T extends RowData>({
         } else {
           next.add(key);
         }
-        dispatch({ type: 'SET_EXPANDED_CELL_IDS', payload: next });
+        dispatch({ type: TABLE_ACTION.SET_EXPANDED_CELL_IDS, payload: next });
       },
 
       toggleColumnAutoSize: (columnId: string) => {
@@ -335,7 +274,7 @@ export function TableProvider<T extends RowData>({
         } else {
           next.add(columnId);
         }
-        dispatch({ type: 'SET_AUTO_SIZED_COLUMN_IDS', payload: next });
+        dispatch({ type: TABLE_ACTION.SET_AUTO_SIZED_COLUMN_IDS, payload: next });
       },
 
       reorderColumn: (sourceId: string, targetId: string) => {
@@ -346,46 +285,46 @@ export function TableProvider<T extends RowData>({
         const [removed] = newStates.splice(sourceIndex, ONE);
         newStates.splice(targetIndex, ZERO, removed);
         newStates.forEach((col, i) => (col.order = i));
-        dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
+        dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: newStates });
       },
 
       resizeColumn: (columnId: string, width: number) => {
         const newStates = state.columnStates.map((col) =>
           col.id === columnId ? { ...col, width } : col
         );
-        dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
+        dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: newStates });
       },
 
       toggleColumnVisibility: (columnId: string) => {
         const newStates = state.columnStates.map((col) =>
           col.id === columnId ? { ...col, visible: !col.visible } : col
         );
-        dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
+        dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: newStates });
       },
 
       pinColumn: (columnId: string, side: 'left' | 'right' | null) => {
         const newStates = state.columnStates.map((col) =>
           col.id === columnId ? { ...col, pinned: side } : col
         );
-        dispatch({ type: 'SET_COLUMN_STATES', payload: newStates });
+        dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: newStates });
       },
 
-      resetColumns: () => dispatch({ type: 'SET_COLUMN_STATES', payload: initialColumnStates }),
+      resetColumns: () => dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: initialColumnStates }),
 
-      setDraggingColumn: (columnId) => dispatch({ type: 'SET_DRAGGING_COLUMN', payload: columnId }),
-      setResizingColumn: (columnId) => dispatch({ type: 'SET_RESIZING_COLUMN', payload: columnId }),
+      setDraggingColumn: (columnId) => dispatch({ type: TABLE_ACTION.SET_DRAGGING_COLUMN, payload: columnId }),
+      setResizingColumn: (columnId) => dispatch({ type: TABLE_ACTION.SET_RESIZING_COLUMN, payload: columnId }),
       setActiveFilterColumn: (columnId) =>
-        dispatch({ type: 'SET_ACTIVE_FILTER_COLUMN', payload: columnId }),
+        dispatch({ type: TABLE_ACTION.SET_ACTIVE_FILTER_COLUMN, payload: columnId }),
 
       openMobileDrawer: (content) =>
-        dispatch({ type: 'SET_MOBILE_DRAWER', payload: { show: true, content } }),
+        dispatch({ type: TABLE_ACTION.SET_MOBILE_DRAWER, payload: { show: true, content } }),
       closeMobileDrawer: () =>
-        dispatch({ type: 'SET_MOBILE_DRAWER', payload: { show: false, content: null } }),
+        dispatch({ type: TABLE_ACTION.SET_MOBILE_DRAWER, payload: { show: false, content: null } }),
 
-      refresh: () => dispatch({ type: 'SET_DATA', payload: state.originalData }),
+      refresh: () => dispatch({ type: TABLE_ACTION.SET_DATA, payload: state.originalData }),
       reset: () =>
         dispatch({
-          type: 'RESET',
+          type: TABLE_ACTION.RESET,
           payload: {
             sorting: [],
             filters: [],
@@ -489,9 +428,16 @@ export function TableProvider<T extends RowData>({
       });
     }
 
-    const totalPages = Math.ceil(sortedData.length / state.pageSize) || ONE;
+    const manualPagination = paginationConfig?.manualPagination ?? false;
+    const serverTotal =
+      typeof paginationConfig?.totalRowCount === 'number' ? paginationConfig.totalRowCount : null;
+    const effectiveTotalItems =
+      manualPagination && serverTotal !== null ? serverTotal : sortedData.length;
+    const totalPages = Math.ceil(effectiveTotalItems / state.pageSize) || ONE;
     const startIndex = (state.page - ONE) * state.pageSize;
-    const paginatedData = sortedData.slice(startIndex, startIndex + state.pageSize);
+    const paginatedData = manualPagination
+      ? sortedData
+      : sortedData.slice(startIndex, startIndex + state.pageSize);
 
     const visibleColumns = columns.filter((col) => {
       const colState = state.columnStates.find((cs) => cs.id === col.id);
@@ -512,6 +458,7 @@ export function TableProvider<T extends RowData>({
       paginatedData,
       visibleColumns,
       totalPages,
+      effectiveTotalItems,
       canGoNext: state.page < totalPages,
       canGoPrevious: state.page > ONE,
       allSelected,
@@ -520,7 +467,7 @@ export function TableProvider<T extends RowData>({
       isTablet,
       isDesktop,
     };
-  }, [state, columns, tableOptions]);
+  }, [state, columns, tableOptions, paginationConfig?.manualPagination, paginationConfig?.totalRowCount]);
 
   const contextValue: TableContextValue<T> = {
     state: state as TableContextState<T>,

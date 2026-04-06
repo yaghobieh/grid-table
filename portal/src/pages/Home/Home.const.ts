@@ -15,6 +15,14 @@ export const FEATURE_ICONS: Record<string, React.ReactNode> = {
   expand: React.createElement(BearIcons.ChevronDownIcon, { size: 'md', color: 'var(--grid-accent)' }),
   skeleton: React.createElement(BearIcons.LoaderIcon, { size: 'md', color: 'var(--grid-accent)' }),
   typescript: React.createElement(BearIcons.CodeIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  keyboard: React.createElement(BearIcons.KeyboardIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  menu: React.createElement(BearIcons.MenuIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  export: React.createElement(BearIcons.DownloadIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  undo: React.createElement(BearIcons.UndoIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  pin: React.createElement(BearIcons.MapPinIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  reorder: React.createElement(BearIcons.MoveIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  print: React.createElement(BearIcons.PrinterIcon, { size: 'md', color: 'var(--grid-accent)' }),
+  bar: React.createElement(BearIcons.BarChartIcon, { size: 'md', color: 'var(--grid-accent)' }),
 };
 
 // ── Demo icon mapping ────────────────────────────────
@@ -23,6 +31,14 @@ export const DEMO_ICONS: Record<string, React.ReactNode> = {
   UsersIcon: React.createElement(BearIcons.UsersIcon, { size: 'lg', color: 'var(--grid-accent)' }),
   TableIcon: React.createElement(BearIcons.TableIcon, { size: 'lg', color: 'var(--grid-accent)' }),
   PaletteIcon: React.createElement(BearIcons.PaletteIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  SparklesIcon: React.createElement(BearIcons.SparklesIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  CodeIcon: React.createElement(BearIcons.CodeIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  KeyboardIcon: React.createElement(BearIcons.KeyboardIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  LayersIcon: React.createElement(BearIcons.LayersIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  SaveIcon: React.createElement(BearIcons.SaveIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  ServerIcon: React.createElement(BearIcons.ServerIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  GridIcon: React.createElement(BearIcons.GridIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  LoaderIcon: React.createElement(BearIcons.LoaderIcon, { size: 'lg', color: 'var(--grid-accent)' }),
 };
 
 // ── Gradient colors ──────────────────────────────────

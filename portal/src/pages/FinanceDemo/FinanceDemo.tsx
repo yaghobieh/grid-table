@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from '@forgedevstack/forge-compass/react';
+import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
 import {
   Button,
   Typography,
@@ -10,12 +10,14 @@ import {
 import { GridTable } from '@forgedevstack/grid-table';
 import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
+import { DemoCodeSection } from '@/components/DemoCodeSection';
 import { Sparkline } from '@/components/Sparkline';
 import { generateFinanceData, updateFinanceData } from '@/data/finance.data';
 import type { FinanceRow } from '@/data/finance.data';
 import { LIVE_UPDATE_INTERVAL_MS } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
 import { SECTOR_BADGE_VARIANT, SECTOR_OPTIONS, VOLUME_MILLION, VOLUME_THOUSAND } from './FinanceDemo.const';
+import { FINANCE_DEMO_SOURCE } from './FinanceDemo.code.const';
 
 const PriceChange: FC<{ value: number; percent: number }> = ({ value, percent }) => {
   const isPositive = value >= 0;
@@ -82,7 +84,8 @@ const columns: ColumnDefinition<FinanceRow>[] = [
 
 export const FinanceDemo: FC = () => {
   const { t } = useI18n();
-  const { navigate } = useNavigate();
+  const themeMode = useGridTableThemeMode();
+  const { openDemosIndex } = useDemoNavigation();
   const [data, setData] = useState<FinanceRow[]>(() => generateFinanceData());
   const [isLive, setIsLive] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -105,7 +108,7 @@ export const FinanceDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>{t.common.demos}</Button>
               <Badge variant="success">{t.demos.finance.title}</Badge>
               {isLive && <Badge variant="error" className="animate-pulse text-xs">● {t.financeDemo.live}</Badge>}
             </Flex>
@@ -138,13 +141,15 @@ export const FinanceDemo: FC = () => {
             showFilter
             showGlobalFilter
             stickyHeader
-            tableEffects={{ hover: true, sort: true, row: true }}
+            tableEffects={{ hover: false, sort: true, row: true }}
             themeMode="dark"
             mobileBreakpoint="none"
             paginationConfig={{ initialPageSize: 20, pageSizeOptions: [10, 20, 50] }}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
           />
         </div>
+
+        <DemoCodeSection title={t.demoCodeTitles.finance} code={FINANCE_DEMO_SOURCE} />
       </div>
     </Layout>
   );

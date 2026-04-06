@@ -15,11 +15,11 @@ export const es: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Animaciones de Orden, Datos Jerárquicos, Constructor de Temas',
+    badgeText: 'Tabla Móvil con Scroll, Hover Más Suave, Portal',
     title: 'Grid Table',
     subtitle: 'El Data Grid de React para ForgeStack',
     typewriterTexts: [
-      'Animaciones de orden, datos jerárquicos, temas.',
+      'Tabla con scroll móvil, diseño apilado opcional, hover más suave.',
       'Paneles financieros y organigramas de RRHH.',
       'Arrastrar y soltar, redimensionar, selección de filas.',
       'Totalmente personalizable vía props.',
@@ -57,6 +57,12 @@ export const es: TranslationStrings = {
     viewLive: 'Ver en Vivo →',
     ecosystemBanner: 'Totalmente compatible con todo el ecosistema ForgeStack.',
     visitForgeStack: 'Visitar ForgeStack',
+    marqueeItems: [
+      'Paginación manual en servidor y effectiveTotalItems',
+      'Tabla con scroll móvil por defecto · apilado opcional',
+      'lazyLoad por lotes en regiones largas',
+      'MIT · @forgedevstack/grid-table · TypeScript primero',
+    ],
   },
 
   stats: {
@@ -72,7 +78,7 @@ export const es: TranslationStrings = {
     filter: { title: 'Filtrado Avanzado', description: 'Filtrado a nivel de columna y global con 12+ operadores, funciones personalizadas y panel de filtros.' },
     drag: { title: 'Arrastrar y Soltar', description: 'Reordena columnas arrastrando, con retroalimentación visual y umbral para prevenir movimientos accidentales.' },
     theme: { title: 'Constructor de Temas', description: 'Personaliza cada aspecto — colores, fuentes, espaciado, bordes. Exporta código listo para usar.' },
-    responsive: { title: 'Diseño Responsivo', description: 'Diseño de tarjetas móviles con cajón para filtros/orden, puntos de quiebre configurables.' },
+    responsive: { title: 'Diseño Responsivo', description: 'Por defecto scroll horizontal mantiene la tabla completa; mobileLayout="stacked" para tarjetas. Cajón de filtros en pantallas pequeñas.' },
     selection: { title: 'Selección de Filas', description: 'Selección simple y múltiple con casillas, seleccionar todo y estado indeterminado.' },
     pagination: { title: 'Paginación', description: 'Paginación incorporada con tamaños de página personalizables, botones de primero/último.' },
     resize: { title: 'Redimensionar Columnas', description: 'Arrastra los bordes de las columnas para redimensionar con restricciones de ancho mín/máx.' },
@@ -85,6 +91,37 @@ export const es: TranslationStrings = {
     finance: { title: 'Finanzas', description: 'Datos financieros en tiempo real con P&L, gráficos y cotizaciones en vivo.' },
     hr: { title: 'RRHH / Organigrama', description: 'Datos jerárquicos de empleados con vista de árbol, expandir/contraer y líneas de reporte.' },
     basic: { title: 'Tabla Básica', description: 'Tabla completa con ordenamiento, filtrado, paginación y selección de filas.' },
+    features: {
+      title: 'Novedades',
+      description:
+        'Menú contextual, barra de estado, exportación, navegación por teclado, reordenar filas, datos en árbol, deshacer/rehacer, filas congeladas, modo impresión. En pantallas estrechas el grid usa scroll horizontal por defecto; el diseño apilado solo si quieres filas tipo tarjeta.',
+    },
+    'theme-playground': { title: 'Tema y Playground', description: 'Constructor de temas y playground en un solo lugar.' },
+    accessibility: { title: 'Accesibilidad', description: 'Navegación por teclado y patrones para lectores de pantalla.' },
+    'master-detail': {
+      title: 'Maestro-detalle',
+      description:
+        'Usa enableRowExpansion con renderRowExpansion para incrustar partidas, vistas previas o un segundo grid.',
+    },
+    'persisted-state': {
+      title: 'Paginación persistente',
+      description:
+        'La página y el tamaño se restauran desde localStorage al cargar y se actualizan en cada cambio. Extiende el mismo patrón a la URL o a preferencias en el backend.',
+    },
+    'server-driven': {
+      title: 'Paginación en servidor',
+      description:
+        'Pasa solo la página actual en data, activa manualPagination y totalRowCount, y vuelve a pedir datos en onPageChange. Orden y filtros sobre el dataset completo deben aplicarse en el servidor en producción.',
+    },
+    'column-grouping': {
+      title: 'Banda de agrupación de columnas',
+      description:
+        'Dos niveles de cabecera: una franja visual (regiones, trimestres, KPIs) se alinea con las columnas reales mediante CSS grid—sin colspan nativo aún, pero con aspecto de grid empresarial.',
+    },
+    virtualization: {
+      title: 'Listas grandes y lazy load',
+      description: 'Miles de filas en memoria con lazyLoad que revela lotes al scroll—ajusta initialRows, batchSize y maxHeight.',
+    },
     themeBuilder: { title: 'Constructor de Temas', description: 'Personaliza cada color, fuente y espaciado — exporta código para tu proyecto.' },
   },
 
@@ -92,6 +129,8 @@ export const es: TranslationStrings = {
     popular: 'Popular',
     new: 'Nuevo',
     interactive: 'Interactivo',
+    guide: 'Guía',
+    pattern: 'Patrón',
   },
 
   footer: {
@@ -161,14 +200,107 @@ export const es: TranslationStrings = {
   basicDemo: {
     title: 'Tabla Básica',
     description: 'Tabla completa con ordenamiento, filtrado, paginación, arrastrar y soltar, y selección de filas.',
+    mobileHint: 'Por debajo del ancho de escritorio este demo usa mobileLayout="stacked" (filas en tarjetas). Redimensiona o usa el modo dispositivo para compararlo con la tabla con scroll horizontal por defecto.',
     testLoading: 'Probar Carga',
     rows: 'filas',
+  },
+
+  featuresDemo: {
+    badge: 'v1.0.8 Portal + Grid',
+    title: 'Escaparate de funciones (stack v1.0.7 + móvil v1.0.8)',
+    description:
+      'Menú contextual, barra de estado, exportación, teclado, reordenar filas, árbol, deshacer/rehacer, filas congeladas, impresión. En pantallas estrechas el grid usa scroll horizontal por defecto.',
+    sections: [
+      {
+        title: 'Menú contextual, barra de estado y exportación',
+        description: 'Clic derecho en una celda para acciones rápidas. El pie muestra conteos y agregaciones. Exporta a CSV, Excel, JSON o PDF.',
+      },
+      {
+        title: 'Reordenar filas, deshacer/rehacer y teclado',
+        description:
+          'Arrastra filas para reordenar. Edita celdas con deshacer/rehacer (Ctrl+Z/Y). Flechas, Enter para editar, Escape para cancelar.',
+      },
+      {
+        title: 'Datos en árbol — filas jerárquicas',
+        description: 'Anida datos con flechas expandir/contraer e indentación automática.',
+      },
+      {
+        title: 'Filas congeladas e impresión',
+        description: 'Fija filas resumen al fondo. Usa el icono de impresión en la barra para una vista imprimible.',
+      },
+    ],
+  },
+
+  accessibilityDemo: {
+    badge: 'A11y',
+    title: 'Accesibilidad',
+    description:
+      'Grid Table expone roles en el contenedor, admite teclado entre celdas, Enter para editar y Escape para cancelar. Añade anillos de foco visibles y prueba con VoiceOver o NVDA.',
+    bullets: [
+      'Activa keyboardNavigation para flechas, Inicio, Fin, RePág, AvPág.',
+      'Mantén filtros y acciones de barra como elementos button (Bear lo cubre).',
+      'No quites los contornos de foco sin sustituirlos por un anillo de alto contraste.',
+      'En expansión de filas, asegura nombre accesible en el control de expandir.',
+    ],
+  },
+
+  themePlaygroundPage: {
+    title: 'Theme Builder y Playground',
+    description:
+      'Ajusta tokens en el Theme Builder y luego refleja props en código. Usa el Playground para alternar props y copiar el JSX generado de GridTable.',
+    cardThemeTitle: 'Theme Builder',
+    cardThemeDescription: 'Colores, tipografía, espaciado — exporta temas compatibles con Bear.',
+    cardThemeCta: 'Abrir Theme Builder →',
+    cardPlayTitle: 'Playground',
+    cardPlayDescription: 'Interruptores de props en vivo con JSX listo para copiar.',
+    cardPlayCta: 'Abrir Playground →',
+  },
+
+  demoCodeTitles: {
+    basic: 'Copiar — boceto de grid completo',
+    features: 'Copiar — grid de productos (menú contextual, barra de estado, exportación, fila congelada)',
+    finance: 'Copiar — grid estilo finanzas (hover más suave)',
+    hr: 'Copiar — patrón RRHH (expandir personalizado; o treeData)',
+    accessibility: 'Copiar — teclado + edición',
+    masterDetail: 'Copiar — render de expansión',
+    persisted: 'Copiar — guardar página en localStorage',
+    server: 'Copiar — patrón de paginación manual',
+    columnGrouping: 'Copiar — banda de cabecera agrupada',
+    virtualization: 'Copiar — lazyLoad + opciones',
+    themePlayground: 'Copiar — boceto de integración',
   },
 
   demosIndex: {
     title: 'Demos y Ejemplos',
     description: 'Explora demos interactivos que muestran Grid Table en escenarios del mundo real — desde paneles financieros hasta organigramas de RRHH.',
     viewDemo: 'Ver Demo',
+    whatsNew: 'Novedades de',
+    seeAllFeatures: 'Ver todas las funciones en acción',
+    releaseHighlights: [
+      'v1.0.8 — manualPagination + totalRowCount; demo servidor; arreglo carga/hooks; Compass compatible con historial del navegador',
+      'Hub Tema y Playground reúne tokens y playground de props',
+      'mobileLayout con scroll horizontal por defecto; apilado opcional',
+      'Hover más suave con tableEffects.hover',
+      'Demos: accesibilidad, maestro-detalle, paginación persistida, servidor, banda de grupos, listas perezosas',
+    ],
+  },
+
+  virtualizationDemo: {
+    title: 'Listas grandes y lazy load',
+    lead: 'La muestra mantiene 500 filas en memoria mientras lazyLoad las muestra por lotes al hacer scroll. Cambia preajustes o números, desactiva lazyLoad para cargar todo de golpe, y usa el tour para recorrer la UI.',
+    presets: 'Preajustes',
+    presetDense: 'Denso (rápido)',
+    presetDefault: 'Por defecto',
+    presetHeavy: 'Lotes grandes',
+    initialRows: 'initialRows',
+    batchSize: 'batchSize',
+    maxHeight: 'maxHeight (px)',
+    lazyEnabled: 'lazyLoad.enabled',
+    startTour: 'Tour de controles',
+    tourToolbarTitle: 'Ajustes de lazy load',
+    tourToolbarBody: 'Cambia preajustes o edita números. Lotes pequeños se sienten más ágiles; los grandes reducen revelados al scroll.',
+    tourGridTitle: 'Desplaza el cuerpo',
+    tourGridBody: 'Solo las filas cargadas renderizan; baja para traer el siguiente lote hasta montar todas.',
   },
 
   changelog: {

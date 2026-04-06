@@ -99,9 +99,14 @@ function GridTableContent<T extends RowData>({
   printConfig,
   autoFit: _autoFit,
   enableCopy,
+  mobileLayout = 'scroll',
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
+  const stackedMobile = shouldShowMobileView && mobileLayout === 'stacked';
+  const scrollMobile = shouldShowMobileView && mobileLayout === 'scroll';
+  const showTableHeader = !shouldShowMobileView || scrollMobile;
+  const mobileRootClass = scrollMobile ? 'gt-mobile gt-mobile-scroll' : stackedMobile ? 'gt-mobile gt-mobile-stacked' : '';
 
   // -- Context menu state --
   const [ctxMenu, setCtxMenu] = useState<{ visible: boolean; x: number; y: number; context: CtxMenuCtx<T> | null }>({
@@ -339,6 +344,15 @@ function GridTableContent<T extends RowData>({
     return state.columnStates.map((cs) => cs.width);
   }, [state.columnStates]);
 
+  const isEmpty = computed.paginatedData.length === 0;
+
+  const displayData = useMemo(() => {
+    if (!lazyEnabled) return computed.paginatedData;
+    return computed.paginatedData.slice(0, lazyVisibleCount);
+  }, [lazyEnabled, lazyVisibleCount, computed.paginatedData]);
+
+  const hasMoreLazy = lazyEnabled && lazyVisibleCount < computed.paginatedData.length;
+
   if (error) {
     const errorMessage = typeof error === 'string' ? error : error.message;
     if (errorContent) {
@@ -393,19 +407,10 @@ function GridTableContent<T extends RowData>({
     );
   }
 
-  const isEmpty = computed.paginatedData.length === 0;
-
-  const displayData = useMemo(() => {
-    if (!lazyEnabled) return computed.paginatedData;
-    return computed.paginatedData.slice(0, lazyVisibleCount);
-  }, [lazyEnabled, lazyVisibleCount, computed.paginatedData]);
-
-  const hasMoreLazy = lazyEnabled && lazyVisibleCount < computed.paginatedData.length;
-
   const tableContent = (
     <div
       ref={kbConfig?.enabled ? kbRef as React.RefObject<HTMLDivElement> : undefined}
-      className={`grid-table rounded-lg border overflow-hidden ${shouldShowMobileView ? 'gt-mobile' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
+      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
       style={containerStyle}
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
@@ -600,7 +605,7 @@ function GridTableContent<T extends RowData>({
       )}
 
       <div className="grid-table-container overflow-auto">
-        {!shouldShowMobileView && (
+        {showTableHeader && (
           <GridHeader
             columns={columns}
             columnStates={state.columnStates}
@@ -640,7 +645,8 @@ function GridTableContent<T extends RowData>({
                 columnStates={state.columnStates}
                 className={`gt-frozen-top ${classNames.body || ''}`}
                 style={{ ...styles.body, position: 'sticky', top: stickyHeader ? 'var(--gt-header-height, 40px)' : 0, zIndex: 1, background: 'var(--gt-bg-primary, #fff)' }}
-                isMobile={shouldShowMobileView}
+                applyHiddenOnMobile={stackedMobile}
+                stackedMobileLayout={stackedMobile}
                 showMobileLabels={showMobileLabels}
                 enableSelection={enableRowSelection}
                 enableExpansion={enableRowExpansion}
@@ -665,7 +671,8 @@ function GridTableContent<T extends RowData>({
               columnStates={state.columnStates}
               className={classNames.body}
               style={styles.body}
-              isMobile={shouldShowMobileView}
+              applyHiddenOnMobile={stackedMobile}
+              stackedMobileLayout={stackedMobile}
               showMobileLabels={showMobileLabels}
               enableSelection={enableRowSelection}
               enableExpansion={enableRowExpansion}
@@ -715,7 +722,8 @@ function GridTableContent<T extends RowData>({
                 columnStates={state.columnStates}
                 className={`gt-frozen-bottom ${classNames.body || ''}`}
                 style={{ ...styles.body, position: 'sticky', bottom: 0, zIndex: 1, background: 'var(--gt-bg-primary, #fff)' }}
-                isMobile={shouldShowMobileView}
+                applyHiddenOnMobile={stackedMobile}
+                stackedMobileLayout={stackedMobile}
                 showMobileLabels={showMobileLabels}
                 enableSelection={enableRowSelection}
                 enableExpansion={enableRowExpansion}
@@ -741,7 +749,7 @@ function GridTableContent<T extends RowData>({
         <div className={`grid-pagination ${classNames.pagination ?? ''}`} style={styles.pagination} role="navigation" aria-label="Pagination">
           <div className="grid-pagination-info">
             <Typography component="span" variant="body2" color="secondary">
-              {(state.page - 1) * state.pageSize + 1}-{Math.min(state.page * state.pageSize, computed.sortedData.length)} {state.translations.of} {computed.sortedData.length}
+              {(state.page - 1) * state.pageSize + 1}-{Math.min(state.page * state.pageSize, computed.effectiveTotalItems)} {state.translations.of} {computed.effectiveTotalItems}
             </Typography>
             <Typography component="span" variant="caption" color="secondary" className="bear-sr-only">{state.translations.rowsPerPage}</Typography>
             <Select
@@ -776,8 +784,16 @@ function GridTableContent<T extends RowData>({
         <StatusBar
           config={statusBarConfig}
           data={computed.sortedData}
-          totalCount={data.length}
-          filteredCount={computed.sortedData.length}
+          totalCount={
+            paginationConfig?.manualPagination && typeof paginationConfig.totalRowCount === 'number'
+              ? paginationConfig.totalRowCount
+              : data.length
+          }
+          filteredCount={
+            paginationConfig?.manualPagination && typeof paginationConfig.totalRowCount === 'number'
+              ? paginationConfig.totalRowCount
+              : computed.sortedData.length
+          }
           selectedCount={state.selectedIds.size}
           columns={columns}
           className={classNames.footer}

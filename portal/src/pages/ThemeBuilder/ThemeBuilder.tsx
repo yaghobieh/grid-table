@@ -172,7 +172,6 @@ export const ThemeBuilder: FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
-            {/* ── Sidebar Controls ──────────── */}
             <div className="space-y-6">
               {/* Presets */}
               <Card variant="ghost" padding="md" radius="xl">
@@ -275,7 +274,6 @@ export const ThemeBuilder: FC = () => {
               </Button>
             </div>
 
-            {/* ── Preview ──────────────────── */}
             <div className="space-y-6">
               <Card variant="ghost" padding="md" radius="xl">
                 <CardBody>

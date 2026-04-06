@@ -1,18 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { useTableContext } from '../context';
-import type { SortDirection, SortActions, SortState } from '../types';
+import type { SortDirection } from '../types';
+import type { UseSortReturn } from '../types/hooks.types';
 
-export interface UseSortReturn {
-  sorting: SortState['sorting'];
-  getSortDirection: (columnId: string) => SortDirection;
-  getSortIndex: (columnId: string) => number;
-  isSorted: (columnId: string) => boolean;
-  setSorting: SortActions['setSorting'];
-  toggleSorting: SortActions['toggleSorting'];
-  clearSorting: SortActions['clearSorting'];
-  clearColumnSorting: (columnId: string) => void;
-}
-
+/**
+ * Sorting helpers and actions from table context.
+ */
 export function useSort(): UseSortReturn {
   const { state, actions } = useTableContext();
 
@@ -59,4 +52,3 @@ export function useSort(): UseSortReturn {
     [state.sorting, getSortDirection, getSortIndex, isSorted, actions, clearColumnSorting]
   );
 }
-

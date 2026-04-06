@@ -1,28 +1,12 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTableContext } from '../context';
 import type { FilterActions, FilterValue, FilterOperator } from '../types';
+import type { UseFilterReturn, UseFilterOptions } from '../types/hooks.types';
 import { DEBOUNCE_DELAY } from '../constants';
 
-export interface UseFilterReturn {
-  filters: FilterValue[];
-  globalFilter: string;
-  activeFilterColumnId: string | null;
-  hasAnyFilter: () => boolean;
-  hasFilter: (columnId: string) => boolean;
-  getFilterValue: (columnId: string) => FilterValue | undefined;
-  setFilter: FilterActions['setFilter'];
-  removeFilter: FilterActions['removeFilter'];
-  clearFilters: FilterActions['clearFilters'];
-  setGlobalFilter: FilterActions['setGlobalFilter'];
-  clearGlobalFilter: () => void;
-  openFilterPanel: (columnId: string) => void;
-  closeFilterPanel: () => void;
-}
-
-export interface UseFilterOptions {
-  debounceMs?: number;
-}
-
+/**
+ * Filter and global-search helpers with optional debounced global filter.
+ */
 export function useFilter(options: UseFilterOptions = {}): UseFilterReturn {
   const { debounceMs = DEBOUNCE_DELAY } = options;
   const { state, actions } = useTableContext();
@@ -114,4 +98,3 @@ export function useFilter(options: UseFilterOptions = {}): UseFilterReturn {
     ]
   );
 }
-

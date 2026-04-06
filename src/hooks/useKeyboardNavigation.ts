@@ -1,16 +1,11 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import type { KeyboardEvent, RefObject } from 'react';
 import type { FocusedCell, KeyboardNavConfig } from '../types/features.types';
+import type { UseKeyboardNavigationReturn } from '../types/hooks.types';
 
-export interface UseKeyboardNavigationReturn {
-  focusedCell: FocusedCell | null;
-  setFocusedCell: (cell: FocusedCell | null) => void;
-  handleKeyDown: (e: React.KeyboardEvent) => void;
-  containerRef: React.RefObject<HTMLDivElement>;
-  isEditing: boolean;
-  startEditing: () => void;
-  stopEditing: () => void;
-}
-
+/**
+ * Arrow-key cell focus, Enter/Tab edit flow, and optional wrap for grid keyboard navigation.
+ */
 export function useKeyboardNavigation(
   rowCount: number,
   colCount: number,
@@ -22,7 +17,7 @@ export function useKeyboardNavigation(
 
   const [focusedCell, setFocusedCell] = useState<FocusedCell | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
+  const containerRef = useRef<HTMLDivElement>(null!) as RefObject<HTMLDivElement>;
 
   const clamp = useCallback((row: number, col: number): FocusedCell => {
     let r = row;
@@ -41,7 +36,7 @@ export function useKeyboardNavigation(
     return { rowIndex: r, colIndex: c };
   }, [rowCount, colCount, wrap]);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!enabled || !focusedCell) return;
 
     if (isEditing) {

@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useNavigate } from '@forgedevstack/forge-compass/react';
 import { Typography, BearIcons } from '@forgedevstack/bear';
+import { useDemoNavigation } from '@/hooks';
 import { SEARCH_ITEMS } from './SearchModal.const';
 import type { SearchItem } from './SearchModal.const';
 
@@ -13,7 +13,7 @@ export const SearchModal: FC<SearchModalProps> = ({ open, onClose }) => {
   const [query, setQuery] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const nav = useNavigate();
+  const { openDemo } = useDemoNavigation();
 
   const results = useMemo<SearchItem[]>(() => {
     if (!query.trim()) return SEARCH_ITEMS.slice(0, 8);
@@ -28,11 +28,11 @@ export const SearchModal: FC<SearchModalProps> = ({ open, onClose }) => {
 
   const goTo = useCallback(
     (path: string) => {
-      nav.navigate(path);
+      openDemo(path);
       onClose();
       setQuery('');
     },
-    [nav, onClose],
+    [openDemo, onClose],
   );
 
   useEffect(() => {

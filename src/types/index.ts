@@ -6,4 +6,5 @@ export * from './sort.types';
 export * from './pagination.types';
 export * from './table.types';
 export * from './features.types';
+export * from './hooks.types';
 

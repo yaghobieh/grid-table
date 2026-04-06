@@ -230,8 +230,11 @@ Enable pagination with \`showPagination\`:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| \`initialPage\` | number | 1 | Initial page index |
 | \`initialPageSize\` | number | 10 | Initial rows per page |
 | \`pageSizeOptions\` | number[] | [10,20,50,100] | Page size dropdown options |
+| \`manualPagination\` | boolean | false | Parent supplies one page; grid does not slice |
+| \`totalRowCount\` | number | — | Total rows when \`manualPagination\` is true |
 
 ### Page Change Callback
 
@@ -241,7 +244,13 @@ Enable pagination with \`showPagination\`:
     console.log('Page:', page, 'Size:', pageSize);
   }}
 />
-\`\`\``;
+\`\`\`
+
+### Server-driven (manual) pagination
+
+When the server returns one page at a time, pass the slice as \`data\`, set \`paginationConfig.manualPagination: true\`, and \`paginationConfig.totalRowCount\` to the full result count. Fetch the next slice inside \`onPageChange\`.
+
+See the [Server-driven demo](/demos/server-driven) and [Advanced patterns](/docs/advanced-patterns).`;
 
 export const DOC_SELECTION = `## Row Selection
 
@@ -353,26 +362,73 @@ Visit the [Theme Builder](/theme-builder) to create and export custom themes int
 
 export const DOC_TREE_DATA = `## Tree Data
 
-Display hierarchical data with expand/collapse:
+Use \`treeData\` with rows that contain a \`children\` array (or configure \`childrenField\`). The grid flattens, indents, and shows expand toggles.
 
 \`\`\`tsx
 const data = [
-  { id: 1, name: 'CEO', managerId: null, level: 0 },
-  { id: 2, name: 'VP Eng', managerId: 1, level: 1 },
-  { id: 3, name: 'Sr Engineer', managerId: 2, level: 2 },
+  {
+    id: 1,
+    name: 'CEO',
+    children: [
+      { id: 2, name: 'VP Eng', children: [{ id: 5, name: 'Engineer' }] },
+    ],
+  },
 ];
 
 <GridTable
   data={data}
   columns={columns}
-  enableRowExpansion
-  renderRowExpansion={(row) => <EmployeeDetail data={row} />}
+  treeData={{ enabled: true, childrenField: 'children', indentSize: 24 }}
 />
 \`\`\`
 
+### Row expansion (flat tables)
+
+For master–detail on **flat** rows (no nested \`children\`), use \`enableRowExpansion\` and \`renderRowExpansion\` — see [Master–detail demo](/demos/master-detail).
+
 ### HR Demo
 
-See the [HR Demo](/demos/hr) for a full example with an org-chart tree view, expand/collapse, and hierarchical employee data.`;
+See the [HR Demo](/demos/hr) for an org-chart style tree.`;
+
+export const DOC_ADVANCED_PATTERNS = `## Advanced patterns
+
+Guides that pair with the new portal demos. Each page under **Demos** includes a copy-ready code block.
+
+### Accessibility
+
+Enable \`keyboardNavigation\` and, when editing, \`enableCellEdit\` with \`onCellEdit\`. Keep toolbar controls as real focusable buttons. Do not remove \`:focus-visible\` outlines without substituting a visible focus ring. Test with VoiceOver, NVDA, or Chrome Accessibility Insights.
+
+Live: [Accessibility demo](/demos/accessibility)
+
+### Master–detail
+
+Use \`enableRowExpansion\` and \`renderRowExpansion\` to show line items, notes, or a nested grid under a row.
+
+Live: [Master–detail demo](/demos/master-detail)
+
+### Persisted pagination
+
+Read \`initialPage\` / \`initialPageSize\` from \`localStorage\` (or your API) into \`paginationConfig\`, then write back inside \`onPageChange\`.
+
+Live: [Persisted state demo](/demos/persisted-state)
+
+### Server-driven paging
+
+Set \`paginationConfig.manualPagination: true\`, \`paginationConfig.totalRowCount\` to the server total, pass only the current page in \`data\`, and refetch in \`onPageChange\`. Apply sort/filter on the server when the dataset is large.
+
+Live: [Server-driven demo](/demos/server-driven)
+
+### Column grouping band
+
+Multi-row headers with colspan are not built in yet. Use \`renderHeader\` to render a labelled band above the grid that lines up with your column count (see demo).
+
+Live: [Column grouping demo](/demos/column-grouping)
+
+### Large lists and virtualization
+
+Use \`lazyLoad\` with \`dimensions.maxHeight\` to reveal rows in batches while scrolling. For only rendering visible rows (window virtualization), track the roadmap or combine **manual pagination** with a tall backend dataset.
+
+Live: [Lazy load demo](/demos/virtualization)`;
 
 export const DOC_CONTENT_MAP: Record<string, string> = {
   'getting-started': DOC_GETTING_STARTED,
@@ -385,4 +441,5 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'drag-drop': DOC_DRAG_DROP,
   'theming': DOC_THEMING,
   'tree-data': DOC_TREE_DATA,
+  'advanced-patterns': DOC_ADVANCED_PATTERNS,
 };

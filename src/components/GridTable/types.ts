@@ -5,6 +5,7 @@ import type {
   Theme,
   Translations,
   Breakpoint,
+  MobileLayout,
   Dimensions,
   ClassNames,
   Styles,
@@ -25,7 +26,7 @@ import type {
   PrintConfig,
   AutoFitConfig,
 } from '../../types';
-import type { SubCellExpandTrigger } from '../../context/types';
+import type { SubCellExpandTrigger } from '../../context/TableContext.types';
 
 export interface GridTableComponentProps<T extends RowData = RowData> {
   data: T[];
@@ -41,6 +42,7 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   classNames?: ClassNames;
   styles?: Styles;
   mobileBreakpoint?: Breakpoint;
+  mobileLayout?: MobileLayout;
   showMobileLabels?: boolean;
   enableDragDrop?: boolean;
   enableColumnResize?: boolean;

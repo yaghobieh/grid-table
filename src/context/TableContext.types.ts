@@ -14,6 +14,7 @@ import type {
   FilterConfig,
   SortConfig,
 } from '../types';
+import { TABLE_ACTION } from './TableContext.constants';
 
 export interface TableContextState<T extends RowData = RowData> {
   data: T[];
@@ -102,6 +103,7 @@ export interface TableContextValue<T extends RowData = RowData> {
     paginatedData: T[];
     visibleColumns: ColumnDefinition<T>[];
     totalPages: number;
+    effectiveTotalItems: number;
     canGoNext: boolean;
     canGoPrevious: boolean;
     allSelected: boolean;
@@ -134,7 +136,26 @@ export interface TableProviderProps<T extends RowData = RowData> {
   subCellExpandTrigger?: SubCellExpandTrigger;
   expandRowOnDoubleClick?: boolean;
   globalFilterColumns?: string[];
-  /** IDs to expand by default on mount */
   defaultExpandedIds?: Array<string | number>;
 }
 
+export type TableReducerAction<T extends RowData = RowData> =
+  | { type: typeof TABLE_ACTION.SET_DATA; payload: T[] }
+  | { type: typeof TABLE_ACTION.SET_LOADING; payload: boolean }
+  | { type: typeof TABLE_ACTION.SET_ERROR; payload: Error | string | null }
+  | { type: typeof TABLE_ACTION.SET_SORTING; payload: SortValue[] }
+  | { type: typeof TABLE_ACTION.SET_FILTERS; payload: FilterValue[] }
+  | { type: typeof TABLE_ACTION.SET_GLOBAL_FILTER; payload: string }
+  | { type: typeof TABLE_ACTION.SET_PAGE; payload: number }
+  | { type: typeof TABLE_ACTION.SET_PAGE_SIZE; payload: number }
+  | { type: typeof TABLE_ACTION.SET_SELECTED_IDS; payload: Set<string | number> }
+  | { type: typeof TABLE_ACTION.SET_EXPANDED_IDS; payload: Set<string | number> }
+  | { type: typeof TABLE_ACTION.SET_EXPANDED_CELL_IDS; payload: Set<string> }
+  | { type: typeof TABLE_ACTION.SET_AUTO_SIZED_COLUMN_IDS; payload: Set<string> }
+  | { type: typeof TABLE_ACTION.SET_COLUMN_STATES; payload: ColumnState[] }
+  | { type: typeof TABLE_ACTION.SET_DRAGGING_COLUMN; payload: string | null }
+  | { type: typeof TABLE_ACTION.SET_RESIZING_COLUMN; payload: string | null }
+  | { type: typeof TABLE_ACTION.SET_ACTIVE_FILTER_COLUMN; payload: string | null }
+  | { type: typeof TABLE_ACTION.SET_CURRENT_BREAKPOINT; payload: 'mobile' | 'tablet' | 'desktop' }
+  | { type: typeof TABLE_ACTION.SET_MOBILE_DRAWER; payload: { show: boolean; content: 'filter' | 'sort' | 'columns' | null } }
+  | { type: typeof TABLE_ACTION.RESET; payload: Partial<TableContextState<T>> };

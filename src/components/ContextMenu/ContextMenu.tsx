@@ -1,24 +1,9 @@
 import { useEffect, useCallback, useRef, type ReactNode } from 'react';
-import type { ContextMenuAction, ContextMenuContext } from '../../types/features.types';
+import type { ContextMenuProps } from './ContextMenu.types';
 import type { RowData } from '../../types';
 
-export interface ContextMenuProps<T extends RowData = RowData> {
-  visible: boolean;
-  x: number;
-  y: number;
-  context: ContextMenuContext<T> | null;
-  actions: ContextMenuAction<T>[];
-  onClose: () => void;
-}
-
-export function ContextMenu<T extends RowData>({
-  visible,
-  x,
-  y,
-  context,
-  actions,
-  onClose,
-}: ContextMenuProps<T>): ReactNode {
+export function ContextMenu<T extends RowData>(props: ContextMenuProps<T>): ReactNode {
+  const { visible, x, y, context, actions, onClose } = props;
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
@@ -54,54 +39,30 @@ export function ContextMenu<T extends RowData>({
     <div
       ref={menuRef}
       className="gt-context-menu"
-      style={{
-        position: 'fixed',
-        left: x,
-        top: y,
-        zIndex: 9999,
-        minWidth: 180,
-        background: 'var(--gt-bg-primary, #fff)',
-        border: '1px solid var(--gt-border-color, #e0e0e0)',
-        borderRadius: 6,
-        boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-        padding: '4px 0',
-      }}
+      style={{ left: x, top: y }}
     >
       {visibleActions.map((action) => {
         if (action.divider) {
-          return <div key={action.id} className="gt-context-menu-divider" style={{ height: 1, background: 'var(--gt-border-color, #e0e0e0)', margin: '4px 8px' }} />;
+          return <div key={action.id} className="gt-context-menu-divider" />;
         }
 
         return (
           <button
             key={action.id}
+            type="button"
             className="gt-context-menu-item"
             disabled={action.disabled}
             onClick={() => {
               action.onClick(context);
               onClose();
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-              padding: '6px 12px',
-              border: 'none',
-              background: 'none',
-              cursor: action.disabled ? 'default' : 'pointer',
-              opacity: action.disabled ? 0.5 : 1,
-              fontSize: '0.8rem',
-              color: 'var(--gt-text-primary, #333)',
-              textAlign: 'left',
-            }}
           >
-            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="gt-context-menu-item-label">
               {action.icon && <span className="gt-cm-icon">{action.icon}</span>}
               <span>{action.label}</span>
             </span>
             {action.shortcut && (
-              <span style={{ fontSize: '0.7rem', color: 'var(--gt-text-muted, #999)' }}>{action.shortcut}</span>
+              <span className="gt-context-menu-shortcut">{action.shortcut}</span>
             )}
           </button>
         );

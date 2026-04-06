@@ -1,16 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { useTableContext } from '../context';
-import type { PaginationInfo, PaginationActions } from '../types';
+import type { PaginationInfo } from '../types';
+import type { UsePaginationReturn, UsePaginationOptions } from '../types/hooks.types';
 import { ONE } from '../constants';
 
-export interface UsePaginationReturn extends PaginationInfo, PaginationActions {
-  pageSizeOptions: readonly number[];
-}
-
-export interface UsePaginationOptions {
-  pageSizeOptions?: readonly number[];
-}
-
+/**
+ * Pagination state and navigation bound to sorted data length and context actions.
+ */
 export function usePagination(options: UsePaginationOptions = {}): UsePaginationReturn {
   const { pageSizeOptions = [10, 20, 50, 100] } = options;
   const { state, actions, computed } = useTableContext();
@@ -60,23 +56,23 @@ export function usePagination(options: UsePaginationOptions = {}): UsePagination
 
   const getPageRange = useCallback((): { start: number; end: number } => {
     const start = (state.page - ONE) * state.pageSize + ONE;
-    const end = Math.min(state.page * state.pageSize, computed.sortedData.length);
+    const end = Math.min(state.page * state.pageSize, computed.effectiveTotalItems);
     return { start, end };
-  }, [state.page, state.pageSize, computed.sortedData.length]);
+  }, [state.page, state.pageSize, computed.effectiveTotalItems]);
 
   const paginationInfo: PaginationInfo = useMemo(() => {
     const { start, end } = getPageRange();
     return {
       page: state.page,
       pageSize: state.pageSize,
-      totalItems: computed.sortedData.length,
+      totalItems: computed.effectiveTotalItems,
       totalPages: computed.totalPages,
       startIndex: start,
       endIndex: end,
       isFirstPage: state.page === ONE,
       isLastPage: state.page === computed.totalPages,
     };
-  }, [state.page, state.pageSize, computed.sortedData.length, computed.totalPages, getPageRange]);
+  }, [state.page, state.pageSize, computed.effectiveTotalItems, computed.totalPages, getPageRange]);
 
   return useMemo(
     () => ({
@@ -107,4 +103,3 @@ export function usePagination(options: UsePaginationOptions = {}): UsePagination
     ]
   );
 }
-

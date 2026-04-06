@@ -30,6 +30,9 @@ export const DEFAULT_TRANSLATIONS = {
   noResults: 'No results found',
   errorLoading: 'Error loading data',
   retry: 'Retry',
+  editYes: 'Yes',
+  editNo: 'No',
+  doubleClickToEdit: 'Double-click to edit',
 } as const;
 
 export const DEFAULT_THEME = {

@@ -1,66 +1,16 @@
 import { useMemo } from 'react';
 import { useTableContext } from '../context';
-import { useSort, type UseSortReturn } from './useSort';
-import { useFilter, type UseFilterReturn } from './useFilter';
-import { usePagination, type UsePaginationReturn } from './usePagination';
-import { useDragDrop, type UseDragDropReturn } from './useDragDrop';
-import { useBreakpoint, type UseBreakpointReturn } from './useBreakpoint';
-import type { RowData, ColumnDefinition } from '../types';
+import { useSort } from './useSort';
+import { useFilter } from './useFilter';
+import { usePagination } from './usePagination';
+import { useDragDrop } from './useDragDrop';
+import { useBreakpoint } from './useBreakpoint';
+import type { RowData } from '../types';
+import type { UseTableReturn } from '../types/hooks.types';
 
-export interface UseTableReturn<T extends RowData = RowData> {
-  data: T[];
-  filteredData: T[];
-  sortedData: T[];
-  paginatedData: T[];
-  columns: ColumnDefinition<T>[];
-  visibleColumns: ColumnDefinition<T>[];
-  loading: boolean;
-  error: Error | string | null;
-  isEmpty: boolean;
-  sort: UseSortReturn;
-  filter: UseFilterReturn;
-  pagination: UsePaginationReturn;
-  dragDrop: UseDragDropReturn;
-  breakpoint: UseBreakpointReturn;
-  selection: {
-    selectedIds: Set<string | number>;
-    allSelected: boolean;
-    someSelected: boolean;
-    selectRow: (id: string | number) => void;
-    deselectRow: (id: string | number) => void;
-    toggleRow: (id: string | number) => void;
-    selectAll: () => void;
-    deselectAll: () => void;
-    isSelected: (id: string | number) => boolean;
-  };
-  expansion: {
-    expandedIds: Set<string | number>;
-    expandRow: (id: string | number) => void;
-    collapseRow: (id: string | number) => void;
-    toggleRow: (id: string | number) => void;
-    isExpanded: (id: string | number) => boolean;
-  };
-  columnApi: {
-    states: import('../types').ColumnState[];
-    reorder: (sourceId: string, targetId: string) => void;
-    resize: (columnId: string, width: number) => void;
-    toggleVisibility: (columnId: string) => void;
-    reset: () => void;
-    getWidth: (columnId: string) => number;
-    isVisible: (columnId: string) => boolean;
-  };
-  mobile: {
-    showDrawer: boolean;
-    drawerContent: 'filter' | 'sort' | 'columns' | null;
-    openDrawer: (content: 'filter' | 'sort' | 'columns') => void;
-    closeDrawer: () => void;
-  };
-  theme: import('../types').Theme;
-  translations: import('../types').Translations;
-  refresh: () => void;
-  reset: () => void;
-}
-
+/**
+ * Composed table API: sort, filter, pagination, drag-drop, breakpoint, selection, and columns.
+ */
 export function useTable<T extends RowData = RowData>(): UseTableReturn<T> {
   const { state, actions, computed } = useTableContext<T>();
 
@@ -153,4 +103,3 @@ export function useTable<T extends RowData = RowData>(): UseTableReturn<T> {
     [state, computed, sort, filter, pagination, dragDrop, breakpoint, selection, expansion, columnsApi, mobile, actions]
   );
 }
-

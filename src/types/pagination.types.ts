@@ -26,6 +26,8 @@ export interface PaginationConfig {
   maxPageButtons?: number;
   persistPagination?: boolean;
   paginationStorageKey?: string;
+  manualPagination?: boolean;
+  totalRowCount?: number;
 }
 
 export interface PaginationInfo {

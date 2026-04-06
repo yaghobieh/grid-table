@@ -71,3 +71,5 @@ export const TASK_STATUS_COLORS: Record<string, string> = {
   'In Progress': '#3b82f6',
   Todo: '#64748b',
 };
+
+export const SECTION_GAP_PX = 48;

@@ -1,10 +1,10 @@
-import { createContext, useContext, useState, useCallback, FC, ReactNode, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, FC, ReactNode, useMemo, useEffect } from 'react';
 import type { Locale, TranslationStrings } from './types';
 import { en } from './en';
 import { es } from './es';
+import { he } from './he';
 
-// ── Locale map ───────────────────────────────────────
-const TRANSLATIONS: Record<Locale, TranslationStrings> = { en, es };
+const TRANSLATIONS: Record<Locale, TranslationStrings> = { en, es, he };
 
 // ── Storage key ──────────────────────────────────────
 const LOCALE_STORAGE_KEY = 'grid-table-locale';
@@ -15,6 +15,7 @@ const DEFAULT_LOCALE: Locale = 'en';
 // ── Context ──────────────────────────────────────────
 interface I18nContextValue {
   locale: Locale;
+  isRtl: boolean;
   t: TranslationStrings;
   setLocale: (locale: Locale) => void;
   toggleLocale: () => void;
@@ -33,7 +34,7 @@ export const I18nProvider: FC<I18nProviderProps> = ({ children, defaultLocale })
     if (defaultLocale) return defaultLocale;
     try {
       const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      if (stored === 'en' || stored === 'es') return stored;
+      if (stored === 'en' || stored === 'es' || stored === 'he') return stored;
     } catch { /* noop */ }
     return DEFAULT_LOCALE;
   });
@@ -44,15 +45,25 @@ export const I18nProvider: FC<I18nProviderProps> = ({ children, defaultLocale })
   }, []);
 
   const toggleLocale = useCallback(() => {
-    setLocale(locale === 'en' ? 'es' : 'en');
+    const order: Locale[] = ['en', 'es', 'he'];
+    const i = order.indexOf(locale);
+    setLocale(order[(i + 1) % order.length] ?? 'en');
   }, [locale, setLocale]);
+
+  const isRtl = locale === 'he';
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+  }, [locale, isRtl]);
 
   const value = useMemo<I18nContextValue>(() => ({
     locale,
+    isRtl,
     t: TRANSLATIONS[locale],
     setLocale,
     toggleLocale,
-  }), [locale, setLocale, toggleLocale]);
+  }), [locale, isRtl, setLocale, toggleLocale]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };

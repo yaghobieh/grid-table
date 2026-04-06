@@ -5,6 +5,28 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] - 2026-03-28
+
+### Added
+
+- **`mobileLayout` prop** — `'scroll'` (default) keeps a real table on small viewports: header visible, row flex nowrap, horizontal scroll in the table body. `'stacked'` restores the previous card layout with `hiddenOnMobile` column hiding and cell labels.
+- **Manual (server) pagination** — `paginationConfig.manualPagination` skips client slicing of `data`; `paginationConfig.totalRowCount` drives page counts and the footer “of N” label. Use with `onPageChange` to fetch each page from an API.
+
+### Changed
+
+- **Hover effect** — `tableEffects.hover` uses a lighter inset accent and no keyframed glow animation.
+- **Toolbar** — Action-button SVGs use a slightly larger size for readability on touch layouts.
+- **Computed pagination** — `effectiveTotalItems` for hooks and footer text when manual pagination is enabled.
+
+### Fixed
+
+- **Loading state + hooks** — `GridTableContent` always runs the same hooks before `loading` / `error` early returns, fixing “Rendered more hooks than during the previous render” when `loading` toggles (e.g. server-driven demo).
+
+### Portal
+
+- Theme & Playground hub, Accessibility, Master–detail, Persisted pagination, Server-driven paging, Column grouping band, Lazy load demos; **Advanced patterns** doc; copyable code on demos.
+- **Browser back/forward** — portal can depend on **@forgedevstack/forge-compass** ≥ 1.0.3 (popstate no longer replaces the history entry URL).
+
 ## [1.0.7] - 2026-02-24
 
 ### Added

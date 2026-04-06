@@ -1,8 +1,4 @@
-@import 'base/variables';
-
-// Mobile layout scoped to .gt-mobile class (added by JS when mobileBreakpoint is active).
-// This avoids @media queries that would override mobileBreakpoint="none".
-.gt-mobile {
+.gt-mobile-stacked {
   .grid-row {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -12,5 +8,28 @@
   .grid-cell {
     width: 100%;
     padding: 0.25rem 0;
+  }
+}
+
+.gt-mobile-scroll {
+  .grid-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .grid-header {
+    width: max-content;
+    min-width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .grid-body {
+    min-width: min-content;
+  }
+
+  .grid-row {
+    width: max-content;
+    min-width: 100%;
+    flex-wrap: nowrap;
   }
 }

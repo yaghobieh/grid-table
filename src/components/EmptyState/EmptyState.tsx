@@ -1,15 +1,10 @@
 import type { ReactNode } from 'react';
+import { Typography, Flex } from '@forgedevstack/bear';
 import type { EmptyStateProps } from './types';
 import { useTableContext } from '../../context';
 
-export function EmptyState({
-  title,
-  description,
-  icon,
-  action,
-  className = '',
-  style,
-}: EmptyStateProps): ReactNode {
+export function EmptyState(props: EmptyStateProps): ReactNode {
+  const { title, description, icon, action, className = '', style } = props;
   const { state } = useTableContext();
   const { translations } = state;
 
@@ -17,7 +12,10 @@ export function EmptyState({
   const displayDescription = description ?? translations.noResults;
 
   return (
-    <div
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
       className={`grid-empty-state ${className}`}
       style={style}
       role="status"
@@ -44,18 +42,17 @@ export function EmptyState({
         </div>
       )}
 
-      <h3 className="grid-empty-title">
+      <Typography variant="h4" className="grid-empty-title">
         {displayTitle}
-      </h3>
+      </Typography>
 
       {displayDescription && (
-        <p className="grid-empty-description">
+        <Typography variant="body2" className="grid-empty-description">
           {displayDescription}
-        </p>
+        </Typography>
       )}
 
       {action && <div className="grid-empty-action">{action}</div>}
-    </div>
+    </Flex>
   );
 }
-

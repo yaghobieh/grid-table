@@ -1,5 +1,5 @@
 import { FC, useState, useMemo } from 'react';
-import { useNavigate } from '@forgedevstack/forge-compass/react';
+import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
 import {
   Button,
   Typography,
@@ -10,16 +10,19 @@ import {
 import { GridTable } from '@forgedevstack/grid-table';
 import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
+import { DemoCodeSection } from '@/components/DemoCodeSection';
 import { HR_DATA, buildHierarchy } from '@/data/hr.data';
 import type { Employee } from '@/data/hr.data';
 import { DEFAULT_HR_ROWS } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
 import { INDENT_PX, DEPT_OPTIONS, STATUS_OPTIONS } from './HRDemo.const';
 import { StatusBadge, DeptTag, ExpandToggle } from './helpers';
+import { HR_DEMO_SOURCE } from './HRDemo.code.const';
 
 export const HRDemo: FC = () => {
   const { t } = useI18n();
-  const { navigate } = useNavigate();
+  const themeMode = useGridTableThemeMode();
+  const { openDemosIndex } = useDemoNavigation();
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set([1]));
 
   const orderedData = useMemo(() => buildHierarchy(HR_DATA), []);
@@ -82,7 +85,7 @@ export const HRDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>{t.common.demos}</Button>
               <Badge variant="info">{t.demos.hr.title}</Badge>
               <Badge variant="secondary" className="text-xs">{DEFAULT_HR_ROWS} {t.hrDemo.employees}</Badge>
             </Flex>
@@ -95,7 +98,7 @@ export const HRDemo: FC = () => {
           </Flex>
         </Flex>
 
-        <div className="dark">
+        <div>
           <GridTable
             data={visibleData}
             columns={columns}
@@ -103,10 +106,12 @@ export const HRDemo: FC = () => {
             showPagination={false} showFilter showGlobalFilter stickyHeader
             tableEffects={{ hover: true, sort: true, row: true }}
             defaultExpandedIds={[1]}
-            themeMode="dark"
+            themeMode={themeMode}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
           />
         </div>
+
+        <DemoCodeSection title={t.demoCodeTitles.hr} code={HR_DEMO_SOURCE} />
       </div>
     </Layout>
   );

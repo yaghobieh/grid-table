@@ -8,6 +8,7 @@ export const TEN = 10;
 export const TWENTY = 20;
 export const FIFTY = 50;
 export const HUNDRED = 100;
+export const DEFAULT_UNDO_HISTORY_MAX = FIFTY;
 
 export const DEFAULT_PAGE_SIZE = TEN;
 export const DEFAULT_PAGE_SIZES = [TEN, TWENTY, FIFTY, HUNDRED] as const;

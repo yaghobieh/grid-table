@@ -13,7 +13,8 @@ export function GridRow<T extends RowData = RowData>({
   isSelected = false,
   isExpanded = false,
   isDisabled = false,
-  isMobile = false,
+  applyHiddenOnMobile = false,
+  stackedMobileLayout = false,
   showMobileLabels = true,
   className = '',
   style,
@@ -77,7 +78,7 @@ export function GridRow<T extends RowData = RowData>({
       .filter((col) => {
         const state = columnStates.find((cs) => cs.id === col.id);
         if (state?.visible === false) return false;
-        if (isMobile && col.hiddenOnMobile) return false;
+        if (applyHiddenOnMobile && col.hiddenOnMobile) return false;
         return true;
       })
       .sort((a, b) => {
@@ -85,7 +86,7 @@ export function GridRow<T extends RowData = RowData>({
         const bState = columnStates.find((cs) => cs.id === b.id);
         return (aState?.order ?? 0) - (bState?.order ?? 0);
       });
-  }, [columns, columnStates, isMobile]);
+  }, [columns, columnStates, applyHiddenOnMobile]);
 
   const getCellValue = useCallback(
     (col: typeof columns[number]) => {
@@ -121,14 +122,14 @@ export function GridRow<T extends RowData = RowData>({
       classes.push('cursor-pointer');
     }
 
-    if (isMobile) {
+    if (stackedMobileLayout) {
       classes.push('flex', 'flex-wrap', 'gap-2', 'p-4');
     } else {
       classes.push('flex', 'items-stretch');
     }
 
     return classes.join(' ');
-  }, [isHovered, isSelected, isDisabled, onClick, isMobile]);
+  }, [isHovered, isSelected, isDisabled, onClick, stackedMobileLayout]);
 
   return (
     <>
@@ -208,7 +209,7 @@ export function GridRow<T extends RowData = RowData>({
 
         {visibleColumns.map((col, colIndex) => {
           const colState = columnStates.find((cs) => cs.id === col.id);
-          const width = isMobile ? '100%' : colState?.width;
+          const width = stackedMobileLayout ? '100%' : colState?.width;
           
           // Calculate sticky offset (sum of widths of previous sticky columns)
           let stickyOffset = 0;
@@ -242,9 +243,9 @@ export function GridRow<T extends RowData = RowData>({
               value={getCellValue(col)}
               width={width}
               align={col.align}
-              showLabel={isMobile && showMobileLabels && col.showLabelOnMobile !== false}
+              showLabel={stackedMobileLayout && showMobileLabels && col.showLabelOnMobile !== false}
               labelText={typeof col.header === 'string' ? col.header : col.id}
-              className={isMobile ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0'}
+              className={stackedMobileLayout ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0'}
               sticky={col.sticky}
               stickyOffset={stickyOffset}
               onClick={onCellClick}

@@ -1,38 +1,12 @@
 import { useCallback, useRef, useState, useMemo } from 'react';
+import type { DragEvent } from 'react';
 import { useTableContext } from '../context';
-import type { ColumnReorderEvent } from '../types';
+import type { UseDragDropOptions, UseDragDropReturn, DragHandleProps, DropTargetProps } from '../types/hooks.types';
 import { DRAG_THRESHOLD } from '../constants';
 
-export interface UseDragDropReturn {
-  isDragging: boolean;
-  draggingColumnId: string | null;
-  dragOverColumnId: string | null;
-  handleDragStart: (columnId: string) => (event: React.DragEvent) => void;
-  handleDragOver: (columnId: string) => (event: React.DragEvent) => void;
-  handleDragEnd: () => void;
-  handleDrop: (targetColumnId: string) => (event: React.DragEvent) => void;
-  handleDragLeave: () => void;
-  getDragHandleProps: (columnId: string) => DragHandleProps;
-  getDropTargetProps: (columnId: string) => DropTargetProps;
-}
-
-export interface DragHandleProps {
-  draggable: boolean;
-  onDragStart: (event: React.DragEvent) => void;
-  onDragEnd: () => void;
-}
-
-export interface DropTargetProps {
-  onDragOver: (event: React.DragEvent) => void;
-  onDragLeave: () => void;
-  onDrop: (event: React.DragEvent) => void;
-}
-
-export interface UseDragDropOptions {
-  onReorder?: (event: ColumnReorderEvent) => void;
-  enabled?: boolean;
-}
-
+/**
+ * Column drag-and-drop reorder with thresholded validity and table context wiring.
+ */
 export function useDragDrop(options: UseDragDropOptions = {}): UseDragDropReturn {
   const { onReorder, enabled = true } = options;
   const { state, actions } = useTableContext();
@@ -41,7 +15,7 @@ export function useDragDrop(options: UseDragDropOptions = {}): UseDragDropReturn
   const isDragValid = useRef(false);
 
   const handleDragStart = useCallback(
-    (columnId: string) => (event: React.DragEvent) => {
+    (columnId: string) => (event: DragEvent) => {
       if (!enabled) {
         event.preventDefault();
         return;
@@ -61,7 +35,7 @@ export function useDragDrop(options: UseDragDropOptions = {}): UseDragDropReturn
   );
 
   const handleDragOver = useCallback(
-    (columnId: string) => (event: React.DragEvent) => {
+    (columnId: string) => (event: DragEvent) => {
       if (!enabled || !state.draggingColumnId) return;
 
       event.preventDefault();
@@ -87,7 +61,7 @@ export function useDragDrop(options: UseDragDropOptions = {}): UseDragDropReturn
   }, []);
 
   const handleDrop = useCallback(
-    (targetColumnId: string) => (event: React.DragEvent) => {
+    (targetColumnId: string) => (event: DragEvent) => {
       event.preventDefault();
 
       if (!enabled || !state.draggingColumnId || !isDragValid.current) return;
@@ -163,4 +137,3 @@ export function useDragDrop(options: UseDragDropOptions = {}): UseDragDropReturn
     ]
   );
 }
-

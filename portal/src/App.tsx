@@ -4,6 +4,13 @@ import { FinanceDemo } from './pages/FinanceDemo';
 import { HRDemo } from './pages/HRDemo';
 import { BasicDemo } from './pages/BasicDemo';
 import { FeaturesDemo } from './pages/FeaturesDemo';
+import { ThemePlaygroundDemo } from './pages/ThemePlaygroundDemo';
+import { AccessibilityDemo } from './pages/AccessibilityDemo';
+import { MasterDetailDemo } from './pages/MasterDetailDemo';
+import { PersistedStateDemo } from './pages/PersistedStateDemo';
+import { ServerDrivenDemo } from './pages/ServerDrivenDemo';
+import { ColumnGroupingDemo } from './pages/ColumnGroupingDemo';
+import { VirtualizationDemo } from './pages/VirtualizationDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
@@ -17,6 +24,13 @@ const routes = [
   { path: '/demos/hr', name: 'demos-hr', component: HRDemo },
   { path: '/demos/basic', name: 'demos-basic', component: BasicDemo },
   { path: '/demos/features', name: 'demos-features', component: FeaturesDemo },
+  { path: '/demos/theme-playground', name: 'demos-theme-playground', component: ThemePlaygroundDemo },
+  { path: '/demos/accessibility', name: 'demos-accessibility', component: AccessibilityDemo },
+  { path: '/demos/master-detail', name: 'demos-master-detail', component: MasterDetailDemo },
+  { path: '/demos/persisted-state', name: 'demos-persisted-state', component: PersistedStateDemo },
+  { path: '/demos/server-driven', name: 'demos-server-driven', component: ServerDrivenDemo },
+  { path: '/demos/column-grouping', name: 'demos-column-grouping', component: ColumnGroupingDemo },
+  { path: '/demos/virtualization', name: 'demos-virtualization', component: VirtualizationDemo },
   { path: '/theme-builder', name: 'theme-builder', component: ThemeBuilder },
   { path: '/playground', name: 'playground', component: Playground },
   { path: '/changelog', name: 'changelog', component: Changelog },

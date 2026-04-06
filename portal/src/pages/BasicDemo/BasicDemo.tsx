@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { useNavigate } from '@forgedevstack/forge-compass/react';
+import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
 import {
   Button,
   Typography,
@@ -10,9 +10,11 @@ import {
 import { GridTable } from '@forgedevstack/grid-table';
 import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
+import { DemoCodeSection } from '@/components/DemoCodeSection';
 import { BASIC_DEMO_ROWS, DEMO_PAGE_SIZE, DEMO_PAGE_SIZES } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
 import { ROLE_VARIANT, STATUS_COLORS, ROLE_OPTIONS, LOADING_SIMULATION_MS } from './BasicDemo.const';
+import { BASIC_DEMO_SOURCE } from './BasicDemo.code.const';
 import type { BasicUser } from './BasicDemo.types';
 
 const TOTAL_ROW: BasicUser = {
@@ -69,7 +71,8 @@ const columns: ColumnDefinition<BasicUser>[] = [
 
 export const BasicDemo: FC = () => {
   const { t } = useI18n();
-  const { navigate } = useNavigate();
+  const themeMode = useGridTableThemeMode();
+  const { openDemosIndex } = useDemoNavigation();
   const [loading, setLoading] = useState(false);
 
   const simulateLoading = () => {
@@ -83,19 +86,20 @@ export const BasicDemo: FC = () => {
         <Flex align="center" justify="between" className="mb-6">
           <div>
             <Flex align="center" gap={3} className="mb-2">
-              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={() => navigate('/demos')}>{t.common.demos}</Button>
+              <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>{t.common.demos}</Button>
               <Badge variant="secondary">{t.demos.basic.title}</Badge>
               <Badge variant="secondary" className="text-xs">{BASIC_DEMO_ROWS} {t.basicDemo.rows}</Badge>
             </Flex>
             <Typography variant="h2" className="text-2xl font-bold">{t.basicDemo.title}</Typography>
             <Typography variant="body2" className="opacity-50">{t.basicDemo.description}</Typography>
+            <Typography variant="caption" className="mt-2 block max-w-3xl opacity-70 leading-relaxed">{t.basicDemo.mobileHint}</Typography>
           </div>
           <Flex gap={3}>
             <Button variant="gridGhost" size="sm" onClick={simulateLoading} leftIcon={<BearIcons.LoaderIcon size="xs" />}>{t.basicDemo.testLoading}</Button>
           </Flex>
         </Flex>
 
-        <div className="dark">
+        <div>
           <GridTable
             data={BASIC_DATA}
             columns={columns}
@@ -104,7 +108,9 @@ export const BasicDemo: FC = () => {
             showPagination showFilter showGlobalFilter stickyHeader
             tableEffects={{ hover: true, sort: true, row: true }}
             lazyLoad={{ enabled: true, initialRows: 10, batchSize: 5 }}
-            themeMode="dark"
+            themeMode={themeMode}
+            mobileBreakpoint="tablet"
+            mobileLayout="stacked"
             paginationConfig={{ initialPageSize: DEMO_PAGE_SIZE, pageSizeOptions: [...DEMO_PAGE_SIZES] }}
             dimensions={{ maxHeight: 'calc(100vh - 260px)' }}
             onRowClick={(row: BasicUser, index: number) => console.log('Row clicked:', { row, index })}
@@ -129,6 +135,8 @@ export const BasicDemo: FC = () => {
             frozenRows={{ bottom: [{ ...TOTAL_ROW, salary: BASIC_DATA.reduce((s, r) => s + r.salary, 0) }] }}
           />
         </div>
+
+        <DemoCodeSection title={t.demoCodeTitles.basic} code={BASIC_DEMO_SOURCE} />
       </div>
     </Layout>
   );

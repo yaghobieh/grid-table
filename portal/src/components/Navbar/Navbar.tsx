@@ -8,6 +8,7 @@ import {
   BearIcons,
   Dropdown,
   useBear,
+  Marquee,
 } from '@forgedevstack/bear';
 import { NAV_ITEMS } from '@/constants';
 import { CURRENT_VERSION } from '@/constants/numbers.const';
@@ -18,6 +19,7 @@ import { SearchModal } from '@/components/SearchModal';
 const LOCALE_META: Record<Locale, { flag: string; label: string }> = {
   en: { flag: '🇺🇸', label: 'English' },
   es: { flag: '🇪🇸', label: 'Español' },
+  he: { flag: '🇮🇱', label: 'עברית' },
 };
 
 const GITHUB_URL = 'https://github.com/yaghobieh/grid-table';
@@ -59,7 +61,7 @@ export const Navbar: FC = () => {
           <Flex align="center" gap={4} className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                <BearIcons.TableIcon size="xs" color="#fff" />
+                <BearIcons.TableIcon size="sm" color="#fff" />
               </div>
               <Typography variant="h5" className="font-bold">{t.nav.gridTable}</Typography>
             </Link>
@@ -90,7 +92,7 @@ export const Navbar: FC = () => {
             <Button
               variant="ghost"
               size="sm"
-              leftIcon={<BearIcons.SearchIcon size="xs" />}
+              leftIcon={<BearIcons.SearchIcon size="sm" className="mr-1" style={{ color: 'var(--text-primary)' }} />}
               onClick={() => setSearchOpen(true)}
               className="hidden md:inline-flex"
               style={{ border: '1px solid var(--border-color)', borderRadius: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}
@@ -99,14 +101,24 @@ export const Navbar: FC = () => {
             </Button>
 
             <a href={NPM_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="ghost" size="sm" icon={<BearIcons.PackageIcon size="xs" />} aria-label="npm" />
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<BearIcons.PackageIcon size="sm" style={{ color: 'var(--text-primary)' }} />}
+                aria-label="npm"
+              />
             </a>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-              <Button variant="ghost" size="sm" icon={<BearIcons.GithubIcon size="xs" />} aria-label="GitHub" />
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<BearIcons.GithubIcon size="sm" style={{ color: 'var(--text-primary)' }} />}
+                aria-label="GitHub"
+              />
             </a>
             <Dropdown
               trigger={
-                <Button variant="ghost" size="sm" leftIcon={<BearIcons.GlobeIcon size="xs" />} className="font-mono text-xs">
+                <Button variant="ghost" size="sm" leftIcon={<BearIcons.GlobeIcon size="sm" className="mr-1" style={{ color: 'var(--text-primary)' }} />} className="font-mono text-xs">
                   {LOCALE_META[locale].flag}
                 </Button>
               }
@@ -119,21 +131,50 @@ export const Navbar: FC = () => {
               size="sm"
               onClick={toggleMode}
               aria-label={t.nav.toggleTheme}
-              icon={mode === 'dark' ? <BearIcons.SunIcon size="xs" /> : <BearIcons.MoonIcon size="xs" />}
+              icon={
+                mode === 'dark' ? (
+                  <BearIcons.SunIcon size="sm" style={{ color: 'var(--text-primary)' }} />
+                ) : (
+                  <BearIcons.MoonIcon size="sm" style={{ color: 'var(--text-primary)' }} />
+                )
+              }
             />
             <Link to="/theme-builder" className="hidden sm:inline-flex">
-              <Button variant="gridGhost" size="sm" leftIcon={<BearIcons.PaletteIcon size="xs" />} className="border" style={{ borderColor: 'var(--border-color)' }}>
+              <Button variant="gridGhost" size="sm" leftIcon={<BearIcons.PaletteIcon size="sm" className="mr-1.5" style={{ color: 'var(--text-primary)' }} />} className="border" style={{ borderColor: 'var(--border-color)', gap: '0.5rem' }}>
                 {t.nav.themeBuilder}
               </Button>
             </Link>
             <Link to="/docs/getting-started" className="hidden sm:inline-flex">
-              <Button variant="grid" size="sm" leftIcon={<BearIcons.BookOpenIcon size="xs" />}>
+              <Button variant="grid" size="sm" leftIcon={<BearIcons.BookOpenIcon size="sm" className="mr-1.5" style={{ color: 'var(--text-primary)' }} />} style={{ gap: '0.5rem' }}>
                 {t.nav.getStarted}
               </Button>
             </Link>
           </Flex>
         </div>
       </nav>
+
+      <div
+        className="w-full overflow-hidden border-b"
+        style={{
+          borderColor: 'var(--border-color)',
+          backgroundColor: mode === 'dark' ? 'rgba(10, 10, 20, 0.55)' : 'rgba(255, 255, 255, 0.75)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-2">
+          <Marquee speed={48} pauseOnHover gradient gap={40}>
+            {t.home.marqueeItems.map((line) => (
+              <Typography
+                key={line}
+                variant="body2"
+                className="whitespace-nowrap font-medium"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {line}
+              </Typography>
+            ))}
+          </Marquee>
+        </div>
+      </div>
 
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>

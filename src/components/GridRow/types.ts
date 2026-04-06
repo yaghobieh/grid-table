@@ -10,7 +10,8 @@ export interface GridRowProps<T extends RowData = RowData> {
   isSelected?: boolean;
   isExpanded?: boolean;
   isDisabled?: boolean;
-  isMobile?: boolean;
+  applyHiddenOnMobile?: boolean;
+  stackedMobileLayout?: boolean;
   showMobileLabels?: boolean;
   className?: string;
   style?: CSSProperties;

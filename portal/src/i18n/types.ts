@@ -1,4 +1,4 @@
-export type Locale = 'en' | 'es';
+export type Locale = 'en' | 'es' | 'he';
 
 export interface TranslationStrings {
   nav: {
@@ -51,6 +51,7 @@ export interface TranslationStrings {
     viewLive: string;
     ecosystemBanner: string;
     visitForgeStack: string;
+    marqueeItems: string[];
   };
 
   stats: {
@@ -62,17 +63,14 @@ export interface TranslationStrings {
 
   features: Record<string, { title: string; description: string }>;
 
-  demos: {
-    finance: { title: string; description: string };
-    hr: { title: string; description: string };
-    basic: { title: string; description: string };
-    themeBuilder: { title: string; description: string };
-  };
+  demos: Record<string, { title: string; description: string }>;
 
   tags: {
     popular: string;
     new: string;
     interactive: string;
+    guide: string;
+    pattern: string;
   };
 
   footer: {
@@ -142,6 +140,7 @@ export interface TranslationStrings {
   basicDemo: {
     title: string;
     description: string;
+    mobileHint: string;
     testLoading: string;
     rows: string;
   };
@@ -150,6 +149,66 @@ export interface TranslationStrings {
     title: string;
     description: string;
     viewDemo: string;
+    whatsNew: string;
+    seeAllFeatures: string;
+    releaseHighlights: string[];
+  };
+
+  featuresDemo: {
+    badge: string;
+    title: string;
+    description: string;
+    sections: { title: string; description: string }[];
+  };
+
+  accessibilityDemo: {
+    badge: string;
+    title: string;
+    description: string;
+    bullets: string[];
+  };
+
+  themePlaygroundPage: {
+    title: string;
+    description: string;
+    cardThemeTitle: string;
+    cardThemeDescription: string;
+    cardThemeCta: string;
+    cardPlayTitle: string;
+    cardPlayDescription: string;
+    cardPlayCta: string;
+  };
+
+  demoCodeTitles: {
+    basic: string;
+    features: string;
+    finance: string;
+    hr: string;
+    accessibility: string;
+    masterDetail: string;
+    persisted: string;
+    server: string;
+    columnGrouping: string;
+    virtualization: string;
+    themePlayground: string;
+  };
+
+  virtualizationDemo: {
+    title: string;
+    lead: string;
+    presets: string;
+    presetDense: string;
+    presetDefault: string;
+    presetHeavy: string;
+    initialRows: string;
+    batchSize: string;
+    maxHeight: string;
+    lazyEnabled: string;
+    startTour: string;
+    tourToolbarTitle: string;
+    tourToolbarBody: string;
+    tourGridTitle: string;
+    tourGridBody: string;
   };
 
   changelog: {

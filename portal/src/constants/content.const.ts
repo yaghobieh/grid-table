@@ -18,6 +18,16 @@ export const FOOTER_LINKS: FooterLink[] = [
 
 export const VERSIONS: VersionInfo[] = [
   {
+    version: '1.0.8',
+    date: '2026-03-28',
+    highlights: [
+      'mobileLayout — horizontal scroll table by default on small screens; stacked layout optional',
+      'manualPagination + totalRowCount for server-driven slices; fix loading/hooks order in GridTableContent',
+      'Portal: Theme & Playground hub, new demos (a11y, master-detail, persisted state, server paging, grouping, lazy lists), Advanced patterns doc, copy-ready demo code',
+      'Softer tableEffects hover; toolbar icons sized for touch; Forge Compass popstate skips extra replaceState (browser back)',
+    ],
+  },
+  {
     version: '1.0.7',
     date: '2026-02-24',
     highlights: [
@@ -88,8 +98,8 @@ export const VERSIONS: VersionInfo[] = [
 export const DEMOS: DemoMeta[] = [
   {
     id: 'features',
-    title: 'v1.0.7 Features',
-    description: 'Context menu, status bar, tree data, row reorder, keyboard nav, undo/redo, frozen rows, multi-export, and print mode.',
+    title: 'New Features',
+    description: 'Context menu, status bar, tree data, row reorder, keyboard nav, undo/redo, frozen rows, multi-export, print mode, plus v1.0.8 mobile scroll layout.',
     icon: 'SparklesIcon',
     path: '/demos/features',
     tag: 'New',
@@ -101,6 +111,60 @@ export const DEMOS: DemoMeta[] = [
     icon: 'TableIcon',
     path: '/demos/basic',
     tag: 'Popular',
+  },
+  {
+    id: 'theme-playground',
+    title: 'Theme & Playground',
+    description: 'Visual theme tokens and live prop playground — both tools in one place with copy-ready setup.',
+    icon: 'PaletteIcon',
+    path: '/demos/theme-playground',
+    tag: 'Interactive',
+  },
+  {
+    id: 'accessibility',
+    title: 'Accessibility',
+    description: 'Keyboard navigation, focus, screen reader guidance, and inline edit with Enter / Escape.',
+    icon: 'KeyboardIcon',
+    path: '/demos/accessibility',
+    tag: 'Guide',
+  },
+  {
+    id: 'master-detail',
+    title: 'Master–detail',
+    description: 'Expand rows to show nested line items or a secondary grid using renderRowExpansion.',
+    icon: 'LayersIcon',
+    path: '/demos/master-detail',
+  },
+  {
+    id: 'persisted-state',
+    title: 'Persisted pagination',
+    description: 'Save page and page size to localStorage (pattern extends to URL or API preferences).',
+    icon: 'SaveIcon',
+    path: '/demos/persisted-state',
+  },
+  {
+    id: 'server-driven',
+    title: 'Server-driven paging',
+    description: 'manualPagination with totalRowCount — fetch each slice from your API in onPageChange.',
+    icon: 'ServerIcon',
+    path: '/demos/server-driven',
+    tag: 'New',
+  },
+  {
+    id: 'column-grouping',
+    title: 'Column grouping band',
+    description:
+      'Two-tier header: a visual band (quarters, regions, KPI groups) aligns to real columns via CSS grid—enterprise look before native colspan.',
+    icon: 'GridIcon',
+    path: '/demos/column-grouping',
+    tag: 'Pattern',
+  },
+  {
+    id: 'virtualization',
+    title: 'Large lists (lazy load)',
+    description: 'Many rows in memory; lazyLoad reveals scroll batches—tune initialRows, batchSize, maxHeight (see demo controls).',
+    icon: 'LoaderIcon',
+    path: '/demos/virtualization',
   },
   {
     id: 'finance',
@@ -115,22 +179,6 @@ export const DEMOS: DemoMeta[] = [
     description: 'Hierarchical employee data with tree view, expand/collapse, and reporting lines.',
     icon: 'UsersIcon',
     path: '/demos/hr',
-  },
-  {
-    id: 'theme-builder',
-    title: 'Theme Builder',
-    description: 'Customize every color, font, and spacing — export code for your project.',
-    icon: 'PaletteIcon',
-    path: '/theme-builder',
-    tag: 'Interactive',
-  },
-  {
-    id: 'playground',
-    title: 'Playground',
-    description: 'Toggle every prop live and get auto-generated code for your configuration.',
-    icon: 'CodeIcon',
-    path: '/playground',
-    tag: 'Interactive',
   },
 ];
 
@@ -328,6 +376,7 @@ export const DOC_SECTIONS: DocSection[] = [
   { id: 'drag-drop', title: 'Drag & Drop', path: '/docs/drag-drop', icon: 'MoveIcon' },
   { id: 'theming', title: 'Theming', path: '/docs/theming', icon: 'PaletteIcon' },
   { id: 'tree-data', title: 'Tree Data', path: '/docs/tree-data', icon: 'GitBranchIcon' },
+  { id: 'advanced-patterns', title: 'Advanced patterns', path: '/docs/advanced-patterns', icon: 'LayersIcon' },
   { id: 'api-reference', title: 'API Reference', path: '/docs/api-reference', icon: 'CodeIcon' },
 ];
 
@@ -352,7 +401,7 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'showPagination', type: 'boolean', default: 'true', description: 'Show pagination controls.' },
       { name: 'showFilter', type: 'boolean', default: 'true', description: 'Show column-level filter icons.' },
       { name: 'showGlobalFilter', type: 'boolean', default: 'true', description: 'Show global search toolbar.' },
-      { name: 'paginationConfig', type: 'PaginationConfig', default: '{ initialPageSize: 10 }', description: 'Configure page sizes and initial page.' },
+      { name: 'paginationConfig', type: 'PaginationConfig', default: '{ initialPageSize: 10 }', description: 'Page size, initial page, manualPagination, totalRowCount for server slices.' },
       { name: 'dimensions', type: 'Dimensions', default: '{}', description: 'Width, height, maxHeight constraints.' },
       { name: 'classNames', type: 'ClassNames', default: '{}', description: 'CSS class overrides for every part.' },
       { name: 'styles', type: 'Styles', default: '{}', description: 'Inline style overrides for every part.' },

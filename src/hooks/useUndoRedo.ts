@@ -1,21 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { EditHistoryEntry } from '../types/features.types';
+import type { UseUndoRedoReturn } from '../types/hooks.types';
+import { DEFAULT_UNDO_HISTORY_MAX } from '../constants';
 
-const DEFAULT_MAX_HISTORY = 50;
-
-export interface UseUndoRedoReturn {
-  canUndo: boolean;
-  canRedo: boolean;
-  undo: () => EditHistoryEntry | null;
-  redo: () => EditHistoryEntry | null;
-  pushEdit: (entry: Omit<EditHistoryEntry, 'timestamp'>) => void;
-  clear: () => void;
-  history: EditHistoryEntry[];
-  cursor: number;
-}
-
+/**
+ * Cell edit history with undo/redo stack and Ctrl/Cmd+Z / Ctrl+Y shortcuts.
+ */
 export function useUndoRedo(
-  maxHistory = DEFAULT_MAX_HISTORY,
+  maxHistory = DEFAULT_UNDO_HISTORY_MAX,
   onUndo?: (entry: EditHistoryEntry) => void,
   onRedo?: (entry: EditHistoryEntry) => void,
 ): UseUndoRedoReturn {

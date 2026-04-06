@@ -1,14 +1,15 @@
 # @forgedevstack/grid-table
 
 <p align="center">
-  <img src="https://github.com/yaghobieh/grid-table/docs/logo.svg" alt="Grid Table logo" width="120" />
+  <img src="https://github.com/yaghobieh/grid-table/blob/main/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.0.7 — A powerful, feature-rich data grid for React with 30+ features including cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, and print mode. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.0.8 — A powerful, feature-rich data grid for React with 30+ features including cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
 ### Core
+- **Server-driven pagination** — `paginationConfig.manualPagination` + `totalRowCount`: pass one page in `data` and load more in `onPageChange` (see portal **Server-driven** demo).
 - **Cell Editing** — Double-click to edit inline with validation (text, number, select, date, boolean)
 - **Dark/Light Theme** — Built-in theme support with customizable colors
 - **Filtering** — Column-level and global filtering with multiple operators
@@ -18,7 +19,12 @@
 - **Pagination** — Built-in pagination with customizable page sizes
 - **Row Selection** — Single and multi-select support
 - **Row Expansion** — Expandable rows with custom content
-- **Responsive** — Mobile-first design with drawer for filters/sorting (disable with `mobileBreakpoint="none"`)
+- **Responsive** — Default **horizontal scroll** table on small screens; optional **`mobileLayout="stacked"`** for card layout. Drawer for filters/sorting. Disable breakpoints with `mobileBreakpoint="none"`.
+
+### v1.0.8
+
+- **Mobile layout** — `mobileLayout="scroll"` (default) shows the full header and columns with swipe scrolling; `mobileLayout="stacked"` uses the stacked card layout.
+- **Hover** — Softer row hover when `tableEffects.hover` is enabled.
 
 ### v1.0.7
 - **Keyboard Navigation** — Arrow keys, Tab, Enter to edit, Escape, Home/End, PageUp/Down
@@ -399,6 +405,7 @@ const customTranslations: Partial<Translations> = {
   data={data}
   columns={columns}
   mobileBreakpoint="tablet"
+  mobileLayout="scroll"
   showMobileLabels={true}
   dimensions={{
     width: { mobile: '100%', tablet: '100%', desktop: 800 },
@@ -406,6 +413,8 @@ const customTranslations: Partial<Translations> = {
   }}
 />
 ```
+
+Use `mobileLayout="stacked"` for the previous label-per-cell mobile layout.
 
 ## Using Hooks
 

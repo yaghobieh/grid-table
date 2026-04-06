@@ -1,28 +1,20 @@
 import { useMemo, useCallback, useState } from 'react';
 import type { RowData } from '../types';
 import type { TreeConfig, FlatTreeRow } from '../types/features.types';
+import type { UseTreeDataReturn } from '../types/hooks.types';
+import { TREE_DEFAULT_CHILDREN_FIELD, TREE_DEFAULT_ID_FIELD, TREE_DEFAULT_INDENT_PX } from '../constants';
 
-const DEFAULT_CHILDREN_FIELD = 'children';
-const DEFAULT_ID_FIELD = 'id';
-const DEFAULT_INDENT = 20;
-
-export interface UseTreeDataReturn<T extends RowData> {
-  flatRows: FlatTreeRow<T>[];
-  toggleExpand: (id: string | number) => void;
-  expandAll: () => void;
-  collapseAll: () => void;
-  isExpanded: (id: string | number) => boolean;
-  getIndent: (depth: number) => number;
-}
-
+/**
+ * Flattens hierarchical rows with expand/collapse and indent for tree columns.
+ */
 export function useTreeData<T extends RowData>(
   data: T[],
   config?: TreeConfig,
 ): UseTreeDataReturn<T> {
   const enabled = config?.enabled ?? false;
-  const childrenField = config?.childrenField ?? DEFAULT_CHILDREN_FIELD;
-  const idField = config?.idField ?? DEFAULT_ID_FIELD;
-  const indentSize = config?.indentSize ?? DEFAULT_INDENT;
+  const childrenField = config?.childrenField ?? TREE_DEFAULT_CHILDREN_FIELD;
+  const idField = config?.idField ?? TREE_DEFAULT_ID_FIELD;
+  const indentSize = config?.indentSize ?? TREE_DEFAULT_INDENT_PX;
 
   const [expandedIds, setExpandedIds] = useState<Set<string | number>>(() => {
     if (!config?.expandAll) return new Set();

@@ -1,18 +1,11 @@
 import { useState, useCallback, useRef } from 'react';
+import type { DragEvent } from 'react';
 import type { RowData } from '../types';
+import type { UseRowReorderReturn, RowDragHandleProps } from '../types/hooks.types';
 
-export interface UseRowReorderReturn<T extends RowData> {
-  draggingRowId: string | number | null;
-  dragOverRowId: string | number | null;
-  getRowDragProps: (rowId: string | number) => {
-    draggable: boolean;
-    onDragStart: () => void;
-    onDragOver: (e: React.DragEvent) => void;
-    onDragEnd: () => void;
-    onDrop: (e: React.DragEvent) => void;
-  };
-}
-
+/**
+ * Row reorder via HTML5 drag-and-drop with local reorder callback.
+ */
 export function useRowReorder<T extends RowData>(
   data: T[],
   getRowId: (row: T) => string | number,
@@ -32,7 +25,7 @@ export function useRowReorder<T extends RowData>(
   const getRowIdRef = useRef(getRowId);
   getRowIdRef.current = getRowId;
 
-  const getRowDragProps = useCallback((rowId: string | number) => ({
+  const getRowDragProps = useCallback((rowId: string | number): RowDragHandleProps => ({
     draggable: true as const,
 
     onDragStart: () => {
@@ -40,7 +33,7 @@ export function useRowReorder<T extends RowData>(
       setDraggingRowId(rowId);
     },
 
-    onDragOver: (e: React.DragEvent) => {
+    onDragOver: (e: DragEvent) => {
       e.preventDefault();
       if (dragOverRef.current !== rowId) {
         dragOverRef.current = rowId;
@@ -48,7 +41,7 @@ export function useRowReorder<T extends RowData>(
       }
     },
 
-    onDrop: (e: React.DragEvent) => {
+    onDrop: (e: DragEvent) => {
       e.preventDefault();
       const fromId = draggingRef.current;
       const toId = dragOverRef.current;

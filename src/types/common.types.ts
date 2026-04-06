@@ -4,6 +4,8 @@ export type ThemeMode = 'light' | 'dark';
 
 export type Breakpoint = 'mobile' | 'tablet' | 'desktop' | 'none';
 
+export type MobileLayout = 'scroll' | 'stacked';
+
 export type ResponsiveValue<T> = T | Partial<Record<Breakpoint, T>>;
 
 export type SortDirection = 'asc' | 'desc' | null;
@@ -92,6 +94,9 @@ export interface Translations {
   noResults: string;
   errorLoading: string;
   retry: string;
+  editYes: string;
+  editNo: string;
+  doubleClickToEdit: string;
 }
 
 export interface ClassNames {

@@ -14,5 +14,6 @@ export const DOC_ICON_MAP: Record<string, React.ReactNode> = {
   MoveIcon: React.createElement(BearIcons.MoveIcon, { size: 'xs', color: 'var(--grid-accent)' }),
   PaletteIcon: React.createElement(BearIcons.PaletteIcon, { size: 'xs', color: 'var(--grid-accent)' }),
   GitBranchIcon: React.createElement(BearIcons.GitBranchIcon, { size: 'xs', color: 'var(--grid-accent)' }),
+  LayersIcon: React.createElement(BearIcons.LayersIcon, { size: 'xs', color: 'var(--grid-accent)' }),
   CodeIcon: React.createElement(BearIcons.CodeIcon, { size: 'xs', color: 'var(--grid-accent)' }),
 };

@@ -1,5 +1,6 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { RowData, ColumnDefinition, ColumnState } from '../../types';
+import type { RowDragHandleProps } from '../../types/hooks.types';
 import type { CellClickEvent } from '../GridCell/types';
 
 export interface GridBodyProps<T extends RowData = RowData> {
@@ -8,7 +9,8 @@ export interface GridBodyProps<T extends RowData = RowData> {
   columnStates: ColumnState[];
   className?: string;
   style?: CSSProperties;
-  isMobile?: boolean;
+  applyHiddenOnMobile?: boolean;
+  stackedMobileLayout?: boolean;
   showMobileLabels?: boolean;
   enableSelection?: boolean;
   enableExpansion?: boolean;
@@ -25,13 +27,7 @@ export interface GridBodyProps<T extends RowData = RowData> {
   isRowDisabled?: (row: T) => boolean;
   renderRowExpansion?: (row: T, rowId: string | number) => ReactNode;
   onRowContextMenu?: (row: T, index: number, event: React.MouseEvent) => void;
-  rowDragProps?: (rowId: string | number) => {
-    draggable: boolean;
-    onDragStart: () => void;
-    onDragOver: (e: React.DragEvent) => void;
-    onDragEnd: () => void;
-    onDrop: (e: React.DragEvent) => void;
-  };
+  rowDragProps?: (rowId: string | number) => RowDragHandleProps;
   draggingRowId?: string | number | null;
   dragOverRowId?: string | number | null;
   treeIndents?: Map<string | number, number>;

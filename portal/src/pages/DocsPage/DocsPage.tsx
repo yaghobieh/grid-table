@@ -290,7 +290,6 @@ export const DocsPage: FC = () => {
       <div className="pt-20 pb-20">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <Flex gap={8}>
-            {/* ── Desktop Sidebar (Bear Sidebar) ── */}
             <div className="hidden lg:block flex-shrink-0 sticky top-24 self-start">
               <Sidebar
                 items={sidebarItems}
@@ -310,7 +309,6 @@ export const DocsPage: FC = () => {
               />
             </div>
 
-            {/* ── Content ────────────────── */}
             <main className="flex-1 min-w-0" style={{ maxWidth: DOC_MAX_CONTENT_WIDTH_PX }}>
               {/* Mobile nav toggle */}
               <div className="lg:hidden mb-6">

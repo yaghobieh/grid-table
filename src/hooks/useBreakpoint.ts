@@ -1,19 +1,12 @@
 import { useMemo } from 'react';
 import { useTableContext } from '../context';
 import type { Breakpoint, ResponsiveValue } from '../types';
+import type { UseBreakpointReturn } from '../types/hooks.types';
 import { BREAKPOINTS } from '../constants';
 
-export interface UseBreakpointReturn {
-  currentBreakpoint: Breakpoint;
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-  isMobileOrTablet: boolean;
-  isTabletOrDesktop: boolean;
-  breakpointValue: <T>(value: ResponsiveValue<T>, fallback: T) => T;
-  shouldShowMobileView: boolean;
-}
-
+/**
+ * Responsive breakpoint from context plus helpers for responsive values and mobile table mode.
+ */
 export function useBreakpoint(): UseBreakpointReturn {
   const { state, computed } = useTableContext();
 
@@ -51,12 +44,10 @@ export function useBreakpoint(): UseBreakpointReturn {
 
   const shouldShowMobileView = useMemo(() => {
     if (state.mobileBreakpoint === 'none') return false;
-
-    const mobileBreakpoints: Breakpoint[] = ['mobile'];
-    if (state.mobileBreakpoint === 'tablet') {
-      mobileBreakpoints.push('tablet');
-    }
-    return mobileBreakpoints.includes(state.currentBreakpoint);
+    if (state.mobileBreakpoint === 'mobile') return state.currentBreakpoint === 'mobile';
+    if (state.mobileBreakpoint === 'tablet') return state.currentBreakpoint !== 'desktop';
+    if (state.mobileBreakpoint === 'desktop') return true;
+    return state.currentBreakpoint !== 'desktop';
   }, [state.currentBreakpoint, state.mobileBreakpoint]);
 
   return useMemo(
@@ -75,4 +66,3 @@ export function useBreakpoint(): UseBreakpointReturn {
 }
 
 export { BREAKPOINTS };
-

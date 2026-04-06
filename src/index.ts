@@ -39,6 +39,8 @@ export type {
   TableContextActions,
   TableContextValue,
   TableProviderProps,
+  TableOptions,
+  SubCellExpandTrigger,
 } from './context';
 
 // Hooks
@@ -59,11 +61,17 @@ export type {
   UseTableReturn,
   UseSortReturn,
   UseFilterReturn,
+  UseFilterOptions,
   UsePaginationReturn,
+  UsePaginationOptions,
   UseDragDropReturn,
+  UseDragDropOptions,
+  DragHandleProps,
+  DropTargetProps,
   UseBreakpointReturn,
   UseKeyboardNavigationReturn,
   UseRowReorderReturn,
+  RowDragHandleProps,
   UseUndoRedoReturn,
   UseTreeDataReturn,
 } from './hooks';
@@ -73,6 +81,7 @@ export type {
   // Common types
   ThemeMode,
   Breakpoint,
+  MobileLayout,
   ResponsiveValue,
   SortDirection,
   FilterOperator,

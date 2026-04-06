@@ -6,5 +6,4 @@ export type {
   TableProviderProps,
   TableOptions,
   SubCellExpandTrigger,
-} from './types';
-
+} from './TableContext.types';

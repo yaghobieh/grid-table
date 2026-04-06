@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@forgedevstack/bear": "^1.0.9",
-    "@forgedevstack/forge-compass": "file:../../compass",
+    "@forgedevstack/forge-compass": "^1.0.2",
     "@forgedevstack/grid-table": "file:..",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

@@ -2,6 +2,20 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent, RefObject } from 'react';
 import type { FocusedCell, KeyboardNavConfig } from '../types/features.types';
 import type { UseKeyboardNavigationReturn } from '../types/hooks.types';
+import {
+  KEY_ARROW_DOWN,
+  KEY_ARROW_LEFT,
+  KEY_ARROW_RIGHT,
+  KEY_ARROW_UP,
+  KEY_END,
+  KEY_ENTER,
+  KEY_ESCAPE,
+  KEY_HOME,
+  KEY_PAGE_DOWN,
+  KEY_PAGE_UP,
+  KEY_TAB,
+} from '@/constants/keyboard.const';
+import { ONE, TEN, ZERO } from '@/constants/numbers.const';
 
 /**
  * Arrow-key cell focus, Enter/Tab edit flow, and optional wrap for grid keyboard navigation.
@@ -40,16 +54,16 @@ export function useKeyboardNavigation(
     if (!enabled || !focusedCell) return;
 
     if (isEditing) {
-      if (e.key === 'Escape') {
+      if (e.key === KEY_ESCAPE) {
         setIsEditing(false);
         e.preventDefault();
-      } else if (e.key === 'Enter') {
+      } else if (e.key === KEY_ENTER) {
         setIsEditing(false);
         setFocusedCell(clamp(focusedCell.rowIndex + 1, focusedCell.colIndex));
         e.preventDefault();
-      } else if (e.key === 'Tab') {
+      } else if (e.key === KEY_TAB) {
         setIsEditing(false);
-        const delta = e.shiftKey ? -1 : 1;
+        const delta = e.shiftKey ? -ONE : ONE;
         setFocusedCell(clamp(focusedCell.rowIndex, focusedCell.colIndex + delta));
         e.preventDefault();
       }
@@ -60,37 +74,37 @@ export function useKeyboardNavigation(
     let handled = true;
 
     switch (e.key) {
-      case 'ArrowUp':
+      case KEY_ARROW_UP:
         setFocusedCell(clamp(rowIndex - 1, colIndex));
         break;
-      case 'ArrowDown':
+      case KEY_ARROW_DOWN:
         setFocusedCell(clamp(rowIndex + 1, colIndex));
         break;
-      case 'ArrowLeft':
+      case KEY_ARROW_LEFT:
         setFocusedCell(clamp(rowIndex, colIndex - 1));
         break;
-      case 'ArrowRight':
+      case KEY_ARROW_RIGHT:
         setFocusedCell(clamp(rowIndex, colIndex + 1));
         break;
-      case 'Home':
-        setFocusedCell(e.ctrlKey ? { rowIndex: 0, colIndex: 0 } : { rowIndex, colIndex: 0 });
+      case KEY_HOME:
+        setFocusedCell(e.ctrlKey ? { rowIndex: ZERO, colIndex: ZERO } : { rowIndex, colIndex: ZERO });
         break;
-      case 'End':
+      case KEY_END:
         setFocusedCell(e.ctrlKey
           ? { rowIndex: rowCount - 1, colIndex: colCount - 1 }
           : { rowIndex, colIndex: colCount - 1 });
         break;
-      case 'PageUp':
-        setFocusedCell(clamp(Math.max(0, rowIndex - 10), colIndex));
+      case KEY_PAGE_UP:
+        setFocusedCell(clamp(Math.max(ZERO, rowIndex - TEN), colIndex));
         break;
-      case 'PageDown':
-        setFocusedCell(clamp(Math.min(rowCount - 1, rowIndex + 10), colIndex));
+      case KEY_PAGE_DOWN:
+        setFocusedCell(clamp(Math.min(rowCount - ONE, rowIndex + TEN), colIndex));
         break;
-      case 'Enter':
+      case KEY_ENTER:
         if (editOnEnter) setIsEditing(true);
         break;
-      case 'Tab': {
-        const delta = e.shiftKey ? -1 : 1;
+      case KEY_TAB: {
+        const delta = e.shiftKey ? -ONE : ONE;
         setFocusedCell(clamp(rowIndex, colIndex + delta));
         break;
       }

@@ -1,7 +1,6 @@
 import type { ReactNode, CSSProperties } from 'react';
-import type { RowData, ColumnDefinition, ColumnState } from '../../types';
-import type { RowDragHandleProps } from '../../types/hooks.types';
-import type { CellClickEvent } from '../GridCell/types';
+import type { RowData, ColumnDefinition, ColumnState, RowDragHandleProps } from '@/types';
+import type { CellClickEvent } from '../GridCell/GridCell.types';
 
 export interface GridBodyProps<T extends RowData = RowData> {
   data: T[];
@@ -39,3 +38,34 @@ export interface GridBodyProps<T extends RowData = RowData> {
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
 }
 
+export interface GridBodyRowDerivedState {
+  rowId: string | number;
+  isSelected: boolean;
+  isExpanded: boolean;
+  isDisabled: boolean;
+  rowClassName: string;
+  rowStyle: CSSProperties | undefined;
+  dragProps: RowDragHandleProps | undefined;
+  isDragging: boolean;
+  isDragOver: boolean;
+  indent: number;
+  hasChildren: boolean;
+  isTreeExpanded: boolean;
+}
+
+export interface GetGridBodyRowDerivedStateParams<T extends RowData> {
+  row: T;
+  index: number;
+  getRowId: (row: T) => string | number;
+  selectedIds: Set<string | number>;
+  expandedIds: Set<string | number>;
+  isRowDisabled?: (row: T) => boolean;
+  getRowClassName?: (row: T, index: number) => string;
+  getRowStyle?: (row: T, index: number) => CSSProperties | undefined;
+  rowDragProps?: (id: string | number) => RowDragHandleProps;
+  draggingRowId?: string | number | null;
+  dragOverRowId?: string | number | null;
+  treeIndents?: Map<string | number, number>;
+  treeHasChildren?: (id: string | number) => boolean;
+  treeIsExpanded?: (id: string | number) => boolean;
+}

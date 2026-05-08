@@ -1,0 +1,8 @@
+# Grid Table Code Riview
+
+Use `.cursor/rules/persona/review-checklist.mdc` as the source checklist.
+Use `.cursor/rules/persona/structure.mdc` and `.cursor/rules/persona/code-style.mdc` for rule enforcement.
+
+Applies to:
+- `grid-table/src`
+- `grid-table/portal/src`

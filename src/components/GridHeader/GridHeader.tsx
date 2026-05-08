@@ -1,58 +1,14 @@
 import type { ReactNode } from 'react';
 import { useMemo, useCallback, useState, useRef } from 'react';
-import type { GridHeaderProps, GridHeaderCellProps } from './types';
-import type { RowData, ColumnDefinition, ColumnState, SortDirection, FilterOperator } from '../../types';
-import { useTableContext } from '../../context';
-import { useDragDrop } from '../../hooks';
-import { MIN_COLUMN_WIDTH, MAX_COLUMN_WIDTH } from '../../constants';
-import { Checkbox } from '@forgedevstack/bear';
+import clsx from 'clsx';
+import type { GridHeaderProps, GridHeaderCellProps } from './GridHeader.types';
+import type { RowData, ColumnDefinition, ColumnState, SortDirection, FilterOperator } from '@/types';
+import { useTableContext } from '@/context';
+import { useDragDrop } from '@/hooks';
+import { EMPTY_STRING, MAX_COLUMN_WIDTH, MIN_COLUMN_WIDTH, ONE, TWO, ZERO } from '@/constants';
+import { Checkbox, BearIcons } from '@forgedevstack/bear';
 import { FilterPopup } from '../FilterPopup';
-
-const FilterIcon = ({ active = false }: { active?: boolean }) => (
-  <svg
-    className={`icon-sm ${active ? 'text-accent-primary' : 'text-theme-muted'}`}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-    />
-  </svg>
-);
-
-const SortIcon = ({ direction }: { direction: SortDirection }) => (
-  <svg
-    className={`icon-sm ${direction ? 'text-accent-primary' : 'text-theme-muted'}`}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    {direction === 'asc' ? (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-    ) : direction === 'desc' ? (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    ) : (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-    )}
-  </svg>
-);
-
-const DragIcon = () => (
-  <svg className="icon-sm text-theme-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
-  </svg>
-);
-
-const ALIGN_CLASSES = {
-  left: 'text-left justify-start',
-  center: 'text-center justify-center',
-  right: 'text-right justify-end',
-} as const;
+import { GRID_HEADER_ALIGN_CLASSES, GRID_HEADER_FILTER_ARIA, GRID_HEADER_SELECT_ALL_ARIA } from './GridHeader.const';
 
 function HeaderCell<T extends RowData>({
   column,
@@ -74,6 +30,17 @@ function HeaderCell<T extends RowData>({
   dragHandleProps,
   dropTargetProps,
 }: GridHeaderCellProps<T>): ReactNode {
+  const renderSortIcon = (): ReactNode => {
+    switch (sortDirection) {
+      case 'asc':
+        return <BearIcons.Navigation.ChevronUpIcon size="xs" className="text-accent-primary" />;
+      case 'desc':
+        return <BearIcons.Navigation.ChevronDownIcon size="xs" className="text-accent-primary" />;
+      default:
+        return <BearIcons.ArrowDownIcon size="xs" className="text-theme-muted" />;
+    }
+  };
+
   const isSortable = enableSort && column.sortable !== false;
   const isFilterable = enableFilter && column.filterable !== false;
   const isDraggable = enableDragDrop && column.draggable !== false;
@@ -101,29 +68,14 @@ function HeaderCell<T extends RowData>({
   );
 
   const cellClasses = useMemo(() => {
-    const classes = [
+    return clsx(
       'grid-header-cell',
-      ALIGN_CLASSES[column.align || 'left'],
-    ];
-
-    if (isSortable) {
-      classes.push('cursor-pointer');
-    }
-
-    if (isDragging) {
-      classes.push('opacity-50');
-    }
-
-    if (isDragOver) {
-      classes.push('bg-accent-primary/10');
-    }
-
-    // Add gt-sorted class when column has an active sort direction
-    if (sortDirection) {
-      classes.push('gt-sorted');
-    }
-
-    return classes.join(' ');
+      GRID_HEADER_ALIGN_CLASSES[column.align || 'left'],
+      isSortable && 'cursor-pointer',
+      isDragging && 'opacity-50',
+      isDragOver && 'bg-accent-primary/10',
+      sortDirection && 'gt-sorted',
+    );
   }, [column.align, isSortable, isDragging, isDragOver, sortDirection]);
 
   const cellStyle = useMemo(() => {
@@ -132,7 +84,7 @@ function HeaderCell<T extends RowData>({
       ...(column.sticky && {
         position: 'sticky',
         [column.sticky]: 0,
-        zIndex: 2,
+        zIndex: TWO,
         backgroundColor: 'var(--gt-bg-secondary, #2b2b2b)',
       }),
       ...column.headerStyle,
@@ -151,7 +103,7 @@ function HeaderCell<T extends RowData>({
 
   return (
     <div
-      className={`${cellClasses} ${column.headerClassName || ''} ${column.sticky ? `sticky-${column.sticky}` : ''}`}
+      className={clsx(cellClasses, column.headerClassName ?? EMPTY_STRING, column.sticky && `sticky-${column.sticky}`)}
       style={cellStyle}
       role="columnheader"
       aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : 'none'}
@@ -162,9 +114,9 @@ function HeaderCell<T extends RowData>({
 
       {isSortable && (
         <span className="grid-header-sort">
-          <SortIcon direction={sortDirection ?? null} />
-          {isMultiSort && sortIndex !== undefined && sortIndex >= 0 && sortDirection && (
-            <span className="text-xs text-theme-muted">{sortIndex + 1}</span>
+          {renderSortIcon()}
+          {isMultiSort && sortIndex !== undefined && sortIndex >= ZERO && sortDirection && (
+            <span className="text-xs text-theme-muted">{sortIndex + ONE}</span>
           )}
         </span>
       )}
@@ -173,9 +125,9 @@ function HeaderCell<T extends RowData>({
         <button
           onClick={handleFilterClick}
           className="grid-header-filter"
-          aria-label="Filter column"
+          aria-label={GRID_HEADER_FILTER_ARIA}
         >
-          <FilterIcon active={hasFilter} />
+          <BearIcons.FilterIcon size="xs" className={hasFilter ? 'text-accent-primary' : 'text-theme-muted'} />
         </button>
       )}
 
@@ -244,7 +196,7 @@ export function GridHeader<T extends RowData = RowData>({
       .sort((a, b) => {
         const aState = columnStates.find((cs) => cs.id === a.id);
         const bState = columnStates.find((cs) => cs.id === b.id);
-        return (aState?.order ?? 0) - (bState?.order ?? 0);
+        return (aState?.order ?? ZERO) - (bState?.order ?? ZERO);
       });
   }, [columns, columnStates]);
 
@@ -276,15 +228,10 @@ export function GridHeader<T extends RowData = RowData>({
     [actions]
   );
 
-  const headerClasses = useMemo(() => {
-    const classes = ['grid-header', 'flex', 'bg-theme-secondary'];
-
-    if (sticky) {
-      classes.push('sticky', 'top-0', 'z-10');
-    }
-
-    return classes.join(' ');
-  }, [sticky]);
+  const headerClasses = useMemo(
+    () => clsx('grid-header', 'flex', 'bg-theme-secondary', sticky && ['sticky', 'top-0', 'z-10']),
+    [sticky],
+  );
 
   return (
     <div className={`${headerClasses} ${className}`} style={style} role="row">
@@ -295,7 +242,7 @@ export function GridHeader<T extends RowData = RowData>({
             indeterminate={someSelected && !allSelected}
             onChange={() => onSelectAll?.()}
             size="sm"
-            aria-label="Select all rows"
+            aria-label={GRID_HEADER_SELECT_ALL_ARIA}
           />
         </div>
       )}

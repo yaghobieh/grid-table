@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { Typography, Flex } from '@forgedevstack/bear';
-import type { EmptyStateProps } from './types';
-import { useTableContext } from '../../context';
+import type { EmptyStateProps } from './EmptyState.types';
+import { useTableContext } from '@/context';
+import { EMPTY_STATE_STROKE_WIDTH } from './EmptyState.const';
+import { EMPTY_STATE_ICON_PATH, EMPTY_STATE_ICON_VIEWBOX } from '@constants/images.const';
 
 export function EmptyState(props: EmptyStateProps): ReactNode {
   const { title, description, icon, action, className = '', style } = props;
@@ -29,14 +31,14 @@ export function EmptyState(props: EmptyStateProps): ReactNode {
           <svg
             className="icon-lg"
             fill="none"
-            viewBox="0 0 24 24"
+            viewBox={EMPTY_STATE_ICON_VIEWBOX}
             stroke="currentColor"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={1}
-              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              strokeWidth={EMPTY_STATE_STROKE_WIDTH}
+              d={EMPTY_STATE_ICON_PATH}
             />
           </svg>
         </div>

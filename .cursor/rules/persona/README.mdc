@@ -1,0 +1,10 @@
+# Grid Table Persona Rules
+
+This folder contains the active Grid Table persona split by concern.
+
+- `identity.mdc` - maintainer role and priorities.
+- `structure.mdc` - file/folder naming and component structure.
+- `code-style.mdc` - constants, types, hooks, aliases, and TSX rules.
+- `review-checklist.mdc` - mandatory code review checks and build gates.
+
+Use these rules together for all `grid-table` and `grid-table/portal` changes.

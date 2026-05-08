@@ -1,5 +1,5 @@
-import type { ReactNode, CSSProperties } from 'react';
-import type { Alignment, ColumnDefinition, RowData } from '../../types';
+import type { CSSProperties, ReactNode } from 'react';
+import type { Alignment, ColumnDefinition, RowData } from '@/types';
 
 export interface CellClickEvent<T extends RowData = RowData> {
   row: T;
@@ -34,4 +34,3 @@ export interface GridCellRenderProps {
   row: RowData;
   rowIndex: number;
 }
-

@@ -1,3 +1,3 @@
 export { MobileDrawer } from './MobileDrawer';
-export type { MobileDrawerProps, DrawerContent } from './types';
+export type { DrawerContent, MobileDrawerProps } from './MobileDrawer.types';
 

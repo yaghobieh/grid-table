@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import type { ColumnDefinition, ColumnState, SortDirection, RowData } from '../../types';
+import type { ColumnDefinition, ColumnState, RowData, SortDirection } from '@/types';
 
 export interface GridHeaderProps<T extends RowData = RowData> {
   columns: ColumnDefinition<T>[];
@@ -50,4 +50,3 @@ export interface GridHeaderCellProps<T extends RowData = RowData> {
     onDrop: (event: React.DragEvent) => void;
   };
 }
-

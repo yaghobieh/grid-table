@@ -1,0 +1,10 @@
+# Grid Table Persona Entry
+
+Use the split persona rules in `.cursor/rules/persona/`:
+
+- `identity.mdc`
+- `structure.mdc`
+- `code-style.mdc`
+- `review-checklist.mdc`
+
+All apply to both `grid-table` library and `grid-table/portal`.

@@ -1,0 +1,13 @@
+# Grid Table Development Mode
+
+Development mode is split into persona modules under `.cursor/rules/persona/`.
+
+Use together:
+- `identity.mdc`
+- `structure.mdc`
+- `code-style.mdc`
+- `review-checklist.mdc`
+
+Scope:
+- `src/`
+- `portal/src/`

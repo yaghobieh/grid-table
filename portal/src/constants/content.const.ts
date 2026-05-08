@@ -18,7 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 
 export const VERSIONS: VersionInfo[] = [
   {
-    version: '1.0.8',
+    version: '1.0.9',
     date: '2026-03-28',
     highlights: [
       'mobileLayout — horizontal scroll table by default on small screens; stacked layout optional',
@@ -99,9 +99,41 @@ export const DEMOS: DemoMeta[] = [
   {
     id: 'features',
     title: 'New Features',
-    description: 'Context menu, status bar, tree data, row reorder, keyboard nav, undo/redo, frozen rows, multi-export, print mode, plus v1.0.8 mobile scroll layout.',
+    description: 'v1.0.9: Mobile Scroll Table, Softer Hover, Portal Polish, plus examples for pinned row groups, formula engine, saved views, and advanced filter builder.',
     icon: 'SparklesIcon',
     path: '/demos/features',
+    tag: 'New',
+  },
+  {
+    id: 'pinned-row-groups',
+    title: 'Pinned Row Groups + Aggregate Footers',
+    description: 'Group rows and keep subtotal/total footers pinned while scrolling.',
+    icon: 'LayersIcon',
+    path: '/demos/pinned-row-groups',
+    tag: 'New',
+  },
+  {
+    id: 'column-formula-engine',
+    title: 'Column Formula Engine',
+    description: 'Computed columns from formulas like profit, margin, and KPI derivatives.',
+    icon: 'CodeIcon',
+    path: '/demos/column-formula-engine',
+    tag: 'New',
+  },
+  {
+    id: 'saved-views',
+    title: 'Saved Views',
+    description: 'Store and restore sorting, filtering, visibility, and pagination presets.',
+    icon: 'SaveIcon',
+    path: '/demos/saved-views',
+    tag: 'New',
+  },
+  {
+    id: 'advanced-filter-builder',
+    title: 'Advanced Filter Builder',
+    description: 'Build nested AND/OR filters with reusable rule groups.',
+    icon: 'FilterIcon',
+    path: '/demos/advanced-filter-builder',
     tag: 'New',
   },
   {
@@ -148,7 +180,6 @@ export const DEMOS: DemoMeta[] = [
     description: 'manualPagination with totalRowCount — fetch each slice from your API in onPageChange.',
     icon: 'ServerIcon',
     path: '/demos/server-driven',
-    tag: 'New',
   },
   {
     id: 'column-grouping',

@@ -1,20 +1,12 @@
 import type { ReactNode } from 'react';
 import { useState, useCallback } from 'react';
 import { Typography } from '@forgedevstack/bear';
-import type { RowData } from '../../types';
-import type { ColumnDefinition } from '../../types';
-import { generateSampleData } from '../../utils/generateSampleData';
+import type { RowData } from '@/types';
+import { generateSampleData } from '@/utils/generateSampleData';
+import { TEN } from '@/constants';
+import type { TableStudioPanelProps } from './TableStudioPanel.types';
 
-export interface TableStudioPanelProps<T extends RowData = RowData> {
-  data: T[];
-  columns: ColumnDefinition<T>[];
-  propsSnapshot: Record<string, unknown>;
-  onDataChange?: (data: T[]) => void;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-}
-
-const DEFAULT_ROW_COUNT = 10;
+const DEFAULT_ROW_COUNT = TEN;
 
 export function TableStudioPanel<T extends RowData = RowData>({
   data,

@@ -1,0 +1,20 @@
+# Grid Table Review Checklist
+
+Review priorities:
+- Behavioral regressions in sorting/filtering/pagination/selection/expansion/drag-drop.
+- Performance regressions in render loops and derived state.
+- Accessibility regressions in keyboard/focus/aria behavior.
+- Type-safety and alias-import consistency.
+
+Required checks:
+- `Name.tsx`, `Name.types.ts`, `Name.const.ts`, `index.ts` structure preserved.
+- No stale `types.ts`/`constants.ts` alongside `Name.*` files.
+- No magic literals where shared constants are available.
+- `clsx` used for conditional classes.
+- JSX conditional branches extracted when blocks become complex.
+- Unused params/locals removed.
+
+Build gates:
+- `npm run typecheck`
+- `npm run build`
+- Validate portal against local library before release.

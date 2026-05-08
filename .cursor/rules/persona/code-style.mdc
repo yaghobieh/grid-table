@@ -1,0 +1,14 @@
+# Grid Table Code Style Rules
+
+Mandatory style:
+- No magic numbers or repeated strings in component/hook logic.
+- Use shared constants (`ZERO`, `ONE`, `TEN`, keyboard constants, etc.).
+- Use `clsx` for conditional class composition.
+- Prefer alias imports (`@/`, `@components/`, `@constants/`, `@types/`) over deep relative imports.
+- Avoid inline style objects in TSX when classes/utilities can represent the same output.
+
+Type and function rules:
+- Interfaces/types must live in `*.types.ts`.
+- For TSX components, prefer a single `props` argument and destructure inside.
+- For non-TSX functions with more than 3 parameters, use a single params object.
+- Add concise JSDoc to hooks in `src/hooks`.

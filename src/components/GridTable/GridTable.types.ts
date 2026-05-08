@@ -1,32 +1,32 @@
-import type { ReactNode, CSSProperties, RefObject } from 'react';
+import type { CSSProperties, ReactNode, RefObject } from 'react';
 import type {
-  RowData,
-  ColumnDefinition,
-  Theme,
-  Translations,
+  AutoFitConfig,
   Breakpoint,
-  MobileLayout,
-  Dimensions,
   ClassNames,
-  Styles,
-  PaginationConfig,
+  ColumnDefinition,
+  ContextMenuConfig,
+  Dimensions,
   FilterConfig,
+  FrozenRowsConfig,
+  GridTableRef,
+  KeyboardNavConfig,
+  LazyLoadConfig,
+  MobileLayout,
+  PaginationConfig,
+  PrintConfig,
+  RowData,
+  RowReorderConfig,
   SortConfig,
   SortDirection,
-  GridTableRef,
-  TableEffects,
-  LazyLoadConfig,
-  ContextMenuConfig,
   StatusBarConfig,
-  FrozenRowsConfig,
+  Styles,
+  TableEffects,
+  Theme,
+  Translations,
   TreeConfig,
-  KeyboardNavConfig,
-  RowReorderConfig,
   UndoRedoConfig,
-  PrintConfig,
-  AutoFitConfig,
-} from '../../types';
-import type { SubCellExpandTrigger } from '../../context/TableContext.types';
+} from '@/types';
+import type { SubCellExpandTrigger } from '@/context/TableContext.types';
 
 export interface GridTableComponentProps<T extends RowData = RowData> {
   data: T[];
@@ -93,8 +93,6 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   onCellEdit?: (rowId: string | number, columnId: string, newValue: unknown) => void;
   enableExport?: boolean | 'csv' | 'json' | 'excel' | 'pdf' | Array<'csv' | 'json' | 'excel' | 'pdf'>;
   exportFileName?: string;
-
-  // v1.0.7 — New features
   contextMenu?: ContextMenuConfig<T>;
   statusBar?: StatusBarConfig;
   frozenRows?: FrozenRowsConfig<T>;

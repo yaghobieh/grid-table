@@ -4,6 +4,8 @@ export const TWO = 2;
 export const THREE = 3;
 export const FOUR = 4;
 export const FIVE = 5;
+export const SIX = 6;
+export const TWELVE = 12;
 export const TEN = 10;
 export const TWENTY = 20;
 export const FIFTY = 50;
@@ -29,4 +31,6 @@ export const DESKTOP_BREAKPOINT = 1024;
 
 export const DRAWER_ANIMATION_DURATION = 300;
 export const DRAWER_OVERLAY_OPACITY = 0.5;
+export const DEFAULT_LAZY_INITIAL_ROWS = TWENTY;
+export const DEFAULT_LAZY_BATCH_SIZE = TEN;
 

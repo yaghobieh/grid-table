@@ -15,7 +15,7 @@ export const he: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'גלילה ניידת, hover רגוע, פורטל מלוטש',
+    badgeText: 'קבוצות מוצמדות, מנוע נוסחאות, תצוגות שמורות, בונה פילטרים מתקדם',
     title: 'Grid Table',
     subtitle: 'גריד הנתונים של React ל־ForgeStack',
     typewriterTexts: [
@@ -202,8 +202,8 @@ export const he: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.8 פורטל + גריד',
-    title: 'תצוגת תכונות (מחסנית v1.0.7 + נייד v1.0.8)',
+    badge: 'v1.0.9 פורטל + גריד',
+    title: 'תצוגת תכונות (נייד + פורטל v1.0.9)',
     description:
       'תפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור שורות מחדש, עץ, ביטול/שחזור, שורות קפואות, הדפסה. במסכים צרים ברירת המחדל היא גלילה אופקית.',
     sections: [
@@ -273,7 +273,8 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.0.8 — manualPagination + totalRowCount; דמו שרת; תיקון טעינה/hooks; ניווט Compass ידידותי להיסטוריה',
+      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
+      'נוספו דוגמאות: קבוצות שורות מוצמדות + סיכומי תחתית, נוסחאות עמודות, תצוגות שמורות, בונה פילטרים מתקדם',
       'מרכז ערכת נושא ומתחם ניסוי מאחדים אסימונים וניסוי props',
       'mobileLayout גלילה אופקית כברירת מחדל; מוערם אופציונלי',
       'hover רגוע יותר עם tableEffects.hover',

@@ -11,6 +11,10 @@ import { PersistedStateDemo } from './pages/PersistedStateDemo';
 import { ServerDrivenDemo } from './pages/ServerDrivenDemo';
 import { ColumnGroupingDemo } from './pages/ColumnGroupingDemo';
 import { VirtualizationDemo } from './pages/VirtualizationDemo';
+import { PinnedRowGroupsDemo } from './pages/PinnedRowGroupsDemo';
+import { ColumnFormulaEngineDemo } from './pages/ColumnFormulaEngineDemo';
+import { SavedViewsDemo } from './pages/SavedViewsDemo';
+import { AdvancedFilterBuilderDemo } from './pages/AdvancedFilterBuilderDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
@@ -29,6 +33,10 @@ const routes = [
   { path: '/demos/master-detail', name: 'demos-master-detail', component: MasterDetailDemo },
   { path: '/demos/persisted-state', name: 'demos-persisted-state', component: PersistedStateDemo },
   { path: '/demos/server-driven', name: 'demos-server-driven', component: ServerDrivenDemo },
+  { path: '/demos/pinned-row-groups', name: 'demos-pinned-row-groups', component: PinnedRowGroupsDemo },
+  { path: '/demos/column-formula-engine', name: 'demos-column-formula-engine', component: ColumnFormulaEngineDemo },
+  { path: '/demos/saved-views', name: 'demos-saved-views', component: SavedViewsDemo },
+  { path: '/demos/advanced-filter-builder', name: 'demos-advanced-filter-builder', component: AdvancedFilterBuilderDemo },
   { path: '/demos/column-grouping', name: 'demos-column-grouping', component: ColumnGroupingDemo },
   { path: '/demos/virtualization', name: 'demos-virtualization', component: VirtualizationDemo },
   { path: '/theme-builder', name: 'theme-builder', component: ThemeBuilder },

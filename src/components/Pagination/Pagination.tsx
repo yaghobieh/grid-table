@@ -1,31 +1,29 @@
 import type { ReactNode } from 'react';
 import { useMemo, useCallback } from 'react';
-import type { PaginationProps } from './types';
-import { useTableContext } from '../../context';
-import { ONE, FIVE } from '../../constants';
+import type { PaginationProps } from './Pagination.types';
+import { useTableContext } from '@/context';
+import { EMPTY_STRING, FIVE, ONE, ZERO } from '@/constants';
+import { getPaginationDerivedState } from './Pagination.utils';
 
-export function Pagination({
-  page,
-  pageSize,
-  totalItems,
-  totalPages,
-  pageSizeOptions = [10, 20, 50, 100],
-  showFirstLast = true,
-  showPageNumbers = true,
-  maxPageButtons = FIVE,
-  className = '',
-  style,
-  onPageChange,
-  onPageSizeChange,
-}: PaginationProps): ReactNode {
+export function Pagination(props: PaginationProps): ReactNode {
+  const {
+    page,
+    pageSize,
+    totalItems,
+    totalPages,
+    pageSizeOptions = [10, 20, 50, 100],
+    showFirstLast = true,
+    showPageNumbers = true,
+    maxPageButtons = FIVE,
+    className = EMPTY_STRING,
+    style,
+    onPageChange,
+    onPageSizeChange,
+  } = props;
   const { state } = useTableContext();
   const { translations } = state;
 
-  const canGoPrevious = page > ONE;
-  const canGoNext = page < totalPages;
-
-  const startItem = (page - ONE) * pageSize + ONE;
-  const endItem = Math.min(page * pageSize, totalItems);
+  const { canGoPrevious, canGoNext, startItem, endItem } = getPaginationDerivedState({ page, pageSize, totalItems, totalPages });
 
   const handleFirstPage = useCallback(() => {
     onPageChange(ONE);
@@ -92,7 +90,7 @@ export function Pagination({
     return pages;
   }, [page, totalPages, showPageNumbers, maxPageButtons]);
 
-  if (totalItems === 0) {
+  if (totalItems === ZERO) {
     return null;
   }
 

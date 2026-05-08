@@ -8,6 +8,7 @@ export { useKeyboardNavigation } from './useKeyboardNavigation';
 export { useRowReorder } from './useRowReorder';
 export { useUndoRedo } from './useUndoRedo';
 export { useTreeData } from './useTreeData';
+export { useFilterPopupDismiss } from './useFilterPopupDismiss';
 
 export type {
   UseTableReturn,

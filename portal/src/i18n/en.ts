@@ -15,11 +15,11 @@ export const en: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Mobile Scroll Table, Softer Hover, Portal Polish',
+    badgeText: 'Pinned Row Groups, Formula Engine, Saved Views, Advanced Filter Builder',
     title: 'Grid Table',
     subtitle: 'The React Data Grid for ForgeStack',
     typewriterTexts: [
-      'Mobile scroll table, stacked layout opt-in, calmer hover.',
+      'Pinned row groups, formula engine, saved views, advanced filter builder.',
       'Finance dashboards & HR org charts.',
       'Drag & drop, resize, row selection.',
       'Fully customizable via props.',
@@ -59,7 +59,7 @@ export const en: TranslationStrings = {
     visitForgeStack: 'Visit ForgeStack',
     marqueeItems: [
       'Manual server pagination & effectiveTotalItems',
-      'Mobile scroll table by default · stacked layout optional',
+      'Pinned row groups · formula engine · saved views · advanced filter builder',
       'lazyLoad batches for long scroll regions',
       'MIT · @forgedevstack/grid-table · TypeScript-first',
     ],
@@ -112,6 +112,22 @@ export const en: TranslationStrings = {
       title: 'Server-driven paging',
       description:
         'Pass only the current page in data, set manualPagination and totalRowCount, and refetch inside onPageChange. Sorting and filtering for full datasets should be applied on the server in production.',
+    },
+    'pinned-row-groups': {
+      title: 'Pinned Row Groups + Aggregate Footers',
+      description: 'Group rows and keep subtotal/total footers pinned while scrolling.',
+    },
+    'column-formula-engine': {
+      title: 'Column Formula Engine',
+      description: 'Define computed columns from formulas for profit, margin, and derived KPIs.',
+    },
+    'saved-views': {
+      title: 'Saved Views',
+      description: 'Save and restore sorting, filtering, visibility, and pagination as named presets.',
+    },
+    'advanced-filter-builder': {
+      title: 'Advanced Filter Builder',
+      description: 'Create nested AND/OR filter rules with reusable groups.',
     },
     'column-grouping': {
       title: 'Column grouping band',
@@ -206,8 +222,8 @@ export const en: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.8 Portal + Grid',
-    title: 'Feature showcase (v1.0.7 stack + v1.0.8 mobile)',
+    badge: 'v1.0.9 Portal + Grid',
+    title: 'Feature showcase (v1.0.9 mobile + portal polish)',
     description:
       'Context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, print mode. On narrow screens the grid defaults to horizontal scroll; use the stacked mobile layout only when you want card-style rows.',
     sections: [
@@ -277,7 +293,8 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.0.8 — manualPagination + totalRowCount; server-driven demo; loading/hooks fix; Forge Compass history-friendly nav',
+      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
+      'Examples added: pinned row groups + aggregate footers, formula columns, saved views, advanced filter builder',
       'Theme & Playground hub merges theme tokens and live prop playground',
       'mobileLayout default horizontal scroll; stacked optional for card-style rows',
       'Softer tableEffects.hover accent',

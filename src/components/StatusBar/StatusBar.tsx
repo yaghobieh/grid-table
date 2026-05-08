@@ -1,28 +1,21 @@
 import type { ReactNode } from 'react';
-import type { ColumnDefinition } from '../../types/column.types';
-import type { RowData } from '../../types/row.types';
-import type { StatusBarConfig } from '../../types/features.types';
-import { computeAggregation } from '../../utils/export.utils';
+import { Flex } from '@forgedevstack/bear';
+import type { RowData } from '@/types';
+import { EMPTY_STRING, ONE, SIX, TWELVE, ZERO } from '@/constants';
+import { computeAggregation } from '@/utils/export.utils';
+import type { StatusBarProps } from './StatusBar.types';
 
-export interface StatusBarProps<T extends RowData = RowData> {
-  config: StatusBarConfig;
-  data: T[];
-  totalCount: number;
-  filteredCount: number;
-  selectedCount: number;
-  columns: ColumnDefinition<T>[];
-  className?: string;
-}
-
-export function StatusBar<T extends RowData>({
-  config,
-  data,
-  totalCount,
-  filteredCount,
-  selectedCount,
-  columns,
-  className = '',
-}: StatusBarProps<T>): ReactNode {
+export function StatusBar<T extends RowData>(props: StatusBarProps<T>): ReactNode {
+  const {
+    config,
+    data,
+    totalCount,
+    filteredCount,
+    selectedCount,
+    columns,
+    className = EMPTY_STRING,
+    labels,
+  } = props;
   if (!config.enabled) return null;
 
   const aggregations = config.aggregations?.map(agg => {
@@ -34,36 +27,32 @@ export function StatusBar<T extends RowData>({
     return { label, formatted };
   }).filter(Boolean);
 
+  const rowsLabel = labels?.rows ?? 'Rows';
+  const filteredLabel = labels?.filtered ?? 'Filtered';
+  const selectedLabel = labels?.selected ?? 'Selected';
+
   return (
-    <div
+    <Flex
       className={`gt-status-bar ${className}`}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 16,
-        padding: '6px 12px',
-        borderTop: '1px solid var(--gt-border-color, #e0e0e0)',
-        background: 'var(--gt-bg-secondary, #fafafa)',
-        fontSize: '0.75rem',
-        color: 'var(--gt-text-secondary, #666)',
-        flexWrap: 'wrap',
-      }}
+      align="center"
+      gap={ONE}
+      style={{ padding: `${SIX}px ${TWELVE}px` }}
     >
       {config.showRowCount !== false && (
         <span className="gt-sb-item">
-          <strong>Rows:</strong> {totalCount}
+          <strong>{rowsLabel}:</strong> {totalCount}
         </span>
       )}
 
       {config.showFilteredCount !== false && filteredCount !== totalCount && (
         <span className="gt-sb-item">
-          <strong>Filtered:</strong> {filteredCount}
+          <strong>{filteredLabel}:</strong> {filteredCount}
         </span>
       )}
 
-      {config.showSelectedCount !== false && selectedCount > 0 && (
+      {config.showSelectedCount !== false && selectedCount > ZERO && (
         <span className="gt-sb-item">
-          <strong>Selected:</strong> {selectedCount}
+          <strong>{selectedLabel}:</strong> {selectedCount}
         </span>
       )}
 
@@ -74,8 +63,6 @@ export function StatusBar<T extends RowData>({
       ))}
 
       {config.customContent}
-    </div>
+    </Flex>
   );
 }
-
-export default StatusBar;

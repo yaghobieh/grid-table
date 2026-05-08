@@ -29,3 +29,9 @@ export interface TreeEmployee {
   children?: TreeEmployee[];
   [key: string]: unknown;
 }
+
+export interface FeatureExampleItem {
+  title: string;
+  summary: string;
+  example: string;
+}

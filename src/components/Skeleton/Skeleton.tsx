@@ -1,37 +1,7 @@
 import type { ReactNode } from 'react';
-import type { SkeletonProps, SkeletonRowProps, SkeletonCellProps } from './types';
-import { SKELETON_ROWS, DEFAULT_COLUMN_WIDTH } from '../../constants';
-
-function SkeletonCell({ width = DEFAULT_COLUMN_WIDTH, height = 16, animate = true }: SkeletonCellProps): ReactNode {
-  const widthStyle = typeof width === 'number' ? `${width}px` : width;
-
-  return (
-    <div
-      className="grid-skeleton-cell px-4 py-3 flex-shrink-0"
-      style={{ width: widthStyle }}
-    >
-      <div
-        className={`rounded ${animate ? 'animate-pulse' : ''}`}
-        style={{ height: `${height}px`, width: '80%' }}
-      />
-    </div>
-  );
-}
-
-function SkeletonRow({ columns, columnWidths, height = 16, animate = true }: SkeletonRowProps): ReactNode {
-  return (
-    <div className="grid-skeleton-row">
-      {Array.from({ length: columns }).map((_, index) => (
-        <SkeletonCell
-          key={index}
-          width={columnWidths?.[index] ?? DEFAULT_COLUMN_WIDTH}
-          height={height}
-          animate={animate}
-        />
-      ))}
-    </div>
-  );
-}
+import type { SkeletonProps } from './Skeleton.types';
+import { SKELETON_ROWS, DEFAULT_COLUMN_WIDTH } from '@/constants';
+import { SkeletonRow } from './SkeletonRow';
 
 export function Skeleton({
   rows = SKELETON_ROWS,

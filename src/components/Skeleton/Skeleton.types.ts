@@ -23,4 +23,3 @@ export interface SkeletonCellProps {
   height?: number;
   animate?: boolean;
 }
-

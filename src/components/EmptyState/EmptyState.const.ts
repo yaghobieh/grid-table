@@ -1,0 +1,1 @@
+export const EMPTY_STATE_STROKE_WIDTH = 1;

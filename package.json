@@ -1,6 +1,6 @@
 {
   "name": "@forgedevstack/grid-table",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A powerful, headless grid table component for React with SCSS styling, drag-and-drop columns, filtering, sorting, and responsive mobile support",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -91,6 +91,7 @@
     "typescript": "^5.3.0"
   },
   "dependencies": {
-    "@forgedevstack/bear": ">=1.0.0"
+    "@forgedevstack/bear": ">=1.0.0",
+    "clsx": "^2.1.1"
   }
 }

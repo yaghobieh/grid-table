@@ -15,7 +15,7 @@ export const es: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Tabla Móvil con Scroll, Hover Más Suave, Portal',
+    badgeText: 'Grupos fijados, motor de fórmulas, vistas guardadas, filtros avanzados',
     title: 'Grid Table',
     subtitle: 'El Data Grid de React para ForgeStack',
     typewriterTexts: [
@@ -206,8 +206,8 @@ export const es: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.8 Portal + Grid',
-    title: 'Escaparate de funciones (stack v1.0.7 + móvil v1.0.8)',
+    badge: 'v1.0.9 Portal + Grid',
+    title: 'Escaparate de funciones (móvil + portal v1.0.9)',
     description:
       'Menú contextual, barra de estado, exportación, teclado, reordenar filas, árbol, deshacer/rehacer, filas congeladas, impresión. En pantallas estrechas el grid usa scroll horizontal por defecto.',
     sections: [
@@ -277,7 +277,8 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.0.8 — manualPagination + totalRowCount; demo servidor; arreglo carga/hooks; Compass compatible con historial del navegador',
+      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
+      'Ejemplos añadidos: grupos de filas fijados + pies agregados, fórmulas por columna, vistas guardadas, constructor de filtros avanzado',
       'Hub Tema y Playground reúne tokens y playground de props',
       'mobileLayout con scroll horizontal por defecto; apilado opcional',
       'Hover más suave con tableEffects.hover',

@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef, type ReactNode } from 'react';
 import type { ContextMenuProps } from './ContextMenu.types';
-import type { RowData } from '../../types';
+import type { RowData } from '@/types';
 
 export function ContextMenu<T extends RowData>(props: ContextMenuProps<T>): ReactNode {
   const { visible, x, y, context, actions, onClose } = props;

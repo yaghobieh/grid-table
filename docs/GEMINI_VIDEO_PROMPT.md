@@ -1,66 +1,82 @@
-Create a cinematic 75-90 second product demo video for "@forgedevstack/grid-table" (React data grid). Use edge-to-edge modern UI framing, smooth camera motion, and high readability text overlays. Style: premium developer tooling launch video (dark + light mode moments), 16:9, 1080p.
+Create a cinematic 80-95 second product demo video for "@forgedevstack/grid-table" (React data grid), positioned as part of the Forge Dev Stack ecosystem. Visual style: premium developer tooling launch trailer, edge-to-edge UI framing, smooth camera motion, high readability overlays, 16:9, 1080p.
 
-Goal: show why Grid Table is production-ready for real apps across desktop and mobile.
+Goal:
+Show Grid Table as a production-ready, enterprise-grade React grid with rich UX, mobile support, and deep customization.
 
-Storyboard and scenes:
-1) Hero intro (5-8s)
-- Title card: "Grid Table for React"
-- Subline: "Sortable. Filterable. Editable. Mobile-ready."
-- Show both dark and light themes quickly with elegant transitions.
+Brand and color direction (important):
+- Keep the portal look and feel: dark navy/charcoal backgrounds with emerald green accents.
+- Primary accent tones: green family similar to #22c55e and #16a34a.
+- Supporting neutrals: deep slate/navy backgrounds and soft gray text for secondary copy.
+- Maintain high contrast; avoid random neon palettes not matching the portal.
+- Include quick dark and light mode transitions while preserving the same green accent identity.
 
-2) Core grid interactions (10-12s)
-- Large dataset in a clean table shell.
-- Demonstrate sorting with animated sort effects.
-- Global search + column filters in real time.
-- Show sticky header while scrolling.
+Storyboard:
+1) Hero opener (6-8s)
+- Title: "Grid Table for React"
+- Subline: "Fast. Flexible. Mobile-ready."
+- Brief flashes of finance, HR tree, and server paging demos.
+- Overlay: "Part of Forge Dev Stack"
 
-3) Advanced filtering (8-10s)
-- Open filter controls and apply multiple operators.
-- Show filtered count + visible rows updating instantly.
-- Overlay text: "Advanced filtering with fast UX feedback."
+2) Core grid UX (10-12s)
+- Large dataset with sticky header.
+- Sorting with animated indicators.
+- Global search + column filters.
+- Row selection + pagination interactions.
 
-4) Tree data + expansion (8-10s)
-- Switch to hierarchical org-style data.
-- Expand/collapse nested rows with indentation.
-- Show master-detail expansion panel for a row.
+3) Advanced filtering and control surface (8-10s)
+- Multi-operator filters (contains, equals, range-like flow).
+- Show filtered counts and immediate row updates.
+- Open filter UI quickly, then return to grid state.
 
-5) Drag and drop + resize + pinning (10-12s)
-- Reorder rows with drag handle.
-- Resize columns by dragging edges.
-- Pin a key column to left and keep it visible during horizontal scroll.
+4) Data shape flexibility (10-12s)
+- Tree data expand/collapse with indentation.
+- Master-detail row expansion panel.
+- Column grouping band style preview.
 
-6) Editing + undo/redo (8-10s)
-- Inline edit a few cells.
-- Trigger undo then redo with keyboard shortcuts.
-- Overlay text: "Editable cells with history support."
+5) Productivity features (12-14s)
+- Context menu actions (copy/filter/pin/hide).
+- Inline editing with undo/redo.
+- Row reorder drag-and-drop.
+- Column resize + pinning left/right.
+- Status bar aggregations (sum, avg, row count).
 
-7) Context menu + export + status bar (8-10s)
-- Right-click cell opens context menu (copy/filter/pin/hide).
-- Export examples: CSV, Excel, JSON, PDF.
-- Status bar shows row count and aggregations (sum/avg).
+6) Export and workflow integration (7-9s)
+- Export options: CSV, Excel, JSON, PDF.
+- Show print mode snapshot.
+- Overlay: "Designed for real reporting workflows"
 
-8) Mobile responsiveness focus (12-15s, critical)
-- Show viewport shrinking from desktop to tablet to phone.
-- Demonstrate two mobile modes:
-  - Horizontal scroll table (default mobile scroll mode).
-  - Stacked card rows (mobileLayout="stacked").
-- Overlay text: "Configurable mobile behavior via mobileBreakpoint + mobileLayout."
-- Show touch-like interactions (scroll, filter, expand).
+7) Mobile and responsive (critical, 14-16s)
+- Resize desktop -> tablet -> phone.
+- Show both mobile behaviors:
+  - mobileLayout="scroll" (horizontal table, real headers)
+  - mobileLayout="stacked" (card rows)
+- Mention breakpoint control:
+  - mobileBreakpoint="mobile" | "tablet" | "desktop" | "none"
+- Show touch-like interactions and smooth scrolling.
 
-9) Performance and polish (6-8s)
-- Lazy loading batches while scrolling long lists.
-- Smooth row animations and hover effects.
-- Quick transition between demos (finance, HR/tree, server-driven paging).
+8) Performance and polish (7-9s)
+- Lazy loading batches in long lists.
+- Smooth hover, row, and sort effects.
+- Fast transitions between demos without losing context.
+
+9) Forge Dev Stack ecosystem moment (6-8s)
+- Show Grid Table working with:
+  - Bear UI
+  - Forge Compass
+  - Synapse
+  - Harbor
+  - Forge CLI
+- Overlay: "Built to work across the full Forge Dev Stack"
 
 10) Closing CTA (5-7s)
-- Final title: "Build data-heavy UIs faster."
-- Secondary line: "@forgedevstack/grid-table"
+- Final line: "Build data-heavy UIs faster."
+- Secondary: "@forgedevstack/grid-table"
 - CTA: "npm i @forgedevstack/grid-table"
+- Optional footer: "MIT · TypeScript-first · Forge Dev Stack"
 
-Creative and technical notes:
-- Keep transitions purposeful and not flashy.
-- Use concise motion graphics for callouts of each feature.
-- Favor clarity of UI states over excessive zoom.
-- Maintain text-safe margins.
-- Add subtle background score and soft UI click/hover sounds.
-- Keep the feature labels synced with what is visible onscreen.
+Creative notes:
+- Keep motion intentional, not flashy.
+- Favor legibility and authentic UI state transitions over heavy effects.
+- Sync every overlay label to the exact visible feature.
+- Use subtle UI sound design and clean background music.
+- Keep title-safe margins and avoid clipping on social exports.

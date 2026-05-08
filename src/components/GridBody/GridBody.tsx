@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 import { useCallback } from 'react';
-import type { GridBodyProps } from './types';
-import type { RowData } from '../../types';
+import clsx from 'clsx';
+import type { GridBodyProps } from './gridBody.types';
+import type { RowData } from '@/types';
 import { GridRow } from '../GridRow';
 import { getGridBodyRowDerivedState } from './gridBody.utils';
+import { ZERO } from '@constants/numbers.const';
 
 export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): ReactNode {
   const {
@@ -57,14 +59,14 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     [getRowId, onRowExpand]
   );
 
-  if (data.length === 0) {
+  if (data.length === ZERO) {
     return null;
   }
 
   return (
-    <div className={`grid-body ${className}`} style={style} role="rowgroup">
+    <div className={clsx('grid-body', className)} style={style} role="rowgroup">
       {data.map((row, index) => {
-        const d = getGridBodyRowDerivedState(
+        const d = getGridBodyRowDerivedState({
           row,
           index,
           getRowId,
@@ -79,7 +81,7 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
           treeIndents,
           treeHasChildren,
           treeIsExpanded,
-        );
+        });
 
         return (
           <GridRow
@@ -94,8 +96,8 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             applyHiddenOnMobile={applyHiddenOnMobile}
             stackedMobileLayout={stackedMobileLayout}
             showMobileLabels={showMobileLabels}
-            className={`${d.rowClassName} ${d.isDragging ? 'gt-row-dragging' : ''} ${d.isDragOver ? 'gt-row-drag-over' : ''}`}
-            style={{ ...d.rowStyle, ...(d.indent > 0 ? { paddingLeft: d.indent } : {}) }}
+            className={clsx(d.rowClassName, d.isDragging && 'gt-row-dragging', d.isDragOver && 'gt-row-drag-over')}
+            style={{ ...d.rowStyle, ...(d.indent > ZERO ? { paddingLeft: d.indent } : {}) }}
             onClick={onRowClick}
             onDoubleClick={onRowDoubleClick}
             onCellClick={onCellClick}

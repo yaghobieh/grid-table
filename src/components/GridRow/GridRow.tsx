@@ -1,9 +1,24 @@
 import type { ReactNode, MouseEvent } from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import type { GridRowProps } from './types';
-import type { RowData } from '../../types';
-import { Checkbox } from '@forgedevstack/bear';
+import clsx from 'clsx';
+import type { GridRowProps } from './GridRow.types';
+import type { RowData } from '@/types';
+import { Button, Checkbox, BearIcons } from '@forgedevstack/bear';
 import { GridCell } from '../GridCell';
+import {
+  GRID_ROW_BASE_CLASSES,
+  GRID_ROW_CLICKABLE_CLASS,
+  GRID_ROW_DEFAULT_STICKY_WIDTH,
+  GRID_ROW_DESKTOP_CLASSES,
+  GRID_ROW_DISABLED_CLASSES,
+  GRID_ROW_HOVER_CLASS,
+  GRID_ROW_MOBILE_CLASSES,
+  GRID_ROW_SELECTED_CLASS,
+  GRID_ROW_TREE_PLACEHOLDER_OFFSET,
+} from './GridRow.const';
+import { buildColumnStateIndex, getStickyOffsets, getVisibleColumns } from './GridRow.utils';
+import { DRAG_HANDLE_ICON_PATHS, DRAG_HANDLE_ICON_VIEWBOX, TREE_TOGGLE_ICON_PATH, TREE_TOGGLE_ICON_VIEWBOX } from '@constants/images.const';
+import { ZERO } from '@constants/numbers.const';
 
 export function GridRow<T extends RowData = RowData>({
   row,
@@ -36,7 +51,10 @@ export function GridRow<T extends RowData = RowData>({
   treeToggle,
   treeHasChildren,
   treeIsExpanded,
-  treeIndent = 0,
+  treeIndent = ZERO,
+  dragHandleIcon,
+  treeToggleIcon,
+  expandRowIcon,
   enableCellEdit,
   onCellSave,
 }: GridRowProps<T>): ReactNode {
@@ -73,20 +91,12 @@ export function GridRow<T extends RowData = RowData>({
     onExpand?.(!isExpanded);
   }, [onExpand, isExpanded, isDisabled]);
 
-  const visibleColumns = useMemo(() => {
-    return columns
-      .filter((col) => {
-        const state = columnStates.find((cs) => cs.id === col.id);
-        if (state?.visible === false) return false;
-        if (applyHiddenOnMobile && col.hiddenOnMobile) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const aState = columnStates.find((cs) => cs.id === a.id);
-        const bState = columnStates.find((cs) => cs.id === b.id);
-        return (aState?.order ?? 0) - (bState?.order ?? 0);
-      });
-  }, [columns, columnStates, applyHiddenOnMobile]);
+  const columnStateIndex = useMemo(() => buildColumnStateIndex(columnStates), [columnStates]);
+  const visibleColumns = useMemo(
+    () => getVisibleColumns(columns, columnStateIndex, applyHiddenOnMobile),
+    [columns, columnStateIndex, applyHiddenOnMobile],
+  );
+  const stickyOffsets = useMemo(() => getStickyOffsets(visibleColumns, columnStateIndex), [visibleColumns, columnStateIndex]);
 
   const getCellValue = useCallback(
     (col: typeof columns[number]) => {
@@ -100,41 +110,19 @@ export function GridRow<T extends RowData = RowData>({
   );
 
   const rowClasses = useMemo(() => {
-    const classes = [
-      'grid-row',
-      'border-b',
-      'border-theme-border',
-      'transition-colors',
-      'duration-150',
-    ];
-
-    if (isHovered && !isDisabled) {
-      classes.push('bg-theme-hover');
-    }
-
-    if (isSelected) {
-      classes.push('bg-accent-primary/10');
-    }
-
-    if (isDisabled) {
-      classes.push('opacity-50', 'cursor-not-allowed');
-    } else if (onClick) {
-      classes.push('cursor-pointer');
-    }
-
-    if (stackedMobileLayout) {
-      classes.push('flex', 'flex-wrap', 'gap-2', 'p-4');
-    } else {
-      classes.push('flex', 'items-stretch');
-    }
-
-    return classes.join(' ');
+    return clsx(
+      GRID_ROW_BASE_CLASSES,
+      isHovered && !isDisabled && GRID_ROW_HOVER_CLASS,
+      isSelected && GRID_ROW_SELECTED_CLASS,
+      isDisabled ? GRID_ROW_DISABLED_CLASSES : onClick && GRID_ROW_CLICKABLE_CLASS,
+      stackedMobileLayout ? GRID_ROW_MOBILE_CLASSES : GRID_ROW_DESKTOP_CLASSES,
+    );
   }, [isHovered, isSelected, isDisabled, onClick, stackedMobileLayout]);
 
   return (
     <>
       <div
-        className={`${rowClasses} ${className}`}
+        className={clsx(rowClasses, className)}
         style={style}
         role="row"
         aria-selected={isSelected}
@@ -151,28 +139,40 @@ export function GridRow<T extends RowData = RowData>({
         onDrop={onDrop}
       >
         {draggable && (
-          <div className="gt-drag-handle" style={{ display: 'flex', alignItems: 'center', padding: '0 4px', cursor: 'grab' }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" opacity={0.4}>
-              <circle cx="8" cy="4" r="2" /><circle cx="16" cy="4" r="2" />
-              <circle cx="8" cy="12" r="2" /><circle cx="16" cy="12" r="2" />
-              <circle cx="8" cy="20" r="2" /><circle cx="16" cy="20" r="2" />
-            </svg>
+          <div className="gt-drag-handle gt-drag-handle-bear">
+            {dragHandleIcon ?? (
+              <svg width="12" height="12" viewBox={DRAG_HANDLE_ICON_VIEWBOX} fill="currentColor" opacity={0.4}>
+                {DRAG_HANDLE_ICON_PATHS.map((dot) => (
+                  <circle key={`${dot.cx}-${dot.cy}`} cx={dot.cx} cy={dot.cy} r={dot.r} />
+                ))}
+              </svg>
+            )}
           </div>
         )}
 
         {treeHasChildren && treeToggle && (
-          <button
+          <Button
             className="gt-tree-toggle"
-            onClick={(e) => { e.stopPropagation(); treeToggle(); }}
-            style={{ display: 'flex', alignItems: 'center', padding: '0 4px', marginLeft: treeIndent, border: 'none', background: 'none', cursor: 'pointer' }}
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              treeToggle();
+            }}
+            style={{ marginLeft: treeIndent }}
+            icon={
+              treeToggleIcon ?? (
+                <svg width="12" height="12" viewBox={TREE_TOGGLE_ICON_VIEWBOX} fill="currentColor" className={treeIsExpanded ? 'rotate-90 transition-transform duration-150' : 'transition-transform duration-150'}>
+                  <path d={TREE_TOGGLE_ICON_PATH} />
+                </svg>
+              )
+            }
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ transform: treeIsExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }}>
-              <path d="M8 5l8 7-8 7z" />
-            </svg>
-          </button>
+            <span className="bear-sr-only">{treeIsExpanded ? 'Collapse tree row' : 'Expand tree row'}</span>
+          </Button>
         )}
-        {!treeHasChildren && treeIndent > 0 && (
-          <div style={{ width: treeIndent + 20, flexShrink: 0 }} />
+        {!treeHasChildren && treeIndent > ZERO && (
+          <div style={{ width: treeIndent + GRID_ROW_TREE_PLACEHOLDER_OFFSET, flexShrink: 0 }} />
         )}
 
         {enableSelection && (
@@ -196,42 +196,21 @@ export function GridRow<T extends RowData = RowData>({
               aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
               aria-expanded={isExpanded}
             >
-              <span
-                className={`transform transition-transform duration-200 ${
-                  isExpanded ? 'rotate-90' : ''
-                }`}
-              >
-                &gt;
-              </span>
+              {expandRowIcon ?? (
+                <BearIcons.Navigation.ChevronRightIcon
+                  size="xs"
+                  className={isExpanded ? 'transform transition-transform duration-200 rotate-90' : 'transform transition-transform duration-200'}
+                />
+              )}
             </button>
           </div>
         )}
 
-        {visibleColumns.map((col, colIndex) => {
-          const colState = columnStates.find((cs) => cs.id === col.id);
+        {visibleColumns.map((col) => {
+          const colState = columnStateIndex.get(col.id);
           const width = stackedMobileLayout ? '100%' : colState?.width;
           
-          // Calculate sticky offset (sum of widths of previous sticky columns)
-          let stickyOffset = 0;
-          if (col.sticky === 'left') {
-            for (let i = 0; i < colIndex; i++) {
-              const prevCol = visibleColumns[i];
-              if (prevCol.sticky === 'left') {
-                const prevState = columnStates.find((cs) => cs.id === prevCol.id);
-                stickyOffset += prevState?.width ?? 150;
-              }
-            }
-          }
-          // For right-sticky, calculate from the right
-          if (col.sticky === 'right') {
-            for (let i = visibleColumns.length - 1; i > colIndex; i--) {
-              const nextCol = visibleColumns[i];
-              if (nextCol.sticky === 'right') {
-                const nextState = columnStates.find((cs) => cs.id === nextCol.id);
-                stickyOffset += nextState?.width ?? 150;
-              }
-            }
-          }
+          const stickyOffset = stickyOffsets.get(col.id) ?? (col.sticky ? GRID_ROW_DEFAULT_STICKY_WIDTH : ZERO);
 
           return (
             <GridCell

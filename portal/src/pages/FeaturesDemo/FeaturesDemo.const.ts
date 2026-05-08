@@ -1,4 +1,4 @@
-import type { Product, Task, TreeEmployee } from './FeaturesDemo.types';
+import type { Product, Task, TreeEmployee, FeatureExampleItem } from './FeaturesDemo.types';
 
 export const PRODUCT_DATA: Product[] = [
   { id: 1, name: 'MacBook Pro 16"', category: 'Laptops', price: 2499, stock: 45, rating: 4.8, status: 'In Stock' },
@@ -73,3 +73,26 @@ export const TASK_STATUS_COLORS: Record<string, string> = {
 };
 
 export const SECTION_GAP_PX = 48;
+
+export const NEW_FEATURE_EXAMPLES: FeatureExampleItem[] = [
+  {
+    title: 'Pinned Row Groups + Aggregate Footers',
+    summary: 'Group by business key and keep subtotal rows pinned at bottom while scrolling.',
+    example: 'groups: [{ by: "department", pinned: true, footer: ["sum:budget", "avg:margin"] }]',
+  },
+  {
+    title: 'Column Formula Engine',
+    summary: 'Define computed columns from other fields and recalculate during edits.',
+    example: 'columns: [{ id: "profit", formula: "revenue - cost" }, { id: "margin", formula: "(profit/revenue)*100" }]',
+  },
+  {
+    title: 'Saved Views',
+    summary: 'Persist filters, sorting, visibility, pagination, and density as named presets.',
+    example: 'views: [{ id: "ops-default", sort: ["priority:desc"], filters: ["status=active"], hidden: ["internalId"] }]',
+  },
+  {
+    title: 'Advanced Filter Builder',
+    summary: 'Build nested AND/OR conditions with typed operators and reusable filter sets.',
+    example: 'where: { op: "and", rules: [{ field: "region", op: "in", value: ["EU","US"] }, { op: "or", rules: [...] }] }',
+  },
+];

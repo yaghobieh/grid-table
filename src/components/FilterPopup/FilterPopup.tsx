@@ -1,27 +1,22 @@
 import type { ReactNode } from 'react';
-import { useState, useCallback, useEffect, useRef } from 'react';
-import type { FilterPopupProps } from './types';
-import type { FilterOperator } from '../../types';
+import { useState, useCallback, useRef } from 'react';
+import { Button, BearIcons } from '@forgedevstack/bear';
+import type { FilterPopupProps } from './FilterPopup.types';
+import type { FilterOperator } from '@/types';
 import { useTableContext } from '../../context';
-
-const TEXT_OPERATORS: FilterOperator[] = ['contains', 'equals', 'startsWith', 'endsWith', 'notContains', 'notEquals'];
-const NUMBER_OPERATORS: FilterOperator[] = ['equals', 'notEquals', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'];
-
-const OPERATOR_LABELS: Record<FilterOperator, string> = {
-  equals: 'Equals',
-  notEquals: 'Not equals',
-  contains: 'Contains',
-  notContains: 'Not contains',
-  startsWith: 'Starts with',
-  endsWith: 'Ends with',
-  greaterThan: 'Greater than',
-  lessThan: 'Less than',
-  greaterThanOrEqual: 'Greater or equal',
-  lessThanOrEqual: 'Less or equal',
-  between: 'Between',
-  isEmpty: 'Is empty',
-  isNotEmpty: 'Is not empty',
-};
+import { useFilterPopupDismiss } from '@hooks/useFilterPopupDismiss';
+import {
+  FILTER_POPUP_CLOSE_ARIA,
+  FILTER_POPUP_FILTER_PREFIX,
+  FILTER_POPUP_KEY_ENTER,
+  FILTER_POPUP_NUMBER_OPERATORS,
+  FILTER_POPUP_OPERATOR_LABEL,
+  FILTER_POPUP_OPERATOR_LABELS,
+  FILTER_POPUP_SELECT_PLACEHOLDER,
+  FILTER_POPUP_TEXT_OPERATORS,
+  FILTER_POPUP_TOP_OFFSET,
+  FILTER_POPUP_VALUE_LABEL,
+} from './FilterPopup.const';
 
 export function FilterPopup({
   columnId,
@@ -44,29 +39,8 @@ export function FilterPopup({
   const [value, setValue] = useState<string>(currentValue ? String(currentValue) : '');
   const [operator, setOperator] = useState<FilterOperator>(currentOperator);
 
-  const operators = filterType === 'number' ? NUMBER_OPERATORS : TEXT_OPERATORS;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [onClose]);
+  const operators = filterType === 'number' ? FILTER_POPUP_NUMBER_OPERATORS : FILTER_POPUP_TEXT_OPERATORS;
+  useFilterPopupDismiss(popupRef, onClose);
 
   const handleApply = useCallback(() => {
     if (value.trim()) {
@@ -83,7 +57,7 @@ export function FilterPopup({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === FILTER_POPUP_KEY_ENTER) {
         handleApply();
       }
     },
@@ -97,22 +71,21 @@ export function FilterPopup({
       style={{
         top: position?.top ?? '100%',
         left: position?.left ?? 0,
-        marginTop: 4,
+        marginTop: FILTER_POPUP_TOP_OFFSET,
         ...style,
       }}
     >
       <div className="filter-popup-header">
         <div className="header-content">
           <span className="header-title">{columnHeader}</span>
-          <button
+          <Button
             onClick={onClose}
             className="header-close"
-            aria-label="Close"
-          >
-            <svg className="icon-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+            aria-label={FILTER_POPUP_CLOSE_ARIA}
+            variant="ghost"
+            size="sm"
+            icon={<BearIcons.CloseIcon size="xs" />}
+          />
         </div>
       </div>
 
@@ -123,7 +96,7 @@ export function FilterPopup({
             onChange={(e) => setValue(e.target.value)}
             className="w-full px-3 py-2 text-sm rounded"
           >
-            <option value="">Select...</option>
+            <option value="">{FILTER_POPUP_SELECT_PLACEHOLDER}</option>
             {filterOptions.map((opt) => (
               <option key={String(opt.value)} value={String(opt.value)}>
                 {opt.label}
@@ -133,7 +106,7 @@ export function FilterPopup({
         ) : (
           <>
             <div className="filter-field">
-              <label>Operator</label>
+              <label>{FILTER_POPUP_OPERATOR_LABEL}</label>
               <select
                 value={operator}
                 onChange={(e) => setOperator(e.target.value as FilterOperator)}
@@ -141,20 +114,20 @@ export function FilterPopup({
               >
                 {operators.map((op) => (
                   <option key={op} value={op}>
-                    {OPERATOR_LABELS[op]}
+                    {FILTER_POPUP_OPERATOR_LABELS[op]}
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="filter-field">
-              <label>Value</label>
+              <label>{FILTER_POPUP_VALUE_LABEL}</label>
               <input
                 type={filterType === 'number' ? 'number' : 'text'}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={`Filter ${columnHeader}...`}
+                placeholder={`${FILTER_POPUP_FILTER_PREFIX} ${columnHeader}...`}
                 className="w-full px-3 py-2 text-sm rounded"
                 autoFocus
               />

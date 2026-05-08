@@ -1,3 +1,3 @@
 export { GridBody } from './GridBody';
-export type { GridBodyProps } from './types';
+export type { GridBodyProps } from './gridBody.types';
 

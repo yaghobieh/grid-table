@@ -11,7 +11,7 @@ import { GridTable } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { DemoCodeSection } from '@/components/DemoCodeSection';
 import { useI18n } from '@/i18n';
-import { PRODUCT_DATA, TASK_DATA, TREE_DATA, SECTION_GAP_PX } from './FeaturesDemo.const';
+import { PRODUCT_DATA, TASK_DATA, TREE_DATA, SECTION_GAP_PX, NEW_FEATURE_EXAMPLES } from './FeaturesDemo.const';
 import { FEATURES_PRODUCT_GRID_SOURCE } from './FeaturesDemo.code.const';
 import type { Task } from './FeaturesDemo.types';
 import { productColumns, taskColumns, treeColumns, productTotal } from './FeaturesDemo.columns';
@@ -69,6 +69,31 @@ export const FeaturesDemo: FC = () => {
               printConfig={{ enabled: true, title: 'Product Inventory' }}
               frozenRows={{ bottom: [productTotal] }}
             />
+          </div>
+        </section>
+
+        <section style={{ marginBottom: SECTION_GAP_PX }}>
+          <Flex align="center" gap={2} className="mb-3">
+            <Typography variant="h3" className="text-lg font-semibold">New feature examples</Typography>
+            <Badge variant="success" className="text-xs">{t.tags.new}</Badge>
+          </Flex>
+          <Typography variant="body2" className="opacity-50 mb-4">
+            Quick examples for the next feature set planned in Grid Table.
+          </Typography>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {NEW_FEATURE_EXAMPLES.map((item) => (
+              <div key={item.title} className="rounded-lg border border-white/10 p-4 bg-black/20">
+                <Typography variant="subtitle1" className="font-semibold mb-2">
+                  {item.title}
+                </Typography>
+                <Typography variant="body2" className="opacity-70 mb-3">
+                  {item.summary}
+                </Typography>
+                <pre className="text-xs opacity-80 overflow-x-auto">
+                  <code>{item.example}</code>
+                </pre>
+              </div>
+            ))}
           </div>
         </section>
 

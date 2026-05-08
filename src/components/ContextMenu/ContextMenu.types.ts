@@ -1,5 +1,5 @@
-import type { ContextMenuAction, ContextMenuContext } from '../../types/features.types';
-import type { RowData } from '../../types';
+import type { ContextMenuAction, ContextMenuContext } from '@/types/features.types';
+import type { RowData } from '@/types';
 
 export interface ContextMenuProps<T extends RowData = RowData> {
   visible: boolean;

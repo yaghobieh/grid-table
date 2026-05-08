@@ -1,6 +1,6 @@
 import type { ReactNode, CSSProperties, MouseEvent } from 'react';
-import type { RowData, ColumnDefinition, ColumnState } from '../../types';
-import type { CellClickEvent } from '../GridCell/types';
+import type { RowData, ColumnDefinition, ColumnState } from '@/types';
+import type { CellClickEvent } from '../GridCell/GridCell.types';
 
 export interface GridRowProps<T extends RowData = RowData> {
   row: T;
@@ -34,7 +34,9 @@ export interface GridRowProps<T extends RowData = RowData> {
   treeHasChildren?: boolean;
   treeIsExpanded?: boolean;
   treeIndent?: number;
+  dragHandleIcon?: ReactNode;
+  treeToggleIcon?: ReactNode;
+  expandRowIcon?: ReactNode;
   enableCellEdit?: boolean;
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
 }
-

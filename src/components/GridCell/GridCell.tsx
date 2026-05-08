@@ -1,17 +1,24 @@
 import type { ReactNode } from 'react';
 import { useMemo, useCallback, useRef, useEffect, useState } from 'react';
-import type { GridCellProps } from './types';
-import type { RowData } from '../../types';
+import clsx from 'clsx';
+import type { GridCellProps } from './GridCell.types';
+import type { RowData } from '@/types';
 import { Tooltip, Typography } from '@forgedevstack/bear';
-import { useTableContext } from '../../context';
-import { highlightMatch } from '../../utils';
+import { useTableContext } from '@/context';
+import { highlightMatch } from '@/utils';
 import { EditableCell } from '../EditableCell';
-
-const ALIGN_CLASSES = {
-  left: 'text-left justify-start',
-  center: 'text-center justify-center',
-  right: 'text-right justify-end',
-} as const;
+import {
+  GRID_CELL_ALIGN_CLASSES,
+  GRID_CELL_COLLAPSE_ARIA,
+  GRID_CELL_EMPTY_STRING,
+  GRID_CELL_EXPAND_ARIA,
+  GRID_CELL_STICKY_BACKGROUND,
+  GRID_CELL_SUBCELL_TRIGGER_BOTH,
+  GRID_CELL_SUBCELL_TRIGGER_DOUBLE_CLICK,
+  GRID_CELL_TOOLTIP_DELAY,
+  GRID_CELL_TRUNCATE_CLASS,
+} from './GridCell.const';
+import { deriveGridCellState, formatGridCellValue, getGridCellStyle } from './GridCell.utils';
 
 export function GridCell<T extends RowData = RowData>({
   column,
@@ -35,34 +42,25 @@ export function GridCell<T extends RowData = RowData>({
   const [overflowTitle, setOverflowTitle] = useState<string | undefined>(undefined);
   const { state, actions, tableOptions } = useTableContext<T>();
 
-  const showOverflowTooltip = (column.showOverflowTooltip ?? tableOptions.showOverflowTooltip) !== false;
-  const hasSubCell = Boolean(column.renderSubCell);
-  const trigger = column.subCellExpandTrigger ?? tableOptions.subCellExpandTrigger ?? 'both';
-  const showArrow = hasSubCell && (trigger === 'arrow' || trigger === 'both');
-  const enableCellAutoSize = tableOptions.enableCellAutoSizeOnDoubleClick === true;
-  const cellKey = `${String(rowId)}-${column.id}`;
-  const isSubCellExpanded = state.expandedCellIds.has(cellKey);
-  const isAutoSized = state.autoSizedColumnIds.has(column.id);
+  const {
+    showOverflowTooltip,
+    hasSubCell,
+    trigger,
+    showArrow,
+    enableCellAutoSize,
+    isSubCellExpanded,
+    isAutoSized,
+  } = useMemo(
+    () =>
+      deriveGridCellState(
+        { column, rowId },
+        tableOptions,
+        { expandedCellIds: state.expandedCellIds, autoSizedColumnIds: state.autoSizedColumnIds },
+      ),
+    [column, rowId, tableOptions, state.expandedCellIds, state.autoSizedColumnIds],
+  );
 
-  const formattedValue = useMemo(() => {
-    if (column.render) {
-      return column.render(value, row as Record<string, unknown>, rowIndex);
-    }
-
-    if (value === null || value === undefined) {
-      return '-';
-    }
-
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-
-    if (value instanceof Date) {
-      return value.toLocaleDateString();
-    }
-
-    return String(value);
-  }, [column, row, rowIndex, value]);
+  const formattedValue = useMemo(() => formatGridCellValue(column, value, row, rowIndex), [column, value, row, rowIndex]);
 
   useEffect(() => {
     if (!showOverflowTooltip || !valueRef.current) return;
@@ -90,7 +88,7 @@ export function GridCell<T extends RowData = RowData>({
   const handleDoubleClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (hasSubCell && (trigger === 'doubleClick' || trigger === 'both')) {
+      if (hasSubCell && (trigger === GRID_CELL_SUBCELL_TRIGGER_DOUBLE_CLICK || trigger === GRID_CELL_SUBCELL_TRIGGER_BOTH)) {
         actions.toggleCellExpansion(rowId, column.id);
       } else if (enableCellAutoSize) {
         actions.toggleColumnAutoSize(column.id);
@@ -107,36 +105,15 @@ export function GridCell<T extends RowData = RowData>({
     [actions, rowId, column.id]
   );
 
-  const cellStyle = useMemo(() => {
-    const baseStyle: React.CSSProperties = { ...style };
+  const cellStyle = useMemo(
+    () => getGridCellStyle({ style, width, sticky, stickyOffset, isAutoSized, stickyBackground: GRID_CELL_STICKY_BACKGROUND }),
+    [style, width, sticky, stickyOffset, isAutoSized],
+  );
 
-    if (isAutoSized) {
-      baseStyle.width = 'auto';
-      baseStyle.minWidth = 'max-content';
-      baseStyle.maxWidth = 'none';
-    } else if (width !== undefined) {
-      baseStyle.width = typeof width === 'number' ? `${width}px` : width;
-      baseStyle.minWidth = baseStyle.width;
-      baseStyle.maxWidth = baseStyle.width;
-    }
-
-    if (sticky) {
-      baseStyle.position = 'sticky';
-      baseStyle.zIndex = 1;
-      baseStyle.backgroundColor = 'var(--gt-bg-primary, #1e1e1e)';
-
-      if (sticky === 'left') {
-        baseStyle.left = stickyOffset;
-      } else if (sticky === 'right') {
-        baseStyle.right = stickyOffset;
-      }
-    }
-
-    return baseStyle;
-  }, [style, width, sticky, stickyOffset, isAutoSized]);
-
-  const alignClass = ALIGN_CLASSES[align];
-  const stickyClass = sticky ? `sticky-${sticky}` : '';
+  const alignClass = GRID_CELL_ALIGN_CLASSES[align];
+  const stickyClass = sticky ? `sticky-${sticky}` : GRID_CELL_EMPTY_STRING;
+  const valueClassName = clsx('grid-cell-value', !isAutoSized && GRID_CELL_TRUNCATE_CLASS);
+  const mergedCellStyle = useMemo(() => ({ ...cellStyle, ...column.cellStyle }), [cellStyle, column.cellStyle]);
 
   const shouldHighlight =
     state.globalFilter &&
@@ -158,6 +135,24 @@ export function GridCell<T extends RowData = RowData>({
     [onCellSave, rowId],
   );
 
+  const renderValueNode = (): ReactNode => {
+    const valueNode = (
+      <span ref={valueRef} className={valueClassName}>
+        <Typography component="span" variant="body2" className="grid-cell-value-text">
+          {cellContent}
+        </Typography>
+      </span>
+    );
+
+    if (!overflowTitle) return valueNode;
+
+    return (
+      <Tooltip content={overflowTitle} placement="top" delay={GRID_CELL_TOOLTIP_DELAY}>
+        {valueNode}
+      </Tooltip>
+    );
+  };
+
   const innerContent = (
     <div className="grid-cell-inner">
       {showLabel && labelText && (
@@ -165,35 +160,15 @@ export function GridCell<T extends RowData = RowData>({
           {labelText}:
         </Typography>
       )}
-      <div className="grid-cell-value-wrapper" style={{ minWidth: 0, overflow: 'hidden' }}>
-        {overflowTitle ? (
-          <Tooltip content={overflowTitle} placement="top" delay={200}>
-            <span
-              ref={valueRef}
-              className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
-            >
-              <Typography component="span" variant="body2" className="grid-cell-value-text">
-                {cellContent}
-              </Typography>
-            </span>
-          </Tooltip>
-        ) : (
-          <span
-            ref={valueRef}
-            className={`grid-cell-value ${isAutoSized ? '' : 'grid-cell-value--truncate'}`}
-          >
-            <Typography component="span" variant="body2">
-              {cellContent}
-            </Typography>
-          </span>
-        )}
+      <div className="grid-cell-value-wrapper min-w-0 overflow-hidden">
+        {renderValueNode()}
       </div>
       {showArrow && (
         <button
           type="button"
           className={`grid-cell-expand-trigger ${isSubCellExpanded ? 'grid-cell-expand-trigger--expanded' : ''}`}
           onClick={handleExpandClick}
-          aria-label={isSubCellExpanded ? 'Collapse' : 'Expand'}
+          aria-label={isSubCellExpanded ? GRID_CELL_COLLAPSE_ARIA : GRID_CELL_EXPAND_ARIA}
           aria-expanded={isSubCellExpanded}
         />
       )}
@@ -202,17 +177,17 @@ export function GridCell<T extends RowData = RowData>({
 
   return (
     <div
-      className={`
-        grid-cell
-        ${alignClass}
-        ${stickyClass}
-        ${onClick ? 'cursor-pointer' : ''}
-        ${hasSubCell ? 'grid-cell--has-sub' : ''}
-        ${isAutoSized ? 'grid-cell--auto-sized' : ''}
-        ${column.cellClassName || ''}
-        ${className}
-      `.trim()}
-      style={{ ...cellStyle, ...column.cellStyle }}
+      className={clsx(
+        'grid-cell',
+        alignClass,
+        stickyClass,
+        onClick && 'cursor-pointer',
+        hasSubCell && 'grid-cell--has-sub',
+        isAutoSized && 'grid-cell--auto-sized',
+        column.cellClassName,
+        className,
+      )}
+      style={mergedCellStyle}
       role="cell"
       data-column-id={column.id}
       onClick={onClick ? handleClick : undefined}

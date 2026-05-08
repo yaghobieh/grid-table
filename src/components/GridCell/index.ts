@@ -1,3 +1,3 @@
 export { GridCell } from './GridCell';
-export type { GridCellProps, GridCellRenderProps, CellClickEvent } from './types';
+export type { CellClickEvent, GridCellProps, GridCellRenderProps } from './GridCell.types';
 

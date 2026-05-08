@@ -1,3 +1,3 @@
 export { FilterPopup } from './FilterPopup';
-export type { FilterPopupProps } from './types';
+export type { FilterPopupProps } from './FilterPopup.types';
 

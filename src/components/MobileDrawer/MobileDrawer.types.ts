@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 export type DrawerContent = 'filter' | 'sort' | 'columns';
 
@@ -29,4 +29,3 @@ export interface DrawerSortContentProps {
 export interface DrawerColumnsContentProps {
   onReset: () => void;
 }
-

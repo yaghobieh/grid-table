@@ -1,0 +1,19 @@
+# Grid Table Portal Code Riview
+
+## Review Focus
+- Demo correctness vs library behavior.
+- Accessibility and keyboard parity in examples.
+- Alias import consistency and constants hygiene.
+- No inline magic values where shared constants are appropriate.
+- Applies to all Grid Table workspaces: library + portal.
+- Prefer `Name.types.ts` and `Name.const.ts`; reject stale `types.ts`/`constants.ts`.
+- Require single `props` argument for TSX components.
+- Require helper/object argument when function signature exceeds 3 params.
+- Require `clsx` for conditional classes.
+- Push complex JSX conditionals into helper functions/components.
+- Avoid inline styles where classes/utilities can represent the same output.
+- Flag unused params/local vars immediately.
+
+## Build Gates
+- Portal build must pass locally.
+- Integration with local grid-table build must be validated before merge.

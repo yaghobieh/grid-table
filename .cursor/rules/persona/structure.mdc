@@ -1,0 +1,16 @@
+# Grid Table Structure Rules
+
+Scope:
+- Apply to `src/` and `portal/src/`.
+
+Component folder contract:
+- `Name.tsx` (single component per file)
+- `Name.types.ts` (all public interfaces/types)
+- `Name.const.ts` (reusable constants)
+- `Name.utils.ts` (pure logic helpers)
+- `index.ts` (barrel exports)
+
+Structure constraints:
+- Do not keep `types.ts` or `constants.ts` when `Name.types.ts` / `Name.const.ts` exists.
+- If a component grows helper views, move to `_helper/<Name>/<Name>.tsx` plus `index.ts`.
+- No multiple main components in one TSX file.

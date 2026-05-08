@@ -1,9 +1,9 @@
 import type { ReactNode, CSSProperties } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
-import type { GridTableComponentProps } from './types';
-import type { RowData, TableEffects, ContextMenuContext as CtxMenuCtx, ContextMenuAction, EditHistoryEntry } from '../../types';
-import { TableProvider, useTableContext } from '../../context';
-import { useBreakpoint, useKeyboardNavigation, useRowReorder, useUndoRedo, useTreeData } from '../../hooks';
+import type { GridTableComponentProps } from './GridTable.types';
+import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
+import { TableProvider, useTableContext } from '@/context';
+import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo } from '@/hooks';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
 import { Pagination as BearPagination, Typography, Select, BearProvider } from '@forgedevstack/bear';
@@ -13,26 +13,9 @@ import { EmptyState } from '../EmptyState';
 import { MobileDrawer } from '../MobileDrawer';
 import { ContextMenu } from '../ContextMenu';
 import { StatusBar } from '../StatusBar';
-import { exportToCSV, exportToJSON, exportToExcel, exportToPDF, copyToClipboard, printTable } from '../../utils/export.utils';
-
-function isEffectEnabled(cfg: boolean | Record<string, unknown> | undefined): boolean {
-  if (cfg === true) return true;
-  if (cfg && typeof cfg === 'object' && cfg.enabled !== false) return true;
-  return false;
-}
-
-function resolveEffects(te?: TableEffects) {
-  if (!te) return { sort: false, row: false, hover: false, className: '' };
-  return {
-    sort: isEffectEnabled(te.sort as boolean | Record<string, unknown> | undefined),
-    row: isEffectEnabled(te.row as boolean | Record<string, unknown> | undefined),
-    hover: isEffectEnabled(te.hover as boolean | Record<string, unknown> | undefined),
-    className: te.className ?? '',
-  };
-}
-
-const DEFAULT_LAZY_INITIAL = 20;
-const DEFAULT_LAZY_BATCH = 10;
+import { copyToClipboard, exportToCSV, exportToExcel, exportToJSON, exportToPDF, printTable } from '@/utils/export.utils';
+import { resolveTableEffects } from './GridTable.utils';
+import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS } from '@constants/numbers.const';
 
 function GridTableContent<T extends RowData>({
   data,
@@ -57,8 +40,8 @@ function GridTableContent<T extends RowData>({
   onRowClick,
   onRowDoubleClick,
   onCellClick,
-  onRowSelect,
-  onSort,
+  onRowSelect: _onRowSelect,
+  onSort: _onSort,
   onFilter: _onFilter,
   onPageChange,
   onError: _onError,
@@ -72,9 +55,9 @@ function GridTableContent<T extends RowData>({
   renderFooter,
   className = '',
   style,
-  showOverflowTooltip,
-  enableCellAutoSizeOnDoubleClick,
-  subCellExpandTrigger,
+  showOverflowTooltip: _showOverflowTooltip,
+  enableCellAutoSizeOnDoubleClick: _enableCellAutoSizeOnDoubleClick,
+  subCellExpandTrigger: _subCellExpandTrigger,
   expandRowOnDoubleClick,
   themeMode,
   paginationConfig,
@@ -108,17 +91,14 @@ function GridTableContent<T extends RowData>({
   const showTableHeader = !shouldShowMobileView || scrollMobile;
   const mobileRootClass = scrollMobile ? 'gt-mobile gt-mobile-scroll' : stackedMobile ? 'gt-mobile gt-mobile-stacked' : '';
 
-  // -- Context menu state --
   const [ctxMenu, setCtxMenu] = useState<{ visible: boolean; x: number; y: number; context: CtxMenuCtx<T> | null }>({
     visible: false, x: 0, y: 0, context: null,
   });
 
-  // -- Keyboard navigation --
   const visibleCols = useMemo(() => columns.filter(c => !c.hidden), [columns]);
   const { focusedCell, setFocusedCell, handleKeyDown: kbHandleKeyDown, containerRef: kbRef } =
     useKeyboardNavigation(computed.paginatedData.length, visibleCols.length, kbConfig);
 
-  // -- Undo / Redo --
   const onCellEditRef = useRef(onCellEdit);
   onCellEditRef.current = onCellEdit;
   const undoRedo = useUndoRedo(
@@ -133,10 +113,8 @@ function GridTableContent<T extends RowData>({
     },
   );
 
-  // -- Tree data --
   const tree = useTreeData(data, treeConfig);
 
-  // -- Default context menu actions --
   const defaultCtxActions = useMemo((): ContextMenuAction<T>[] => {
     const acts: ContextMenuAction<T>[] = [];
     if (contextMenuConfig?.showCopy !== false) {
@@ -201,7 +179,7 @@ function GridTableContent<T extends RowData>({
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
   const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
 
-  const fx = useMemo(() => resolveEffects(tableEffects), [tableEffects]);
+  const fx = useMemo(() => resolveTableEffects(tableEffects), [tableEffects]);
 
   const shouldShowExport = useCallback((format: 'csv' | 'json' | 'excel' | 'pdf'): boolean => {
     if (enableExport === true) return true;
@@ -219,25 +197,22 @@ function GridTableContent<T extends RowData>({
   }, [defaultExpandedIds, actions]);
 
   const lazyEnabled = lazyLoad?.enabled ?? false;
-  const lazyInitial = lazyLoad?.initialRows ?? DEFAULT_LAZY_INITIAL;
-  const lazyBatch = lazyLoad?.batchSize ?? DEFAULT_LAZY_BATCH;
+  const lazyInitial = lazyLoad?.initialRows ?? DEFAULT_LAZY_INITIAL_ROWS;
+  const lazyBatch = lazyLoad?.batchSize ?? DEFAULT_LAZY_BATCH_SIZE;
   const [lazyVisibleCount, setLazyVisibleCount] = useState(lazyEnabled ? lazyInitial : Infinity);
   const [lazyLoading, setLazyLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Reset lazy count when data changes
   useEffect(() => {
     if (lazyEnabled) setLazyVisibleCount(lazyInitial);
   }, [lazyEnabled, lazyInitial, state.data.length]);
 
-  // Intersection observer for infinite scroll
   useEffect(() => {
     if (!lazyEnabled || !sentinelRef.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting && !lazyLoading) {
           setLazyLoading(true);
-          // Simulate a tiny delay so the loader is visible
           setTimeout(() => {
             setLazyVisibleCount((prev) => prev + lazyBatch);
             setLazyLoading(false);
@@ -259,10 +234,8 @@ function GridTableContent<T extends RowData>({
     [getRowId, data]
   );
 
-  // -- Row reorder --
   const rowReorder = useRowReorder<T>(data, getRowIdFn, onRowReorder);
 
-  // -- Cell edit + undo/redo integration --
   const handleCellSave = useCallback(
     (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => {
       if (undoRedoConfig?.enabled) {

@@ -4,6 +4,8 @@ import { Select } from '@forgedevstack/bear';
 import type { EditableCellProps } from './EditableCell.types';
 import type { RowData } from '../../types/row.types';
 import { useTableContext } from '../../context';
+import { BOOLEAN_TRUE_VALUE, KEY_ENTER, KEY_ESCAPE } from '@constants/keyboard.const';
+import { EDITABLE_CELL_BOOLEAN_OPTIONS } from './EditableCell.const';
 
 export function EditableCell<T extends RowData>(props: EditableCellProps<T>): ReactNode {
   const { value, row, columnId, config, onSave, children } = props;
@@ -62,14 +64,14 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
   const save = useCallback(() => {
     let parsed: unknown = draft;
     if (config.type === 'number') parsed = Number(draft);
-    if (config.type === 'boolean') parsed = draft === 'true';
+    if (config.type === 'boolean') parsed = draft === BOOLEAN_TRUE_VALUE;
     commitParsed(parsed, true);
   }, [draft, config.type, commitParsed]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') save();
-      if (e.key === 'Escape') cancel();
+      if (e.key === KEY_ENTER) save();
+      if (e.key === KEY_ESCAPE) cancel();
     },
     [save, cancel],
   );
@@ -111,14 +113,11 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
     return (
       <div className="gt-edit-wrapper">
         <Select
-          options={[
-            { value: 'true', label: translations.editYes },
-            { value: 'false', label: translations.editNo },
-          ]}
+          options={EDITABLE_CELL_BOOLEAN_OPTIONS(translations.editYes, translations.editNo)}
           value={draft}
           onChange={(v) => {
             setDraft(v);
-            commitParsed(v === 'true', true);
+            commitParsed(v === BOOLEAN_TRUE_VALUE, true);
           }}
           size="sm"
           fullWidth

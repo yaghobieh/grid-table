@@ -1,0 +1,27 @@
+# Grid Table Code Review Checklist
+
+Before merging:
+
+1) Structure
+- Component folder contains `Name.tsx`, `Name.types.ts`, `Name.const.ts`, `index.ts`.
+- Shared logic is extracted into `hooks/` and `utils/`.
+
+2) Types
+- No new inline interfaces in implementation files.
+- Strong typing for callbacks and reducers; no implicit `any`.
+
+3) Constants
+- No magic numbers or repeated key strings in component files.
+- Keyboard keys, labels, and thresholds come from constants.
+
+4) UI consistency
+- Interactive controls use Bear primitives.
+- SVG paths/icons are reusable and customizable through props when appropriate.
+
+5) Performance
+- Avoid repeated `find` lookups inside list rendering loops.
+- Precompute indexed maps and derived arrays with `useMemo`.
+
+6) Accessibility
+- Buttons have aria labels.
+- Toggle controls expose correct `aria-expanded` state.

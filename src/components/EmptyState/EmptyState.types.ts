@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 export interface EmptyStateProps {
   title?: string;
@@ -8,4 +8,3 @@ export interface EmptyStateProps {
   className?: string;
   style?: CSSProperties;
 }
-

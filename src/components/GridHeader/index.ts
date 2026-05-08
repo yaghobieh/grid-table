@@ -1,3 +1,3 @@
 export { GridHeader } from './GridHeader';
-export type { GridHeaderProps, GridHeaderCellProps } from './types';
+export type { GridHeaderCellProps, GridHeaderProps } from './GridHeader.types';
 

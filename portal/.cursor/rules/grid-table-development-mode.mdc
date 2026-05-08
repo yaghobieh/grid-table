@@ -1,0 +1,17 @@
+# Grid Table Portal Development Mode
+
+## Scope
+- Apply to `portal/src/`.
+- Keep portal docs/demo implementation aligned with library architecture.
+
+## Standards
+- Use alias imports and avoid long relative paths.
+- No magic numbers/strings in pages/components; use constants.
+- Keep component/types/constants split (`Name.tsx`, `Name.types.ts`, `Name.const.ts` when applicable).
+- Use Bear primitives for controls and interactive UI where possible.
+- Prefer `clsx` for conditional class composition.
+- Avoid inline style objects in TSX; prefer classes/utilities and extracted style helpers.
+
+## Validation
+- Run `npm run build` in portal after substantial changes.
+- Verify local library package integration before release.

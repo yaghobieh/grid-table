@@ -15,7 +15,7 @@ export const es: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Grupos fijados, motor de fórmulas, vistas guardadas, filtros avanzados',
+    badgeText: 'Vistas guardadas, filtros, grupos, fórmulas, virtualización',
     title: 'Grid Table',
     subtitle: 'El Data Grid de React para ForgeStack',
     typewriterTexts: [
@@ -286,6 +286,36 @@ export const es: TranslationStrings = {
     ],
   },
 
+  savedViewsDemo: {
+    title: 'Vistas guardadas',
+    description: 'Cambia presets con nombre que restauran orden, filtros, columnas ocultas y densidad.',
+  },
+
+  advancedFilterDemo: {
+    title: 'Constructor de filtros avanzado',
+    description: 'Crea reglas AND/OR anidadas con el panel FilterBuilder integrado.',
+  },
+
+  pinnedRowGroupsDemo: {
+    title: 'Grupos fijados + pies agregados',
+    description:
+      'Pasa rowGroups con by, footer (p. ej. sum:amount) y pinned: true. Las filas de detalle hacen scroll; la cuadrícula genera un pie por grupo (Finance Total, Marketing Total) y lo fija al fondo del cuerpo. Distinto del total global en la barra de estado.',
+    explainerTitle: 'Qué estás viendo',
+    explainerItems: [
+      'Filas de detalle agrupadas por la columna group — Finance, Marketing, Operations.',
+      'Los pies son filas sintéticas generadas por la cuadrícula, no están en tus datos.',
+      'Finance Total / Marketing Total / Operations Total suman amount por grupo.',
+      'Al hacer scroll, los pies fijados permanecen visibles al fondo del área de scroll.',
+      'Total Amount en la barra de estado es el gran total de todas las filas de detalle.',
+    ],
+    scrollHint: 'Consejo: desplázate dentro del cuerpo de la tabla para ver los pies fijados.',
+  },
+
+  formulaDemo: {
+    title: 'Motor de fórmulas de columna',
+    description: 'Columnas calculadas a partir de campos base con expresiones seguras.',
+  },
+
   virtualizationDemo: {
     title: 'Listas grandes y lazy load',
     lead: 'La muestra mantiene 500 filas en memoria mientras lazyLoad las muestra por lotes al hacer scroll. Cambia preajustes o números, desactiva lazyLoad para cargar todo de golpe, y usa el tour para recorrer la UI.',
@@ -297,6 +327,7 @@ export const es: TranslationStrings = {
     batchSize: 'batchSize',
     maxHeight: 'maxHeight (px)',
     lazyEnabled: 'lazyLoad.enabled',
+    virtualizeEnabled: 'virtualize (ventana)',
     startTour: 'Tour de controles',
     tourToolbarTitle: 'Ajustes de lazy load',
     tourToolbarBody: 'Cambia preajustes o edita números. Lotes pequeños se sienten más ágiles; los grandes reducen revelados al scroll.',
@@ -308,6 +339,56 @@ export const es: TranslationStrings = {
     title: 'Historial de Cambios',
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
+    versions: {
+      '1.1.0': {
+        highlights: [
+          'Vistas guardadas — presets con orden, filtros, columnas, paginación y densidad',
+          'Constructor de filtros avanzado — reglas AND/OR anidadas con FilterBuilder',
+          'Grupos de filas fijados — agrupar por campo con pies agregados al fondo',
+          'Motor de fórmulas de columna — columnas calculadas con expresiones seguras',
+          'Virtualización por ventana — virtualize renderiza solo filas visibles',
+          'Grupos de columnas, formato condicional, master-detail, densidad, persistencia',
+        ],
+      },
+      '1.0.9': {
+        highlights: [
+          'mobileLayout — scroll horizontal por defecto en pantallas pequeñas',
+          'manualPagination + totalRowCount para paginación en servidor',
+          'Portal: hub Theme & Playground, nuevos demos, documentación de patrones',
+          'Hover más suave; iconos táctiles; corrección popstate en Forge Compass',
+        ],
+      },
+      '1.0.7': {
+        highlights: [
+          'Navegación por teclado',
+          'Menú contextual, datos en árbol, barra de estado',
+          'Reordenar filas, export Excel/PDF, portapapeles, deshacer/rehacer',
+          'Fijar columnas, filas congeladas, modo impresión',
+        ],
+      },
+      '1.0.6': {
+        highlights: [
+          'Edición de celdas, export CSV/JSON, Playground interactivo',
+          'Búsqueda Cmd+K, changelog, efectos, lazy load, demos Finance y HR',
+          'Theme Builder e internacionalización',
+        ],
+      },
+      '1.0.2': {
+        highlights: ['Migración a SCSS', 'CSS compilado incluido', 'Orden de exports en package.json'],
+      },
+      '1.0.1': {
+        highlights: ['Primera publicación npm con alcance @forgedevstack'],
+      },
+      '1.0.0': {
+        highlights: [
+          'Lanzamiento inicial',
+          'Ordenar, filtrar, paginar',
+          'Arrastrar columnas, redimensionar',
+          'Selección y expansión de filas',
+          'Drawer móvil, tema claro/oscuro',
+        ],
+      },
+    },
   },
 
   playground: {

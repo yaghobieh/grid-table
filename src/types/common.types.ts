@@ -23,7 +23,9 @@ export type FilterOperator =
   | 'lessThanOrEqual'
   | 'between'
   | 'isEmpty'
-  | 'isNotEmpty';
+  | 'isNotEmpty'
+  | 'in'
+  | 'notIn';
 
 export type Alignment = 'left' | 'center' | 'right';
 

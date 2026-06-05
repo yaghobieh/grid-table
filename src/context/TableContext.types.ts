@@ -74,6 +74,7 @@ export interface TableContextActions<T extends RowData = RowData> {
   toggleColumnVisibility: (columnId: string) => void;
   pinColumn: (columnId: string, side: 'left' | 'right' | null) => void;
   resetColumns: () => void;
+  setColumnStates: (states: ColumnState[]) => void;
   setDraggingColumn: (columnId: string | null) => void;
   setResizingColumn: (columnId: string | null) => void;
   setActiveFilterColumn: (columnId: string | null) => void;

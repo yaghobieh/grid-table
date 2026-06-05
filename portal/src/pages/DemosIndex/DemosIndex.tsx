@@ -118,10 +118,10 @@ export const DemosIndex: FC = () => {
                         )}
                       </Flex>
                       <Typography variant="h3" className="text-base font-bold mb-1">
-                        {demoT?.title ?? demo.title}
+                        {demoT?.title ?? demo.id}
                       </Typography>
                       <Typography className="opacity-50 text-sm leading-relaxed" style={{ minHeight: 44 }}>
-                        {demoT?.description ?? demo.description}
+                        {demoT?.description ?? ''}
                       </Typography>
                       <Flex align="center" gap={2} className="mt-3">
                         <Typography variant="body2" style={{ color: 'var(--grid-accent)', fontSize: '0.8rem' }} className="font-medium">

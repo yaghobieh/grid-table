@@ -1,67 +1,47 @@
 import type { FC } from 'react';
-import { useMemo, useState } from 'react';
 import { Badge, Button, Flex, Typography, BearIcons } from '@forgedevstack/bear';
 import { GridTable } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
-
-const DATA = [
-  { id: 1, name: 'Acme Inc', status: 'Active', priority: 'High', owner: 'Alice' },
-  { id: 2, name: 'Blue Labs', status: 'Pending', priority: 'Medium', owner: 'Bob' },
-  { id: 3, name: 'Core Media', status: 'Active', priority: 'Low', owner: 'Diana' },
-  { id: 4, name: 'Delta Ads', status: 'Paused', priority: 'High', owner: 'Eli' },
-];
-
-const COLUMNS = [
-  { id: 'name', accessor: 'name', header: 'Account', sortable: true },
-  { id: 'status', accessor: 'status', header: 'Status', sortable: true, filterable: true },
-  { id: 'priority', accessor: 'priority', header: 'Priority', sortable: true, filterable: true },
-  { id: 'owner', accessor: 'owner', header: 'Owner', sortable: true, filterable: true },
-];
-
-type ViewPreset = 'all' | 'active' | 'priorityHigh';
+import { useI18n } from '@/i18n';
+import {
+  SAVED_VIEWS_ACTIVE_VIEW_ID,
+  SAVED_VIEWS_DEMO_COLUMNS,
+  SAVED_VIEWS_DEMO_DATA,
+  SAVED_VIEWS_DEMO_VIEWS,
+} from './SavedViewsDemo.const';
 
 export const SavedViewsDemo: FC = () => {
   const themeMode = useGridTableThemeMode();
   const { openDemosIndex } = useDemoNavigation();
-  const [viewPreset, setViewPreset] = useState<ViewPreset>('all');
-
-  const filteredData = useMemo(() => {
-    if (viewPreset === 'active') {
-      return DATA.filter((row) => row.status === 'Active');
-    }
-    if (viewPreset === 'priorityHigh') {
-      return DATA.filter((row) => row.priority === 'High');
-    }
-    return DATA;
-  }, [viewPreset]);
+  const { t } = useI18n();
 
   return (
     <Layout>
       <div className="max-w-[1400px] mx-auto px-6 py-8">
         <Flex align="center" gap={3} className="mb-2">
           <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>
-            Demos
+            {t.common.demos}
           </Button>
-          <Badge variant="success">New</Badge>
+          <Badge variant="success">v1.1.0</Badge>
         </Flex>
-        <Typography variant="h2" className="text-2xl font-bold mb-1">Saved Views</Typography>
+        <Typography variant="h2" className="text-2xl font-bold mb-1">{t.savedViewsDemo.title}</Typography>
         <Typography variant="body2" className="opacity-50 mb-4">
-          Simulated saved views that switch table state presets.
+          {t.savedViewsDemo.description}
         </Typography>
-        <Flex gap={2} className="mb-4">
-          <Button size="sm" variant={viewPreset === 'all' ? 'solid' : 'ghost'} onClick={() => setViewPreset('all')}>All</Button>
-          <Button size="sm" variant={viewPreset === 'active' ? 'solid' : 'ghost'} onClick={() => setViewPreset('active')}>Active View</Button>
-          <Button size="sm" variant={viewPreset === 'priorityHigh' ? 'solid' : 'ghost'} onClick={() => setViewPreset('priorityHigh')}>High Priority View</Button>
-        </Flex>
         <GridTable
-          data={filteredData}
-          columns={COLUMNS}
+          data={SAVED_VIEWS_DEMO_DATA}
+          columns={SAVED_VIEWS_DEMO_COLUMNS}
           showPagination={false}
           showGlobalFilter
           stickyHeader
           themeMode={themeMode}
           tableEffects={{ hover: true }}
+          savedViews={{
+            views: SAVED_VIEWS_DEMO_VIEWS,
+            activeViewId: SAVED_VIEWS_ACTIVE_VIEW_ID,
+            showViewSwitcher: true,
+          }}
         />
       </div>
     </Layout>

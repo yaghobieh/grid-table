@@ -3,7 +3,15 @@ import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './GridTable.types';
 import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
 import { TableProvider, useTableContext } from '@/context';
-import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo } from '@/hooks';
+import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo, useSavedViews, useVirtualizedWindow } from '@/hooks';
+import { FilterBuilder } from '../FilterBuilder';
+import { getRowGroupMeta } from '@/utils/rowGroups.utils';
+import {
+  buildDisplayRows,
+  resolveVirtualizeConfig,
+  shouldEnableVirtualization,
+  sliceVirtualRows,
+} from './GridTable.display.utils';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
 import { Pagination as BearPagination, Typography, Select, BearProvider } from '@forgedevstack/bear';
@@ -83,8 +91,24 @@ function GridTableContent<T extends RowData>({
   autoFit: _autoFit,
   enableCopy,
   mobileLayout = 'scroll',
-}: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'>): ReactNode {
+  savedViews,
+  advancedFilter: advancedFilterConfig,
+  advancedFilterWhere,
+  onAdvancedFilterChange,
+  rowGroups,
+  columnGroups,
+  conditionalFormat: _conditionalFormat,
+  masterDetail,
+  virtualize,
+  density = 'comfortable',
+  columnStatePersistence,
+  touchGestures,
+}: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'> & {
+  advancedFilterWhere?: import('@/types/filter.types').FilterTreeGroup | null;
+  onAdvancedFilterChange?: (where: import('@/types/filter.types').FilterTreeGroup | null) => void;
+}): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
+  const savedViewsApi = useSavedViews(savedViews);
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
   const stackedMobile = shouldShowMobileView && mobileLayout === 'stacked';
   const scrollMobile = shouldShowMobileView && mobileLayout === 'scroll';
@@ -319,10 +343,63 @@ function GridTableContent<T extends RowData>({
 
   const isEmpty = computed.paginatedData.length === 0;
 
+  const displayPipeline = useMemo(
+    () => buildDisplayRows({
+      rows: computed.paginatedData,
+      columns,
+      rowGroups,
+    }),
+    [computed.paginatedData, columns, rowGroups],
+  );
+
   const displayData = useMemo(() => {
-    if (!lazyEnabled) return computed.paginatedData;
-    return computed.paginatedData.slice(0, lazyVisibleCount);
-  }, [lazyEnabled, lazyVisibleCount, computed.paginatedData]);
+    const baseRows = displayPipeline.bodyRows;
+    if (!lazyEnabled) return baseRows;
+    return baseRows.slice(0, lazyVisibleCount);
+  }, [lazyEnabled, lazyVisibleCount, displayPipeline.bodyRows]);
+
+  const virtualizeConfig = useMemo(() => resolveVirtualizeConfig(virtualize), [virtualize]);
+  const virtualizationEnabled = shouldEnableVirtualization(displayData.length, virtualizeConfig);
+  const virtualWindow = useVirtualizedWindow({
+    itemCount: displayData.length,
+    enabled: virtualizationEnabled,
+    rowHeight: virtualizeConfig.rowHeight,
+    overscan: virtualizeConfig.overscan,
+  });
+  const virtualizedRows = useMemo(
+    () => sliceVirtualRows(displayData, virtualWindow.startIndex, virtualWindow.endIndex),
+    [displayData, virtualWindow.startIndex, virtualWindow.endIndex],
+  );
+  const bodyRows = virtualizationEnabled ? virtualizedRows : displayData;
+
+  const mergedFrozenBottom = useMemo(() => {
+    const manual = frozenRows?.bottom ?? [];
+    return [...manual, ...displayPipeline.pinnedBottomRows];
+  }, [frozenRows?.bottom, displayPipeline.pinnedBottomRows]);
+
+  const effectiveRowExpansion = masterDetail?.enabled && masterDetail.renderPanel
+    ? (row: T, rowId: string | number) => masterDetail.renderPanel?.(row) ?? null
+    : renderRowExpansion;
+
+  const mergedRowClassName = useCallback(
+    (row: T, index: number) => {
+      const base = getRowClassName?.(row, index) ?? '';
+      const meta = getRowGroupMeta(row);
+      if (meta?.isGroupFooter) return `${base} gt-row-group-footer`.trim();
+      return base;
+    },
+    [getRowClassName],
+  );
+
+  useEffect(() => {
+    if (!columnStatePersistence?.persistKey) return;
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(
+      columnStatePersistence.persistKey,
+      JSON.stringify(state.columnStates),
+    );
+    columnStatePersistence.onStateChange?.(state.columnStates);
+  }, [state.columnStates, columnStatePersistence]);
 
   const hasMoreLazy = lazyEnabled && lazyVisibleCount < computed.paginatedData.length;
 
@@ -383,13 +460,52 @@ function GridTableContent<T extends RowData>({
   const tableContent = (
     <div
       ref={kbConfig?.enabled ? kbRef as React.RefObject<HTMLDivElement> : undefined}
-      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
+      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} gt-density-${density} ${touchGestures?.enabled ? 'gt-touch-gestures' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
       style={containerStyle}
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
+
+      {columnGroups && columnGroups.length > 0 && (
+        <div className="grid-table-column-groups" role="row">
+          {columnGroups.map((group) => (
+            <div key={group.id} className="grid-table-column-group-band">
+              <span className="grid-table-column-group-label">{group.label}</span>
+              <span className="grid-table-column-group-count">{group.columnIds.length} cols</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {savedViews?.showViewSwitcher && savedViewsApi.views.length > 0 && (
+        <div className="grid-table-view-switcher">
+          {savedViewsApi.views.map((view) => (
+            <button
+              key={view.id}
+              type="button"
+              className={`grid-table-view-chip ${savedViewsApi.activeViewId === view.id ? 'is-active' : ''}`}
+              onClick={() => savedViewsApi.setActiveViewId(view.id)}
+            >
+              {view.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {advancedFilterConfig?.showBuilder && onAdvancedFilterChange && (
+        <FilterBuilder
+          value={advancedFilterWhere ?? null}
+          fields={columns.map((col) => ({
+            id: col.id,
+            label: typeof col.header === 'string' ? col.header : col.id,
+          }))}
+          onChange={onAdvancedFilterChange}
+          onApply={onAdvancedFilterChange}
+          className="grid-table-advanced-filter"
+        />
+      )}
 
       {showGlobalFilter && (
         <div className="grid-table-toolbar">
@@ -577,7 +693,11 @@ function GridTableContent<T extends RowData>({
         </div>
       )}
 
-      <div className="grid-table-container overflow-auto">
+      <div
+        ref={virtualizationEnabled ? virtualWindow.scrollRef : undefined}
+        className="grid-table-container overflow-auto"
+        style={virtualizationEnabled ? { maxHeight: dimensions?.maxHeight ? undefined : '480px' } : undefined}
+      >
         {showTableHeader && (
           <GridHeader
             columns={columns}
@@ -611,6 +731,10 @@ function GridTableContent<T extends RowData>({
           )
         ) : (
           <>
+            {virtualizationEnabled && (
+              <div style={{ height: virtualWindow.offsetY }} aria-hidden />
+            )}
+
             {frozenRows?.top && frozenRows.top.length > 0 && (
               <GridBody
                 data={frozenRows.top}
@@ -657,10 +781,10 @@ function GridTableContent<T extends RowData>({
               onRowSelect={handleRowSelect}
               onRowExpand={handleRowExpand}
               getRowId={getRowIdFn}
-              getRowClassName={getRowClassName}
+              getRowClassName={mergedRowClassName}
               getRowStyle={getRowStyle}
               isRowDisabled={isRowDisabled}
-              renderRowExpansion={renderRowExpansion}
+              renderRowExpansion={effectiveRowExpansion}
               onRowContextMenu={contextMenuConfig?.enabled ? handleContextMenu : undefined}
               rowDragProps={rowReorderConfig?.enabled ? rowReorder.getRowDragProps : undefined}
               draggingRowId={rowReorder.draggingRowId}
@@ -688,9 +812,16 @@ function GridTableContent<T extends RowData>({
               </div>
             )}
 
-            {frozenRows?.bottom && frozenRows.bottom.length > 0 && (
+            {virtualizationEnabled && (
+              <div
+                style={{ height: Math.max(virtualWindow.totalHeight - virtualWindow.offsetY - bodyRows.length * (virtualizeConfig.rowHeight ?? 48), 0) }}
+                aria-hidden
+              />
+            )}
+
+            {mergedFrozenBottom.length > 0 && (
               <GridBody
-                data={frozenRows.bottom}
+                data={mergedFrozenBottom}
                 columns={columns}
                 columnStates={state.columnStates}
                 className={`gt-frozen-bottom ${classNames.body || ''}`}
@@ -826,10 +957,21 @@ export function GridTable<T extends RowData = RowData>({
   themeMode,
   themeOverride,
   studio = false,
+  advancedFilter,
+  columnStatePersistence,
   ...props
 }: GridTableComponentProps<T>): ReactNode {
   const [studioData, setStudioData] = useState(data);
   const [studioOpen, setStudioOpen] = useState(true);
+  const [advancedFilterWhere, setAdvancedFilterWhere] = useState(advancedFilter?.where ?? null);
+
+  const effectiveFilterConfig = useMemo(
+    () => ({
+      ...filterConfig,
+      advancedFilter: advancedFilterWhere,
+    }),
+    [filterConfig, advancedFilterWhere],
+  );
   useEffect(() => {
     if (studio) setStudioData(data);
   }, [data, studio]);
@@ -863,7 +1005,7 @@ export function GridTable<T extends RowData = RowData>({
       translations={translations}
       mobileBreakpoint={mobileBreakpoint}
       paginationConfig={paginationConfig}
-      filterConfig={filterConfig}
+      filterConfig={effectiveFilterConfig}
       sortConfig={sortConfig}
       enableMultiSort={sortConfig?.multiSort}
       enableMultiSelect={enableMultiSelect}
@@ -883,6 +1025,13 @@ export function GridTable<T extends RowData = RowData>({
         themeMode={themeMode}
         paginationConfig={paginationConfig}
         gridThemeVars={gridThemeVars}
+        advancedFilter={advancedFilter}
+        advancedFilterWhere={advancedFilterWhere}
+        onAdvancedFilterChange={(where) => {
+          setAdvancedFilterWhere(where);
+          advancedFilter?.onChange?.(where);
+        }}
+        columnStatePersistence={columnStatePersistence}
         {...props}
       />
     </TableProvider>

@@ -1,60 +1,89 @@
 import type { FilterOperator, FilterValue } from '../types';
+import { EMPTY_STRING } from '@constants/strings.const';
+import {
+  FILTER_OP_BETWEEN,
+  FILTER_OP_CONTAINS,
+  FILTER_OP_ENDS_WITH,
+  FILTER_OP_EQUALS,
+  FILTER_OP_GREATER_THAN,
+  FILTER_OP_GREATER_THAN_OR_EQUAL,
+  FILTER_OP_IN,
+  FILTER_OP_IS_EMPTY,
+  FILTER_OP_IS_NOT_EMPTY,
+  FILTER_OP_LESS_THAN,
+  FILTER_OP_LESS_THAN_OR_EQUAL,
+  FILTER_OP_NOT_CONTAINS,
+  FILTER_OP_NOT_EQUALS,
+  FILTER_OP_NOT_IN,
+  FILTER_OP_STARTS_WITH,
+} from '@constants/filterOperators.const';
+import { TWO } from '@constants/numbers.const';
 
 export function defaultFilter(
   value: unknown,
   filterValue: unknown,
   operator: FilterOperator
 ): boolean {
-  if (filterValue === null || filterValue === undefined || filterValue === '') {
+  if (filterValue === null || filterValue === undefined || filterValue === EMPTY_STRING) {
     return true;
   }
 
-  const strValue = String(value ?? '').toLowerCase();
+  const strValue = String(value ?? EMPTY_STRING).toLowerCase();
   const strFilter = String(filterValue).toLowerCase();
 
   switch (operator) {
-    case 'equals':
+    case FILTER_OP_EQUALS:
       return strValue === strFilter;
 
-    case 'notEquals':
+    case FILTER_OP_NOT_EQUALS:
       return strValue !== strFilter;
 
-    case 'contains':
+    case FILTER_OP_CONTAINS:
       return strValue.includes(strFilter);
 
-    case 'notContains':
+    case FILTER_OP_NOT_CONTAINS:
       return !strValue.includes(strFilter);
 
-    case 'startsWith':
+    case FILTER_OP_STARTS_WITH:
       return strValue.startsWith(strFilter);
 
-    case 'endsWith':
+    case FILTER_OP_ENDS_WITH:
       return strValue.endsWith(strFilter);
 
-    case 'greaterThan':
+    case FILTER_OP_GREATER_THAN:
       return Number(value) > Number(filterValue);
 
-    case 'lessThan':
+    case FILTER_OP_LESS_THAN:
       return Number(value) < Number(filterValue);
 
-    case 'greaterThanOrEqual':
+    case FILTER_OP_GREATER_THAN_OR_EQUAL:
       return Number(value) >= Number(filterValue);
 
-    case 'lessThanOrEqual':
+    case FILTER_OP_LESS_THAN_OR_EQUAL:
       return Number(value) <= Number(filterValue);
 
-    case 'between':
-      if (Array.isArray(filterValue) && filterValue.length === 2) {
+    case FILTER_OP_BETWEEN:
+      if (Array.isArray(filterValue) && filterValue.length === TWO) {
         const numValue = Number(value);
         return numValue >= Number(filterValue[0]) && numValue <= Number(filterValue[1]);
       }
       return true;
 
-    case 'isEmpty':
-      return value === null || value === undefined || strValue === '';
+    case FILTER_OP_IS_EMPTY:
+      return value === null || value === undefined || strValue === EMPTY_STRING;
 
-    case 'isNotEmpty':
-      return value !== null && value !== undefined && strValue !== '';
+    case FILTER_OP_IS_NOT_EMPTY:
+      return value !== null && value !== undefined && strValue !== EMPTY_STRING;
+
+    case FILTER_OP_IN: {
+      const list = Array.isArray(filterValue) ? filterValue : [filterValue];
+      return list.some((item) => String(item) === String(value ?? EMPTY_STRING));
+    }
+
+    case FILTER_OP_NOT_IN: {
+      const list = Array.isArray(filterValue) ? filterValue : [filterValue];
+      return !list.some((item) => String(item) === String(value ?? EMPTY_STRING));
+    }
 
     default:
       return strValue.includes(strFilter);
@@ -80,7 +109,7 @@ export function applyFilters<T>(
         if (!accessor) return false;
 
         const value = typeof accessor === 'function' ? accessor(row) : (row as Record<string, unknown>)[accessor as string];
-        return String(value ?? '').toLowerCase().includes(searchLower);
+        return String(value ?? EMPTY_STRING).toLowerCase().includes(searchLower);
       });
     });
   }
@@ -97,4 +126,3 @@ export function applyFilters<T>(
 
   return result;
 }
-

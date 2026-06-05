@@ -1,47 +1,54 @@
 import type { FC } from 'react';
 import { useMemo, useState } from 'react';
 import { Button, Typography, Flex, Badge, BearIcons, Switch, Tour, Input } from '@forgedevstack/bear';
-import type { TourStep } from '@forgedevstack/bear';
 import { GridTable } from '@forgedevstack/grid-table';
 import { Layout } from '@/components/Layout';
 import { DemoCodeSection } from '@/components/DemoCodeSection';
-import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
+import { useDemoNavigation } from '@/hooks';
 import { useI18n } from '@/i18n';
 import {
+  VIRTUAL_DEMO_INPUT_WIDTH_PX,
+  VIRTUAL_DEMO_MAX_HEIGHT_INPUT_WIDTH_PX,
+  VIRTUAL_DEMO_MIN_MAX_HEIGHT,
+  VIRTUAL_DEMO_MIN_ROWS,
+  VIRTUAL_DEMO_VIRTUALIZE_OVERSCAN,
+  VIRTUAL_DEMO_VIRTUALIZE_ROW_HEIGHT,
+  VIRTUAL_DEMO_VIRTUALIZE_THRESHOLD,
+} from '@/constants/numbers.const';
+import {
   buildVirtualDemoRows,
-  VIRTUAL_DEMO_COLUMNS,
-  VIRTUAL_DEMO_ROW_COUNT,
+  buildVirtualDemoTourSteps,
   buildVirtualizationDemoSource,
+  VIRTUAL_DEMO_COLUMNS,
+  VIRTUAL_DEMO_DEFAULT_BATCH_SIZE,
+  VIRTUAL_DEMO_DEFAULT_INITIAL_ROWS,
+  VIRTUAL_DEMO_DEFAULT_MAX_HEIGHT,
+  VIRTUAL_DEMO_PRESETS,
+  VIRTUAL_DEMO_TOUR_TARGET_GRID,
+  VIRTUAL_DEMO_TOUR_TARGET_TOOLBAR,
+  type VirtualizationPresetKind,
 } from './VirtualizationDemo.const';
 
 export const VirtualizationDemo: FC = () => {
   const { t } = useI18n();
-  const themeMode = useGridTableThemeMode();
+  const vt = t.virtualizationDemo;
   const { openDemosIndex } = useDemoNavigation();
   const data = useMemo(buildVirtualDemoRows, []);
-  const [initialRows, setInitialRows] = useState(40);
-  const [batchSize, setBatchSize] = useState(40);
-  const [maxHeight, setMaxHeight] = useState(420);
-  const [lazyEnabled, setLazyEnabled] = useState(true);
+  const [initialRows, setInitialRows] = useState(VIRTUAL_DEMO_DEFAULT_INITIAL_ROWS);
+  const [batchSize, setBatchSize] = useState(VIRTUAL_DEMO_DEFAULT_BATCH_SIZE);
+  const [maxHeight, setMaxHeight] = useState(VIRTUAL_DEMO_DEFAULT_MAX_HEIGHT);
+  const [lazyEnabled, setLazyEnabled] = useState(false);
+  const [virtualizeEnabled, setVirtualizeEnabled] = useState(true);
   const [tourOpen, setTourOpen] = useState(false);
 
-  const vt = t.virtualizationDemo;
-
-  const tourSteps: TourStep[] = useMemo(
-    () => [
-      {
-        target: '#lazy-demo-toolbar',
-        title: vt.tourToolbarTitle,
-        description: vt.tourToolbarBody,
-        placement: 'bottom',
-      },
-      {
-        target: '#lazy-demo-grid',
-        title: vt.tourGridTitle,
-        description: vt.tourGridBody,
-        placement: 'top',
-      },
-    ],
+  const tourSteps = useMemo(
+    () =>
+      buildVirtualDemoTourSteps({
+        tourToolbarTitle: vt.tourToolbarTitle,
+        tourToolbarBody: vt.tourToolbarBody,
+        tourGridTitle: vt.tourGridTitle,
+        tourGridBody: vt.tourGridBody,
+      }),
     [vt.tourToolbarTitle, vt.tourToolbarBody, vt.tourGridTitle, vt.tourGridBody],
   );
 
@@ -56,20 +63,11 @@ export const VirtualizationDemo: FC = () => {
     [initialRows, batchSize, maxHeight, lazyEnabled],
   );
 
-  const applyPreset = (kind: 'dense' | 'default' | 'heavy') => {
-    if (kind === 'dense') {
-      setInitialRows(20);
-      setBatchSize(20);
-      setMaxHeight(360);
-    } else if (kind === 'default') {
-      setInitialRows(40);
-      setBatchSize(40);
-      setMaxHeight(420);
-    } else {
-      setInitialRows(80);
-      setBatchSize(80);
-      setMaxHeight(520);
-    }
+  const applyPreset = (kind: VirtualizationPresetKind) => {
+    const preset = VIRTUAL_DEMO_PRESETS[kind];
+    setInitialRows(preset.initialRows);
+    setBatchSize(preset.batchSize);
+    setMaxHeight(preset.maxHeight);
   };
 
   return (
@@ -89,7 +87,7 @@ export const VirtualizationDemo: FC = () => {
         </Typography>
 
         <div
-          id="lazy-demo-toolbar"
+          id={VIRTUAL_DEMO_TOUR_TARGET_TOOLBAR}
           className="mb-4 rounded-xl p-4 space-y-4"
           style={{ border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}
         >
@@ -116,8 +114,20 @@ export const VirtualizationDemo: FC = () => {
           <Flex align="center" gap={4} wrap="wrap">
             <Switch
               checked={lazyEnabled}
-              onCheckedChange={setLazyEnabled}
+              onCheckedChange={(checked) => {
+                setLazyEnabled(checked);
+                if (checked) setVirtualizeEnabled(false);
+              }}
               label={vt.lazyEnabled}
+              size="sm"
+            />
+            <Switch
+              checked={virtualizeEnabled}
+              onCheckedChange={(checked) => {
+                setVirtualizeEnabled(checked);
+                if (checked) setLazyEnabled(false);
+              }}
+              label={vt.virtualizeEnabled}
               size="sm"
             />
             <Flex align="center" gap={2}>
@@ -127,9 +137,9 @@ export const VirtualizationDemo: FC = () => {
               <Input
                 type="number"
                 size="sm"
-                style={{ width: 72 }}
+                style={{ width: VIRTUAL_DEMO_INPUT_WIDTH_PX }}
                 value={String(initialRows)}
-                onChange={(e) => setInitialRows(Math.max(1, Number(e.target.value) || 1))}
+                onChange={(e) => setInitialRows(Math.max(VIRTUAL_DEMO_MIN_ROWS, Number(e.target.value) || VIRTUAL_DEMO_MIN_ROWS))}
               />
             </Flex>
             <Flex align="center" gap={2}>
@@ -139,9 +149,9 @@ export const VirtualizationDemo: FC = () => {
               <Input
                 type="number"
                 size="sm"
-                style={{ width: 72 }}
+                style={{ width: VIRTUAL_DEMO_INPUT_WIDTH_PX }}
                 value={String(batchSize)}
-                onChange={(e) => setBatchSize(Math.max(1, Number(e.target.value) || 1))}
+                onChange={(e) => setBatchSize(Math.max(VIRTUAL_DEMO_MIN_ROWS, Number(e.target.value) || VIRTUAL_DEMO_MIN_ROWS))}
               />
             </Flex>
             <Flex align="center" gap={2}>
@@ -151,15 +161,15 @@ export const VirtualizationDemo: FC = () => {
               <Input
                 type="number"
                 size="sm"
-                style={{ width: 88 }}
+                style={{ width: VIRTUAL_DEMO_MAX_HEIGHT_INPUT_WIDTH_PX }}
                 value={String(maxHeight)}
-                onChange={(e) => setMaxHeight(Math.max(120, Number(e.target.value) || 120))}
+                onChange={(e) => setMaxHeight(Math.max(VIRTUAL_DEMO_MIN_MAX_HEIGHT, Number(e.target.value) || VIRTUAL_DEMO_MIN_MAX_HEIGHT))}
               />
             </Flex>
           </Flex>
         </div>
 
-        <div id="lazy-demo-grid" className="relative">
+        <div id={VIRTUAL_DEMO_TOUR_TARGET_GRID} className="relative">
           <div className="dark">
             <GridTable
               data={data}
@@ -177,6 +187,16 @@ export const VirtualizationDemo: FC = () => {
                       batchSize,
                     }
                   : undefined
+              }
+              virtualize={
+                virtualizeEnabled && !lazyEnabled
+                  ? {
+                      enabled: true,
+                      threshold: VIRTUAL_DEMO_VIRTUALIZE_THRESHOLD,
+                      rowHeight: VIRTUAL_DEMO_VIRTUALIZE_ROW_HEIGHT,
+                      overscan: VIRTUAL_DEMO_VIRTUALIZE_OVERSCAN,
+                    }
+                  : false
               }
               tableEffects={{ hover: true }}
             />

@@ -15,7 +15,7 @@ export const he: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'קבוצות מוצמדות, מנוע נוסחאות, תצוגות שמורות, בונה פילטרים מתקדם',
+    badgeText: 'תצוגות שמורות, מסננים, קבוצות, נוסחאות, וירטואליזציה',
     title: 'Grid Table',
     subtitle: 'גריד הנתונים של React ל־ForgeStack',
     typewriterTexts: [
@@ -282,6 +282,36 @@ export const he: TranslationStrings = {
     ],
   },
 
+  savedViewsDemo: {
+    title: 'תצוגות שמורות',
+    description: 'החלפת פריסות שמורות שמשחזרות מיון, מסננים, עמודות מוסתרות וצפיפות.',
+  },
+
+  advancedFilterDemo: {
+    title: 'בונה מסננים מתקדם',
+    description: 'בניית כללי AND/OR מקוננים עם פאנל FilterBuilder מובנה.',
+  },
+
+  pinnedRowGroupsDemo: {
+    title: 'קבוצות שורות נעוצות + סיכומי תחתית',
+    description:
+      'העבר rowGroups עם by, footer (למשל sum:amount) ו־pinned: true. שורות הפירוט נגללות; הטבלה יוצרת שורת סיכום לכל קבוצה ומצמידה אותה לתחתית אזור הגלילה. שונה מהסכום הכולל בשורת הסטטוס.',
+    explainerTitle: 'מה רואים כאן',
+    explainerItems: [
+      'שורות פירוט מקובצות לפי עמודת group — Finance, Marketing, Operations.',
+      'שורות הסיכום נוצרות על ידי הטבלה ואינן בנתוני המקור.',
+      'Finance Total / Marketing Total / Operations Total מסכמים amount לכל קבוצה.',
+      'בגלילה, שורות הסיכום הנעוצות נשארות בתחתית אזור הגלילה.',
+      'Total Amount בשורת הסטטוס הוא הסכום הכולל של כל שורות הפירוט.',
+    ],
+    scrollHint: 'גלול בתוך גוף הטבלה כדי לראות שהסיכומים נשארים נעוצים.',
+  },
+
+  formulaDemo: {
+    title: 'מנוע נוסחאות עמודות',
+    description: 'עמודות מחושבות משדות מקור עם ביטויי נוסחה בטוחים.',
+  },
+
   virtualizationDemo: {
     title: 'רשימות גדולות וטעינה עצלה',
     lead: 'הדוגמה שומרת 500 שורות בזיכרון בזמן ש־lazyLoad חושף אצוות בגלילה. התאימו ערכים או בטלו lazyLoad לטעינה מלאה, והשתמשו בסיור לבקרת הממשק.',
@@ -293,6 +323,7 @@ export const he: TranslationStrings = {
     batchSize: 'batchSize',
     maxHeight: 'maxHeight (px)',
     lazyEnabled: 'lazyLoad.enabled',
+    virtualizeEnabled: 'virtualize (חלון)',
     startTour: 'סיור בבקרים',
     tourToolbarTitle: 'הגדרות lazy load',
     tourToolbarBody: 'החלפת ערכות או מספרים. אצוות קטנות זריזות יותר; גדולות פחות חשיפות בגלילה.',
@@ -304,6 +335,55 @@ export const he: TranslationStrings = {
     title: 'יומן שינויים',
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
+    versions: {
+      '1.1.0': {
+        highlights: [
+          'תצוגות שמורות — presets למיון, מסננים, עמודות, עימוד וצפיפות',
+          'בונה מסננים מתקדם — כללי AND/OR מקוננים עם FilterBuilder',
+          'קבוצות שורות נעוצות — קיבוץ לפי שדה עם סיכומי תחתית',
+          'מנוע נוסחאות עמודות — עמודות מחושבות מביטויים בטוחים',
+          'וירטואליזציה — virtualize מרנדר רק שורות גלויות',
+          'קבוצות עמודות, עיצוב מותנה, master-detail, צפיפות, שמירת מצב',
+        ],
+      },
+      '1.0.9': {
+        highlights: [
+          'mobileLayout — גלילה אופקית כברירת מחדל במסכים קטנים',
+          'manualPagination + totalRowCount לעימוד בשרת',
+          'פורטל: Theme & Playground, דמוים חדשים, תיעוד דפוסים',
+          'hover רך יותר; אייקונים למגע; תיקון popstate ב־Forge Compass',
+        ],
+      },
+      '1.0.7': {
+        highlights: [
+          'ניווט מקלדת, תפריט הקשר, נתוני עץ, שורת סטטוס',
+          'סידור שורות, ייצוא Excel/PDF, לוח, ביטול/ביצוע מחדש',
+          'נעיצת עמודות, שורות קפואות, מצב הדפסה',
+        ],
+      },
+      '1.0.6': {
+        highlights: [
+          'עריכת תאים, ייצוא CSV/JSON, Playground אינטראקטיבי',
+          'חיפוש Cmd+K, changelog, אפקטים, lazy load, דמוי Finance ו־HR',
+          'Theme Builder ותרגום',
+        ],
+      },
+      '1.0.2': {
+        highlights: ['מעבר ל־SCSS', 'CSS מקומפל כלול', 'תיקון סדר exports'],
+      },
+      '1.0.1': {
+        highlights: ['פרסום npm ראשון תחת @forgedevstack'],
+      },
+      '1.0.0': {
+        highlights: [
+          'שחרור ראשון',
+          'מיון, סינון, עימוד',
+          'גרירת עמודות, שינוי גודל',
+          'בחירת שורות והרחבה',
+          'מגירה במובייל, ערכות נושא',
+        ],
+      },
+    },
   },
 
   playground: {

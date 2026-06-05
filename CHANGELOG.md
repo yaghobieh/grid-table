@@ -5,6 +5,33 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-20
+
+### Added
+
+- **Saved views** — `savedViews` prop with named presets (`sort`, `filters`, `hiddenColumnIds`, `columnWidths`, `page`, `pageSize`, `density`). Optional `showViewSwitcher` chip bar. `useSavedViews` hook for external control.
+- **Advanced filter builder** — `FilterTreeGroup` / `FilterTreeRule` types, `evaluateFilterTree` utility, `advancedFilter` prop with optional Bear `FilterBuilder` panel. Operators include `in` / `notIn`.
+- **Pinned row groups** — `rowGroups` prop groups rows by field, injects aggregate footer rows (`sum:field`, `avg:field`, etc.), pins footers via `pinned: true`.
+- **Column formula engine** — `formula` on `ColumnDefinition`; safe expression evaluation (`revenue - cost`, `(profit / revenue) * 100`).
+- **Window virtualization** — `virtualize` prop (boolean or `VirtualizeConfig`) renders only visible rows with scroll spacers. `useVirtualizedWindow` hook exported.
+- **Column groups band** — `columnGroups` prop renders grouped header labels above the table.
+- **Conditional formatting** — `conditionalFormat` prop with per-row/column rules (`when`, `className`, `cellStyle`).
+- **Master-detail API** — `masterDetail` prop with `renderPanel`, `panelHeight`, `expandOnRowClick`.
+- **Density presets** — `density: 'compact' | 'comfortable' | 'spacious'` on `GridTable`.
+- **Column state persistence** — `columnStatePersistence.persistKey` writes column state to `localStorage`.
+- **Touch gestures** — `touchGestures` prop adds `gt-touch-gestures` surface class for mobile-friendly tables.
+- **Manual server sort/filter** — `sortConfig.manualSorting` and `filterConfig.manualFiltering` skip client-side sort/filter pipelines.
+
+### Changed
+
+- `TableContext` applies `filterConfig.advancedFilter` in the computed data pipeline.
+- `setColumnStates` action added for saved-view application.
+- Portal demos for saved views, advanced filters, row groups, and formulas now use real library APIs.
+
+### Portal
+
+- v1.1.0 demo pages wired to library features; i18n for new demo copy (en, es, he).
+
 ## [1.0.8] - 2026-03-28
 
 ### Added

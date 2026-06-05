@@ -9,6 +9,10 @@ export { useRowReorder } from './useRowReorder';
 export { useUndoRedo } from './useUndoRedo';
 export { useTreeData } from './useTreeData';
 export { useFilterPopupDismiss } from './useFilterPopupDismiss';
+export { useSavedViews, createInitialViews } from './useSavedViews';
+export { useVirtualizedWindow } from './useVirtualizedWindow';
+export type { UseSavedViewsConfig, UseSavedViewsReturn } from './useSavedViews.types';
+export type { UseVirtualizedWindowParams, UseVirtualizedWindowReturn } from './useVirtualizedWindow.types';
 
 export type {
   UseTableReturn,

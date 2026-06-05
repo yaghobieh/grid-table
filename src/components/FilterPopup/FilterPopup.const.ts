@@ -19,6 +19,8 @@ export const FILTER_POPUP_OPERATOR_LABELS: Record<FilterOperator, string> = {
   between: 'Between',
   isEmpty: 'Is empty',
   isNotEmpty: 'Is not empty',
+  in: 'In list',
+  notIn: 'Not in list',
 };
 
 export const FILTER_POPUP_SELECT_PLACEHOLDER = 'Select...';

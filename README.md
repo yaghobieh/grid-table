@@ -4,7 +4,7 @@
   <img src="https://github.com/yaghobieh/grid-table/blob/main/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.0.8 — A powerful, feature-rich data grid for React with 30+ features including cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.1.0 — A powerful, feature-rich data grid for React with 40+ features including **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
@@ -20,6 +20,19 @@
 - **Row Selection** — Single and multi-select support
 - **Row Expansion** — Expandable rows with custom content
 - **Responsive** — Default **horizontal scroll** table on small screens; optional **`mobileLayout="stacked"`** for card layout. Drawer for filters/sorting. Disable breakpoints with `mobileBreakpoint="none"`.
+
+### v1.1.0
+
+- **Saved views** — Named presets for sort, filters, column visibility/widths, pagination, and density. Optional view-switcher chip bar. `useSavedViews` hook.
+- **Advanced filter builder** — Nested AND/OR rules via `advancedFilter` and the built-in `FilterBuilder` panel. `evaluateFilterTree` utility.
+- **Pinned row groups** — `rowGroups` groups rows by field, injects aggregate footer rows (`sum:amount`, `avg:field`, etc.), and pins footers at the bottom of the scroll area.
+- **Column formula engine** — `formula` on `ColumnDefinition` for computed columns (`revenue - cost`, `(profit / revenue) * 100`).
+- **Window virtualization** — `virtualize` prop renders only visible rows with scroll spacers. `useVirtualizedWindow` hook.
+- **Column groups band** — `columnGroups` renders grouped header labels above columns.
+- **Density presets** — `density: 'compact' | 'comfortable' | 'spacious'`.
+- **Column state persistence** — `columnStatePersistence.persistKey` saves column state to `localStorage`.
+- **Master-detail API** — `masterDetail` prop with `renderPanel` and `expandOnRowClick`.
+- **Manual server sort/filter** — `sortConfig.manualSorting` and `filterConfig.manualFiltering` skip client pipelines.
 
 ### v1.0.8
 
@@ -351,6 +364,100 @@ Arrow keys move between cells. Enter starts editing. Tab moves to next cell. Esc
 />
 ```
 
+## Window Virtualization
+
+Render only visible rows for large in-memory datasets:
+
+```tsx
+<GridTable
+  data={largeData}
+  columns={columns}
+  showPagination={false}
+  dimensions={{ maxHeight: 420 }}
+  virtualize={{ enabled: true, rowHeight: 44, overscan: 6, threshold: 50 }}
+/>
+```
+
+## Saved Views
+
+Switch named presets that restore sort, filters, columns, and pagination:
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  savedViews={{
+    views: [
+      { id: 'all', label: 'All', snapshot: { sorting: [], filters: [], globalFilter: '', hiddenColumnIds: [], columnWidths: {}, page: 1, pageSize: 10 } },
+      { id: 'active', label: 'Active only', snapshot: { /* ... */ } },
+    ],
+    activeViewId: 'all',
+    showViewSwitcher: true,
+  }}
+/>
+```
+
+## Advanced Filter Builder
+
+Nested AND/OR filter trees with the built-in panel:
+
+```tsx
+<GridTable
+  data={data}
+  columns={columns}
+  advancedFilter={{
+    enabled: true,
+    showBuilder: true,
+    where: {
+      op: 'and',
+      rules: [
+        { field: 'region', op: 'in', value: ['US', 'EU'] },
+        { field: 'status', op: 'equals', value: 'Active' },
+      ],
+    },
+  }}
+/>
+```
+
+## Pinned Row Groups + Aggregate Footers
+
+Group rows by field and pin subtotal footers while scrolling:
+
+```tsx
+<GridTable
+  data={rows}
+  columns={columns}
+  dimensions={{ maxHeight: 320 }}
+  rowGroups={[
+    {
+      by: 'group',
+      pinned: true,
+      footer: ['sum:amount'],
+      footerLabelField: 'item',
+    },
+  ]}
+  statusBar={{
+    enabled: true,
+    aggregations: [{ columnId: 'amount', type: 'sum', label: 'Total Amount' }],
+  }}
+/>
+```
+
+Footer rows are synthesized by the grid (not in your data). The status bar shows the grand total across all detail rows.
+
+## Column Formulas
+
+Computed columns from safe expressions:
+
+```tsx
+const columns: ColumnDefinition<Row>[] = [
+  { id: 'revenue', accessor: 'revenue', header: 'Revenue' },
+  { id: 'cost', accessor: 'cost', header: 'Cost' },
+  { id: 'profit', accessor: 'profit', header: 'Profit', formula: 'revenue - cost' },
+  { id: 'margin', accessor: 'margin', header: 'Margin %', formula: '(profit / revenue) * 100' },
+];
+```
+
 ## Theming
 
 ```tsx
@@ -484,6 +591,14 @@ Development panel for inspecting data, props, and generating sample rows:
 | `tableEffects` | `TableEffects` | — | Sort/hover/row animations |
 | `defaultExpandedIds` | `Array<string \| number>` | — | IDs to expand on mount |
 | `lazyLoad` | `LazyLoadConfig` | — | Infinite scroll config |
+| `virtualize` | `boolean \| VirtualizeConfig` | `false` | Window virtualization |
+| `savedViews` | `SavedViewsConfig` | — | Named view presets + switcher |
+| `advancedFilter` | `AdvancedFilterConfig` | — | Nested AND/OR filter tree |
+| `rowGroups` | `RowGroupConfig[]` | — | Group-by with aggregate footers |
+| `columnGroups` | `ColumnGroupConfig[]` | — | Header group band |
+| `density` | `'compact' \| 'comfortable' \| 'spacious'` | `'comfortable'` | Row density preset |
+| `columnStatePersistence` | `ColumnStatePersistenceConfig` | — | Persist column state |
+| `masterDetail` | `MasterDetailConfig` | — | Row expansion panel API |
 | `onCellEdit` | `(row, colId, old, new) => void` | — | Cell edit callback |
 | `onRowClick` | `(row, index) => void` | — | Row click callback |
 | `onRowSelect` | `(selectedRows) => void` | — | Selection callback |
@@ -507,6 +622,7 @@ Development panel for inspecting data, props, and generating sample rows:
 | `hidden` | `boolean` | Initially hidden |
 | `editable` | `boolean \| CellEditConfig` | Enable inline editing |
 | `render` | `(value, row, index) => ReactNode` | Custom cell renderer |
+| `formula` | `string` | Computed column expression |
 | `filterType` | `'text' \| 'number' \| 'select' \| ...` | Filter input type |
 | `showOverflowTooltip` | `boolean` | Tooltip on truncated cell |
 | `renderSubCell` | `(row) => ReactNode` | Expandable sub-content |
@@ -571,7 +687,14 @@ import {
   useRowReorder,
   useUndoRedo,
   useTreeData,
+  useSavedViews,
+  useVirtualizedWindow,
+  FilterBuilder,
   // Utils
+  evaluateFilterTree,
+  applyFormulaColumnsToData,
+  applyRowGroups,
+  resolveConditionalCellFormat,
   exportToCSV,
   exportToJSON,
   exportToExcel,
@@ -587,12 +710,12 @@ import {
 The grid-table portal is a full documentation + demo website:
 
 - **Home** — Feature showcase, demo mesh, ecosystem banner
-- **Demos** — Finance (live data), HR (tree view), Basic (all props)
+- **Demos** — Saved views, filter builder, row groups, formulas, virtualization, Finance, HR, Basic
 - **Playground** — Toggle props live, auto-generated code
 - **Theme Builder** — Customize colors and export code
 - **Docs** — Getting started, API reference, guides
 - **Changelog** — Full version history
-- **i18n** — English and Spanish
+- **i18n** — English, Spanish, and Hebrew
 - **Cmd+K** — Quick search across all pages
 
 Run the portal:

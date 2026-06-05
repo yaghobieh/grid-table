@@ -11,4 +11,9 @@ export {
   printTable,
   computeAggregation,
 } from './export.utils';
+export { evaluateFilterTree } from './filterTree.utils';
+export { evaluateFormula, applyFormulaColumns, applyFormulaColumnsToData } from './formula.utils';
+export { applyRowGroups, getRowGroupMeta } from './rowGroups.utils';
+export { captureTableViewSnapshot, createDefaultViewSnapshot } from './savedViews.utils';
+export { resolveConditionalCellFormat } from './conditionalFormat.utils';
 

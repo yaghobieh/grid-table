@@ -14,13 +14,10 @@ export interface FooterLink {
 export interface VersionInfo {
   version: string;
   date: string;
-  highlights: string[];
 }
 
 export interface DemoMeta {
   id: string;
-  title: string;
-  description: string;
   icon: string;
   path: string;
   tag?: string;

@@ -4,10 +4,20 @@ import type {
   Breakpoint,
   ClassNames,
   ColumnDefinition,
+  AdvancedFilterConfig,
+  ColumnGroupConfig,
+  ColumnStatePersistenceConfig,
+  ConditionalFormatConfig,
   ContextMenuConfig,
   Dimensions,
   FilterConfig,
   FrozenRowsConfig,
+  MasterDetailConfig,
+  RowGroupConfig,
+  SavedViewsConfig,
+  TableDensity,
+  TouchGesturesConfig,
+  VirtualizeConfig,
   GridTableRef,
   KeyboardNavConfig,
   LazyLoadConfig,
@@ -106,4 +116,14 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   printConfig?: PrintConfig;
   autoFit?: AutoFitConfig;
   enableCopy?: boolean;
+  savedViews?: SavedViewsConfig;
+  advancedFilter?: AdvancedFilterConfig;
+  rowGroups?: RowGroupConfig[];
+  columnGroups?: ColumnGroupConfig[];
+  conditionalFormat?: ConditionalFormatConfig<T>;
+  masterDetail?: MasterDetailConfig<T>;
+  virtualize?: boolean | VirtualizeConfig;
+  density?: TableDensity;
+  columnStatePersistence?: ColumnStatePersistenceConfig;
+  touchGestures?: TouchGesturesConfig;
 }

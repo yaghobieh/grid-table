@@ -20,6 +20,7 @@ import { tableReducer } from './tableReducer';
 import { TABLE_ACTION } from './TableContext.constants';
 import { DEFAULT_THEME, DEFAULT_TRANSLATIONS, DEFAULT_TABLE_CONFIG } from '../constants';
 import { ZERO, ONE, MOBILE_BREAKPOINT, DESKTOP_BREAKPOINT } from '../constants';
+import { evaluateFilterTree } from '../utils/filterTree.utils';
 
 const TableContext = createContext<TableContextValue<RowData> | null>(null);
 
@@ -33,8 +34,8 @@ export function TableProvider<T extends RowData>({
   translations,
   mobileBreakpoint = 'tablet',
   paginationConfig,
-  filterConfig: _filterConfig,
-  sortConfig: _sortConfig,
+  filterConfig,
+  sortConfig,
   enableMultiSort = false,
   getRowId,
   onStateChange,
@@ -311,6 +312,9 @@ export function TableProvider<T extends RowData>({
 
       resetColumns: () => dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: initialColumnStates }),
 
+      setColumnStates: (states: ColumnState[]) =>
+        dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: states }),
+
       setDraggingColumn: (columnId) => dispatch({ type: TABLE_ACTION.SET_DRAGGING_COLUMN, payload: columnId }),
       setResizingColumn: (columnId) => dispatch({ type: TABLE_ACTION.SET_RESIZING_COLUMN, payload: columnId }),
       setActiveFilterColumn: (columnId) =>
@@ -344,7 +348,10 @@ export function TableProvider<T extends RowData>({
   const computed = useMemo(() => {
     let filteredData = [...state.data];
 
-    if (state.globalFilter) {
+    const manualFiltering = filterConfig?.manualFiltering ?? false;
+    const manualSorting = sortConfig?.manualSorting ?? false;
+
+    if (!manualFiltering && state.globalFilter) {
       const searchLower = state.globalFilter.toLowerCase();
       const columnIds = tableOptions.globalFilterColumns;
       filteredData = filteredData.filter((row) => {
@@ -359,6 +366,7 @@ export function TableProvider<T extends RowData>({
       });
     }
 
+    if (!manualFiltering) {
     state.filters.forEach((filter) => {
       const column = columns.find((c) => c.id === filter.columnId);
       if (!column) return;
@@ -397,10 +405,15 @@ export function TableProvider<T extends RowData>({
         }
       });
     });
+    }
+
+    if (!manualFiltering && filterConfig?.advancedFilter) {
+      filteredData = evaluateFilterTree(filteredData, filterConfig.advancedFilter, columns);
+    }
 
     let sortedData = [...filteredData];
 
-    if (state.sorting.length > ZERO) {
+    if (!manualSorting && state.sorting.length > ZERO) {
       sortedData.sort((a, b) => {
         for (const sort of state.sorting) {
           const column = columns.find((c) => c.id === sort.columnId);
@@ -467,7 +480,16 @@ export function TableProvider<T extends RowData>({
       isTablet,
       isDesktop,
     };
-  }, [state, columns, tableOptions, paginationConfig?.manualPagination, paginationConfig?.totalRowCount]);
+  }, [
+    state,
+    columns,
+    tableOptions,
+    paginationConfig?.manualPagination,
+    paginationConfig?.totalRowCount,
+    filterConfig?.manualFiltering,
+    filterConfig?.advancedFilter,
+    sortConfig?.manualSorting,
+  ]);
 
   const contextValue: TableContextValue<T> = {
     state: state as TableContextState<T>,

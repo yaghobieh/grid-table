@@ -71,7 +71,7 @@ export const Changelog: FC = () => {
                       </Flex>
 
                       <ul className="space-y-2">
-                        {ver.highlights.map((h, i) => (
+                        {(t.changelog.versions[ver.version]?.highlights ?? []).map((h, i) => (
                           <li key={i} className="flex items-start gap-2">
                             <BearIcons.CheckIcon size="xs" color="#22c55e" className="mt-0.5 flex-shrink-0" />
                             <Typography variant="body2" style={{ color: 'var(--text-secondary)' }}>

@@ -15,6 +15,7 @@ export {
   MobileDrawer,
   ContextMenu,
   StatusBar,
+  FilterBuilder,
 } from './components';
 
 export { EditableCell } from './components/EditableCell';
@@ -30,6 +31,7 @@ export type {
   MobileDrawerProps,
   ContextMenuProps,
   StatusBarProps,
+  FilterBuilderProps,
 } from './components';
 
 // Context and Provider
@@ -55,6 +57,9 @@ export {
   useRowReorder,
   useUndoRedo,
   useTreeData,
+  useSavedViews,
+  useVirtualizedWindow,
+  createInitialViews,
 } from './hooks';
 
 export type {
@@ -74,6 +79,9 @@ export type {
   RowDragHandleProps,
   UseUndoRedoReturn,
   UseTreeDataReturn,
+  UseSavedViewsReturn,
+  UseVirtualizedWindowParams,
+  UseVirtualizedWindowReturn,
 } from './hooks';
 
 // Types
@@ -152,6 +160,21 @@ export type {
   PrintConfig,
   AutoFitConfig,
   ColumnAggregation,
+  TableDensity,
+  FilterTreeGroup,
+  FilterTreeRule,
+  AdvancedFilterConfig,
+  TableViewSnapshot,
+  SavedViewDefinition,
+  SavedViewsConfig,
+  RowGroupConfig,
+  ColumnGroupConfig,
+  ConditionalFormatRule,
+  ConditionalFormatConfig,
+  MasterDetailConfig,
+  VirtualizeConfig,
+  ColumnStatePersistenceConfig,
+  TouchGesturesConfig,
 } from './types';
 
 // Constants
@@ -181,4 +204,13 @@ export {
   copyToClipboard,
   printTable,
   computeAggregation,
+  evaluateFilterTree,
+  evaluateFormula,
+  applyFormulaColumns,
+  applyFormulaColumnsToData,
+  applyRowGroups,
+  getRowGroupMeta,
+  captureTableViewSnapshot,
+  createDefaultViewSnapshot,
+  resolveConditionalCellFormat,
 } from './utils';

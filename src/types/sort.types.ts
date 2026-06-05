@@ -27,5 +27,7 @@ export interface SortConfig {
   nullsFirst?: boolean;
   persistSort?: boolean;
   sortStorageKey?: string;
+  manualSorting?: boolean;
+  onSortingChange?: (sorting: SortValue[]) => void;
 }
 

@@ -1,5 +1,25 @@
 import type { FilterOperator } from './common.types';
 
+export type FilterTreeOperator = FilterOperator | 'in' | 'notIn';
+
+export interface FilterTreeRule {
+  field: string;
+  op: FilterTreeOperator;
+  value?: unknown;
+}
+
+export interface FilterTreeGroup {
+  op: 'and' | 'or';
+  rules: Array<FilterTreeRule | FilterTreeGroup>;
+}
+
+export interface AdvancedFilterConfig {
+  enabled?: boolean;
+  where?: FilterTreeGroup | null;
+  showBuilder?: boolean;
+  onChange?: (where: FilterTreeGroup | null) => void;
+}
+
 export interface FilterValue {
   columnId: string;
   value: unknown;
@@ -28,6 +48,9 @@ export interface FilterConfig {
   globalFilterColumns?: string[];
   persistFilters?: boolean;
   filterStorageKey?: string;
+  manualFiltering?: boolean;
+  onFilteringChange?: (filters: FilterValue[], globalFilter: string) => void;
+  advancedFilter?: FilterTreeGroup | null;
 }
 
 export interface FilterPanelProps {

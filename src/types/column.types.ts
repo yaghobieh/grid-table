@@ -44,6 +44,8 @@ export interface ColumnDefinition<T = unknown> {
   renderSubCell?: (row: T) => ReactNode;
   subCellExpandTrigger?: 'doubleClick' | 'arrow' | 'both';
   editable?: boolean | CellEditConfig<T>;
+  formula?: string;
+  groupId?: string;
 }
 
 export interface FilterOption {

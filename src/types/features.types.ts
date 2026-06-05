@@ -1,6 +1,8 @@
 import type { ReactNode, CSSProperties } from 'react';
+import type { ColumnDefinition, ColumnState } from './column.types';
+import type { FilterTreeGroup, FilterValue } from './filter.types';
 import type { RowData } from './row.types';
-import type { ColumnDefinition } from './column.types';
+import type { SortValue } from './sort.types';
 
 // ---- Context Menu ----
 export interface ContextMenuAction<T extends RowData = RowData> {
@@ -126,4 +128,100 @@ export interface ColumnAggregation {
   type: AggregationType;
   label?: string;
   format?: (value: number) => string;
+}
+
+export type TableDensity = 'compact' | 'comfortable' | 'spacious';
+
+export interface TableViewSnapshot {
+  sorting: SortValue[];
+  filters: FilterValue[];
+  globalFilter: string;
+  hiddenColumnIds: string[];
+  columnWidths: Record<string, number>;
+  page: number;
+  pageSize: number;
+  density?: TableDensity;
+  advancedFilter?: FilterTreeGroup | null;
+}
+
+export interface SavedViewDefinition {
+  id: string;
+  label: string;
+  snapshot: TableViewSnapshot;
+}
+
+export interface SavedViewsConfig {
+  views: SavedViewDefinition[];
+  activeViewId?: string;
+  persistKey?: string;
+  showViewSwitcher?: boolean;
+  onViewChange?: (viewId: string, snapshot: TableViewSnapshot) => void;
+}
+
+export interface GroupFooterSpec {
+  type: 'sum' | 'avg' | 'min' | 'max' | 'count';
+  field: string;
+  label?: string;
+}
+
+export interface RowGroupConfig {
+  by: string;
+  pinned?: boolean;
+  footer?: Array<string | GroupFooterSpec>;
+  footerLabelField?: string;
+}
+
+export interface RowGroupMeta {
+  isGroupFooter?: boolean;
+  isGroupHeader?: boolean;
+  groupKey?: string;
+  groupLabel?: string;
+}
+
+export interface ColumnGroupConfig {
+  id: string;
+  label: string;
+  columnIds: string[];
+}
+
+export interface ConditionalFormatRule<T extends RowData = RowData> {
+  id?: string;
+  columnId?: string;
+  when: (row: T, value: unknown) => boolean;
+  className?: string;
+  cellStyle?: CSSProperties;
+}
+
+export interface ConditionalFormatConfig<T extends RowData = RowData> {
+  rules: ConditionalFormatRule<T>[];
+}
+
+export interface ConditionalCellFormat {
+  className: string;
+  style: CSSProperties;
+}
+
+export interface MasterDetailConfig<T extends RowData = RowData> {
+  enabled?: boolean;
+  renderPanel?: (row: T) => ReactNode;
+  panelHeight?: number;
+  expandOnRowClick?: boolean;
+}
+
+export interface VirtualizeConfig {
+  enabled?: boolean;
+  threshold?: number;
+  rowHeight?: number;
+  overscan?: number;
+}
+
+export interface ColumnStatePersistenceConfig {
+  persistKey?: string;
+  onStateChange?: (states: ColumnState[]) => void;
+}
+
+export interface TouchGesturesConfig {
+  enabled?: boolean;
+  swipeActions?: boolean;
+  longPressContextMenu?: boolean;
 }

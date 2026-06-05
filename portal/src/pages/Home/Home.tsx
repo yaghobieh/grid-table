@@ -270,7 +270,7 @@ export const Home: FC = () => {
                       {/* Card body */}
                       <div className="px-6 py-5">
                         <Flex align="center" justify="between" className="mb-2">
-                          <Typography variant="h4" className="font-bold">{demoT?.title ?? demo.title}</Typography>
+                          <Typography variant="h4" className="font-bold">{demoT?.title ?? demo.id}</Typography>
                           {demo.tag && (
                             <Badge variant={demo.tag === 'New' ? 'info' : demo.tag === 'Popular' ? 'success' : 'secondary'} className="text-xs">
                               {t.tags[demo.tag.toLowerCase() as keyof typeof t.tags] ?? demo.tag}
@@ -278,7 +278,7 @@ export const Home: FC = () => {
                           )}
                         </Flex>
                         <Typography variant="body2" style={{ color: 'var(--text-secondary)' }} className="mb-3">
-                          {demoT?.description ?? demo.description}
+                          {demoT?.description ?? ''}
                         </Typography>
                         <Typography variant="caption" className="font-semibold" style={{ color: 'var(--grid-accent)' }}>
                           {t.home.viewLive}

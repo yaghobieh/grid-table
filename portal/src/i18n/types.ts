@@ -193,6 +193,29 @@ export interface TranslationStrings {
     themePlayground: string;
   };
 
+  savedViewsDemo: {
+    title: string;
+    description: string;
+  };
+
+  advancedFilterDemo: {
+    title: string;
+    description: string;
+  };
+
+  pinnedRowGroupsDemo: {
+    title: string;
+    description: string;
+    explainerTitle: string;
+    explainerItems: string[];
+    scrollHint: string;
+  };
+
+  formulaDemo: {
+    title: string;
+    description: string;
+  };
+
   virtualizationDemo: {
     title: string;
     lead: string;
@@ -204,6 +227,7 @@ export interface TranslationStrings {
     batchSize: string;
     maxHeight: string;
     lazyEnabled: string;
+    virtualizeEnabled: string;
     startTour: string;
     tourToolbarTitle: string;
     tourToolbarBody: string;
@@ -215,6 +239,7 @@ export interface TranslationStrings {
     title: string;
     description: string;
     latest: string;
+    versions: Record<string, { highlights: string[] }>;
   };
 
   playground: {

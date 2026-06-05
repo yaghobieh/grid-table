@@ -34,3 +34,6 @@ export type { ContextMenuProps } from './ContextMenu';
 export { StatusBar } from './StatusBar';
 export type { StatusBarProps } from './StatusBar';
 
+export { FilterBuilder } from './FilterBuilder';
+export type { FilterBuilderProps } from './FilterBuilder';
+

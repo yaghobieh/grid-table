@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import type { GridBodyProps } from './gridBody.types';
 import type { RowData } from '@/types';
 import { GridRow } from '../GridRow';
+import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { getGridBodyRowDerivedState } from './gridBody.utils';
 import { ZERO } from '@constants/numbers.const';
 
@@ -41,6 +42,9 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     treeIsExpanded,
     enableCellEdit,
     onCellSave,
+    onGroupToggle,
+    isGroupExpanded,
+    getCellClassName,
   } = props;
 
   const handleRowSelect = useCallback(
@@ -115,6 +119,12 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             treeIndent={d.indent}
             enableCellEdit={enableCellEdit}
             onCellSave={onCellSave}
+            onGroupToggle={onGroupToggle}
+            groupExpanded={(() => {
+              const meta = getRowGroupMeta(row);
+              return meta?.groupKey ? (isGroupExpanded?.(meta.groupKey) ?? true) : true;
+            })()}
+            getCellClassName={getCellClassName}
           />
         );
       })}

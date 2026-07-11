@@ -17,7 +17,15 @@ import type {
   SavedViewsConfig,
   TableDensity,
   TouchGesturesConfig,
+  ExportScope,
   VirtualizeConfig,
+  RangeSelectionConfig,
+  InfiniteScrollConfig,
+  FlashCellsConfig,
+  BulkEditConfig,
+  RowTransaction,
+  CellRange,
+  CellCoord,
   GridTableRef,
   KeyboardNavConfig,
   LazyLoadConfig,
@@ -126,4 +134,11 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   density?: TableDensity;
   columnStatePersistence?: ColumnStatePersistenceConfig;
   touchGestures?: TouchGesturesConfig;
+  exportScope?: ExportScope;
+  rangeSelection?: RangeSelectionConfig;
+  infiniteScroll?: InfiniteScrollConfig<T>;
+  flashCells?: FlashCellsConfig;
+  bulkEdit?: BulkEditConfig;
+  alignColumnGroups?: boolean;
 }
+

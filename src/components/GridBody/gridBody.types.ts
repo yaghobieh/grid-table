@@ -36,6 +36,9 @@ export interface GridBodyProps<T extends RowData = RowData> {
   focusedCell?: { rowIndex: number; colIndex: number } | null;
   enableCellEdit?: boolean;
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  onGroupToggle?: (groupKey: string) => void;
+  isGroupExpanded?: (groupKey: string) => boolean;
+  getCellClassName?: (rowIndex: number, columnId: string) => string;
 }
 
 export interface GridBodyRowDerivedState {

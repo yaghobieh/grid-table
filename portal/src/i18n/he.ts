@@ -8,6 +8,7 @@ export const he: TranslationStrings = {
     docs: 'מסמכים',
     api: 'API',
     changelog: 'יומן שינויים',
+    skills: 'Skills',
     getStarted: 'מתחילים',
     gridTable: 'Grid Table',
     toggleTheme: 'החלפת ערכת נושא',
@@ -336,6 +337,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.1': {
+        highlights: [
+          'exportScope — שורות לייצוא/העתקה/הדפסה: all, filtered, sorted או selected',
+          'מסנני set ותאריך, קבוצות מתקפלות, בחירת טווח + הדבקה מלוח',
+          'גלילה אינסופית (SSRM), כותרות קבוצת עמודות, flash cells, applyTransaction',
+          'סנכרון URL לתצוגות, דף Skills, Husky pre-commit + Playwright',
+          'תיעוד enterprise grid; דמו קבוצות עם כותרות מתקפלות',
+        ],
+      },
       '1.1.0': {
         highlights: [
           'תצוגות שמורות — presets למיון, מסננים, עמודות, עימוד וצפיפות',
@@ -384,6 +394,19 @@ export const he: TranslationStrings = {
         ],
       },
     },
+  },
+
+  skillsPage: {
+    badge: 'סוכני Cursor',
+    title: 'Skills',
+    description: 'תנו לעוזר ה-AI ידע מעמיק על Grid Table, דמוים בפורטל ותהליכי שחרור.',
+    installTitle: 'התקנה',
+    installDescription: 'ה-skills נמצאים ב-grid-table/.cursor/skills/. פתחו את הפרויקט ב-Cursor — הם מופעלים כשמפנים אליהם או משתמשים ב-/grid-table-code-review.',
+    includedTitle: 'מה כלול',
+    examplesTitle: 'דוגמאות לפרומפטים',
+    copy: 'העתק',
+    copied: 'הועתק!',
+    copyFor: 'העתק עבור',
   },
 
   playground: {

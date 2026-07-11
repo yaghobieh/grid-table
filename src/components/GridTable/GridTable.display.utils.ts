@@ -22,9 +22,14 @@ export function buildDisplayRows<T extends RowData>(params: {
   rows: T[];
   columns: ColumnDefinition<T>[];
   rowGroups?: RowGroupConfig[];
+  collapsedGroupKeys?: Set<string>;
+  defaultGroupExpanded?: boolean;
 }): { bodyRows: T[]; pinnedBottomRows: T[] } {
   const withFormulas = applyFormulaColumnsToData(params.rows, params.columns);
-  const grouped = applyRowGroups(withFormulas, params.rowGroups, params.columns);
+  const grouped = applyRowGroups(withFormulas, params.rowGroups, params.columns, {
+    collapsedKeys: params.collapsedGroupKeys,
+    defaultExpanded: params.defaultGroupExpanded,
+  });
   return {
     bodyRows: grouped.rows,
     pinnedBottomRows: grouped.pinnedBottom,

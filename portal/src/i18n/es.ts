@@ -8,6 +8,7 @@ export const es: TranslationStrings = {
     docs: 'Documentación',
     api: 'API',
     changelog: 'Cambios',
+    skills: 'Skills',
     getStarted: 'Comenzar',
     gridTable: 'Grid Table',
     toggleTheme: 'Cambiar tema',
@@ -340,6 +341,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.1': {
+        highlights: [
+          'exportScope — filas en exportar/copiar/imprimir: all, filtered, sorted o selected',
+          'Filtros set y fecha, grupos expandibles, selección de rango + pegado desde portapapeles',
+          'Scroll infinito (estilo SSRM), cabeceras de grupo de columnas, flash cells, applyTransaction',
+          'Sincronización URL de vistas, página Skills, Husky pre-commit + Playwright',
+          'Docs de funciones enterprise; demo de grupos con cabeceras colapsables',
+        ],
+      },
       '1.1.0': {
         highlights: [
           'Vistas guardadas — presets con orden, filtros, columnas, paginación y densidad',
@@ -389,6 +399,19 @@ export const es: TranslationStrings = {
         ],
       },
     },
+  },
+
+  skillsPage: {
+    badge: 'Agentes Cursor',
+    title: 'Skills',
+    description: 'Da a tu asistente IA conocimiento profundo de Grid Table, demos del portal y flujos de release.',
+    installTitle: 'Instalar',
+    installDescription: 'Los skills viven en grid-table/.cursor/skills/. Abre el proyecto en Cursor — se activan al referenciarlos o usar /grid-table-code-review.',
+    includedTitle: 'Qué incluye',
+    examplesTitle: 'Ejemplos de prompts',
+    copy: 'Copiar',
+    copied: '¡Copiado!',
+    copyFor: 'Copiar para',
   },
 
   playground: {

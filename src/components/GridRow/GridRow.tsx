@@ -17,6 +17,7 @@ import {
   GRID_ROW_TREE_PLACEHOLDER_OFFSET,
 } from './GridRow.const';
 import { buildColumnStateIndex, getStickyOffsets, getVisibleColumns } from './GridRow.utils';
+import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { DRAG_HANDLE_ICON_PATHS, DRAG_HANDLE_ICON_VIEWBOX, TREE_TOGGLE_ICON_PATH, TREE_TOGGLE_ICON_VIEWBOX } from '@constants/images.const';
 import { ZERO } from '@constants/numbers.const';
 
@@ -57,8 +58,13 @@ export function GridRow<T extends RowData = RowData>({
   expandRowIcon,
   enableCellEdit,
   onCellSave,
+  onGroupToggle,
+  groupExpanded = true,
+  getCellClassName,
 }: GridRowProps<T>): ReactNode {
   const [isHovered, setIsHovered] = useState(false);
+  const groupMeta = getRowGroupMeta(row);
+  const isGroupHeader = groupMeta?.isGroupHeader === true;
 
   const handleClick = useCallback(() => {
     if (isDisabled) return;
@@ -114,10 +120,11 @@ export function GridRow<T extends RowData = RowData>({
       GRID_ROW_BASE_CLASSES,
       isHovered && !isDisabled && GRID_ROW_HOVER_CLASS,
       isSelected && GRID_ROW_SELECTED_CLASS,
+      isGroupHeader && 'gt-row-group-header',
       isDisabled ? GRID_ROW_DISABLED_CLASSES : onClick && GRID_ROW_CLICKABLE_CLASS,
       stackedMobileLayout ? GRID_ROW_MOBILE_CLASSES : GRID_ROW_DESKTOP_CLASSES,
     );
-  }, [isHovered, isSelected, isDisabled, onClick, stackedMobileLayout]);
+  }, [isHovered, isSelected, isDisabled, onClick, stackedMobileLayout, isGroupHeader]);
 
   return (
     <>
@@ -206,11 +213,49 @@ export function GridRow<T extends RowData = RowData>({
           </div>
         )}
 
-        {visibleColumns.map((col) => {
+        {visibleColumns.map((col, colIndex) => {
           const colState = columnStateIndex.get(col.id);
           const width = stackedMobileLayout ? '100%' : colState?.width;
           
           const stickyOffset = stickyOffsets.get(col.id) ?? (col.sticky ? GRID_ROW_DEFAULT_STICKY_WIDTH : ZERO);
+          const rangeClass = getCellClassName?.(rowIndex, col.id) ?? '';
+
+          if (isGroupHeader && colIndex === ZERO) {
+            return (
+              <div
+                key={col.id}
+                className={clsx('grid-cell gt-group-header-cell flex-shrink-0', col.className, rangeClass)}
+                style={{ width: typeof width === 'number' ? `${width}px` : width }}
+              >
+                <button
+                  type="button"
+                  className="gt-group-header-toggle"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (groupMeta?.groupKey) onGroupToggle?.(groupMeta.groupKey);
+                  }}
+                >
+                  <BearIcons.Navigation.ChevronRightIcon
+                    size="xs"
+                    className={groupExpanded ? 'rotate-90 transition-transform duration-150' : 'transition-transform duration-150'}
+                  />
+                </button>
+                <span className="gt-group-header-label">
+                  {groupMeta?.groupLabel} ({groupMeta?.childCount ?? 0})
+                </span>
+              </div>
+            );
+          }
+
+          if (isGroupHeader) {
+            return (
+              <div
+                key={col.id}
+                className={clsx('grid-cell flex-shrink-0 gt-group-header-spacer', rangeClass)}
+                style={{ width: typeof width === 'number' ? `${width}px` : width }}
+              />
+            );
+          }
 
           return (
             <GridCell
@@ -224,7 +269,7 @@ export function GridRow<T extends RowData = RowData>({
               align={col.align}
               showLabel={stackedMobileLayout && showMobileLabels && col.showLabelOnMobile !== false}
               labelText={typeof col.header === 'string' ? col.header : col.id}
-              className={stackedMobileLayout ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0'}
+              className={clsx(stackedMobileLayout ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0', rangeClass)}
               sticky={col.sticky}
               stickyOffset={stickyOffset}
               onClick={onCellClick}

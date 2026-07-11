@@ -7,6 +7,7 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'docs', label: 'Docs', href: '/docs/getting-started', isLink: true },
   { id: 'api', label: 'API', href: '/docs/api-reference', isLink: true },
   { id: 'changelog', label: 'Changelog', href: '/changelog', isLink: true },
+  { id: 'skills', label: 'Skills', href: '/skills', isLink: true },
 ];
 
 export const FOOTER_LINKS: FooterLink[] = [
@@ -17,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.1', date: '2026-07-11' },
   { version: '1.1.0', date: '2026-05-20' },
   { version: '1.0.9', date: '2026-03-28' },
   { version: '1.0.7', date: '2026-02-24' },
@@ -238,6 +240,12 @@ export const DOC_SECTIONS: DocSection[] = [
   { id: 'drag-drop', title: 'Drag & Drop', path: '/docs/drag-drop', icon: 'MoveIcon' },
   { id: 'theming', title: 'Theming', path: '/docs/theming', icon: 'PaletteIcon' },
   { id: 'tree-data', title: 'Tree Data', path: '/docs/tree-data', icon: 'GitBranchIcon' },
+  { id: 'saved-views', title: 'Saved Views', path: '/docs/saved-views', icon: 'SaveIcon' },
+  { id: 'advanced-filters', title: 'Advanced Filters', path: '/docs/advanced-filters', icon: 'FilterIcon' },
+  { id: 'formulas', title: 'Column Formulas', path: '/docs/formulas', icon: 'CodeIcon' },
+  { id: 'virtualization', title: 'Virtualization', path: '/docs/virtualization', icon: 'LoaderIcon' },
+  { id: 'export-scope', title: 'Export Scope', path: '/docs/export-scope', icon: 'DownloadIcon' },
+  { id: 'enterprise-grid', title: 'Enterprise Grid', path: '/docs/enterprise-grid', icon: 'LayersIcon' },
   { id: 'advanced-patterns', title: 'Advanced patterns', path: '/docs/advanced-patterns', icon: 'LayersIcon' },
   { id: 'api-reference', title: 'API Reference', path: '/docs/api-reference', icon: 'CodeIcon' },
 ];
@@ -291,6 +299,16 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'printConfig', type: 'PrintConfig', default: '—', description: 'Print mode with title and date.' },
       { name: 'enableCopy', type: 'boolean', default: 'false', description: 'Show copy-to-clipboard button in toolbar.' },
       { name: 'enableExport', type: "boolean | string | string[]", default: 'false', description: "Export: true, 'csv', ['csv','excel','pdf']." },
+      { name: 'exportScope', type: "'all' | 'filtered' | 'sorted' | 'selected'", default: "'sorted'", description: 'Which rows to include in export, copy, and print.' },
+      { name: 'savedViews', type: 'SavedViewsConfig', default: '—', description: 'Named view presets with optional URL sync via syncUrl.' },
+      { name: 'virtualize', type: 'boolean | VirtualizeConfig', default: 'false', description: 'Window virtualization — render only visible rows.' },
+      { name: 'advancedFilter', type: 'AdvancedFilterConfig', default: '—', description: 'Nested AND/OR filter tree with FilterBuilder panel.' },
+      { name: 'rowGroups', type: 'RowGroupConfig', default: '—', description: 'Group rows by field with aggregate footers and optional collapsible headers.' },
+      { name: 'rangeSelection', type: 'RangeSelectionConfig', default: '—', description: 'Excel-style cell range selection with optional clipboard paste.' },
+      { name: 'infiniteScroll', type: 'InfiniteScrollConfig', default: '—', description: 'Block loading on scroll for large server-side datasets.' },
+      { name: 'flashCells', type: 'FlashCellsConfig', default: '—', description: 'Brief highlight on cells after paste or programmatic updates.' },
+      { name: 'alignColumnGroups', type: 'boolean', default: 'true', description: 'Render columnGroups as aligned multi-row header with colspan.' },
+      { name: 'columnGroups', type: 'ColumnGroupConfig[]', default: '—', description: 'Grouped column header labels spanning child columns.' },
     ],
   },
   {

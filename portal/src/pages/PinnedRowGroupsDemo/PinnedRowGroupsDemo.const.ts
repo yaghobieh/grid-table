@@ -33,6 +33,8 @@ export const PINNED_ROW_GROUPS_DEMO_CONFIG: RowGroupConfig[] = [
   {
     by: 'group',
     pinned: true,
+    showHeaders: true,
+    defaultExpanded: true,
     footer: ['sum:amount'],
     footerLabelField: 'item',
   },

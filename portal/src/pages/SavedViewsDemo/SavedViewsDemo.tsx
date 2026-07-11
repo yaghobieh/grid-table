@@ -41,6 +41,7 @@ export const SavedViewsDemo: FC = () => {
             views: SAVED_VIEWS_DEMO_VIEWS,
             activeViewId: SAVED_VIEWS_ACTIVE_VIEW_ID,
             showViewSwitcher: true,
+            syncUrl: true,
           }}
         />
       </div>

@@ -33,7 +33,7 @@ export interface ColumnDefinition<T = unknown> {
   headerStyle?: CSSProperties;
   cellStyle?: CSSProperties;
   render?: RenderFunction<unknown>;
-  filterType?: 'text' | 'number' | 'date' | 'select' | 'boolean' | 'custom';
+  filterType?: 'text' | 'number' | 'date' | 'select' | 'set' | 'boolean' | 'custom';
   filterOptions?: FilterOption[];
   filterOperators?: FilterOperator[];
   defaultFilterOperator?: FilterOperator;

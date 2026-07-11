@@ -11,6 +11,11 @@ export { useTreeData } from './useTreeData';
 export { useFilterPopupDismiss } from './useFilterPopupDismiss';
 export { useSavedViews, createInitialViews } from './useSavedViews';
 export { useVirtualizedWindow } from './useVirtualizedWindow';
+export { useRangeSelection, getRangeCellCount } from './useRangeSelection';
+export { useInfiniteScroll } from './useInfiniteScroll';
+export type { UseInfiniteScrollReturn } from './useInfiniteScroll';
+export { useRowGroupExpansion } from './useRowGroupExpansion';
+export type { UseRowGroupExpansionReturn } from './useRowGroupExpansion';
 export type { UseSavedViewsConfig, UseSavedViewsReturn } from './useSavedViews.types';
 export type { UseVirtualizedWindowParams, UseVirtualizedWindowReturn } from './useVirtualizedWindow.types';
 

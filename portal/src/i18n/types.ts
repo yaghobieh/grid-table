@@ -8,6 +8,7 @@ export interface TranslationStrings {
     docs: string;
     api: string;
     changelog: string;
+    skills: string;
     getStarted: string;
     gridTable: string;
     toggleTheme: string;
@@ -240,6 +241,19 @@ export interface TranslationStrings {
     description: string;
     latest: string;
     versions: Record<string, { highlights: string[] }>;
+  };
+
+  skillsPage: {
+    badge: string;
+    title: string;
+    description: string;
+    installTitle: string;
+    installDescription: string;
+    includedTitle: string;
+    examplesTitle: string;
+    copy: string;
+    copied: string;
+    copyFor: string;
   };
 
   playground: {

@@ -3,4 +3,6 @@ export * from './breakpoints.const';
 export * from './defaults.const';
 export * from './tree.const';
 export * from './strings.const';
+export * from './exportScope.const';
+export * from './savedViews.const';
 

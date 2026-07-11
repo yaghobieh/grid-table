@@ -4,6 +4,7 @@ import type { GroupFooterSpec, RowGroupConfig, RowGroupMeta } from '@/types/feat
 import {
   ROW_GROUP_FOOTER_LABEL_SUFFIX,
   ROW_GROUP_FOOTER_PREFIX,
+  ROW_GROUP_HEADER_PREFIX,
   ROW_GROUP_FOOTER_SPEC_SEPARATOR,
   ROW_GROUP_META_KEY,
 } from '@constants/rowGroups.const';
@@ -20,6 +21,32 @@ function parseFooterSpec(spec: string | GroupFooterSpec): GroupFooterSpec {
   };
 }
 
+function buildGroupHeaderRow<T extends RowData>(
+  groupKey: string,
+  groupLabel: string,
+  childCount: number,
+  columns: ColumnDefinition<T>[],
+  labelField: string,
+): T {
+  const headerRow = {} as T;
+  const meta: RowGroupMeta = {
+    isGroupHeader: true,
+    groupKey,
+    groupLabel,
+    childCount,
+  };
+  (headerRow as Record<string, unknown>)[ROW_GROUP_META_KEY] = meta;
+  (headerRow as Record<string, unknown>).id = `${ROW_GROUP_HEADER_PREFIX}${groupKey}`;
+  (headerRow as Record<string, unknown>)[labelField] = groupLabel;
+  for (const column of columns) {
+    const accessor = column.accessor;
+    if (typeof accessor === 'string' && accessor !== labelField) {
+      (headerRow as Record<string, unknown>)[accessor] = EMPTY_STRING;
+    }
+  }
+  return headerRow;
+}
+
 function buildFooterRow<T extends RowData>(
   groupKey: string,
   groupLabel: string,
@@ -33,6 +60,7 @@ function buildFooterRow<T extends RowData>(
     isGroupFooter: true,
     groupKey,
     groupLabel,
+    childCount: rows.length,
   };
   (footerRow as Record<string, unknown>)[ROW_GROUP_META_KEY] = meta;
   (footerRow as Record<string, unknown>).id = `${ROW_GROUP_FOOTER_PREFIX}${groupKey}`;
@@ -68,17 +96,25 @@ export interface RowGroupResult<T extends RowData> {
   pinnedBottom: T[];
 }
 
+export interface ApplyRowGroupsOptions {
+  collapsedKeys?: Set<string>;
+  defaultExpanded?: boolean;
+}
+
 export function applyRowGroups<T extends RowData>(
   data: T[],
   groups: RowGroupConfig[] | undefined,
   columns: ColumnDefinition<T>[],
+  options?: ApplyRowGroupsOptions,
 ): RowGroupResult<T> {
   if (!groups || groups.length === ZERO) {
     return { rows: data, pinnedBottom: [] };
   }
 
   const config = groups[ZERO];
-  const labelField = config.footerLabelField ?? config.by;
+  const labelField = config.headerLabelField ?? config.footerLabelField ?? config.by;
+  const defaultExpanded = options?.defaultExpanded ?? config.defaultExpanded ?? true;
+  const collapsedKeys = options?.collapsedKeys ?? new Set<string>();
   const grouped = new Map<string, T[]>();
 
   for (const row of data) {
@@ -92,7 +128,18 @@ export function applyRowGroups<T extends RowData>(
   const pinnedBottom: T[] = [];
 
   for (const [groupKey, rows] of grouped.entries()) {
-    displayRows.push(...rows);
+    const isExpanded = defaultExpanded ? !collapsedKeys.has(groupKey) : collapsedKeys.has(groupKey);
+
+    if (config.showHeaders) {
+      displayRows.push(
+        buildGroupHeaderRow(groupKey, groupKey, rows.length, columns, labelField),
+      );
+    }
+
+    if (isExpanded) {
+      displayRows.push(...rows);
+    }
+
     if (!config.footer || config.footer.length === ZERO) continue;
     const footerRow = buildFooterRow(
       groupKey,
@@ -100,11 +147,11 @@ export function applyRowGroups<T extends RowData>(
       rows,
       config.footer,
       columns,
-      labelField,
+      config.footerLabelField ?? config.by,
     );
     if (config.pinned) {
       pinnedBottom.push(footerRow);
-    } else {
+    } else if (isExpanded) {
       displayRows.push(footerRow);
     }
   }

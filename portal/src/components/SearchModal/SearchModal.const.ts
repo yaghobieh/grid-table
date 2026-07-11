@@ -15,6 +15,7 @@ export const SEARCH_ITEMS: SearchItem[] = [
   { id: 'playground', title: 'Playground', section: 'Pages', path: '/playground', keywords: ['playground', 'try', 'interactive', 'live'] },
   { id: 'theme-builder', title: 'Theme Builder', section: 'Pages', path: '/theme-builder', keywords: ['theme', 'color', 'customize', 'builder'] },
   { id: 'changelog', title: 'Changelog', section: 'Pages', path: '/changelog', keywords: ['changelog', 'version', 'release', 'history'] },
+  { id: 'skills', title: 'Skills', section: 'Pages', path: '/skills', keywords: ['cursor', 'agent', 'ai', 'skills'] },
   { id: 'getting-started', title: 'Getting Started', section: 'Docs', path: '/docs/getting-started', keywords: ['start', 'install', 'setup', 'quick'] },
   { id: 'installation', title: 'Installation', section: 'Docs', path: '/docs/installation', keywords: ['install', 'npm', 'yarn'] },
   { id: 'columns', title: 'Column Definitions', section: 'Docs', path: '/docs/columns', keywords: ['column', 'definition', 'accessor'] },

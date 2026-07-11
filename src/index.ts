@@ -59,6 +59,9 @@ export {
   useTreeData,
   useSavedViews,
   useVirtualizedWindow,
+  useRangeSelection,
+  useInfiniteScroll,
+  useRowGroupExpansion,
   createInitialViews,
 } from './hooks';
 
@@ -167,6 +170,7 @@ export type {
   TableViewSnapshot,
   SavedViewDefinition,
   SavedViewsConfig,
+  ExportScope,
   RowGroupConfig,
   ColumnGroupConfig,
   ConditionalFormatRule,
@@ -175,6 +179,13 @@ export type {
   VirtualizeConfig,
   ColumnStatePersistenceConfig,
   TouchGesturesConfig,
+  RangeSelectionConfig,
+  InfiniteScrollConfig,
+  FlashCellsConfig,
+  BulkEditConfig,
+  RowTransaction,
+  CellRange,
+  CellCoord,
 } from './types';
 
 // Constants
@@ -194,6 +205,8 @@ export {
   MOBILE_BREAKPOINT,
   TABLET_BREAKPOINT,
   DESKTOP_BREAKPOINT,
+  DEFAULT_EXPORT_SCOPE,
+  EXPORT_SCOPE_OPTIONS,
 } from './constants';
 
 export {
@@ -213,4 +226,12 @@ export {
   captureTableViewSnapshot,
   createDefaultViewSnapshot,
   resolveConditionalCellFormat,
+  resolveExportData,
+  buildColumnGroupHeaderCells,
+  applyTransaction,
+  parseClipboardGrid,
+  applyClipboardToRange,
+  buildFlashCellKey,
+  scheduleFlashRemoval,
+  getFlashCellClassName,
 } from './utils';

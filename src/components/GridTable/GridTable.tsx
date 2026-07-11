@@ -3,9 +3,13 @@ import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './GridTable.types';
 import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
 import { TableProvider, useTableContext } from '@/context';
-import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo, useSavedViews, useVirtualizedWindow } from '@/hooks';
+import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo, useSavedViews, useVirtualizedWindow, useRangeSelection, useInfiniteScroll, useRowGroupExpansion } from '@/hooks';
 import { FilterBuilder } from '../FilterBuilder';
+import { ColumnGroupHeader } from '../ColumnGroupHeader';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
+import { applyClipboardToRange, parseClipboardGrid } from '@/utils/transaction.utils';
+import { getFlashCellClassName, scheduleFlashRemoval, buildFlashCellKey } from '@/utils/flashCells.utils';
+import { RANGE_SELECTION_ACTIVE_CLASS, RANGE_SELECTION_ANCHOR_CLASS } from '@constants/rangeSelection.const';
 import {
   buildDisplayRows,
   resolveVirtualizeConfig,
@@ -22,6 +26,8 @@ import { MobileDrawer } from '../MobileDrawer';
 import { ContextMenu } from '../ContextMenu';
 import { StatusBar } from '../StatusBar';
 import { copyToClipboard, exportToCSV, exportToExcel, exportToJSON, exportToPDF, printTable } from '@/utils/export.utils';
+import { resolveExportData } from '@/utils/exportScope.utils';
+import { DEFAULT_EXPORT_SCOPE } from '@constants/exportScope.const';
 import { resolveTableEffects } from './GridTable.utils';
 import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS } from '@constants/numbers.const';
 
@@ -75,6 +81,7 @@ function GridTableContent<T extends RowData>({
   lazyLoad,
   enableExport,
   exportFileName,
+  exportScope = DEFAULT_EXPORT_SCOPE,
   enableCellEdit,
   onCellEdit,
   contextMenu: contextMenuConfig,
@@ -103,12 +110,21 @@ function GridTableContent<T extends RowData>({
   density = 'comfortable',
   columnStatePersistence,
   touchGestures,
+  rangeSelection,
+  infiniteScroll,
+  flashCells,
+  bulkEdit: _bulkEdit,
+  alignColumnGroups = true,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'> & {
   advancedFilterWhere?: import('@/types/filter.types').FilterTreeGroup | null;
   onAdvancedFilterChange?: (where: import('@/types/filter.types').FilterTreeGroup | null) => void;
 }): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
   const savedViewsApi = useSavedViews(savedViews);
+  const rowGroupExpansion = useRowGroupExpansion(rowGroups);
+  const rangeApi = useRangeSelection(rangeSelection?.enabled === true);
+  const infiniteApi = useInfiniteScroll(infiniteScroll, computed.paginatedData);
+  const [activeFlashes, setActiveFlashes] = useState<Set<string>>(new Set());
   const { shouldShowMobileView, breakpointValue } = useBreakpoint();
   const stackedMobile = shouldShowMobileView && mobileLayout === 'stacked';
   const scrollMobile = shouldShowMobileView && mobileLayout === 'scroll';
@@ -258,6 +274,19 @@ function GridTableContent<T extends RowData>({
     [getRowId, data]
   );
 
+  const exportData = useMemo(
+    () =>
+      resolveExportData({
+        scope: exportScope,
+        allData: state.data,
+        filteredData: computed.filteredData,
+        sortedData: computed.sortedData,
+        selectedIds: state.selectedIds,
+        getRowId: getRowIdFn,
+      }),
+    [exportScope, state.data, computed.filteredData, computed.sortedData, state.selectedIds, getRowIdFn],
+  );
+
   const rowReorder = useRowReorder<T>(data, getRowIdFn, onRowReorder);
 
   const handleCellSave = useCallback(
@@ -343,13 +372,17 @@ function GridTableContent<T extends RowData>({
 
   const isEmpty = computed.paginatedData.length === 0;
 
+  const sourceRows = infiniteScroll?.enabled ? infiniteApi.rows : computed.paginatedData;
+
   const displayPipeline = useMemo(
     () => buildDisplayRows({
-      rows: computed.paginatedData,
+      rows: sourceRows,
       columns,
       rowGroups,
+      collapsedGroupKeys: rowGroupExpansion.collapsedKeys,
+      defaultGroupExpanded: rowGroups?.[0]?.defaultExpanded,
     }),
-    [computed.paginatedData, columns, rowGroups],
+    [sourceRows, columns, rowGroups, rowGroupExpansion.collapsedKeys],
   );
 
   const displayData = useMemo(() => {
@@ -386,10 +419,67 @@ function GridTableContent<T extends RowData>({
       const base = getRowClassName?.(row, index) ?? '';
       const meta = getRowGroupMeta(row);
       if (meta?.isGroupFooter) return `${base} gt-row-group-footer`.trim();
+      if (meta?.isGroupHeader) return `${base} gt-row-group-header`.trim();
       return base;
     },
     [getRowClassName],
   );
+
+  const getCellClassName = useCallback(
+    (rowIndex: number, columnId: string) => {
+      const visibleCols = columns.filter((col) => !col.hidden);
+      const colIndex = visibleCols.findIndex((col) => col.id === columnId);
+      const classes: string[] = [];
+      if (rangeApi.isCellInRange(rowIndex, colIndex)) {
+        classes.push(RANGE_SELECTION_ACTIVE_CLASS);
+      }
+      if (rangeApi.isAnchorCell(rowIndex, colIndex)) {
+        classes.push(RANGE_SELECTION_ANCHOR_CLASS);
+      }
+      if (flashCells?.enabled !== false) {
+        const row = bodyRows[rowIndex];
+        if (row) {
+          const flashClass = getFlashCellClassName(getRowIdFn(row), columnId, activeFlashes);
+          if (flashClass) classes.push(flashClass);
+        }
+      }
+      return classes.join(' ');
+    },
+    [columns, rangeApi, flashCells?.enabled, bodyRows, activeFlashes, getRowIdFn],
+  );
+
+  const handleContainerScroll = useCallback(
+    (event: React.UIEvent<HTMLDivElement>) => {
+      const target = event.currentTarget;
+      infiniteApi.handleScroll(target.scrollTop, target.scrollHeight, target.clientHeight);
+      if (virtualizationEnabled) {
+        virtualWindow.onScroll();
+      }
+    },
+    [infiniteApi, virtualizationEnabled, virtualWindow],
+  );
+
+  useEffect(() => {
+    if (!rangeSelection?.enabled || rangeSelection.enablePaste === false) return;
+    const handlePaste = async (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'v') return;
+      if (!rangeApi.range || !enableCellEdit) return;
+      event.preventDefault();
+      const text = await navigator.clipboard.readText();
+      const matrix = parseClipboardGrid(text);
+      if (matrix.length === 0) return;
+      const visibleCols = columns.filter((col) => !col.hidden);
+      applyClipboardToRange(matrix, bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+        const rowId = getRowIdFn(row);
+        onCellEditRef.current?.(rowId, columnId, value);
+        if (flashCells?.enabled !== false) {
+          scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
+        }
+      });
+    };
+    window.addEventListener('keydown', handlePaste);
+    return () => window.removeEventListener('keydown', handlePaste);
+  }, [rangeSelection, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes]);
 
   useEffect(() => {
     if (!columnStatePersistence?.persistKey) return;
@@ -465,19 +555,9 @@ function GridTableContent<T extends RowData>({
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
+      onMouseUp={rangeSelection?.enabled ? rangeApi.handleMouseUp : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
-
-      {columnGroups && columnGroups.length > 0 && (
-        <div className="grid-table-column-groups" role="row">
-          {columnGroups.map((group) => (
-            <div key={group.id} className="grid-table-column-group-band">
-              <span className="grid-table-column-group-label">{group.label}</span>
-              <span className="grid-table-column-group-count">{group.columnIds.length} cols</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       {savedViews?.showViewSwitcher && savedViewsApi.views.length > 0 && (
         <div className="grid-table-view-switcher">
@@ -543,7 +623,7 @@ function GridTableContent<T extends RowData>({
             <div className="toolbar-export-actions" style={{ display: 'flex', gap: '0.25rem' }}>
               {shouldShowExport('csv') && (
                 <button
-                  onClick={() => exportToCSV(computed.sortedData, columns, exportFileName)}
+                  onClick={() => exportToCSV(exportData, columns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export CSV"
                   title="Export CSV"
@@ -555,7 +635,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('json') && (
                 <button
-                  onClick={() => exportToJSON(computed.sortedData, columns, exportFileName)}
+                  onClick={() => exportToJSON(exportData, columns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export JSON"
                   title="Export JSON"
@@ -567,7 +647,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('excel') && (
                 <button
-                  onClick={() => exportToExcel(computed.sortedData, columns, exportFileName)}
+                  onClick={() => exportToExcel(exportData, columns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export Excel"
                   title="Export Excel"
@@ -579,7 +659,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('pdf') && (
                 <button
-                  onClick={() => exportToPDF(computed.sortedData, columns, exportFileName, printConfig?.title)}
+                  onClick={() => exportToPDF(exportData, columns, exportFileName, printConfig?.title)}
                   className="toolbar-action-button"
                   aria-label="Export PDF"
                   title="Export PDF"
@@ -594,7 +674,7 @@ function GridTableContent<T extends RowData>({
 
           {enableCopy && (
             <button
-              onClick={() => copyToClipboard(computed.sortedData, columns)}
+              onClick={() => copyToClipboard(exportData, columns)}
               className="toolbar-action-button"
               aria-label="Copy to clipboard"
               title="Copy to clipboard"
@@ -607,7 +687,7 @@ function GridTableContent<T extends RowData>({
 
           {printConfig?.enabled && (
             <button
-              onClick={() => printTable(computed.sortedData, columns, printConfig?.title)}
+              onClick={() => printTable(exportData, columns, printConfig?.title)}
               className="toolbar-action-button"
               aria-label="Print"
               title="Print"
@@ -697,7 +777,17 @@ function GridTableContent<T extends RowData>({
         ref={virtualizationEnabled ? virtualWindow.scrollRef : undefined}
         className="grid-table-container overflow-auto"
         style={virtualizationEnabled ? { maxHeight: dimensions?.maxHeight ? undefined : '480px' } : undefined}
+        onScroll={handleContainerScroll}
       >
+        {alignColumnGroups && columnGroups && columnGroups.length > 0 && showTableHeader && (
+          <ColumnGroupHeader
+            columnGroups={columnGroups}
+            visibleColumns={visibleCols}
+            columnStates={state.columnStates}
+            enableSelection={enableRowSelection}
+            enableExpansion={enableRowExpansion}
+          />
+        )}
         {showTableHeader && (
           <GridHeader
             columns={columns}
@@ -796,6 +886,9 @@ function GridTableContent<T extends RowData>({
               focusedCell={focusedCell}
               enableCellEdit={enableCellEdit}
               onCellSave={handleCellSave}
+              onGroupToggle={rowGroupExpansion.toggleGroup}
+              isGroupExpanded={rowGroupExpansion.isExpanded}
+              getCellClassName={rangeSelection?.enabled || flashCells?.enabled ? getCellClassName : undefined}
             />
             {hasMoreLazy && (
               <div ref={sentinelRef} className="gt-lazy-sentinel" style={{ padding: '0.75rem', textAlign: 'center' }}>

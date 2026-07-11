@@ -1,14 +1,39 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTableContext } from '@/context';
 import type { SavedViewDefinition } from '@/types';
-import { SAVED_VIEW_DEFAULT_ID, SAVED_VIEW_DEFAULT_LABEL } from '@constants/savedViews.const';
+import { SAVED_VIEW_DEFAULT_ID, SAVED_VIEW_DEFAULT_LABEL, SAVED_VIEW_URL_PARAM } from '@constants/savedViews.const';
 import { captureTableViewSnapshot, createDefaultViewSnapshot } from '@/utils/savedViews.utils';
 import type { UseSavedViewsConfig, UseSavedViewsReturn } from './useSavedViews.types';
 
+function readViewIdFromUrl(paramName: string): string | null {
+  if (typeof window === 'undefined') return null;
+  return new URLSearchParams(window.location.search).get(paramName);
+}
+
+function writeViewIdToUrl(paramName: string, viewId: string): void {
+  if (typeof window === 'undefined') return;
+  const url = new URL(window.location.href);
+  url.searchParams.set(paramName, viewId);
+  window.history.replaceState({}, '', url.toString());
+}
+
 export function useSavedViews(config?: UseSavedViewsConfig): UseSavedViewsReturn {
   const { state, actions } = useTableContext();
+  const urlParam = config?.urlParam ?? SAVED_VIEW_URL_PARAM;
+  const syncUrl = config?.syncUrl ?? false;
+
+  const initialActiveViewId = useMemo(() => {
+    if (syncUrl) {
+      const fromUrl = readViewIdFromUrl(urlParam);
+      if (fromUrl && config?.views.some((view) => view.id === fromUrl)) {
+        return fromUrl;
+      }
+    }
+    return config?.activeViewId ?? null;
+  }, [syncUrl, urlParam, config?.activeViewId, config?.views]);
+
   const [views, setViews] = useState<SavedViewDefinition[]>(config?.views ?? []);
-  const [activeViewId, setActiveViewIdState] = useState<string | null>(config?.activeViewId ?? null);
+  const [activeViewId, setActiveViewIdState] = useState<string | null>(initialActiveViewId);
 
   const applySnapshot = useCallback(
     (snapshot: Parameters<UseSavedViewsReturn['applySnapshot']>[0]) => {
@@ -54,9 +79,10 @@ export function useSavedViews(config?: UseSavedViewsConfig): UseSavedViewsReturn
       const view = views.find((item) => item.id === viewId);
       if (!view) return;
       applySnapshot(view.snapshot);
+      if (syncUrl) writeViewIdToUrl(urlParam, viewId);
       config?.onViewChange?.(viewId, view.snapshot);
     },
-    [views, applySnapshot, config],
+    [views, applySnapshot, config, syncUrl, urlParam],
   );
 
   const saveCurrentAsView = useCallback(
@@ -70,9 +96,17 @@ export function useSavedViews(config?: UseSavedViewsConfig): UseSavedViewsReturn
         return [...prev, { id, label, snapshot }];
       });
       setActiveViewIdState(id);
+      if (syncUrl) writeViewIdToUrl(urlParam, id);
     },
-    [captureCurrentSnapshot],
+    [captureCurrentSnapshot, syncUrl, urlParam],
   );
+
+  useEffect(() => {
+    if (!initialActiveViewId) return;
+    const view = views.find((item) => item.id === initialActiveViewId);
+    if (!view) return;
+    applySnapshot(view.snapshot);
+  }, []);
 
   return useMemo(
     () => ({

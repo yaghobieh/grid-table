@@ -3,7 +3,12 @@ import { KEY_ENTER, KEY_ESCAPE } from '@constants/keyboard.const';
 import { FOUR } from '@constants/numbers.const';
 
 export const FILTER_POPUP_TEXT_OPERATORS: FilterOperator[] = ['contains', 'equals', 'startsWith', 'endsWith', 'notContains', 'notEquals'];
-export const FILTER_POPUP_NUMBER_OPERATORS: FilterOperator[] = ['equals', 'notEquals', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual'];
+export const FILTER_POPUP_NUMBER_OPERATORS: FilterOperator[] = ['equals', 'notEquals', 'greaterThan', 'lessThan', 'greaterThanOrEqual', 'lessThanOrEqual', 'between'];
+export const FILTER_POPUP_DATE_OPERATORS: FilterOperator[] = ['equals', 'greaterThan', 'lessThan', 'between'];
+
+export const FILTER_POPUP_SET_LABEL = 'Select values';
+export const FILTER_POPUP_DATE_FROM_LABEL = 'From';
+export const FILTER_POPUP_DATE_TO_LABEL = 'To';
 
 export const FILTER_POPUP_OPERATOR_LABELS: Record<FilterOperator, string> = {
   equals: 'Equals',

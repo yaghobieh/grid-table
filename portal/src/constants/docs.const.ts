@@ -426,9 +426,169 @@ Live: [Column grouping demo](/demos/column-grouping)
 
 ### Large lists and virtualization
 
-Use \`lazyLoad\` with \`dimensions.maxHeight\` to reveal rows in batches while scrolling. For only rendering visible rows (window virtualization), track the roadmap or combine **manual pagination** with a tall backend dataset.
+Use \`lazyLoad\` with \`dimensions.maxHeight\` to reveal rows in batches while scrolling. For window virtualization (only visible rows in the DOM), set \`virtualize\` to \`true\` or pass \`VirtualizeConfig\` with \`rowHeight\` and \`overscan\`.
 
-Live: [Lazy load demo](/demos/virtualization)`;
+See the dedicated [Virtualization guide](/docs/virtualization).
+
+Live: [Virtualization demo](/demos/virtualization)
+
+### Export scope (1.1.1)
+
+Control which rows are included in CSV/Excel/PDF export, clipboard copy, and print with \`exportScope\`: \`'all'\`, \`'filtered'\`, \`'sorted'\` (default), or \`'selected'\`.
+
+See [Export scope](/docs/export-scope).`;
+
+export const DOC_SAVED_VIEWS = `## Saved views
+
+Named presets capture sort, filters, hidden columns, column widths, pagination, and density. Pass \`savedViews\` with a \`views\` array and optional \`activeViewId\`.
+
+\`\`\`tsx
+<GridTable
+  savedViews={{
+    views: [
+      { id: 'default', label: 'Default', snapshot: { sort: [], filters: {} } },
+      { id: 'active', label: 'Active only', snapshot: { filters: { status: 'active' } } },
+    ],
+    activeViewId: 'default',
+    showViewSwitcher: true,
+  }}
+/>
+\`\`\`
+
+### URL sync (1.1.1)
+
+Set \`syncUrl: true\` to read and write the active view id to the query string (\`?view=\` by default). Share links restore the same table state.
+
+\`\`\`tsx
+savedViews={{ views, syncUrl: true, urlParam: 'view' }}
+\`\`\`
+
+Live: [Saved views demo](/demos/saved-views)`;
+
+export const DOC_ADVANCED_FILTERS = `## Advanced filter builder
+
+Build nested AND/OR filter trees with \`advancedFilter\`. Rules support operators including \`in\` and \`notIn\`. Enable the Bear \`FilterBuilder\` panel with \`showPanel: true\`.
+
+\`\`\`tsx
+<GridTable
+  advancedFilter={{
+    tree: filterTree,
+    showPanel: true,
+    onTreeChange: setFilterTree,
+  }}
+/>
+\`\`\`
+
+Use \`evaluateFilterTree\` from \`@forgedevstack/grid-table\` for standalone filtering.
+
+Live: [Advanced filter builder demo](/demos/advanced-filter-builder)`;
+
+export const DOC_FORMULAS = `## Column formulas
+
+Add a \`formula\` string to any \`ColumnDefinition\`. Expressions reference other column accessors and support safe arithmetic (\`revenue - cost\`, \`(profit / revenue) * 100\`).
+
+\`\`\`tsx
+{ id: 'margin', accessor: 'margin', header: 'Margin %', formula: '(profit / revenue) * 100' }
+\`\`\`
+
+Formulas are evaluated via \`applyFormulaColumns\` in the data pipeline.
+
+Live: [Column formula engine demo](/demos/column-formula-engine)`;
+
+export const DOC_VIRTUALIZATION = `## Virtualization
+
+Grid Table ships two strategies for large datasets:
+
+### Lazy load
+
+\`lazyLoad\` reveals rows in batches as the user scrolls. Pair with \`dimensions.maxHeight\` for a scrollable body.
+
+### Window virtualization
+
+\`virtualize\` renders only visible rows plus an overscan buffer. Pass a boolean or config:
+
+\`\`\`tsx
+<GridTable
+  virtualize={{ rowHeight: 44, overscan: 6 }}
+  dimensions={{ maxHeight: 420 }}
+/>
+\`\`\`
+
+Export \`useVirtualizedWindow\` for custom table layouts.
+
+Live: [Virtualization demo](/demos/virtualization)`;
+
+export const DOC_EXPORT_SCOPE = `## Export scope
+
+The \`exportScope\` prop controls which rows are included when exporting, copying to clipboard, or printing:
+
+| Value | Rows included |
+|-------|---------------|
+| \`'all'\` | Full \`data\` prop |
+| \`'filtered'\` | After filters (before sort) |
+| \`'sorted'\` | After filters and sort (default) |
+| \`'selected'\` | Only checked rows (requires row selection) |
+
+\`\`\`tsx
+<GridTable
+  enableExport="csv"
+  enableCopy
+  exportScope="selected"
+  enableRowSelection
+/>
+\`\`\`
+
+Use \`resolveExportData\` from \`@forgedevstack/grid-table\` when building custom export UIs.`;
+
+export const DOC_ENTERPRISE_GRID = `## Enterprise grid features
+
+Grid Table 1.1.1 adds AG Grid–style capabilities for dense data apps.
+
+### Set and date column filters
+
+On \`ColumnDefinition\`, set \`filterType: 'set'\` with \`filterOptions\` for checkbox filters (uses \`in\` operator). Set \`filterType: 'date'\` for a from/to date range (\`between\`).
+
+### Expandable row groups
+
+\`rowGroups\` supports \`showHeaders: true\` to inject collapsible group header rows. Use \`defaultExpanded\` and click the chevron to toggle. Pair with \`pinned: true\` and \`footer\` for aggregate footers.
+
+Live: [Pinned row groups demo](/demos/pinned-row-groups)
+
+### Range selection and clipboard paste
+
+\`\`\`tsx
+<GridTable
+  enableCellEdit
+  rangeSelection={{ enabled: true, enablePaste: true }}
+/>
+\`\`\`
+
+Drag to select a cell range. Ctrl/Cmd+V pastes tab-separated values from Excel or Sheets into the range.
+
+### Infinite scroll (SSRM-style)
+
+\`\`\`tsx
+<GridTable
+  infiniteScroll={{
+    enabled: true,
+    totalRowCount: 10000,
+    blockSize: 50,
+    onLoadBlock: async (start, end) => fetchRows(start, end),
+  }}
+/>
+\`\`\`
+
+Export \`useInfiniteScroll\` for custom scroll containers.
+
+### Multi-row column group headers
+
+Pass \`columnGroups\` with \`alignColumnGroups\` (default \`true\`) to render a real colspan header row above column labels.
+
+Live: [Column grouping demo](/demos/column-grouping)
+
+### Delta updates and flash cells
+
+\`applyTransaction({ add, update, remove })\` mutates row arrays in place. \`flashCells\` highlights changed cells after paste or programmatic edits.`;
 
 export const DOC_CONTENT_MAP: Record<string, string> = {
   'getting-started': DOC_GETTING_STARTED,
@@ -441,5 +601,11 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'drag-drop': DOC_DRAG_DROP,
   'theming': DOC_THEMING,
   'tree-data': DOC_TREE_DATA,
+  'saved-views': DOC_SAVED_VIEWS,
+  'advanced-filters': DOC_ADVANCED_FILTERS,
+  'formulas': DOC_FORMULAS,
+  'virtualization': DOC_VIRTUALIZATION,
+  'export-scope': DOC_EXPORT_SCOPE,
+  'enterprise-grid': DOC_ENTERPRISE_GRID,
   'advanced-patterns': DOC_ADVANCED_PATTERNS,
 };

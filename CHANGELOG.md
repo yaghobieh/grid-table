@@ -5,6 +5,36 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-07-11
+
+### Added
+
+- **`exportScope` prop** — `'all' | 'filtered' | 'sorted' | 'selected'` controls which rows are included in CSV/Excel/PDF export, clipboard copy, and print. Default `'sorted'`. `resolveExportData` utility exported.
+- **Saved view URL sync** — `savedViews.syncUrl` reads/writes active view id to the query string (`urlParam`, default `'view'`).
+- **Set filter UI** — `filterType: 'set'` on columns shows checkbox list in the filter popup; applies `'in'` operator.
+- **Date range filter UI** — `filterType: 'date'` with from/to inputs and `between` operator in the filter popup.
+- **Expandable group rows** — `rowGroups.showHeaders`, `defaultExpanded`, collapse/expand via chevron on group header rows. `useRowGroupExpansion` hook exported.
+- **Excel-style range selection** — `rangeSelection` prop with drag-to-select cells. `useRangeSelection` hook exported.
+- **Clipboard paste into range** — Ctrl/Cmd+V pastes tab-separated clipboard data into selected range when `enableCellEdit` is on.
+- **SSRM-style infinite scroll** — `infiniteScroll` prop with `onLoadBlock`, `blockSize`, `totalRowCount`. `useInfiniteScroll` hook exported.
+- **Multi-row column group headers** — `columnGroups` + `alignColumnGroups` render real colspan header row via `ColumnGroupHeader`.
+- **Delta row updates** — `applyTransaction` utility for `{ add, update, remove }` batch mutations.
+- **Flash cells** — `flashCells` prop highlights cells after paste or programmatic updates.
+- **Cursor agent skills** — `.cursor/skills/` with code-review, component-workflow, code-quality, and release-workflow guides.
+- **Husky pre-commit** — `scripts/pre-commit.sh` runs library typecheck, build, portal typecheck, and Playwright portal sanity.
+- **Playwright e2e** — portal route render + dark-mode specs; `Sanity/sanity-release-{version}.md` report.
+
+### Fixed
+
+- **Loading state hooks** — removed `useMemo` after loading early return in `GridTableContent` that broke server-driven and other loading demos.
+
+### Portal
+
+- **Skills page** at `/skills` with copy-ready prompts for Cursor, Claude, and ChatGPT.
+- **Docs** — saved views, advanced filters, column formulas, virtualization, export scope, enterprise grid features; fixed virtualization text (no longer "on the roadmap").
+- Saved views demo enables `syncUrl: true`; pinned row groups demo enables `showHeaders: true`.
+- i18n for Skills and 1.1.1 changelog (en, es, he).
+
 ## [1.1.0] - 2026-05-20
 
 ### Added

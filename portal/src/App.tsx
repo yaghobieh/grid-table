@@ -19,6 +19,7 @@ import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
 import { Changelog } from './pages/Changelog';
+import { Skills } from './pages/Skills';
 import { Playground } from './pages/Playground';
 
 const routes = [
@@ -42,6 +43,7 @@ const routes = [
   { path: '/theme-builder', name: 'theme-builder', component: ThemeBuilder },
   { path: '/playground', name: 'playground', component: Playground },
   { path: '/changelog', name: 'changelog', component: Changelog },
+  { path: '/skills', name: 'skills', component: Skills },
   { path: '/docs/:slug', name: 'docs', component: DocsPage },
   { path: '/docs', name: 'docs-index', component: DocsPage },
 ];

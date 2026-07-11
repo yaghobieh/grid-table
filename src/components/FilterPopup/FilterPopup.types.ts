@@ -4,7 +4,7 @@ import type { FilterOperator } from '@/types';
 export interface FilterPopupProps {
   columnId: string;
   columnHeader: string;
-  filterType: 'text' | 'number' | 'date' | 'select' | 'boolean' | 'custom';
+  filterType: 'text' | 'number' | 'date' | 'select' | 'set' | 'boolean' | 'custom';
   filterOptions?: Array<{ value: string | number | boolean; label: string }>;
   currentValue?: unknown;
   currentOperator?: FilterOperator;

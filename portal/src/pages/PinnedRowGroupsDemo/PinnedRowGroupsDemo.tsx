@@ -25,7 +25,7 @@ export const PinnedRowGroupsDemo: FC = () => {
           <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>
             {t.common.demos}
           </Button>
-          <Badge variant="success">v1.1.0</Badge>
+          <Badge variant="success">v1.1.1</Badge>
         </Flex>
         <Typography variant="h2" className="text-2xl font-bold mb-1">{prg.title}</Typography>
         <Typography variant="body2" className="opacity-50 mb-4">

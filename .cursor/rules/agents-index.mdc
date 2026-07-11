@@ -1,0 +1,25 @@
+# Grid Table Agents Index
+
+Use these skills to keep Grid Table work consistent across library and portal.
+
+## Skills (`.cursor/skills/`)
+
+| Skill | When to use |
+|-------|-------------|
+| **grid-table-code-review** | `/grid-table-code-review`, before merge, refactoring legacy components |
+| **grid-component-workflow** | New component, portal demo page, changelog entry |
+| **grid-code-quality** | Types in type files, constants in const files, no magic numbers |
+| **grid-release-workflow** | Version bump, CHANGELOG, build, portal, publish |
+
+## Rules (`.cursor/rules/`)
+
+- `code-style.mdc` — no comments, types/consts split, `import type`
+- `project-structure.mdc` — folder layout for library and portal
+- `portal-rules.mdc` — Bear UI only, i18n for all UI copy
+- `library-rules.mdc` — headless grid patterns, context API
+
+## Handoff
+
+- Code review gates run on pre-commit via `npm run sanity`
+- Portal demos must use real library APIs — no mock-only pages
+- Every release ships `Sanity/sanity-release-{version}.md`

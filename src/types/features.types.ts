@@ -150,11 +150,15 @@ export interface SavedViewDefinition {
   snapshot: TableViewSnapshot;
 }
 
+export type ExportScope = 'all' | 'filtered' | 'sorted' | 'selected';
+
 export interface SavedViewsConfig {
   views: SavedViewDefinition[];
   activeViewId?: string;
   persistKey?: string;
   showViewSwitcher?: boolean;
+  syncUrl?: boolean;
+  urlParam?: string;
   onViewChange?: (viewId: string, snapshot: TableViewSnapshot) => void;
 }
 
@@ -169,6 +173,9 @@ export interface RowGroupConfig {
   pinned?: boolean;
   footer?: Array<string | GroupFooterSpec>;
   footerLabelField?: string;
+  showHeaders?: boolean;
+  defaultExpanded?: boolean;
+  headerLabelField?: string;
 }
 
 export interface RowGroupMeta {
@@ -176,12 +183,56 @@ export interface RowGroupMeta {
   isGroupHeader?: boolean;
   groupKey?: string;
   groupLabel?: string;
+  childCount?: number;
 }
 
 export interface ColumnGroupConfig {
   id: string;
   label: string;
   columnIds: string[];
+  parentId?: string;
+}
+
+export interface RangeSelectionConfig {
+  enabled?: boolean;
+  enablePaste?: boolean;
+  onRangeChange?: (range: CellRange | null) => void;
+}
+
+export interface CellRange {
+  startRow: number;
+  endRow: number;
+  startCol: number;
+  endCol: number;
+}
+
+export interface CellCoord {
+  rowIndex: number;
+  colIndex: number;
+}
+
+export interface InfiniteScrollConfig<T extends RowData = RowData> {
+  enabled?: boolean;
+  blockSize?: number;
+  totalRowCount: number;
+  onLoadBlock: (startRow: number, endRow: number) => Promise<T[]> | T[];
+  loadingRows?: boolean;
+}
+
+export interface RowTransaction<T extends RowData = RowData> {
+  add?: T[];
+  update?: T[];
+  remove?: Array<string | number>;
+}
+
+export interface FlashCellsConfig {
+  enabled?: boolean;
+  durationMs?: number;
+}
+
+export interface BulkEditConfig {
+  enabled?: boolean;
+  applyToSelection?: boolean;
 }
 
 export interface ConditionalFormatRule<T extends RowData = RowData> {

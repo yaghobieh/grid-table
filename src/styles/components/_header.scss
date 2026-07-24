@@ -202,10 +202,30 @@
 .gt-cell-range-selected {
   outline: 2px solid rgba(var(--gt-accent-rgb, 34, 197, 94), 0.45);
   outline-offset: -2px;
+  position: relative;
 }
 
 .gt-cell-range-anchor {
   background-color: rgba(var(--gt-accent-rgb, 34, 197, 94), 0.12);
+}
+
+.gt-fill-handle {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  border: 1px solid var(--gt-bg-primary, #fff);
+  background: rgb(var(--gt-accent-rgb, 34, 197, 94));
+  cursor: crosshair;
+  padding: 0;
+  z-index: 2;
+}
+
+.gt-fill-handle:hover,
+.gt-fill-handle--active {
+  transform: scale(1.15);
 }
 
 @keyframes gt-cell-flash-keyframes {

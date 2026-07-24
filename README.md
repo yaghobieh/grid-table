@@ -4,7 +4,7 @@
   <img src="https://github.com/yaghobieh/grid-table/blob/main/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.1.1 — A powerful, feature-rich data grid for React with 40+ features including **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.1.2 — A powerful, feature-rich data grid for React with 40+ features including **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
@@ -20,6 +20,12 @@
 - **Row Selection** — Single and multi-select support
 - **Row Expansion** — Expandable rows with custom content
 - **Responsive** — Default **horizontal scroll** table on small screens; optional **`mobileLayout="stacked"`** for card layout. Drawer for filters/sorting. Disable breakpoints with `mobileBreakpoint="none"`.
+
+### v1.1.2
+
+- **Fill handle** — `rangeSelection.fillHandle` drag-fill or Ctrl/Cmd+D fill-down when `enableCellEdit` is on.
+- **Touch gestures** — `swipeActions` row actions + `longPressContextMenu`; `useTouchGestures` exported.
+- **Range drag wired** — cell pointer events drive range selection end-to-end.
 
 ### v1.1.1
 

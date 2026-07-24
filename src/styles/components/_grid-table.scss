@@ -145,3 +145,40 @@
 .gt-touch-gestures .grid-row {
   touch-action: pan-y;
 }
+
+.gt-touch-row {
+  position: relative;
+  transition: transform 0.12s ease-out;
+  will-change: transform;
+}
+
+.gt-touch-row--swiping {
+  transition: none;
+  user-select: none;
+}
+
+.gt-touch-swipe-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  z-index: 0;
+  transform: translateX(100%);
+}
+
+.gt-touch-swipe-action {
+  flex: 1;
+  min-width: 72px;
+  border: none;
+  color: #fff;
+  background: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gt-touch-swipe-action--danger {
+  background: #dc2626;
+}
+

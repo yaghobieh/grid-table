@@ -132,9 +132,19 @@ export const en: TranslationStrings = {
       description: 'Create nested AND/OR filter rules with reusable groups.',
     },
     'column-grouping': {
-      title: 'Column grouping band',
+      title: 'Column group headers',
       description:
-        'Two header tiers: a decorative band row (regions, quarters, KPI groups) lines up with real columns below via CSS grid—no native colspan yet, but reads like enterprise grids.',
+        'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
+    },
+    'enterprise-grid': {
+      title: 'Enterprise grid',
+      description:
+        'Range selection, fill handle, set/date filters, exportScope, flash cells, applyTransaction, and touch swipe / long-press context menu.',
+    },
+    'infinite-scroll': {
+      title: 'Infinite scroll (SSRM)',
+      description:
+        'Block-loading infinite scroll with onLoadBlock — distinct from lazyLoad, virtualize, and manualPagination.',
     },
     virtualization: {
       title: 'Large lists & lazy load',
@@ -224,10 +234,30 @@ export const en: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.9 Portal + Grid',
-    title: 'Feature showcase (v1.0.9 mobile + portal polish)',
+    badge: 'v1.1.2',
+    title: 'Feature showcase',
     description:
-      'Context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, print mode. On narrow screens the grid defaults to horizontal scroll; use the stacked mobile layout only when you want card-style rows.',
+      'Interactive grids for context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, and print. Dedicated demos cover 1.1.x enterprise APIs.',
+    relatedTitle: 'Explore dedicated demos',
+    relatedDescription: 'Shipped 1.1.x surfaces live on their own routes — open them instead of treating them as “planned”.',
+    relatedLinks: {
+      'enterprise-grid': {
+        title: 'Enterprise grid',
+        summary: 'Range selection, fill handle, set/date filters, exportScope, flash cells, touch gestures.',
+      },
+      'infinite-scroll': {
+        title: 'Infinite scroll (SSRM)',
+        summary: 'Block loading with onLoadBlock — separate from lazyLoad and virtualize.',
+      },
+      'pinned-row-groups': {
+        title: 'Pinned row groups',
+        summary: 'Group-by headers and aggregate footers pinned while scrolling.',
+      },
+      'saved-views': {
+        title: 'Saved views',
+        summary: 'Named presets for sort, filters, columns, and density.',
+      },
+    },
     sections: [
       {
         title: 'Context Menu, Status Bar & Export',
@@ -247,6 +277,31 @@ export const en: TranslationStrings = {
         description: 'Pin summary rows to the bottom of the table. Click the print icon in the toolbar to generate a styled printable view.',
       },
     ],
+  },
+
+  enterpriseGridDemo: {
+    title: 'Enterprise grid',
+    description:
+      'Drag to select a range, paste with Ctrl/Cmd+V, fill down with the corner handle or Ctrl/Cmd+D, toggle exportScope, and use set/date column filters. Touch: swipe left for actions, long-press for the context menu.',
+    exportScopeLabel: 'exportScope',
+    addRow: 'Add row (flash)',
+    filtersHint: 'Open a Region/Status column filter for set checkboxes, or Ship date for a from/to range.',
+    swipeCopy: 'Copy',
+    swipeDelete: 'Delete',
+    sections: {
+      range: {
+        title: 'Range, fill handle, filters & export scope',
+        description: 'Select cells, paste or fill, then export/copy using the selected scope. Flash cells highlight after edits.',
+      },
+    },
+  },
+
+  infiniteScrollDemo: {
+    title: 'Infinite scroll (SSRM)',
+    description: 'Scroll to the bottom to load the next block via onLoadBlock. totalRowCount drives how many blocks remain.',
+    compareHint:
+      'Use infiniteScroll for server block fetches. Prefer lazyLoad when all rows are already in memory, virtualize for windowed DOM, and manualPagination for page buttons.',
+    loading: 'Loading next block…',
   },
 
   accessibilityDemo: {
@@ -283,9 +338,11 @@ export const en: TranslationStrings = {
     masterDetail: 'Copy — expansion renderer',
     persisted: 'Copy — save page in localStorage',
     server: 'Copy — manual pagination pattern',
-    columnGrouping: 'Copy — grouped header band',
+    columnGrouping: 'Copy — columnGroups + alignColumnGroups',
     virtualization: 'Copy — lazyLoad + options',
     themePlayground: 'Copy — integration sketch',
+    enterpriseGrid: 'Copy — enterprise grid (range, fill, exportScope)',
+    infiniteScroll: 'Copy — infiniteScroll block loading',
   },
 
   demosIndex: {
@@ -295,12 +352,11 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
-      'Examples added: pinned row groups + aggregate footers, formula columns, saved views, advanced filter builder',
-      'Theme & Playground hub merges theme tokens and live prop playground',
-      'mobileLayout default horizontal scroll; stacked optional for card-style rows',
-      'Softer tableEffects.hover accent',
-      'Demos: accessibility, master–detail, persisted pagination, server paging, grouping band, lazy lists',
+      'v1.1.2 — Fill handle, touch swipe/long-press, enterprise + infinite scroll demos',
+      'Range selection wired for drag; Ctrl/Cmd+D fill-down; set/date filter portal coverage',
+      'Column grouping demo uses real colspan headers',
+      'Playwright interaction smoke for range, filters, and exportScope',
+      'API reference updated for filterType set + 1.1.x hooks',
     ],
   },
 
@@ -359,6 +415,15 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.2': {
+        highlights: [
+          'Fill handle + Ctrl/Cmd+D fill-down for range selection with enableCellEdit',
+          'Touch gestures: swipeActions reveal row actions; longPressContextMenu opens context menu',
+          'Portal: enterprise grid + infinite scroll demos; column grouping uses real colspan',
+          'API reference documents filterType set/date and 1.1.x hooks',
+          'Playwright interaction smoke for range, set filter, and exportScope',
+        ],
+      },
       '1.1.1': {
         highlights: [
           'exportScope — control export/copy/print rows: all, filtered, sorted, or selected',

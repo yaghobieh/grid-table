@@ -14,11 +14,14 @@ function normalizeRange(anchor: CellCoord, focus: CellCoord): CellRange {
 export interface UseRangeSelectionReturn {
   range: CellRange | null;
   isDragging: boolean;
+  isFilling: boolean;
   isCellInRange: (rowIndex: number, colIndex: number) => boolean;
   isAnchorCell: (rowIndex: number, colIndex: number) => boolean;
   handleCellMouseDown: (coord: CellCoord) => void;
   handleCellMouseEnter: (coord: CellCoord) => void;
   handleMouseUp: () => void;
+  beginFillDrag: () => void;
+  setFocusCoord: (coord: CellCoord) => void;
   clearRange: () => void;
 }
 
@@ -26,6 +29,7 @@ export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
   const [anchor, setAnchor] = useState<CellCoord | null>(null);
   const [focus, setFocus] = useState<CellCoord | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isFilling, setIsFilling] = useState(false);
 
   const range = useMemo(() => {
     if (!enabled || !anchor || !focus) return null;
@@ -38,26 +42,43 @@ export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
       setAnchor(coord);
       setFocus(coord);
       setIsDragging(true);
+      setIsFilling(false);
     },
     [enabled],
   );
 
   const handleCellMouseEnter = useCallback(
     (coord: CellCoord) => {
-      if (!enabled || !isDragging) return;
+      if (!enabled || (!isDragging && !isFilling)) return;
+      if (isFilling && anchor) {
+        setFocus({ rowIndex: coord.rowIndex, colIndex: focus?.colIndex ?? anchor.colIndex });
+        return;
+      }
       setFocus(coord);
     },
-    [enabled, isDragging],
+    [enabled, isDragging, isFilling, anchor, focus?.colIndex],
   );
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
+    setIsFilling(false);
+  }, []);
+
+  const beginFillDrag = useCallback(() => {
+    if (!enabled || !anchor) return;
+    setIsFilling(true);
+    setIsDragging(false);
+  }, [enabled, anchor]);
+
+  const setFocusCoord = useCallback((coord: CellCoord) => {
+    setFocus(coord);
   }, []);
 
   const clearRange = useCallback(() => {
     setAnchor(null);
     setFocus(null);
     setIsDragging(false);
+    setIsFilling(false);
   }, []);
 
   const isCellInRange = useCallback(
@@ -84,11 +105,14 @@ export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
   return {
     range,
     isDragging,
+    isFilling,
     isCellInRange,
     isAnchorCell,
     handleCellMouseDown,
     handleCellMouseEnter,
     handleMouseUp,
+    beginFillDrag,
+    setFocusCoord,
     clearRange,
   };
 }

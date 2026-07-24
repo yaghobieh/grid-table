@@ -160,6 +160,29 @@ export interface TranslationStrings {
     title: string;
     description: string;
     sections: { title: string; description: string }[];
+    relatedTitle: string;
+    relatedDescription: string;
+    relatedLinks: Record<string, { title: string; summary: string }>;
+  };
+
+  enterpriseGridDemo: {
+    title: string;
+    description: string;
+    exportScopeLabel: string;
+    addRow: string;
+    filtersHint: string;
+    swipeCopy: string;
+    swipeDelete: string;
+    sections: {
+      range: { title: string; description: string };
+    };
+  };
+
+  infiniteScrollDemo: {
+    title: string;
+    description: string;
+    compareHint: string;
+    loading: string;
   };
 
   accessibilityDemo: {
@@ -192,6 +215,8 @@ export interface TranslationStrings {
     columnGrouping: string;
     virtualization: string;
     themePlayground: string;
+    enterpriseGrid: string;
+    infiniteScroll: string;
   };
 
   savedViewsDemo: {

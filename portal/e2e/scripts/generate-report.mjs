@@ -63,6 +63,7 @@ function buildPlaywrightSection(report) {
 
   const sanity = allTests.filter((t) => t.title.startsWith('[sanity]'));
   const darkMode = allTests.filter((t) => t.title.startsWith('[dark-mode]'));
+  const interactions = allTests.filter((t) => t.title.startsWith('[interactions]'));
 
   const summary = (tests) => {
     const passed = tests.filter((t) => t.status === 'expected').length;
@@ -73,6 +74,7 @@ function buildPlaywrightSection(report) {
 
   const sanitySum = summary(sanity);
   const darkSum = summary(darkMode);
+  const interactionsSum = summary(interactions);
   const failedTests = allTests.filter((t) => t.status === 'unexpected');
 
   let section = `## Playwright Sanity Results\n\n`;
@@ -80,6 +82,7 @@ function buildPlaywrightSection(report) {
   section += `|-------|--------|--------|---------|-------|\n`;
   section += `| Page Render (sanity) | ${sanitySum.passed} | ${sanitySum.failed} | ${sanitySum.skipped} | ${sanitySum.total} |\n`;
   section += `| Dark Mode | ${darkSum.passed} | ${darkSum.failed} | ${darkSum.skipped} | ${darkSum.total} |\n`;
+  section += `| Interactions | ${interactionsSum.passed} | ${interactionsSum.failed} | ${interactionsSum.skipped} | ${interactionsSum.total} |\n`;
 
   if (failedTests.length > 0) {
     section += `\n### Failed Tests\n\n`;

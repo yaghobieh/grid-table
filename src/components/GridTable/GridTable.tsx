@@ -8,8 +8,10 @@ import { FilterBuilder } from '../FilterBuilder';
 import { ColumnGroupHeader } from '../ColumnGroupHeader';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { applyClipboardToRange, parseClipboardGrid } from '@/utils/transaction.utils';
+import { applyFillDownFromRange, isBottomRightOfRange } from '@/utils/fillRange.utils';
 import { getFlashCellClassName, scheduleFlashRemoval, buildFlashCellKey } from '@/utils/flashCells.utils';
 import { RANGE_SELECTION_ACTIVE_CLASS, RANGE_SELECTION_ANCHOR_CLASS } from '@constants/rangeSelection.const';
+import { FILL_HANDLE_KEY } from '@constants/fillHandle.const';
 import {
   buildDisplayRows,
   resolveVirtualizeConfig,
@@ -206,15 +208,51 @@ function GridTableContent<T extends RowData>({
     return [...acts, ...(contextMenuConfig?.actions ?? [])];
   }, [contextMenuConfig, actions, state.columnStates]);
 
+  const openContextMenuAt = useCallback((row: T, rowIndex: number, x: number, y: number, columnId = '') => {
+    if (!contextMenuConfig?.enabled) return;
+    const col = columns.find(c => c.id === columnId);
+    const value = col
+      ? (typeof col.accessor === 'function' ? col.accessor(row) : (row as Record<string, unknown>)[col.accessor as string])
+      : undefined;
+    setCtxMenu({ visible: true, x, y, context: { row, rowIndex, columnId, value } });
+  }, [contextMenuConfig, columns]);
+
   const handleContextMenu = useCallback((row: T, rowIndex: number, e: React.MouseEvent) => {
     if (!contextMenuConfig?.enabled) return;
     e.preventDefault();
     const target = (e.target as HTMLElement).closest('[data-column-id]') as HTMLElement | null;
     const columnId = target?.dataset.columnId ?? '';
-    const col = columns.find(c => c.id === columnId);
-    const value = col ? (typeof col.accessor === 'function' ? col.accessor(row) : (row as Record<string, unknown>)[col.accessor as string]) : undefined;
-    setCtxMenu({ visible: true, x: e.clientX, y: e.clientY, context: { row, rowIndex, columnId, value } });
-  }, [contextMenuConfig, columns]);
+    openContextMenuAt(row, rowIndex, e.clientX, e.clientY, columnId);
+  }, [contextMenuConfig, openContextMenuAt]);
+
+  const handleLongPressContextMenu = useCallback((row: T, rowIndex: number, clientX: number, clientY: number) => {
+    if (!contextMenuConfig?.enabled || touchGestures?.longPressContextMenu !== true) return;
+    openContextMenuAt(row, rowIndex, clientX, clientY);
+  }, [contextMenuConfig, touchGestures?.longPressContextMenu, openContextMenuAt]);
+
+  const handleRangeMouseDown = useCallback((rowIndex: number, colIndex: number, event: React.MouseEvent) => {
+    if (!rangeSelection?.enabled) return;
+    if (event.button !== 0) return;
+    event.preventDefault();
+    rangeApi.handleCellMouseDown({ rowIndex, colIndex });
+  }, [rangeSelection?.enabled, rangeApi]);
+
+  const handleRangeMouseEnter = useCallback((rowIndex: number, colIndex: number) => {
+    if (!rangeSelection?.enabled) return;
+    rangeApi.handleCellMouseEnter({ rowIndex, colIndex });
+  }, [rangeSelection?.enabled, rangeApi]);
+
+  const handleFillHandleMouseDown = useCallback((rowIndex: number, colIndex: number, event: React.MouseEvent) => {
+    if (!rangeSelection?.enabled || rangeSelection.fillHandle === false) return;
+    if (event.button !== 0) return;
+    rangeApi.beginFillDrag();
+    rangeApi.setFocusCoord({ rowIndex, colIndex });
+  }, [rangeSelection, rangeApi]);
+
+  const showFillHandleForCell = useCallback((rowIndex: number, colIndex: number) => {
+    if (!rangeSelection?.enabled || rangeSelection.fillHandle === false || !enableCellEdit) return false;
+    return isBottomRightOfRange(rangeApi.range, rowIndex, colIndex);
+  }, [rangeSelection, enableCellEdit, rangeApi.range]);
 
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
   const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
@@ -460,26 +498,64 @@ function GridTableContent<T extends RowData>({
   );
 
   useEffect(() => {
-    if (!rangeSelection?.enabled || rangeSelection.enablePaste === false) return;
-    const handlePaste = async (event: KeyboardEvent) => {
-      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'v') return;
-      if (!rangeApi.range || !enableCellEdit) return;
-      event.preventDefault();
-      const text = await navigator.clipboard.readText();
-      const matrix = parseClipboardGrid(text);
-      if (matrix.length === 0) return;
+    if (!rangeSelection?.enabled) return;
+    const handleRangeKeys = async (event: KeyboardEvent) => {
+      const meta = event.metaKey || event.ctrlKey;
+      if (!meta || !rangeApi.range || !enableCellEdit) return;
+
+      if (event.key.toLowerCase() === 'v' && rangeSelection.enablePaste !== false) {
+        event.preventDefault();
+        const text = await navigator.clipboard.readText();
+        const matrix = parseClipboardGrid(text);
+        if (matrix.length === 0) return;
+        const visibleCols = columns.filter((col) => !col.hidden);
+        applyClipboardToRange(matrix, bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+          const rowId = getRowIdFn(row);
+          onCellEditRef.current?.(rowId, columnId, value);
+          if (flashCells?.enabled !== false) {
+            scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
+          }
+        });
+        return;
+      }
+
+      if (event.key.toLowerCase() === FILL_HANDLE_KEY && rangeSelection.fillHandle !== false) {
+        event.preventDefault();
+        const visibleCols = columns.filter((col) => !col.hidden);
+        applyFillDownFromRange(bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+          const rowId = getRowIdFn(row);
+          onCellEditRef.current?.(rowId, columnId, value);
+          if (flashCells?.enabled !== false) {
+            scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
+          }
+        });
+      }
+    };
+    window.addEventListener('keydown', handleRangeKeys);
+    return () => window.removeEventListener('keydown', handleRangeKeys);
+  }, [rangeSelection, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes]);
+
+  useEffect(() => {
+    if (!rangeSelection?.enabled || !rangeApi.isFilling || !rangeApi.range || !enableCellEdit) return;
+    if (rangeSelection.fillHandle === false) return;
+    const onUp = () => {
       const visibleCols = columns.filter((col) => !col.hidden);
-      applyClipboardToRange(matrix, bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+      applyFillDownFromRange(bodyRows, visibleCols, rangeApi.range!, (row, columnId, value) => {
         const rowId = getRowIdFn(row);
         onCellEditRef.current?.(rowId, columnId, value);
         if (flashCells?.enabled !== false) {
           scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
         }
       });
+      rangeApi.handleMouseUp();
     };
-    window.addEventListener('keydown', handlePaste);
-    return () => window.removeEventListener('keydown', handlePaste);
-  }, [rangeSelection, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes]);
+    window.addEventListener('mouseup', onUp);
+    return () => window.removeEventListener('mouseup', onUp);
+  }, [rangeSelection, rangeApi.isFilling, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes, rangeApi]);
+
+  useEffect(() => {
+    rangeSelection?.onRangeChange?.(rangeApi.range);
+  }, [rangeSelection, rangeApi.range]);
 
   useEffect(() => {
     if (!columnStatePersistence?.persistKey) return;
@@ -876,6 +952,11 @@ function GridTableContent<T extends RowData>({
               isRowDisabled={isRowDisabled}
               renderRowExpansion={effectiveRowExpansion}
               onRowContextMenu={contextMenuConfig?.enabled ? handleContextMenu : undefined}
+              onLongPressContextMenu={
+                contextMenuConfig?.enabled && touchGestures?.longPressContextMenu
+                  ? handleLongPressContextMenu
+                  : undefined
+              }
               rowDragProps={rowReorderConfig?.enabled ? rowReorder.getRowDragProps : undefined}
               draggingRowId={rowReorder.draggingRowId}
               dragOverRowId={rowReorder.dragOverRowId}
@@ -889,6 +970,19 @@ function GridTableContent<T extends RowData>({
               onGroupToggle={rowGroupExpansion.toggleGroup}
               isGroupExpanded={rowGroupExpansion.isExpanded}
               getCellClassName={rangeSelection?.enabled || flashCells?.enabled ? getCellClassName : undefined}
+              touchGestures={touchGestures}
+              onRangeMouseDown={rangeSelection?.enabled ? handleRangeMouseDown : undefined}
+              onRangeMouseEnter={rangeSelection?.enabled ? handleRangeMouseEnter : undefined}
+              onFillHandleMouseDown={
+                rangeSelection?.enabled && rangeSelection.fillHandle !== false
+                  ? handleFillHandleMouseDown
+                  : undefined
+              }
+              showFillHandleForCell={
+                rangeSelection?.enabled && rangeSelection.fillHandle !== false
+                  ? showFillHandleForCell
+                  : undefined
+              }
             />
             {hasMoreLazy && (
               <div ref={sentinelRef} className="gt-lazy-sentinel" style={{ padding: '0.75rem', textAlign: 'center' }}>

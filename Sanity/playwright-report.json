@@ -93,12 +93,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2980,
+                  "duration": 6891,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:28.199Z",
+                  "startTime": "2026-07-24T04:31:06.078Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -127,12 +127,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3203,
+                  "duration": 5650,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:34.815Z",
+                  "startTime": "2026-07-24T04:31:13.847Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -161,12 +161,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2648,
+                  "duration": 3576,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:38.043Z",
+                  "startTime": "2026-07-24T04:31:19.531Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -195,12 +195,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2949,
+                  "duration": 4680,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:40.717Z",
+                  "startTime": "2026-07-24T04:31:23.140Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -229,12 +229,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2609,
+                  "duration": 4542,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:43.697Z",
+                  "startTime": "2026-07-24T04:31:27.869Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -263,12 +263,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3641,
+                  "duration": 3376,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:46.330Z",
+                  "startTime": "2026-07-24T04:31:32.474Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -277,6 +277,74 @@
             }
           ],
           "id": "948bb582612a8e882a31-e10c1727944b17c5e1fb",
+          "file": "dark-mode.spec.cjs",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "[dark-mode] /demos/enterprise-grid — dark class applied",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2584,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-24T04:31:35.867Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "948bb582612a8e882a31-b2fc21f04398ac6e4a0d",
+          "file": "dark-mode.spec.cjs",
+          "line": 6,
+          "column": 3
+        },
+        {
+          "title": "[dark-mode] /demos/enterprise-grid — light mode restores correctly",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-24T04:31:38.471Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "948bb582612a8e882a31-c653f893b5a62758f116",
           "file": "dark-mode.spec.cjs",
           "line": 15,
           "column": 3
@@ -297,12 +365,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2166,
+                  "duration": 2572,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:50.069Z",
+                  "startTime": "2026-07-24T04:31:41.412Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -331,12 +399,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3822,
+                  "duration": 4886,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:52.264Z",
+                  "startTime": "2026-07-24T04:31:44.001Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -365,12 +433,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2381,
+                  "duration": 3772,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:56.107Z",
+                  "startTime": "2026-07-24T04:31:48.918Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -399,12 +467,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3144,
+                  "duration": 3553,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:58.510Z",
+                  "startTime": "2026-07-24T04:31:52.730Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -433,12 +501,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2254,
+                  "duration": 2715,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:01.680Z",
+                  "startTime": "2026-07-24T04:31:56.309Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -467,12 +535,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2880,
+                  "duration": 3224,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:03.954Z",
+                  "startTime": "2026-07-24T04:31:59.064Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -501,12 +569,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4140,
+                  "duration": 2999,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:06.852Z",
+                  "startTime": "2026-07-24T04:32:02.327Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -518,6 +586,125 @@
           "file": "dark-mode.spec.cjs",
           "line": 25,
           "column": 1
+        }
+      ]
+    },
+    {
+      "title": "interactions.spec.cjs",
+      "file": "interactions.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "[interactions] enterprise grid smoke",
+          "file": "interactions.spec.cjs",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "range selection highlight appears after drag",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 6127,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-24T04:31:06.053Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "89849a8072b55adeb898-a7aaec53948975a64479",
+              "file": "interactions.spec.cjs",
+              "line": 4,
+              "column": 3
+            },
+            {
+              "title": "set filter applies and reduces visible rows",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3183,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-24T04:31:13.044Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "89849a8072b55adeb898-eb033fc5aa384e378a01",
+              "file": "interactions.spec.cjs",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "exportScope selected button is available",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2763,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-07-24T04:31:16.286Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "89849a8072b55adeb898-c25b78e3107aa846dce4",
+              "file": "interactions.spec.cjs",
+              "line": 46,
+              "column": 3
+            }
+          ]
         }
       ]
     },
@@ -543,12 +730,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2937,
+                  "duration": 2990,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:28.192Z",
+                  "startTime": "2026-07-24T04:31:19.097Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -577,12 +764,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1764,
+                  "duration": 2000,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:34.775Z",
+                  "startTime": "2026-07-24T04:31:22.276Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -611,12 +798,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1876,
+                  "duration": 3353,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:36.581Z",
+                  "startTime": "2026-07-24T04:31:24.301Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -625,6 +812,74 @@
             }
           ],
           "id": "99577b452668c385dbbc-a2600bf29144ec3150bb",
+          "file": "sanity.spec.cjs",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "[sanity] /demos/enterprise-grid renders without crash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3301,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-24T04:31:27.721Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "99577b452668c385dbbc-efe789535073bd9cc818",
+          "file": "sanity.spec.cjs",
+          "line": 5,
+          "column": 3
+        },
+        {
+          "title": "[sanity] /demos/infinite-scroll renders without crash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1856,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-24T04:31:31.043Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "99577b452668c385dbbc-e73d007ded2b1bfa4fcc",
           "file": "sanity.spec.cjs",
           "line": 5,
           "column": 3
@@ -645,12 +900,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1524,
+                  "duration": 1502,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:38.508Z",
+                  "startTime": "2026-07-24T04:31:32.924Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -679,12 +934,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1513,
+                  "duration": 1564,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:40.093Z",
+                  "startTime": "2026-07-24T04:31:34.445Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -713,12 +968,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1678,
+                  "duration": 1732,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:41.636Z",
+                  "startTime": "2026-07-24T04:31:36.060Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -747,12 +1002,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1712,
+                  "duration": 1449,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:43.337Z",
+                  "startTime": "2026-07-24T04:31:37.856Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -781,12 +1036,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1705,
+                  "duration": 1673,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:45.068Z",
+                  "startTime": "2026-07-24T04:31:39.325Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -815,12 +1070,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1797,
+                  "duration": 1815,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:46.801Z",
+                  "startTime": "2026-07-24T04:31:41.017Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -849,12 +1104,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1923,
+                  "duration": 2240,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:48.635Z",
+                  "startTime": "2026-07-24T04:31:42.847Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -883,12 +1138,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1825,
+                  "duration": 2667,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:50.582Z",
+                  "startTime": "2026-07-24T04:31:45.103Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -917,12 +1172,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1994,
+                  "duration": 3633,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:52.473Z",
+                  "startTime": "2026-07-24T04:31:47.792Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -951,12 +1206,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1935,
+                  "duration": 1666,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:54.491Z",
+                  "startTime": "2026-07-24T04:31:51.460Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -985,12 +1240,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1532,
+                  "duration": 1937,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:56.477Z",
+                  "startTime": "2026-07-24T04:31:53.148Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1019,12 +1274,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1506,
+                  "duration": 1862,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:58.029Z",
+                  "startTime": "2026-07-24T04:31:55.108Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1053,12 +1308,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1674,
+                  "duration": 1631,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:35:59.560Z",
+                  "startTime": "2026-07-24T04:31:56.995Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1087,12 +1342,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1947,
+                  "duration": 1582,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:01.251Z",
+                  "startTime": "2026-07-24T04:31:58.653Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1121,12 +1376,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1589,
+                  "duration": 1684,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:03.236Z",
+                  "startTime": "2026-07-24T04:32:00.263Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1155,12 +1410,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1497,
+                  "duration": 1721,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:04.879Z",
+                  "startTime": "2026-07-24T04:32:01.969Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1189,12 +1444,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1751,
+                  "duration": 1754,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:06.392Z",
+                  "startTime": "2026-07-24T04:32:03.705Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1223,12 +1478,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1350,
+                  "duration": 1366,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:08.165Z",
+                  "startTime": "2026-07-24T04:32:05.474Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1257,12 +1512,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1470,
+                  "duration": 1299,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:09.535Z",
+                  "startTime": "2026-07-24T04:32:06.857Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1291,12 +1546,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1297,
+                  "duration": 1308,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-07-11T12:36:11.044Z",
+                  "startTime": "2026-07-24T04:32:08.177Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1308,15 +1563,49 @@
           "file": "sanity.spec.cjs",
           "line": 5,
           "column": 3
+        },
+        {
+          "title": "[sanity] /docs/enterprise-grid renders without crash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1192,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-24T04:32:09.505Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "99577b452668c385dbbc-b539fb27c24847a810d8",
+          "file": "sanity.spec.cjs",
+          "line": 5,
+          "column": 3
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-11T12:35:25.524Z",
-    "duration": 46935.223000000005,
-    "expected": 36,
+    "startTime": "2026-07-24T04:31:02.160Z",
+    "duration": 68678.22899999999,
+    "expected": 44,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

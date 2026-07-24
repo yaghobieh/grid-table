@@ -1,5 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
-import type { RowData, ColumnDefinition, ColumnState, RowDragHandleProps } from '@/types';
+import type { RowData, ColumnDefinition, ColumnState, RowDragHandleProps, TouchGesturesConfig } from '@/types';
 import type { CellClickEvent } from '../GridCell/GridCell.types';
 
 export interface GridBodyProps<T extends RowData = RowData> {
@@ -26,6 +26,7 @@ export interface GridBodyProps<T extends RowData = RowData> {
   isRowDisabled?: (row: T) => boolean;
   renderRowExpansion?: (row: T, rowId: string | number) => ReactNode;
   onRowContextMenu?: (row: T, index: number, event: React.MouseEvent) => void;
+  onLongPressContextMenu?: (row: T, index: number, clientX: number, clientY: number) => void;
   rowDragProps?: (rowId: string | number) => RowDragHandleProps;
   draggingRowId?: string | number | null;
   dragOverRowId?: string | number | null;
@@ -39,6 +40,11 @@ export interface GridBodyProps<T extends RowData = RowData> {
   onGroupToggle?: (groupKey: string) => void;
   isGroupExpanded?: (groupKey: string) => boolean;
   getCellClassName?: (rowIndex: number, columnId: string) => string;
+  touchGestures?: TouchGesturesConfig<T>;
+  onRangeMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
+  onRangeMouseEnter?: (rowIndex: number, colIndex: number) => void;
+  onFillHandleMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
+  showFillHandleForCell?: (rowIndex: number, colIndex: number) => boolean;
 }
 
 export interface GridBodyRowDerivedState {

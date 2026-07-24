@@ -2,6 +2,8 @@ const PORTAL_ROUTES = [
   '/',
   '/demos',
   '/demos/features',
+  '/demos/enterprise-grid',
+  '/demos/infinite-scroll',
   '/demos/saved-views',
   '/demos/advanced-filter-builder',
   '/demos/pinned-row-groups',
@@ -22,12 +24,14 @@ const PORTAL_ROUTES = [
   '/skills',
   '/docs/getting-started',
   '/docs/api-reference',
+  '/docs/enterprise-grid',
 ];
 
 const DARK_MODE_SAMPLE_ROUTES = [
   '/',
   '/demos/basic',
   '/demos/features',
+  '/demos/enterprise-grid',
   '/playground',
   '/docs/getting-started',
   '/skills',

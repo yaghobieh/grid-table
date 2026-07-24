@@ -5,6 +5,31 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2026-07-24
+
+### Added
+
+- **Fill handle** — `rangeSelection.fillHandle` (default on when range selection is enabled) shows a drag handle on the bottom-right cell of the selection. Drag down or press Ctrl/Cmd+D to fill cells from the top row of the range when `enableCellEdit` is on.
+- **Touch swipe actions** — `touchGestures.swipeActions` reveals configurable row actions (defaults: Copy / Delete). Optional `swipeActionItems` for custom buttons.
+- **Long-press context menu** — `touchGestures.longPressContextMenu` opens the existing context menu on touch/pen long-press.
+- **`useTouchGestures` hook** — exported for custom touch row compositions.
+- **Wired range drag** — cell `mousedown` / `mouseenter` now drive `useRangeSelection` so drag-select works end-to-end.
+
+### Portal
+
+- **Enterprise grid demo** (`/demos/enterprise-grid`) — range + paste + fill handle, set/date filters, exportScope toggle, flash cells, applyTransaction add, touch swipe/long-press.
+- **Infinite scroll demo** (`/demos/infinite-scroll`) — SSRM-style `onLoadBlock` distinct from lazyLoad / virtualize / manualPagination.
+- **Column grouping demo** migrated to `columnGroups` + `alignColumnGroups` colspan headers.
+- **FeaturesDemo** links to shipped 1.1.x demos; hard-coded “planned” cards removed; copy through i18n (en/es/he).
+- **API Reference** — `filterType` includes `set`; date range behavior documented; hooks list includes `useRangeSelection`, `useInfiniteScroll`, `useSavedViews`, `useVirtualizedWindow`, `useRowGroupExpansion`, `useTouchGestures`.
+- Playwright interaction smoke for range highlight, set filter, and exportScope toolbar.
+- Changelog i18n + `CURRENT_VERSION` → 1.1.2.
+
+### Docs
+
+- Cleared stale `[Unreleased] Planned` items that already shipped in 1.1.0 / 1.1.1.
+- `docs/GRID_TABLE_DOCS.md` refreshed through 1.1.2.
+
 ## [1.1.1] - 2026-07-11
 
 ### Added
@@ -278,11 +303,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 
-- Virtualization for large datasets (virtual scrolling)
-- Column groups (grouped headers)
-- Touch gestures for mobile
-- Server-side data support
-- Master-detail (nested grids in expanded rows)
-- Conditional formatting
-- Multi-column header groups
+- Tracked on GitHub milestone **1.1.3** (open issues after this release).
 

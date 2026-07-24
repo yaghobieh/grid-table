@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.2', date: '2026-07-24' },
   { version: '1.1.1', date: '2026-07-11' },
   { version: '1.1.0', date: '2026-05-20' },
   { version: '1.0.9', date: '2026-03-28' },
@@ -29,11 +30,13 @@ export const VERSIONS: VersionInfo[] = [
 ];
 
 export const DEMOS: DemoMeta[] = [
-  { id: 'features', icon: 'SparklesIcon', path: '/demos/features', tag: 'New' },
-  { id: 'pinned-row-groups', icon: 'LayersIcon', path: '/demos/pinned-row-groups', tag: 'New' },
-  { id: 'column-formula-engine', icon: 'CodeIcon', path: '/demos/column-formula-engine', tag: 'New' },
-  { id: 'saved-views', icon: 'SaveIcon', path: '/demos/saved-views', tag: 'New' },
-  { id: 'advanced-filter-builder', icon: 'FilterIcon', path: '/demos/advanced-filter-builder', tag: 'New' },
+  { id: 'enterprise-grid', icon: 'SparklesIcon', path: '/demos/enterprise-grid', tag: 'New' },
+  { id: 'infinite-scroll', icon: 'LoaderIcon', path: '/demos/infinite-scroll', tag: 'New' },
+  { id: 'features', icon: 'SparklesIcon', path: '/demos/features', tag: 'Popular' },
+  { id: 'pinned-row-groups', icon: 'LayersIcon', path: '/demos/pinned-row-groups' },
+  { id: 'column-formula-engine', icon: 'CodeIcon', path: '/demos/column-formula-engine' },
+  { id: 'saved-views', icon: 'SaveIcon', path: '/demos/saved-views' },
+  { id: 'advanced-filter-builder', icon: 'FilterIcon', path: '/demos/advanced-filter-builder' },
   { id: 'basic', icon: 'TableIcon', path: '/demos/basic', tag: 'Popular' },
   { id: 'theme-playground', icon: 'PaletteIcon', path: '/demos/theme-playground', tag: 'Interactive' },
   { id: 'accessibility', icon: 'KeyboardIcon', path: '/demos/accessibility', tag: 'Guide' },
@@ -304,9 +307,10 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'virtualize', type: 'boolean | VirtualizeConfig', default: 'false', description: 'Window virtualization — render only visible rows.' },
       { name: 'advancedFilter', type: 'AdvancedFilterConfig', default: '—', description: 'Nested AND/OR filter tree with FilterBuilder panel.' },
       { name: 'rowGroups', type: 'RowGroupConfig', default: '—', description: 'Group rows by field with aggregate footers and optional collapsible headers.' },
-      { name: 'rangeSelection', type: 'RangeSelectionConfig', default: '—', description: 'Excel-style cell range selection with optional clipboard paste.' },
+      { name: 'rangeSelection', type: 'RangeSelectionConfig', default: '—', description: 'Excel-style cell range selection with optional clipboard paste and fillHandle drag-fill / Ctrl+D.' },
       { name: 'infiniteScroll', type: 'InfiniteScrollConfig', default: '—', description: 'Block loading on scroll for large server-side datasets.' },
       { name: 'flashCells', type: 'FlashCellsConfig', default: '—', description: 'Brief highlight on cells after paste or programmatic updates.' },
+      { name: 'touchGestures', type: 'TouchGesturesConfig', default: '—', description: 'Mobile swipe actions and long-press context menu when enabled.' },
       { name: 'alignColumnGroups', type: 'boolean', default: 'true', description: 'Render columnGroups as aligned multi-row header with colspan.' },
       { name: 'columnGroups', type: 'ColumnGroupConfig[]', default: '—', description: 'Grouped column header labels spanning child columns.' },
     ],
@@ -327,10 +331,13 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'filterable', type: 'boolean', default: 'false', description: 'Enable filtering for this column.' },
       { name: 'sticky', type: "'left' | 'right'", default: '—', description: 'Pin column to left or right edge.' },
       { name: 'render', type: '(value, row, index) => ReactNode', default: '—', description: 'Custom cell renderer.' },
-      { name: 'filterType', type: "'text' | 'number' | 'date' | 'select'", default: "'text'", description: 'Filter input type.' },
-      { name: 'filterOptions', type: 'FilterOption[]', default: '—', description: 'Options for select-type filters.' },
+      { name: 'filterType', type: "'text' | 'number' | 'date' | 'select' | 'set' | 'boolean' | 'custom'", default: "'text'", description: "Filter UI type. 'set' uses checkbox list + 'in' operator; 'date' shows from/to range with 'between'." },
+      { name: 'filterOptions', type: 'FilterOption[]', default: '—', description: "Options for select and set filters (label/value pairs)." },
       { name: 'hidden', type: 'boolean', default: 'false', description: 'Hide this column.' },
       { name: 'renderSubCell', type: '(row) => ReactNode', default: '—', description: 'Render expanded sub-row content.' },
+      { name: 'formula', type: 'string', default: '—', description: 'Computed column expression evaluated from other fields.' },
+      { name: 'groupId', type: 'string', default: '—', description: 'Optional column group id for colspan headers.' },
+      { name: 'editable', type: 'boolean | EditableConfig', default: 'false', description: 'Enable inline cell editing for this column.' },
     ],
   },
   {
@@ -348,6 +355,12 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'useRowReorder', type: 'hook', default: '—', description: 'Row drag-and-drop state and handlers.' },
       { name: 'useUndoRedo', type: 'hook', default: '—', description: 'Edit history with undo/redo and keyboard shortcuts.' },
       { name: 'useTreeData', type: 'hook', default: '—', description: 'Tree flattening, expand/collapse, indent calculation.' },
+      { name: 'useSavedViews', type: 'hook', default: '—', description: 'Apply and switch named view presets externally.' },
+      { name: 'useVirtualizedWindow', type: 'hook', default: '—', description: 'Compute visible window indexes for virtualized rows.' },
+      { name: 'useRangeSelection', type: 'hook', default: '—', description: 'Excel-style range selection state, drag, and fill-handle helpers.' },
+      { name: 'useInfiniteScroll', type: 'hook', default: '—', description: 'SSRM-style block loading driven by scroll position.' },
+      { name: 'useRowGroupExpansion', type: 'hook', default: '—', description: 'Collapse/expand state for grouped header rows.' },
+      { name: 'useTouchGestures', type: 'hook', default: '—', description: 'Swipe offset and long-press handlers for touch rows.' },
     ],
   },
 ];

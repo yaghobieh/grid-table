@@ -3,4 +3,4 @@ dist
 demo
 
 portal/dist
-portal/node_modules
+portal/node_modulesSanity/playwright-results/

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
-test.describe('[interactions] enterprise grid smoke', () => {
-  test('range selection highlight appears after drag', async ({ page }) => {
+test.describe('enterprise grid smoke', () => {
+  test('[interactions] range selection highlight appears after drag', async ({ page }) => {
     await page.goto('/demos/enterprise-grid', { waitUntil: 'networkidle', timeout: 20000 });
     const cells = page.locator('.grid-cell[data-column-id="sku"]');
     await expect(cells.first()).toBeVisible();
@@ -17,7 +17,7 @@ test.describe('[interactions] enterprise grid smoke', () => {
     await expect(page.locator('.gt-cell-range-selected').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('set filter applies and reduces visible rows', async ({ page }) => {
+  test('[interactions] set filter applies and reduces visible rows', async ({ page }) => {
     await page.goto('/demos/enterprise-grid', { waitUntil: 'networkidle', timeout: 20000 });
     const body = page.locator('.grid-body');
     await expect(body).toBeVisible();
@@ -43,7 +43,7 @@ test.describe('[interactions] enterprise grid smoke', () => {
     expect(after).toBeLessThanOrEqual(before);
   });
 
-  test('exportScope selected button is available', async ({ page }) => {
+  test('[interactions] exportScope selected button is available', async ({ page }) => {
     await page.goto('/demos/enterprise-grid', { waitUntil: 'networkidle', timeout: 20000 });
     const selectedScope = page.locator('button').filter({ hasText: /selected/i }).first();
     await expect(selectedScope).toBeVisible({ timeout: 10000 });

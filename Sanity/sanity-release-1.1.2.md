@@ -1,28 +1,22 @@
 # Grid Table Portal Sanity Report — release/1.1.2
 
 **Date:** 2026-07-24
-**Branch:** release/1.1.2
+**Branch:** main
 **Version:** 1.1.2
-**Overall Status:** ❌ FAILED
+**Overall Status:** ✅ PASSED
 
 ---
 
 ## Library TypeScript
 
-❌ Failed:
-```
-
-```
+✅ Passed
 
 
 ---
 
 ## Library Build
 
-❌ Failed:
-```
-
-```
+✅ Passed
 
 
 ---
@@ -40,7 +34,7 @@
 |-------|--------|--------|---------|-------|
 | Page Render (sanity) | 26 | 0 | 0 | 26 |
 | Dark Mode | 15 | 0 | 0 | 15 |
-| Interactions | 0 | 0 | 0 | 0 |
+| Interactions | 3 | 0 | 0 | 3 |
 
 
 ---

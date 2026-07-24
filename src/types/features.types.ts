@@ -196,6 +196,7 @@ export interface ColumnGroupConfig {
 export interface RangeSelectionConfig {
   enabled?: boolean;
   enablePaste?: boolean;
+  fillHandle?: boolean;
   onRangeChange?: (range: CellRange | null) => void;
 }
 
@@ -271,8 +272,18 @@ export interface ColumnStatePersistenceConfig {
   onStateChange?: (states: ColumnState[]) => void;
 }
 
-export interface TouchGesturesConfig {
+export interface TouchSwipeAction<T extends RowData = RowData> {
+  id: string;
+  label: string;
+  danger?: boolean;
+  onAction: (row: T, rowIndex: number) => void;
+}
+
+export interface TouchGesturesConfig<T extends RowData = RowData> {
   enabled?: boolean;
   swipeActions?: boolean;
+  swipeActionItems?: TouchSwipeAction<T>[];
+  swipeThresholdPx?: number;
   longPressContextMenu?: boolean;
+  longPressMs?: number;
 }

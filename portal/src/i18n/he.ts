@@ -112,8 +112,16 @@ export const he: TranslationStrings = {
       description: 'שליחת עמוד נוכחי ב־data, הפעלת manualPagination ו־totalRowCount, וטעינה מחדש ב־onPageChange. מיון וסינון על כל הנתונים בייצור בשרת.',
     },
     'column-grouping': {
-      title: 'רצועת קיבוץ עמודות',
-      description: 'שני מפלסי כותרת: רצועה דקורטיבית מיושרת לעמודות אמיתיות דרך CSS grid.',
+      title: 'כותרות קבוצת עמודות',
+      description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
+    },
+    'enterprise-grid': {
+      title: 'גריד ארגוני',
+      description: 'בחירת טווח, fill handle, מסנני set/תאריך, exportScope, flash cells ומחוות מגע.',
+    },
+    'infinite-scroll': {
+      title: 'גלילה אינסופית (SSRM)',
+      description: 'טעינת בלוקים עם onLoadBlock — נפרד מ־lazyLoad, virtualize ו־manualPagination.',
     },
     virtualization: {
       title: 'רשימות גדולות וטעינה עצלה',
@@ -203,10 +211,30 @@ export const he: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.9 פורטל + גריד',
-    title: 'תצוגת תכונות (נייד + פורטל v1.0.9)',
+    badge: 'v1.1.2',
+    title: 'תצוגת תכונות',
     description:
-      'תפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור שורות מחדש, עץ, ביטול/שחזור, שורות קפואות, הדפסה. במסכים צרים ברירת המחדל היא גלילה אופקית.',
+      'גרידים אינטראקטיביים לתפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור מחדש, עץ, ביטול/שחזור, שורות קפואות והדפסה. ל־APIs של 1.1.x יש דמוים ייעודיים.',
+    relatedTitle: 'דמוים ייעודיים',
+    relatedDescription: 'תכונות שכבר שוחררו ב־1.1.x זמינות בנתיבים נפרדים — לא כ"מתוכנן".',
+    relatedLinks: {
+      'enterprise-grid': {
+        title: 'גריד ארגוני',
+        summary: 'טווח, fill handle, מסנני set/תאריך, exportScope, flash cells, מחוות מגע.',
+      },
+      'infinite-scroll': {
+        title: 'גלילה אינסופית (SSRM)',
+        summary: 'טעינת בלוקים עם onLoadBlock — נפרד מ־lazyLoad ו־virtualize.',
+      },
+      'pinned-row-groups': {
+        title: 'קבוצות שורות נעוצות',
+        summary: 'כותרות קבוצה וסיכומים נעוצים בגלילה.',
+      },
+      'saved-views': {
+        title: 'תצוגות שמורות',
+        summary: 'פריסות בשם למיון, מסננים, עמודות וצפיפות.',
+      },
+    },
     sections: [
       {
         title: 'תפריט הקשר, שורת מצב וייצוא',
@@ -226,6 +254,31 @@ export const he: TranslationStrings = {
         description: 'הצמדת שורות סיכום לתחתית. סמל הדפסה בסרגל לתצוגה להדפסה.',
       },
     ],
+  },
+
+  enterpriseGridDemo: {
+    title: 'גריד ארגוני',
+    description:
+      'גרירה לבחירת טווח, הדבקה ב־Ctrl/Cmd+V, מילוי עם הידית או Ctrl/Cmd+D, החלפת exportScope ומסנני set/תאריך. מגע: החלקה שמאלה ולחיצה ארוכה לתפריט.',
+    exportScopeLabel: 'exportScope',
+    addRow: 'הוספת שורה (flash)',
+    filtersHint: 'פתחו מסנן Region/Status לרשימת set, או Ship date לטווח from/to.',
+    swipeCopy: 'העתקה',
+    swipeDelete: 'מחיקה',
+    sections: {
+      range: {
+        title: 'טווח, fill handle, מסננים ו־exportScope',
+        description: 'בחרו תאים, הדביקו או מלאו, ואז ייצאו/העתיקו לפי ה־scope. Flash cells מדגיש עריכות.',
+      },
+    },
+  },
+
+  infiniteScrollDemo: {
+    title: 'גלילה אינסופית (SSRM)',
+    description: 'גללו לתחתית כדי לטעון את הבלוק הבא עם onLoadBlock. totalRowCount קובע כמה בלוקים נותרו.',
+    compareHint:
+      'השתמשו ב־infiniteScroll לבלוקים מהשרת. העדיפו lazyLoad כשכל השורות כבר בזיכרון, virtualize לחלון DOM, ו־manualPagination לכפתורי עמוד.',
+    loading: 'טוען בלוק הבא…',
   },
 
   accessibilityDemo: {
@@ -262,9 +315,11 @@ export const he: TranslationStrings = {
     masterDetail: 'העתקה — רנדר הרחבה',
     persisted: 'העתקה — שמירת עמוד ב־localStorage',
     server: 'העתקה — תבנית עימוד ידני',
-    columnGrouping: 'העתקה — רצועת כותרת מקובצת',
+    columnGrouping: 'העתקה — columnGroups + alignColumnGroups',
     virtualization: 'העתקה — lazyLoad ואפשרויות',
     themePlayground: 'העתקה — שלד אינטגרציה',
+    enterpriseGrid: 'העתקה — גריד ארגוני (טווח, fill, exportScope)',
+    infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
   },
 
   demosIndex: {
@@ -274,12 +329,11 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
-      'נוספו דוגמאות: קבוצות שורות מוצמדות + סיכומי תחתית, נוסחאות עמודות, תצוגות שמורות, בונה פילטרים מתקדם',
-      'מרכז ערכת נושא ומתחם ניסוי מאחדים אסימונים וניסוי props',
-      'mobileLayout גלילה אופקית כברירת מחדל; מוערם אופציונלי',
-      'hover רגוע יותר עם tableEffects.hover',
-      'דמוים: נגישות, אב—פרט, עימוד מתמיד, שרת, רצועת קיבוץ, רשימות עצלות',
+      'v1.1.2 — Fill handle, מחוות מגע, דמוי enterprise וגלילה אינסופית',
+      'בחירת טווח בגרירה; מילוי למטה Ctrl/Cmd+D; מסנני set/תאריך בפורטל',
+      'דמו קיבוץ עמודות עם colspan אמיתי',
+      'Playwright אינטראקציה לטווח, מסננים ו־exportScope',
+      'API reference מעודכן ל־filterType set ו־hooks של 1.1.x',
     ],
   },
 
@@ -337,6 +391,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.2': {
+        highlights: [
+          'Fill handle + Ctrl/Cmd+D למילוי למטה בבחירת טווח',
+          'מחוות מגע: swipeActions ו־longPressContextMenu',
+          'פורטל: דמוי enterprise וגלילה אינסופית; colspan אמיתי בקיבוץ עמודות',
+          'API reference עם filterType set/date ו־hooks של 1.1.x',
+          'Playwright אינטראקציה לטווח, מסנן set ו־exportScope',
+        ],
+      },
       '1.1.1': {
         highlights: [
           'exportScope — שורות לייצוא/העתקה/הדפסה: all, filtered, sorted או selected',

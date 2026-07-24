@@ -25,6 +25,11 @@ export interface GridCellProps<T extends RowData = RowData> {
   onClick?: (event: CellClickEvent<T>) => void;
   enableCellEdit?: boolean;
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  colIndex?: number;
+  showFillHandle?: boolean;
+  onRangeMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
+  onRangeMouseEnter?: (rowIndex: number, colIndex: number) => void;
+  onFillHandleMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
 }
 
 export interface GridCellRenderProps {

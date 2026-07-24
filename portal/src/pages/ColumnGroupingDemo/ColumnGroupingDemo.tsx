@@ -6,9 +6,10 @@ import { Layout } from '@/components/Layout';
 import { useI18n } from '@/i18n';
 import { DemoCodeSection } from '@/components/DemoCodeSection';
 import {
-  COLUMN_GROUPING_DATA,
   COLUMN_GROUPING_COLUMNS,
+  COLUMN_GROUPING_DATA,
   COLUMN_GROUPING_DEMO_SOURCE,
+  COLUMN_GROUPING_GROUPS,
 } from './ColumnGroupingDemo.const';
 
 export const ColumnGroupingDemo: FC = () => {
@@ -32,19 +33,12 @@ export const ColumnGroupingDemo: FC = () => {
           <GridTable
             data={COLUMN_GROUPING_DATA}
             columns={COLUMN_GROUPING_COLUMNS}
+            columnGroups={COLUMN_GROUPING_GROUPS}
+            alignColumnGroups
             themeMode={themeMode}
             stickyHeader
             showPagination={false}
             showGlobalFilter={false}
-            renderHeader={() => (
-              <div
-                className="grid grid-cols-4 text-[11px] font-semibold uppercase tracking-wide border-b"
-                style={{ borderColor: 'var(--border-color)' }}
-              >
-                <div className="col-span-2 py-2 text-center opacity-70">Catalog</div>
-                <div className="col-span-2 py-2 text-center opacity-70">Performance</div>
-              </div>
-            )}
             tableEffects={{ hover: true }}
           />
         </div>

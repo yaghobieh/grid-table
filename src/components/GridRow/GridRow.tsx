@@ -20,6 +20,15 @@ import { buildColumnStateIndex, getStickyOffsets, getVisibleColumns } from './Gr
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { DRAG_HANDLE_ICON_PATHS, DRAG_HANDLE_ICON_VIEWBOX, TREE_TOGGLE_ICON_PATH, TREE_TOGGLE_ICON_VIEWBOX } from '@constants/images.const';
 import { ZERO } from '@constants/numbers.const';
+import {
+  TOUCH_GESTURES_ACTION_CLASS,
+  TOUCH_GESTURES_ACTIONS_CLASS,
+  TOUCH_GESTURES_OPEN_CLASS,
+  TOUCH_GESTURES_ROW_CLASS,
+  TOUCH_GESTURES_SWIPING_CLASS,
+  TOUCH_SWIPE_ACTION_WIDTH_PX,
+} from '@constants/touchGestures.const';
+import { invokeSwipeAction, useTouchGestures } from '@/hooks/useTouchGestures';
 
 export function GridRow<T extends RowData = RowData>({
   row,
@@ -37,6 +46,7 @@ export function GridRow<T extends RowData = RowData>({
   onClick,
   onDoubleClick,
   onContextMenu,
+  onLongPressContextMenu,
   onCellClick,
   onSelect,
   onExpand,
@@ -61,10 +71,25 @@ export function GridRow<T extends RowData = RowData>({
   onGroupToggle,
   groupExpanded = true,
   getCellClassName,
+  touchGestures,
+  onRangeMouseDown,
+  onRangeMouseEnter,
+  onFillHandleMouseDown,
+  showFillHandleForCell,
 }: GridRowProps<T>): ReactNode {
   const [isHovered, setIsHovered] = useState(false);
   const groupMeta = getRowGroupMeta(row);
   const isGroupHeader = groupMeta?.isGroupHeader === true;
+
+  const handleLongPress = useCallback(
+    (clientX: number, clientY: number) => {
+      onLongPressContextMenu?.(row, rowIndex, clientX, clientY);
+    },
+    [onLongPressContextMenu, row, rowIndex],
+  );
+
+  const touch = useTouchGestures(touchGestures, row, rowIndex, handleLongPress);
+  const touchEnabled = touchGestures?.enabled === true;
 
   const handleClick = useCallback(() => {
     if (isDisabled) return;
@@ -129,8 +154,19 @@ export function GridRow<T extends RowData = RowData>({
   return (
     <>
       <div
-        className={clsx(rowClasses, className)}
-        style={style}
+        className={clsx(
+          rowClasses,
+          className,
+          touchEnabled && TOUCH_GESTURES_ROW_CLASS,
+          touch.isTracking && TOUCH_GESTURES_SWIPING_CLASS,
+          touch.isOpen && TOUCH_GESTURES_OPEN_CLASS,
+        )}
+        style={{
+          ...style,
+          ...(touchEnabled && touch.offsetX !== ZERO
+            ? { transform: `translateX(${touch.offsetX}px)` }
+            : {}),
+        }}
         role="row"
         aria-selected={isSelected}
         aria-disabled={isDisabled}
@@ -144,7 +180,32 @@ export function GridRow<T extends RowData = RowData>({
         onDragOver={onDragOver}
         onDragEnd={onDragEnd}
         onDrop={onDrop}
+        onPointerDown={touchEnabled ? touch.handlers.onPointerDown : undefined}
+        onPointerMove={touchEnabled ? touch.handlers.onPointerMove : undefined}
+        onPointerUp={touchEnabled ? touch.handlers.onPointerUp : undefined}
+        onPointerCancel={touchEnabled ? touch.handlers.onPointerCancel : undefined}
       >
+        {touch.actions.length > ZERO && (
+          <div
+            className={TOUCH_GESTURES_ACTIONS_CLASS}
+            style={{ width: touch.actions.length * TOUCH_SWIPE_ACTION_WIDTH_PX }}
+          >
+            {touch.actions.map((action) => (
+              <button
+                key={action.id}
+                type="button"
+                className={clsx(TOUCH_GESTURES_ACTION_CLASS, action.danger && 'gt-touch-swipe-action--danger')}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  invokeSwipeAction(action, row, rowIndex);
+                  touch.close();
+                }}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
         {draggable && (
           <div className="gt-drag-handle gt-drag-handle-bear">
             {dragHandleIcon ?? (
@@ -275,6 +336,11 @@ export function GridRow<T extends RowData = RowData>({
               onClick={onCellClick}
               enableCellEdit={enableCellEdit}
               onCellSave={onCellSave}
+              colIndex={colIndex}
+              showFillHandle={showFillHandleForCell?.(rowIndex, colIndex) === true}
+              onRangeMouseDown={onRangeMouseDown}
+              onRangeMouseEnter={onRangeMouseEnter}
+              onFillHandleMouseDown={onFillHandleMouseDown}
             />
           );
         })}

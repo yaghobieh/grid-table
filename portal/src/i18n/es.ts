@@ -115,9 +115,19 @@ export const es: TranslationStrings = {
         'Pasa solo la página actual en data, activa manualPagination y totalRowCount, y vuelve a pedir datos en onPageChange. Orden y filtros sobre el dataset completo deben aplicarse en el servidor en producción.',
     },
     'column-grouping': {
-      title: 'Banda de agrupación de columnas',
+      title: 'Cabeceras de grupo de columnas',
       description:
-        'Dos niveles de cabecera: una franja visual (regiones, trimestres, KPIs) se alinea con las columnas reales mediante CSS grid—sin colspan nativo aún, pero con aspecto de grid empresarial.',
+        'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
+    },
+    'enterprise-grid': {
+      title: 'Grid empresarial',
+      description:
+        'Selección de rango, fill handle, filtros set/fecha, exportScope, flash cells, applyTransaction y gestos táctiles.',
+    },
+    'infinite-scroll': {
+      title: 'Scroll infinito (SSRM)',
+      description:
+        'Carga por bloques con onLoadBlock — distinto de lazyLoad, virtualize y manualPagination.',
     },
     virtualization: {
       title: 'Listas grandes y lazy load',
@@ -207,10 +217,30 @@ export const es: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.0.9 Portal + Grid',
-    title: 'Escaparate de funciones (móvil + portal v1.0.9)',
+    badge: 'v1.1.2',
+    title: 'Escaparate de funciones',
     description:
-      'Menú contextual, barra de estado, exportación, teclado, reordenar filas, árbol, deshacer/rehacer, filas congeladas, impresión. En pantallas estrechas el grid usa scroll horizontal por defecto.',
+      'Grids interactivos para menú contextual, barra de estado, exportación, teclado, reordenar, árbol, deshacer/rehacer, filas congeladas e impresión. Las APIs 1.1.x tienen demos dedicados.',
+    relatedTitle: 'Explorar demos dedicados',
+    relatedDescription: 'Las superficies 1.1.x ya enviadas tienen rutas propias — ábrelas en lugar de tratarlas como “planificadas”.',
+    relatedLinks: {
+      'enterprise-grid': {
+        title: 'Grid empresarial',
+        summary: 'Rango, fill handle, filtros set/fecha, exportScope, flash cells, gestos táctiles.',
+      },
+      'infinite-scroll': {
+        title: 'Scroll infinito (SSRM)',
+        summary: 'Carga por bloques con onLoadBlock — aparte de lazyLoad y virtualize.',
+      },
+      'pinned-row-groups': {
+        title: 'Grupos fijados',
+        summary: 'Cabeceras por grupo y pies agregados fijados al scroll.',
+      },
+      'saved-views': {
+        title: 'Vistas guardadas',
+        summary: 'Presets con nombre para orden, filtros, columnas y densidad.',
+      },
+    },
     sections: [
       {
         title: 'Menú contextual, barra de estado y exportación',
@@ -230,6 +260,31 @@ export const es: TranslationStrings = {
         description: 'Fija filas resumen al fondo. Usa el icono de impresión en la barra para una vista imprimible.',
       },
     ],
+  },
+
+  enterpriseGridDemo: {
+    title: 'Grid empresarial',
+    description:
+      'Arrastra para seleccionar un rango, pega con Ctrl/Cmd+V, rellena con el handle o Ctrl/Cmd+D, cambia exportScope y usa filtros set/fecha. Táctil: desliza a la izquierda y mantén pulsado para el menú.',
+    exportScopeLabel: 'exportScope',
+    addRow: 'Añadir fila (flash)',
+    filtersHint: 'Abre el filtro de Región/Estado para checkboxes set, o Fecha de envío para un rango from/to.',
+    swipeCopy: 'Copiar',
+    swipeDelete: 'Eliminar',
+    sections: {
+      range: {
+        title: 'Rango, fill handle, filtros y exportScope',
+        description: 'Selecciona celdas, pega o rellena, luego exporta/copia con el alcance elegido. Flash cells resalta ediciones.',
+      },
+    },
+  },
+
+  infiniteScrollDemo: {
+    title: 'Scroll infinito (SSRM)',
+    description: 'Desplázate al final para cargar el siguiente bloque con onLoadBlock. totalRowCount indica cuántos bloques quedan.',
+    compareHint:
+      'Usa infiniteScroll para bloques del servidor. Prefiere lazyLoad si todas las filas ya están en memoria, virtualize para DOM en ventana y manualPagination para botones de página.',
+    loading: 'Cargando siguiente bloque…',
   },
 
   accessibilityDemo: {
@@ -266,9 +321,11 @@ export const es: TranslationStrings = {
     masterDetail: 'Copiar — render de expansión',
     persisted: 'Copiar — guardar página en localStorage',
     server: 'Copiar — patrón de paginación manual',
-    columnGrouping: 'Copiar — banda de cabecera agrupada',
+    columnGrouping: 'Copiar — columnGroups + alignColumnGroups',
     virtualization: 'Copiar — lazyLoad + opciones',
     themePlayground: 'Copiar — boceto de integración',
+    enterpriseGrid: 'Copiar — grid empresarial (rango, fill, exportScope)',
+    infiniteScroll: 'Copiar — infiniteScroll por bloques',
   },
 
   demosIndex: {
@@ -278,12 +335,11 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.0.9 — Mobile Scroll Table, Softer Hover, Portal Polish',
-      'Ejemplos añadidos: grupos de filas fijados + pies agregados, fórmulas por columna, vistas guardadas, constructor de filtros avanzado',
-      'Hub Tema y Playground reúne tokens y playground de props',
-      'mobileLayout con scroll horizontal por defecto; apilado opcional',
-      'Hover más suave con tableEffects.hover',
-      'Demos: accesibilidad, maestro-detalle, paginación persistida, servidor, banda de grupos, listas perezosas',
+      'v1.1.2 — Fill handle, gestos táctiles, demos enterprise + scroll infinito',
+      'Selección de rango con arrastre; fill-down Ctrl/Cmd+D; filtros set/fecha en portal',
+      'Demo de agrupación de columnas con colspan real',
+      'Playwright de interacción para rango, filtros y exportScope',
+      'API reference actualizada para filterType set y hooks 1.1.x',
     ],
   },
 
@@ -341,6 +397,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.2': {
+        highlights: [
+          'Fill handle + Ctrl/Cmd+D para rellenar hacia abajo en selección de rango',
+          'Gestos táctiles: swipeActions y longPressContextMenu',
+          'Portal: demos enterprise e infinite scroll; colspan real en column grouping',
+          'API reference con filterType set/date y hooks 1.1.x',
+          'Playwright de interacción para rango, filtro set y exportScope',
+        ],
+      },
       '1.1.1': {
         highlights: [
           'exportScope — filas en exportar/copiar/imprimir: all, filtered, sorted o selected',

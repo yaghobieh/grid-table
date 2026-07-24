@@ -20,4 +20,10 @@ export { buildFlashCellKey, scheduleFlashRemoval, getFlashCellClassName } from '
 export { captureTableViewSnapshot, createDefaultViewSnapshot } from './savedViews.utils';
 export { resolveConditionalCellFormat } from './conditionalFormat.utils';
 export { resolveExportData } from './exportScope.utils';
+export {
+  applyFillDownFromRange,
+  extendRangeDown,
+  getCellAccessorValue,
+  isBottomRightOfRange,
+} from './fillRange.utils';
 

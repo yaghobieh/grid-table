@@ -179,6 +179,7 @@ export type {
   VirtualizeConfig,
   ColumnStatePersistenceConfig,
   TouchGesturesConfig,
+  TouchSwipeAction,
   RangeSelectionConfig,
   InfiniteScrollConfig,
   FlashCellsConfig,

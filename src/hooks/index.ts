@@ -16,6 +16,8 @@ export { useInfiniteScroll } from './useInfiniteScroll';
 export type { UseInfiniteScrollReturn } from './useInfiniteScroll';
 export { useRowGroupExpansion } from './useRowGroupExpansion';
 export type { UseRowGroupExpansionReturn } from './useRowGroupExpansion';
+export { useTouchGestures, invokeSwipeAction } from './useTouchGestures';
+export type { UseTouchGesturesReturn, TouchGestureHandlers } from './useTouchGestures';
 export type { UseSavedViewsConfig, UseSavedViewsReturn } from './useSavedViews.types';
 export type { UseVirtualizedWindowParams, UseVirtualizedWindowReturn } from './useVirtualizedWindow.types';
 

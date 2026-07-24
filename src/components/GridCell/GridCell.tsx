@@ -37,6 +37,11 @@ export function GridCell<T extends RowData = RowData>({
   onClick,
   enableCellEdit,
   onCellSave,
+  colIndex,
+  showFillHandle = false,
+  onRangeMouseDown,
+  onRangeMouseEnter,
+  onFillHandleMouseDown,
 }: GridCellProps<T>): ReactNode {
   const valueRef = useRef<HTMLSpanElement>(null);
   const [overflowTitle, setOverflowTitle] = useState<string | undefined>(undefined);
@@ -175,6 +180,29 @@ export function GridCell<T extends RowData = RowData>({
     </div>
   );
 
+  const handleRangeMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      if (colIndex == null || !onRangeMouseDown) return;
+      onRangeMouseDown(rowIndex, colIndex, event);
+    },
+    [colIndex, onRangeMouseDown, rowIndex],
+  );
+
+  const handleRangeMouseEnter = useCallback(() => {
+    if (colIndex == null || !onRangeMouseEnter) return;
+    onRangeMouseEnter(rowIndex, colIndex);
+  }, [colIndex, onRangeMouseEnter, rowIndex]);
+
+  const handleFillHandleMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      if (colIndex == null || !onFillHandleMouseDown) return;
+      event.preventDefault();
+      event.stopPropagation();
+      onFillHandleMouseDown(rowIndex, colIndex, event);
+    },
+    [colIndex, onFillHandleMouseDown, rowIndex],
+  );
+
   return (
     <div
       className={clsx(
@@ -190,8 +218,12 @@ export function GridCell<T extends RowData = RowData>({
       style={mergedCellStyle}
       role="cell"
       data-column-id={column.id}
+      data-row-index={rowIndex}
+      data-col-index={colIndex}
       onClick={onClick ? handleClick : undefined}
       onDoubleClick={!isEditable ? handleDoubleClick : undefined}
+      onMouseDown={onRangeMouseDown ? handleRangeMouseDown : undefined}
+      onMouseEnter={onRangeMouseEnter ? handleRangeMouseEnter : undefined}
     >
       {isEditable ? (
         <EditableCell
@@ -210,6 +242,14 @@ export function GridCell<T extends RowData = RowData>({
         <div className="grid-cell-subcell">
           {column.renderSubCell(row as T)}
         </div>
+      )}
+      {showFillHandle && (
+        <button
+          type="button"
+          className="gt-fill-handle"
+          aria-label="Fill handle"
+          onMouseDown={handleFillHandleMouseDown}
+        />
       )}
     </div>
   );

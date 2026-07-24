@@ -15,6 +15,8 @@ import { PinnedRowGroupsDemo } from './pages/PinnedRowGroupsDemo';
 import { ColumnFormulaEngineDemo } from './pages/ColumnFormulaEngineDemo';
 import { SavedViewsDemo } from './pages/SavedViewsDemo';
 import { AdvancedFilterBuilderDemo } from './pages/AdvancedFilterBuilderDemo';
+import { EnterpriseGridDemo } from './pages/EnterpriseGridDemo';
+import { InfiniteScrollDemo } from './pages/InfiniteScrollDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
@@ -29,6 +31,8 @@ const routes = [
   { path: '/demos/hr', name: 'demos-hr', component: HRDemo },
   { path: '/demos/basic', name: 'demos-basic', component: BasicDemo },
   { path: '/demos/features', name: 'demos-features', component: FeaturesDemo },
+  { path: '/demos/enterprise-grid', name: 'demos-enterprise-grid', component: EnterpriseGridDemo },
+  { path: '/demos/infinite-scroll', name: 'demos-infinite-scroll', component: InfiniteScrollDemo },
   { path: '/demos/theme-playground', name: 'demos-theme-playground', component: ThemePlaygroundDemo },
   { path: '/demos/accessibility', name: 'demos-accessibility', component: AccessibilityDemo },
   { path: '/demos/master-detail', name: 'demos-master-detail', component: MasterDetailDemo },

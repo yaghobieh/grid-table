@@ -542,11 +542,13 @@ Use \`resolveExportData\` from \`@forgedevstack/grid-table\` when building custo
 
 export const DOC_ENTERPRISE_GRID = `## Enterprise grid features
 
-Grid Table 1.1.1 adds AG Grid–style capabilities for dense data apps.
+Grid Table 1.1.x adds AG Grid–style capabilities for dense data apps.
 
 ### Set and date column filters
 
 On \`ColumnDefinition\`, set \`filterType: 'set'\` with \`filterOptions\` for checkbox filters (uses \`in\` operator). Set \`filterType: 'date'\` for a from/to date range (\`between\`).
+
+Live: [Enterprise grid demo](/demos/enterprise-grid)
 
 ### Expandable row groups
 
@@ -554,16 +556,16 @@ On \`ColumnDefinition\`, set \`filterType: 'set'\` with \`filterOptions\` for ch
 
 Live: [Pinned row groups demo](/demos/pinned-row-groups)
 
-### Range selection and clipboard paste
+### Range selection, paste, and fill handle
 
 \`\`\`tsx
 <GridTable
   enableCellEdit
-  rangeSelection={{ enabled: true, enablePaste: true }}
+  rangeSelection={{ enabled: true, enablePaste: true, fillHandle: true }}
 />
 \`\`\`
 
-Drag to select a cell range. Ctrl/Cmd+V pastes tab-separated values from Excel or Sheets into the range.
+Drag to select a cell range. Ctrl/Cmd+V pastes tab-separated values. Drag the fill handle (or Ctrl/Cmd+D) to fill down from the top row of the selection.
 
 ### Infinite scroll (SSRM-style)
 
@@ -578,7 +580,24 @@ Drag to select a cell range. Ctrl/Cmd+V pastes tab-separated values from Excel o
 />
 \`\`\`
 
-Export \`useInfiniteScroll\` for custom scroll containers.
+Prefer \`infiniteScroll\` for server block fetches, \`lazyLoad\` when all rows are already in memory, \`virtualize\` for windowed DOM, and \`manualPagination\` for page controls.
+
+Live: [Infinite scroll demo](/demos/infinite-scroll)
+
+### Touch gestures
+
+\`\`\`tsx
+<GridTable
+  contextMenu={{ enabled: true }}
+  touchGestures={{
+    enabled: true,
+    swipeActions: true,
+    longPressContextMenu: true,
+  }}
+/>
+\`\`\`
+
+Swipe left to reveal row actions; long-press opens the context menu on touch devices.
 
 ### Multi-row column group headers
 

@@ -1,240 +1,92 @@
 # Grid Table — ForgeStack Data Grid
 
-**@forgedevstack/grid-table** is a powerful, feature-rich React data grid with 30+ features: cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, and print mode. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.com).
+**@forgedevstack/grid-table** is a feature-rich React data grid: cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, saved views, virtualization, range selection, infinite scroll, column groups, and more. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.com).
 
 - **Live site:** [grid-table.com](https://grid-table.com/)
-- **npm:** `@forgedevstack/grid-table` · **Version:** 1.0.7
+- **npm:** `@forgedevstack/grid-table` · **Version:** 1.1.2
 - **License:** MIT
+- **Repo:** [yaghobieh/grid-table](https://github.com/yaghobieh/grid-table)
 
 ---
 
 ## Table of Contents
 
 1. [What We Have](#what-we-have)
-2. [New in 1.0.7](#new-in-107)
-3. [Benefits](#benefits)
-4. [Screenshots from grid-table.com](#screenshots-from-grid-tablecom)
-5. [Quick Start](#quick-start)
-6. [Links & Resources](#links--resources)
+2. [New in 1.1.2](#new-in-112)
+3. [Highlights by release](#highlights-by-release)
+4. [Quick Start](#quick-start)
+5. [Links & Resources](#links--resources)
 
 ---
 
 ## What We Have
 
-### Core Features
+### Core
 
 | Feature | Description |
 |--------|-------------|
-| **Cell editing** | Inline edit with validation (text, number, select, date, boolean). Double-click to edit, Enter to save, Escape to cancel. |
-| **Dark / light theme** | Built-in theme support with customizable colors. |
-| **Filtering** | Column-level and global filtering with multiple operators (equals, contains, startsWith, etc.). |
-| **Sorting** | Single and multi-column sorting with custom sort functions. |
-| **Drag & drop** | Reorder columns by dragging headers. |
-| **Column resize** | Adjust column widths by dragging the resize handle. |
-| **Pagination** | Built-in pagination with configurable page sizes. |
-| **Row selection** | Single and multi-select with select-all / deselect-all. |
-| **Row expansion** | Expandable rows with custom content (`renderRowExpansion`). |
-| **Responsive** | Mobile-first design; optional mobile drawer for filters/sorting. |
+| **Cell editing** | Inline edit with validation (text, number, select, date, boolean). |
+| **Filtering** | Column + global filters; `filterType` text/number/date/select/**set**. |
+| **Sorting / pagination** | Client or manual (server) modes. |
+| **Selection / expansion** | Row selection, expansion, master-detail panels. |
+| **Drag & drop** | Column reorder, row reorder, column resize, auto-fit. |
 
-### Display & UX
+### Enterprise / 1.1.x
 
 | Feature | Description |
 |--------|-------------|
-| **Table effects** | Sort animations, row entry effects, hover highlights via `tableEffects`. |
-| **Lazy load** | Infinite scroll with configurable batch size. |
-| **Skeleton loading** | Loading states that match table structure. |
-| **Overflow tooltip** | Full cell content on hover when truncated. |
-| **Expandable sub-cell** | Extra content per cell (double-click or arrow). |
-| **Studio panel** | Dev/prototyping panel for inspecting data and props. |
-| **Context API** | No prop drilling; access state via `useTable` and context. |
-| **TypeScript** | Full type safety and generics for row data. |
-| **Accessibility** | ARIA attributes and keyboard navigation. |
-
-### v1.0.7 Feature Set (see [New in 1.0.7](#new-in-107))
-
-Keyboard navigation, context menu, tree data, status bar, row reordering, Excel/PDF/CSV/JSON export, copy to clipboard, undo/redo, column pinning, column auto-fit, frozen rows, print mode.
+| **Range selection** | Drag-select cells; paste; **fill handle** / Ctrl+D fill-down. |
+| **exportScope** | `all` \| `filtered` \| `sorted` \| `selected` for export/copy/print. |
+| **Infinite scroll** | SSRM-style `onLoadBlock` / `blockSize` / `totalRowCount`. |
+| **Column groups** | `columnGroups` + `alignColumnGroups` real colspan headers. |
+| **Touch gestures** | Swipe actions + long-press context menu. |
+| **Saved views / formulas / row groups** | Named presets, computed columns, pinned group footers. |
+| **Virtualize / lazyLoad** | Window virtualization or in-memory batch reveal. |
 
 ---
 
-## New in 1.0.7
+## New in 1.1.2
 
-Release: **2026-02-24**. Highlights:
+Release: **2026-07-24**.
 
-### Added
-
-- **Keyboard navigation** — Arrow keys to move between cells, Enter to edit, Escape to cancel, Tab, Home/End, PageUp/PageDown. Configure via `keyboardNavigation` prop.
-- **Context menu** — Right-click any cell for copy, filter by value, pin column, hide column. Custom actions via `contextMenu.actions`.
-- **Tree data** — Hierarchical rows with expand/collapse, indent, and toggle arrows. `treeData` with `childrenField`, `expandAll`, etc.
-- **Status bar** — Footer with row count, filtered/selected count, and column aggregations (sum, avg, min, max, count). Configure via `statusBar`.
-- **Row reordering** — Drag-and-drop rows with visual handle. `rowReorder` and `onRowReorder`.
-- **Excel export** — SpreadsheetML XML (`.xls`) via `exportToExcel()`. No extra dependencies.
-- **PDF export** — PDF via print dialog with `exportToPDF()`. Styled HTML table.
-- **Copy to clipboard** — Tab-separated copy with `copyToClipboard()` and `enableCopy` toolbar button.
-- **Undo/redo** — Edit history for cell edits (Ctrl+Z / Ctrl+Y). `undoRedo`, `onUndo`/`onRedo`, configurable max history.
-- **Column pinning** — Runtime pin/unpin columns (left/right) via context menu or context action.
-- **Column auto-fit** — Double-click column edge to auto-fit; optional global auto-fit via `autoFit`.
-- **Frozen rows** — Pin rows to top or bottom via `frozenRows` (e.g. totals). Stay visible while scrolling.
-- **Print mode** — `printConfig` adds print button; styled printable view with title and date.
-
-### New types, hooks, components
-
-- **Types:** `ContextMenuConfig`, `StatusBarConfig`, `FrozenRowsConfig`, `TreeConfig`, `KeyboardNavConfig`, `RowReorderConfig`, `UndoRedoConfig`, `PrintConfig`, `AutoFitConfig`, etc.
-- **Hooks:** `useKeyboardNavigation`, `useRowReorder`, `useUndoRedo`, `useTreeData`.
-- **Components:** `ContextMenu`, `StatusBar`.
+- Fill handle + Ctrl/Cmd+D fill-down on range selection (with `enableCellEdit`)
+- Touch `swipeActions` and `longPressContextMenu` implemented (not CSS-only)
+- Range drag wired to cells end-to-end
+- Portal: `/demos/enterprise-grid`, `/demos/infinite-scroll`; column grouping uses real colspan
+- API reference + Playwright interaction smoke
 
 ---
 
-## Benefits
+## Highlights by release
 
-- **One dependency** — React 16.8+ and optional Bear UI for controls. No heavy grid framework.
-- **Zero-config styling** — SCSS compiled to CSS; import one CSS file. Works with or without Bear.
-- **Fully typed** — TypeScript generics for rows and columns; full IntelliSense.
-- **Composable** — Use `TableProvider` + hooks for custom layouts and toolbars.
-- **Export out of the box** — CSV, JSON, Excel, PDF, copy, and print without extra libs.
-- **Accessible** — ARIA and keyboard support for better a11y.
-- **Portal & docs** — Live demos, playground, theme builder, and docs at [grid-table.com](https://grid-table.com/).
-- **ForgeStack ecosystem** — Fits with Bear UI, Forge Compass, and other ForgeStack packages.
-
----
-
-## Screenshots from grid-table.com
-
-Screenshots below are from the live demos at [https://grid-table.com/](https://grid-table.com/). Add your own screenshots into `docs/screenshots/` and reference them here.
-
-### 1. Basic Demo — full-featured table
-
-Full table with pagination, filters, export, context menu, status bar, frozen row, and loading test.
-
-- **URL:** [https://grid-table.com/demos/basic](https://grid-table.com/demos/basic)
-- **Screenshot:** Add `docs/screenshots/basic-demo.png` (e.g. full table with status bar and toolbar).
-
-<!-- Add when you have the file:
-![Basic Demo](screenshots/basic-demo.png)
--->
-
-### 2. Features Demo — v1.0.7 highlights
-
-Four sections: Context Menu + Status Bar + Export; Row Reorder + Undo/Redo + Keyboard Nav; Tree Data; Frozen Rows + Print.
-
-- **URL:** [https://grid-table.com/demos/features](https://grid-table.com/demos/features)
-- **Screenshots:** Add as needed, e.g.:
-  - `docs/screenshots/features-context-menu.png` — Product table with context menu and status bar
-  - `docs/screenshots/features-row-reorder.png` — Task table with row reorder and status bar
-  - `docs/screenshots/features-tree.png` — Tree data (hierarchical employees)
-  - `docs/screenshots/features-frozen-print.png` — Frozen rows and print
-
-<!-- Example when files exist:
-![Context Menu & Status Bar](screenshots/features-context-menu.png)
-![Row Reorder & Undo/Redo](screenshots/features-row-reorder.png)
-![Tree Data](screenshots/features-tree.png)
-![Frozen Rows & Print](screenshots/features-frozen-print.png)
--->
-
-### 3. Finance Demo — live data
-
-Live-updating table with sparklines (if applicable).
-
-- **URL:** [https://grid-table.com/demos/finance](https://grid-table.com/demos/finance)
-- **Screenshot:** Add `docs/screenshots/finance-demo.png`
-
-### 4. HR Demo — tree view
-
-Hierarchical HR tree with expand/collapse.
-
-- **URL:** [https://grid-table.com/demos/hr](https://grid-table.com/demos/hr)
-- **Screenshot:** Add `docs/screenshots/hr-demo.png`
-
-### 5. Theme Builder
-
-Interactive theme customization and code export.
-
-- **URL:** [https://grid-table.com/theme-builder](https://grid-table.com/theme-builder)
-- **Screenshot:** Add `docs/screenshots/theme-builder.png`
-
-### 6. Playground
-
-Toggle props live and see generated code.
-
-- **URL:** [https://grid-table.com/playground](https://grid-table.com/playground)
-- **Screenshot:** Add `docs/screenshots/playground.png`
+| Version | Focus |
+|---------|--------|
+| **1.1.2** | Fill handle, touch gestures runtime, enterprise/infinite demos |
+| **1.1.1** | exportScope, set/date filters, range paste, infinite scroll, colspan groups, flash cells |
+| **1.1.0** | Saved views, filter builder, row groups, formulas, virtualize |
+| **1.0.9** | mobileLayout scroll/stacked, manualPagination |
+| **1.0.7** | Keyboard nav, context menu, tree, status bar, export suite, pin, print |
 
 ---
 
 ## Quick Start
 
-### Install
-
 ```bash
-npm i @forgedevstack/grid-table
+npm install @forgedevstack/grid-table
 ```
-
-### Import CSS (required)
-
-```tsx
-import '@forgedevstack/grid-table/grid-table.css';
-```
-
-### Minimal example
 
 ```tsx
 import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
 import '@forgedevstack/grid-table/grid-table.css';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  [key: string]: unknown;
-}
-
-const columns: ColumnDefinition<User>[] = [
-  { id: 'name', accessor: 'name', header: 'Name', sortable: true, filterable: true },
-  { id: 'email', accessor: 'email', header: 'Email', sortable: true },
-  { id: 'role', accessor: 'role', header: 'Role', filterType: 'select', filterOptions: [
-    { value: 'admin', label: 'Admin' },
-    { value: 'user', label: 'User' },
-  ]},
-];
-
-const data: User[] = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
-];
-
-function App() {
-  return (
-    <GridTable
-      data={data}
-      columns={columns}
-      enableRowSelection
-      showPagination
-      showFilter
-      enableExport={['csv', 'json', 'excel', 'pdf']}
-      tableEffects={{ hover: true, sort: true, row: true }}
-    />
-  );
-}
+<GridTable data={rows} columns={columns} showPagination />
 ```
 
 ---
 
 ## Links & Resources
 
-| Resource | URL |
-|--------|-----|
-| **Live portal** | [grid-table.com](https://grid-table.com/) |
-| **Basic demo** | [grid-table.com/demos/basic](https://grid-table.com/demos/basic) |
-| **Features demo (1.0.7)** | [grid-table.com/demos/features](https://grid-table.com/demos/features) |
-| **Finance demo** | [grid-table.com/demos/finance](https://grid-table.com/demos/finance) |
-| **HR demo** | [grid-table.com/demos/hr](https://grid-table.com/demos/hr) |
-| **Theme builder** | [grid-table.com/theme-builder](https://grid-table.com/theme-builder) |
-| **Playground** | [grid-table.com/playground](https://grid-table.com/playground) |
-| **npm** | [npmjs.com/package/@forgedevstack/grid-table](https://www.npmjs.com/package/@forgedevstack/grid-table) |
-| **GitHub** | [github.com/yaghobieh/grid-table](https://github.com/yaghobieh/grid-table) |
-| **ForgeStack** | [forgedevstack.com](https://forgedevstack.com) |
-
----
-
-*Grid Table v1.0.7 — part of the ForgeStack ecosystem.*
+- Portal demos: [grid-table.com/demos](https://grid-table.com/demos)
+- npm: [npmjs.com/package/@forgedevstack/grid-table](https://www.npmjs.com/package/@forgedevstack/grid-table)
+- Changelog: see repo `CHANGELOG.md`
+- Open roadmap: GitHub milestones / issues

@@ -133,7 +133,7 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   virtualize?: boolean | VirtualizeConfig;
   density?: TableDensity;
   columnStatePersistence?: ColumnStatePersistenceConfig;
-  touchGestures?: TouchGesturesConfig;
+  touchGestures?: TouchGesturesConfig<T>;
   exportScope?: ExportScope;
   rangeSelection?: RangeSelectionConfig;
   infiniteScroll?: InfiniteScrollConfig<T>;

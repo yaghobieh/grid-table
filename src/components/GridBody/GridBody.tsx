@@ -33,6 +33,7 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     isRowDisabled,
     renderRowExpansion,
     onRowContextMenu,
+    onLongPressContextMenu,
     rowDragProps,
     draggingRowId,
     dragOverRowId,
@@ -45,6 +46,11 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     onGroupToggle,
     isGroupExpanded,
     getCellClassName,
+    touchGestures,
+    onRangeMouseDown,
+    onRangeMouseEnter,
+    onFillHandleMouseDown,
+    showFillHandleForCell,
   } = props;
 
   const handleRowSelect = useCallback(
@@ -112,6 +118,7 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             renderExpansion={renderRowExpansion}
             getRowId={getRowId}
             onContextMenu={onRowContextMenu ? (r: T, idx: number, e: React.MouseEvent) => onRowContextMenu(r, idx, e) : undefined}
+            onLongPressContextMenu={onLongPressContextMenu}
             {...(d.dragProps ?? {})}
             treeToggle={d.hasChildren ? () => treeToggle?.(d.rowId) : undefined}
             treeHasChildren={d.hasChildren}
@@ -125,6 +132,11 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
               return meta?.groupKey ? (isGroupExpanded?.(meta.groupKey) ?? true) : true;
             })()}
             getCellClassName={getCellClassName}
+            touchGestures={touchGestures}
+            onRangeMouseDown={onRangeMouseDown}
+            onRangeMouseEnter={onRangeMouseEnter}
+            onFillHandleMouseDown={onFillHandleMouseDown}
+            showFillHandleForCell={showFillHandleForCell}
           />
         );
       })}

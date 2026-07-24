@@ -30,8 +30,7 @@ export interface TreeEmployee {
   [key: string]: unknown;
 }
 
-export interface FeatureExampleItem {
-  title: string;
-  summary: string;
-  example: string;
+export interface FeatureLinkItem {
+  id: string;
+  path: string;
 }

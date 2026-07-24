@@ -1,7 +1,7 @@
 # Grid Table Portal Sanity Report — release/1.1.2
 
 **Date:** 2026-07-24
-**Branch:** release/1.1.1
+**Branch:** release/1.1.2
 **Version:** 1.1.2
 **Overall Status:** ❌ FAILED
 

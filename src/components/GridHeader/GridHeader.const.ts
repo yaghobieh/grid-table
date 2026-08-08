@@ -6,3 +6,4 @@ export const GRID_HEADER_ALIGN_CLASSES = {
 
 export const GRID_HEADER_FILTER_ARIA = 'Filter column';
 export const GRID_HEADER_SELECT_ALL_ARIA = 'Select all rows';
+export const GRID_HEADER_PIN_ACTIVE_CLASS = 'gt-header-pin--active';

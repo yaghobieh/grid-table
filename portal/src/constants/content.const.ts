@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.3', date: '2026-08-08' },
   { version: '1.1.2', date: '2026-07-24' },
   { version: '1.1.1', date: '2026-07-11' },
   { version: '1.1.0', date: '2026-05-20' },
@@ -302,12 +303,12 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'printConfig', type: 'PrintConfig', default: '—', description: 'Print mode with title and date.' },
       { name: 'enableCopy', type: 'boolean', default: 'false', description: 'Show copy-to-clipboard button in toolbar.' },
       { name: 'enableExport', type: "boolean | string | string[]", default: 'false', description: "Export: true, 'csv', ['csv','excel','pdf']." },
-      { name: 'exportScope', type: "'all' | 'filtered' | 'sorted' | 'selected'", default: "'sorted'", description: 'Which rows to include in export, copy, and print.' },
+      { name: 'exportScope', type: "'all' | 'filtered' | 'sorted' | 'selected'", default: "'sorted'", description: 'Which rows to include in export, copy, and print. selected with no rows is a no-op.' },
       { name: 'savedViews', type: 'SavedViewsConfig', default: '—', description: 'Named view presets with optional URL sync via syncUrl.' },
       { name: 'virtualize', type: 'boolean | VirtualizeConfig', default: 'false', description: 'Window virtualization — render only visible rows.' },
       { name: 'advancedFilter', type: 'AdvancedFilterConfig', default: '—', description: 'Nested AND/OR filter tree with FilterBuilder panel.' },
       { name: 'rowGroups', type: 'RowGroupConfig', default: '—', description: 'Group rows by field with aggregate footers and optional collapsible headers.' },
-      { name: 'rangeSelection', type: 'RangeSelectionConfig', default: '—', description: 'Excel-style cell range selection with optional clipboard paste and fillHandle drag-fill / Ctrl+D.' },
+      { name: 'rangeSelection', type: 'RangeSelectionConfig', default: '—', description: 'Excel-style range selection with copy/paste, Shift+Arrows, Escape clear, and fillHandle / Ctrl+D.' },
       { name: 'infiniteScroll', type: 'InfiniteScrollConfig', default: '—', description: 'Block loading on scroll for large server-side datasets.' },
       { name: 'flashCells', type: 'FlashCellsConfig', default: '—', description: 'Brief highlight on cells after paste or programmatic updates.' },
       { name: 'touchGestures', type: 'TouchGesturesConfig', default: '—', description: 'Mobile swipe actions and long-press context menu when enabled.' },

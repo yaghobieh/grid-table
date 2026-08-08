@@ -234,7 +234,7 @@ export const en: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.2',
+    badge: 'v1.1.3',
     title: 'Feature showcase',
     description:
       'Interactive grids for context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, and print. Dedicated demos cover 1.1.x enterprise APIs.',
@@ -243,7 +243,7 @@ export const en: TranslationStrings = {
     relatedLinks: {
       'enterprise-grid': {
         title: 'Enterprise grid',
-        summary: 'Range selection, fill handle, set/date filters, exportScope, flash cells, touch gestures.',
+        summary: 'Range copy/paste, Shift+Arrows, Tab edit, fill handle, exportScope, flash cells, touch gestures.',
       },
       'infinite-scroll': {
         title: 'Infinite scroll (SSRM)',
@@ -282,16 +282,16 @@ export const en: TranslationStrings = {
   enterpriseGridDemo: {
     title: 'Enterprise grid',
     description:
-      'Drag to select a range, paste with Ctrl/Cmd+V, fill down with the corner handle or Ctrl/Cmd+D, toggle exportScope, and use set/date column filters. Touch: swipe left for actions, long-press for the context menu.',
+      'Drag to select a range; copy with Ctrl/Cmd+C or paste with Ctrl/Cmd+V; Shift+Arrows extend the range; Escape clears it. Tab commits an edit and moves to the next editable cell. Fill down with the corner handle or Ctrl/Cmd+D. Header pin toggles sticky columns. Touch: swipe left for actions, long-press for the context menu.',
     exportScopeLabel: 'exportScope',
     addRow: 'Add row (flash)',
-    filtersHint: 'Open a Region/Status column filter for set checkboxes, or Ship date for a from/to range.',
+    filtersHint: 'Open a Region/Status column filter for set checkboxes, or Ship date for a from/to range. exportScope="selected" with no rows selected is a no-op.',
     swipeCopy: 'Copy',
     swipeDelete: 'Delete',
     sections: {
       range: {
         title: 'Range, fill handle, filters & export scope',
-        description: 'Select cells, paste or fill, then export/copy using the selected scope. Flash cells highlight after edits.',
+        description: 'Select cells, copy/paste or fill, then export using the selected scope. Flash cells highlight after edits.',
       },
     },
   },
@@ -352,11 +352,11 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.1.2 — Fill handle, touch swipe/long-press, enterprise + infinite scroll demos',
-      'Range selection wired for drag; Ctrl/Cmd+D fill-down; set/date filter portal coverage',
-      'Column grouping demo uses real colspan headers',
-      'Playwright interaction smoke for range, filters, and exportScope',
-      'API reference updated for filterType set + 1.1.x hooks',
+      'v1.1.3 — Virtualize fix, range copy, Shift+Arrows, Tab edit commit, export + pin polish',
+      'Ctrl/Cmd+C copies selected range; Escape clears; header pin without right-click',
+      'Export respects column order/hidden columns; empty selected scope is a no-op',
+      'Enterprise demo updated for keyboard range + edit UX',
+      'docs/GRID_TABLE_DOCS.md and changelog for 1.1.3',
     ],
   },
 
@@ -415,6 +415,15 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.3': {
+        highlights: [
+          'Fix virtualize to render sliced bodyRows with absolute row index offset',
+          'Range copy (Ctrl/Cmd+C), Shift+Arrows extend range, Escape clears selection',
+          'Cell edit Tab commit/move + select-on-focus; header pin control + pin-edge shadows',
+          'Export respects column order/hidden columns; empty selected scope is a no-op',
+          'Portal enterprise demo + docs updated for 1.1.3',
+        ],
+      },
       '1.1.2': {
         highlights: [
           'Fill handle + Ctrl/Cmd+D fill-down for range selection with enableCellEdit',

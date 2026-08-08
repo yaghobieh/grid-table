@@ -20,6 +20,13 @@ export { buildFlashCellKey, scheduleFlashRemoval, getFlashCellClassName } from '
 export { captureTableViewSnapshot, createDefaultViewSnapshot } from './savedViews.utils';
 export { resolveConditionalCellFormat } from './conditionalFormat.utils';
 export { resolveExportData } from './exportScope.utils';
+export { resolveExportColumns, shouldSkipEmptyExport } from './exportColumns.utils';
+export { buildRangeClipboardText, copyRangeToClipboard } from './rangeClipboard.utils';
+export {
+  resolveColumnSticky,
+  getStickyOffsetsFromStates,
+  getPinEdgeColumnIds,
+} from './columnSticky.utils';
 export {
   applyFillDownFromRange,
   extendRangeDown,

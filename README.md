@@ -4,7 +4,7 @@
   <img src="https://github.com/yaghobieh/grid-table/blob/main/docs/logo.svg" alt="Grid Table logo" width="120" />
 </p>
 
-**@forgedevstack/grid-table** v1.1.2 — A powerful, feature-rich data grid for React with 40+ features including **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.1.3 — A powerful, feature-rich data grid for React with 40+ features including **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + copy/paste + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 

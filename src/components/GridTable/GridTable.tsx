@@ -29,9 +29,32 @@ import { ContextMenu } from '../ContextMenu';
 import { StatusBar } from '../StatusBar';
 import { copyToClipboard, exportToCSV, exportToExcel, exportToJSON, exportToPDF, printTable } from '@/utils/export.utils';
 import { resolveExportData } from '@/utils/exportScope.utils';
+import { resolveExportColumns } from '@/utils/exportColumns.utils';
+import { copyRangeToClipboard } from '@/utils/rangeClipboard.utils';
 import { DEFAULT_EXPORT_SCOPE } from '@constants/exportScope.const';
+import {
+  RANGE_COPY_MENU_ID,
+  RANGE_COPY_MENU_LABEL,
+  RANGE_COPY_SHORTCUT,
+} from '@constants/rangeSelection.const';
+import {
+  CONTEXT_MENU_COPY_CELL,
+  CONTEXT_MENU_FILTER_VALUE,
+  CONTEXT_MENU_HIDE,
+  CONTEXT_MENU_PIN_LEFT,
+  CONTEXT_MENU_PIN_RIGHT,
+} from '@constants/strings.const';
+import {
+  KEY_ARROW_DOWN,
+  KEY_ARROW_LEFT,
+  KEY_ARROW_RIGHT,
+  KEY_ARROW_UP,
+  KEY_C,
+  KEY_ESCAPE,
+  KEY_V,
+} from '@constants/keyboard.const';
+import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, ZERO } from '@constants/numbers.const';
 import { resolveTableEffects } from './GridTable.utils';
-import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS } from '@constants/numbers.const';
 
 function GridTableContent<T extends RowData>({
   data,
@@ -137,12 +160,22 @@ function GridTableContent<T extends RowData>({
     visible: false, x: 0, y: 0, context: null,
   });
 
-  const visibleCols = useMemo(() => columns.filter(c => !c.hidden), [columns]);
-  const { focusedCell, setFocusedCell, handleKeyDown: kbHandleKeyDown, containerRef: kbRef } =
+  const visibleCols = useMemo(
+    () =>
+      resolveExportColumns({
+        columns,
+        columnStates: state.columnStates,
+      }),
+    [columns, state.columnStates],
+  );
+  const { focusedCell, setFocusedCell, handleKeyDown: kbHandleKeyDown, containerRef: kbRef, isEditing: kbIsEditing } =
     useKeyboardNavigation(computed.paginatedData.length, visibleCols.length, kbConfig);
 
   const onCellEditRef = useRef(onCellEdit);
   onCellEditRef.current = onCellEdit;
+  const rangeRowsRef = useRef<T[]>([]);
+  const visibleColsRef = useRef(visibleCols);
+  visibleColsRef.current = visibleCols;
   const undoRedo = useUndoRedo(
     undoRedoConfig?.maxHistory,
     (e: EditHistoryEntry) => {
@@ -162,22 +195,32 @@ function GridTableContent<T extends RowData>({
     if (contextMenuConfig?.showCopy !== false) {
       acts.push({
         id: 'copy',
-        label: 'Copy cell value',
-        shortcut: '⌘C',
+        label: CONTEXT_MENU_COPY_CELL,
+        shortcut: RANGE_COPY_SHORTCUT,
         onClick: (ctx) => navigator.clipboard?.writeText(ctx.value == null ? '' : String(ctx.value)),
+      });
+    }
+    if (rangeSelection?.enabled && rangeSelection.enableCopy !== false) {
+      acts.push({
+        id: RANGE_COPY_MENU_ID,
+        label: RANGE_COPY_MENU_LABEL,
+        shortcut: RANGE_COPY_SHORTCUT,
+        onClick: () => {
+          copyRangeToClipboard(rangeRowsRef.current, visibleColsRef.current, rangeApi.range);
+        },
       });
     }
     if (contextMenuConfig?.showFilter !== false) {
       acts.push({
         id: 'filter',
-        label: 'Filter by this value',
+        label: CONTEXT_MENU_FILTER_VALUE,
         onClick: (ctx) => actions.setFilter(ctx.columnId, ctx.value, 'equals'),
       });
     }
     if (contextMenuConfig?.showPin !== false) {
       acts.push({
         id: 'pin-left',
-        label: 'Pin column left',
+        label: CONTEXT_MENU_PIN_LEFT,
         onClick: (ctx) => {
           const cs = state.columnStates.find(c => c.id === ctx.columnId);
           actions.pinColumn(ctx.columnId, cs?.pinned === 'left' ? null : 'left');
@@ -185,7 +228,7 @@ function GridTableContent<T extends RowData>({
       });
       acts.push({
         id: 'pin-right',
-        label: 'Pin column right',
+        label: CONTEXT_MENU_PIN_RIGHT,
         onClick: (ctx) => {
           const cs = state.columnStates.find(c => c.id === ctx.columnId);
           actions.pinColumn(ctx.columnId, cs?.pinned === 'right' ? null : 'right');
@@ -201,12 +244,12 @@ function GridTableContent<T extends RowData>({
       });
       acts.push({
         id: 'hide',
-        label: 'Hide column',
+        label: CONTEXT_MENU_HIDE,
         onClick: (ctx) => actions.toggleColumnVisibility(ctx.columnId),
       });
     }
     return [...acts, ...(contextMenuConfig?.actions ?? [])];
-  }, [contextMenuConfig, actions, state.columnStates]);
+  }, [contextMenuConfig, actions, state.columnStates, rangeSelection, rangeApi.range]);
 
   const openContextMenuAt = useCallback((row: T, rowIndex: number, x: number, y: number, columnId = '') => {
     if (!contextMenuConfig?.enabled) return;
@@ -325,6 +368,8 @@ function GridTableContent<T extends RowData>({
     [exportScope, state.data, computed.filteredData, computed.sortedData, state.selectedIds, getRowIdFn],
   );
 
+  const exportColumns = visibleCols;
+
   const rowReorder = useRowReorder<T>(data, getRowIdFn, onRowReorder);
 
   const handleCellSave = useCallback(
@@ -442,11 +487,33 @@ function GridTableContent<T extends RowData>({
     [displayData, virtualWindow.startIndex, virtualWindow.endIndex],
   );
   const bodyRows = virtualizationEnabled ? virtualizedRows : displayData;
+  const rowIndexOffset = virtualizationEnabled ? virtualWindow.startIndex : ZERO;
+  rangeRowsRef.current = displayData;
 
   const mergedFrozenBottom = useMemo(() => {
     const manual = frozenRows?.bottom ?? [];
     return [...manual, ...displayPipeline.pinnedBottomRows];
   }, [frozenRows?.bottom, displayPipeline.pinnedBottomRows]);
+
+  const handleEditNavigate = useCallback(
+    (rowIndex: number, colIndex: number, direction: 1 | -1) => {
+      let nextCol = colIndex + direction;
+      let nextRow = rowIndex;
+      while (nextRow >= ZERO && nextRow < displayData.length) {
+        while (nextCol >= ZERO && nextCol < visibleCols.length) {
+          const column = visibleCols[nextCol];
+          if (column?.editable) {
+            setFocusedCell({ rowIndex: nextRow, colIndex: nextCol });
+            return;
+          }
+          nextCol += direction;
+        }
+        nextRow += direction;
+        nextCol = direction > ZERO ? ZERO : visibleCols.length - ONE;
+      }
+    },
+    [displayData.length, visibleCols, setFocusedCell],
+  );
 
   const effectiveRowExpansion = masterDetail?.enabled && masterDetail.renderPanel
     ? (row: T, rowId: string | number) => masterDetail.renderPanel?.(row) ?? null
@@ -465,7 +532,6 @@ function GridTableContent<T extends RowData>({
 
   const getCellClassName = useCallback(
     (rowIndex: number, columnId: string) => {
-      const visibleCols = columns.filter((col) => !col.hidden);
       const colIndex = visibleCols.findIndex((col) => col.id === columnId);
       const classes: string[] = [];
       if (rangeApi.isCellInRange(rowIndex, colIndex)) {
@@ -475,7 +541,7 @@ function GridTableContent<T extends RowData>({
         classes.push(RANGE_SELECTION_ANCHOR_CLASS);
       }
       if (flashCells?.enabled !== false) {
-        const row = bodyRows[rowIndex];
+        const row = displayData[rowIndex];
         if (row) {
           const flashClass = getFlashCellClassName(getRowIdFn(row), columnId, activeFlashes);
           if (flashClass) classes.push(flashClass);
@@ -483,7 +549,7 @@ function GridTableContent<T extends RowData>({
       }
       return classes.join(' ');
     },
-    [columns, rangeApi, flashCells?.enabled, bodyRows, activeFlashes, getRowIdFn],
+    [visibleCols, rangeApi, flashCells?.enabled, displayData, activeFlashes, getRowIdFn],
   );
 
   const handleContainerScroll = useCallback(
@@ -500,16 +566,49 @@ function GridTableContent<T extends RowData>({
   useEffect(() => {
     if (!rangeSelection?.enabled) return;
     const handleRangeKeys = async (event: KeyboardEvent) => {
-      const meta = event.metaKey || event.ctrlKey;
-      if (!meta || !rangeApi.range || !enableCellEdit) return;
+      if (event.key === KEY_ESCAPE && !kbIsEditing) {
+        if (rangeApi.range) {
+          event.preventDefault();
+          rangeApi.clearRange();
+        }
+        return;
+      }
 
-      if (event.key.toLowerCase() === 'v' && rangeSelection.enablePaste !== false) {
+      if (
+        event.shiftKey &&
+        !kbIsEditing &&
+        (event.key === KEY_ARROW_UP ||
+          event.key === KEY_ARROW_DOWN ||
+          event.key === KEY_ARROW_LEFT ||
+          event.key === KEY_ARROW_RIGHT)
+      ) {
+        const maxRow = Math.max(ZERO, displayData.length - ONE);
+        const maxCol = Math.max(ZERO, visibleCols.length - ONE);
+        const next = rangeApi.extendWithArrowKey(event.key, maxRow, maxCol, focusedCell);
+        if (next) {
+          event.preventDefault();
+          setFocusedCell(next);
+        }
+        return;
+      }
+
+      const meta = event.metaKey || event.ctrlKey;
+      if (!meta || !rangeApi.range) return;
+
+      if (event.key.toLowerCase() === KEY_C && rangeSelection.enableCopy !== false) {
+        event.preventDefault();
+        copyRangeToClipboard(displayData, visibleCols, rangeApi.range);
+        return;
+      }
+
+      if (!enableCellEdit) return;
+
+      if (event.key.toLowerCase() === KEY_V && rangeSelection.enablePaste !== false) {
         event.preventDefault();
         const text = await navigator.clipboard.readText();
         const matrix = parseClipboardGrid(text);
         if (matrix.length === 0) return;
-        const visibleCols = columns.filter((col) => !col.hidden);
-        applyClipboardToRange(matrix, bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+        applyClipboardToRange(matrix, displayData, visibleCols, rangeApi.range, (row, columnId, value) => {
           const rowId = getRowIdFn(row);
           onCellEditRef.current?.(rowId, columnId, value);
           if (flashCells?.enabled !== false) {
@@ -521,8 +620,7 @@ function GridTableContent<T extends RowData>({
 
       if (event.key.toLowerCase() === FILL_HANDLE_KEY && rangeSelection.fillHandle !== false) {
         event.preventDefault();
-        const visibleCols = columns.filter((col) => !col.hidden);
-        applyFillDownFromRange(bodyRows, visibleCols, rangeApi.range, (row, columnId, value) => {
+        applyFillDownFromRange(displayData, visibleCols, rangeApi.range, (row, columnId, value) => {
           const rowId = getRowIdFn(row);
           onCellEditRef.current?.(rowId, columnId, value);
           if (flashCells?.enabled !== false) {
@@ -533,14 +631,25 @@ function GridTableContent<T extends RowData>({
     };
     window.addEventListener('keydown', handleRangeKeys);
     return () => window.removeEventListener('keydown', handleRangeKeys);
-  }, [rangeSelection, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes]);
+  }, [
+    rangeSelection,
+    rangeApi,
+    enableCellEdit,
+    displayData,
+    visibleCols,
+    getRowIdFn,
+    flashCells,
+    activeFlashes,
+    kbIsEditing,
+    focusedCell,
+    setFocusedCell,
+  ]);
 
   useEffect(() => {
     if (!rangeSelection?.enabled || !rangeApi.isFilling || !rangeApi.range || !enableCellEdit) return;
     if (rangeSelection.fillHandle === false) return;
     const onUp = () => {
-      const visibleCols = columns.filter((col) => !col.hidden);
-      applyFillDownFromRange(bodyRows, visibleCols, rangeApi.range!, (row, columnId, value) => {
+      applyFillDownFromRange(displayData, visibleCols, rangeApi.range!, (row, columnId, value) => {
         const rowId = getRowIdFn(row);
         onCellEditRef.current?.(rowId, columnId, value);
         if (flashCells?.enabled !== false) {
@@ -551,8 +660,7 @@ function GridTableContent<T extends RowData>({
     };
     window.addEventListener('mouseup', onUp);
     return () => window.removeEventListener('mouseup', onUp);
-  }, [rangeSelection, rangeApi.isFilling, rangeApi.range, enableCellEdit, columns, bodyRows, getRowIdFn, flashCells, activeFlashes, rangeApi]);
-
+  }, [rangeSelection, rangeApi.isFilling, rangeApi.range, enableCellEdit, visibleCols, displayData, getRowIdFn, flashCells, activeFlashes, rangeApi]);
   useEffect(() => {
     rangeSelection?.onRangeChange?.(rangeApi.range);
   }, [rangeSelection, rangeApi.range]);
@@ -699,7 +807,7 @@ function GridTableContent<T extends RowData>({
             <div className="toolbar-export-actions" style={{ display: 'flex', gap: '0.25rem' }}>
               {shouldShowExport('csv') && (
                 <button
-                  onClick={() => exportToCSV(exportData, columns, exportFileName)}
+                  onClick={() => exportToCSV(exportData, exportColumns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export CSV"
                   title="Export CSV"
@@ -711,7 +819,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('json') && (
                 <button
-                  onClick={() => exportToJSON(exportData, columns, exportFileName)}
+                  onClick={() => exportToJSON(exportData, exportColumns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export JSON"
                   title="Export JSON"
@@ -723,7 +831,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('excel') && (
                 <button
-                  onClick={() => exportToExcel(exportData, columns, exportFileName)}
+                  onClick={() => exportToExcel(exportData, exportColumns, exportFileName)}
                   className="toolbar-action-button"
                   aria-label="Export Excel"
                   title="Export Excel"
@@ -735,7 +843,7 @@ function GridTableContent<T extends RowData>({
               )}
               {shouldShowExport('pdf') && (
                 <button
-                  onClick={() => exportToPDF(exportData, columns, exportFileName, printConfig?.title)}
+                  onClick={() => exportToPDF(exportData, exportColumns, exportFileName, printConfig?.title)}
                   className="toolbar-action-button"
                   aria-label="Export PDF"
                   title="Export PDF"
@@ -750,7 +858,7 @@ function GridTableContent<T extends RowData>({
 
           {enableCopy && (
             <button
-              onClick={() => copyToClipboard(exportData, columns)}
+              onClick={() => copyToClipboard(exportData, exportColumns)}
               className="toolbar-action-button"
               aria-label="Copy to clipboard"
               title="Copy to clipboard"
@@ -763,7 +871,7 @@ function GridTableContent<T extends RowData>({
 
           {printConfig?.enabled && (
             <button
-              onClick={() => printTable(exportData, columns, printConfig?.title)}
+              onClick={() => printTable(exportData, exportColumns, printConfig?.title)}
               className="toolbar-action-button"
               aria-label="Print"
               title="Print"
@@ -929,9 +1037,10 @@ function GridTableContent<T extends RowData>({
             )}
 
             <GridBody
-              data={treeConfig?.enabled ? tree.flatRows.map(r => r.data) : displayData}
+              data={treeConfig?.enabled ? tree.flatRows.map(r => r.data) : bodyRows}
               columns={columns}
               columnStates={state.columnStates}
+              rowIndexOffset={treeConfig?.enabled ? ZERO : rowIndexOffset}
               className={classNames.body}
               style={styles.body}
               applyHiddenOnMobile={stackedMobile}
@@ -967,6 +1076,8 @@ function GridTableContent<T extends RowData>({
               focusedCell={focusedCell}
               enableCellEdit={enableCellEdit}
               onCellSave={handleCellSave}
+              onEditNavigate={enableCellEdit ? handleEditNavigate : undefined}
+              selectOnEditFocus={kbConfig?.selectOnEditFocus !== false}
               onGroupToggle={rowGroupExpansion.toggleGroup}
               isGroupExpanded={rowGroupExpansion.isExpanded}
               getCellClassName={rangeSelection?.enabled || flashCells?.enabled ? getCellClassName : undefined}

@@ -6,6 +6,7 @@ export interface GridBodyProps<T extends RowData = RowData> {
   data: T[];
   columns: ColumnDefinition<T>[];
   columnStates: ColumnState[];
+  rowIndexOffset?: number;
   className?: string;
   style?: CSSProperties;
   applyHiddenOnMobile?: boolean;
@@ -37,6 +38,8 @@ export interface GridBodyProps<T extends RowData = RowData> {
   focusedCell?: { rowIndex: number; colIndex: number } | null;
   enableCellEdit?: boolean;
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  onEditNavigate?: (rowIndex: number, colIndex: number, direction: 1 | -1) => void;
+  selectOnEditFocus?: boolean;
   onGroupToggle?: (groupKey: string) => void;
   isGroupExpanded?: (groupKey: string) => boolean;
   getCellClassName?: (rowIndex: number, columnId: string) => string;

@@ -10,6 +10,7 @@ import {
   KEY_END,
   KEY_ENTER,
   KEY_ESCAPE,
+  KEY_F2,
   KEY_HOME,
   KEY_PAGE_DOWN,
   KEY_PAGE_UP,
@@ -17,9 +18,6 @@ import {
 } from '@/constants/keyboard.const';
 import { ONE, TEN, ZERO } from '@/constants/numbers.const';
 
-/**
- * Arrow-key cell focus, Enter/Tab edit flow, and optional wrap for grid keyboard navigation.
- */
 export function useKeyboardNavigation(
   rowCount: number,
   colCount: number,
@@ -28,6 +26,7 @@ export function useKeyboardNavigation(
   const enabled = config?.enabled ?? false;
   const wrap = config?.wrap ?? false;
   const editOnEnter = config?.enableEditOnEnter ?? true;
+  const editOnF2 = config?.enableEditOnF2 ?? true;
 
   const [focusedCell, setFocusedCell] = useState<FocusedCell | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -70,6 +69,15 @@ export function useKeyboardNavigation(
       return;
     }
 
+    if (e.shiftKey && (
+      e.key === KEY_ARROW_UP ||
+      e.key === KEY_ARROW_DOWN ||
+      e.key === KEY_ARROW_LEFT ||
+      e.key === KEY_ARROW_RIGHT
+    )) {
+      return;
+    }
+
     const { rowIndex, colIndex } = focusedCell;
     let handled = true;
 
@@ -103,6 +111,9 @@ export function useKeyboardNavigation(
       case KEY_ENTER:
         if (editOnEnter) setIsEditing(true);
         break;
+      case KEY_F2:
+        if (editOnF2) setIsEditing(true);
+        break;
       case KEY_TAB: {
         const delta = e.shiftKey ? -ONE : ONE;
         setFocusedCell(clamp(rowIndex, colIndex + delta));
@@ -113,7 +124,7 @@ export function useKeyboardNavigation(
     }
 
     if (handled) e.preventDefault();
-  }, [enabled, focusedCell, isEditing, clamp, rowCount, colCount, editOnEnter]);
+  }, [enabled, focusedCell, isEditing, clamp, rowCount, colCount, editOnEnter, editOnF2]);
 
   useEffect(() => {
     if (!enabled || !focusedCell || !containerRef.current) return;

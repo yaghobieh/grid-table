@@ -1,1 +1,10 @@
 export const EMPTY_STRING = '';
+export const PIN_EDGE_LEFT_CLASS = 'gt-pin-edge-left';
+export const PIN_EDGE_RIGHT_CLASS = 'gt-pin-edge-right';
+export const GRID_HEADER_PIN_ARIA = 'Pin column';
+export const GRID_HEADER_UNPIN_ARIA = 'Unpin column';
+export const CONTEXT_MENU_COPY_CELL = 'Copy cell value';
+export const CONTEXT_MENU_FILTER_VALUE = 'Filter by this value';
+export const CONTEXT_MENU_PIN_LEFT = 'Pin column left';
+export const CONTEXT_MENU_PIN_RIGHT = 'Pin column right';
+export const CONTEXT_MENU_HIDE = 'Hide column';

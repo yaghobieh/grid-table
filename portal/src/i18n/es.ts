@@ -217,7 +217,7 @@ export const es: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.2',
+    badge: 'v1.1.3',
     title: 'Escaparate de funciones',
     description:
       'Grids interactivos para menú contextual, barra de estado, exportación, teclado, reordenar, árbol, deshacer/rehacer, filas congeladas e impresión. Las APIs 1.1.x tienen demos dedicados.',
@@ -226,7 +226,7 @@ export const es: TranslationStrings = {
     relatedLinks: {
       'enterprise-grid': {
         title: 'Grid empresarial',
-        summary: 'Rango, fill handle, filtros set/fecha, exportScope, flash cells, gestos táctiles.',
+        summary: 'Copia/pega de rango, Shift+flechas, Tab al editar, fill handle, exportScope, gestos táctiles.',
       },
       'infinite-scroll': {
         title: 'Scroll infinito (SSRM)',
@@ -265,16 +265,16 @@ export const es: TranslationStrings = {
   enterpriseGridDemo: {
     title: 'Grid empresarial',
     description:
-      'Arrastra para seleccionar un rango, pega con Ctrl/Cmd+V, rellena con el handle o Ctrl/Cmd+D, cambia exportScope y usa filtros set/fecha. Táctil: desliza a la izquierda y mantén pulsado para el menú.',
+      'Arrastra para seleccionar un rango; copia con Ctrl/Cmd+C o pega con Ctrl/Cmd+V; Shift+flechas amplía el rango; Escape lo limpia. Tab confirma la edición y salta a la siguiente celda editable. Rellena con el handle o Ctrl/Cmd+D. El pin del encabezado fija columnas. Táctil: desliza a la izquierda y mantén pulsado para el menú.',
     exportScopeLabel: 'exportScope',
     addRow: 'Añadir fila (flash)',
-    filtersHint: 'Abre el filtro de Región/Estado para checkboxes set, o Fecha de envío para un rango from/to.',
+    filtersHint: 'Abre el filtro de Región/Estado para checkboxes set, o Fecha de envío para un rango from/to. exportScope="selected" sin filas es un no-op.',
     swipeCopy: 'Copiar',
     swipeDelete: 'Eliminar',
     sections: {
       range: {
         title: 'Rango, fill handle, filtros y exportScope',
-        description: 'Selecciona celdas, pega o rellena, luego exporta/copia con el alcance elegido. Flash cells resalta ediciones.',
+        description: 'Selecciona celdas, copia/pega o rellena, luego exporta con el alcance elegido. Flash cells resalta ediciones.',
       },
     },
   },
@@ -335,11 +335,11 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.1.2 — Fill handle, gestos táctiles, demos enterprise + scroll infinito',
-      'Selección de rango con arrastre; fill-down Ctrl/Cmd+D; filtros set/fecha en portal',
-      'Demo de agrupación de columnas con colspan real',
-      'Playwright de interacción para rango, filtros y exportScope',
-      'API reference actualizada para filterType set y hooks 1.1.x',
+      'v1.1.3 — Fix virtualize, copia de rango, Shift+flechas, Tab al editar, export + pin',
+      'Ctrl/Cmd+C copia el rango; Escape limpia; pin en encabezado sin clic derecho',
+      'Export respeta orden/columnas ocultas; selected vacío es no-op',
+      'Demo enterprise actualizado para teclado y edición',
+      'docs/GRID_TABLE_DOCS.md y changelog para 1.1.3',
     ],
   },
 
@@ -397,6 +397,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.3': {
+        highlights: [
+          'Fix virtualize: bodyRows en ventana con offset de índice absoluto',
+          'Copia de rango (Ctrl/Cmd+C), Shift+flechas, Escape limpia la selección',
+          'Tab confirma edición y avanza; pin en encabezado + sombras de borde',
+          'Export respeta orden/ocultas; selected vacío es no-op',
+          'Portal y docs actualizados para 1.1.3',
+        ],
+      },
       '1.1.2': {
         highlights: [
           'Fill handle + Ctrl/Cmd+D para rellenar hacia abajo en selección de rango',

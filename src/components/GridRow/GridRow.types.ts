@@ -40,6 +40,8 @@ export interface GridRowProps<T extends RowData = RowData> {
   expandRowIcon?: ReactNode;
   enableCellEdit?: boolean;
   onCellSave?: (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => void;
+  onEditNavigate?: (rowIndex: number, colIndex: number, direction: 1 | -1) => void;
+  selectOnEditFocus?: boolean;
   onGroupToggle?: (groupKey: string) => void;
   groupExpanded?: boolean;
   getCellClassName?: (rowIndex: number, columnId: string) => string;

@@ -527,7 +527,9 @@ The \`exportScope\` prop controls which rows are included when exporting, copyin
 | \`'all'\` | Full \`data\` prop |
 | \`'filtered'\` | After filters (before sort) |
 | \`'sorted'\` | After filters and sort (default) |
-| \`'selected'\` | Only checked rows (requires row selection) |
+| \`'selected'\` | Only checked rows (requires row selection). If nothing is selected, export/copy/print are a no-op (no empty file). |
+
+Exports use visible column order (\`columnStates.order\`) and skip hidden/invisible columns. Use \`resolveExportColumns\` / \`resolveExportData\` for custom export UIs.
 
 \`\`\`tsx
 <GridTable
@@ -537,8 +539,7 @@ The \`exportScope\` prop controls which rows are included when exporting, copyin
   enableRowSelection
 />
 \`\`\`
-
-Use \`resolveExportData\` from \`@forgedevstack/grid-table\` when building custom export UIs.`;
+`;
 
 export const DOC_ENTERPRISE_GRID = `## Enterprise grid features
 
@@ -556,16 +557,17 @@ Live: [Enterprise grid demo](/demos/enterprise-grid)
 
 Live: [Pinned row groups demo](/demos/pinned-row-groups)
 
-### Range selection, paste, and fill handle
+### Range selection, copy/paste, and fill handle
 
 \`\`\`tsx
 <GridTable
   enableCellEdit
-  rangeSelection={{ enabled: true, enablePaste: true, fillHandle: true }}
+  keyboardNavigation={{ enabled: true }}
+  rangeSelection={{ enabled: true, enablePaste: true, enableCopy: true, fillHandle: true }}
 />
 \`\`\`
 
-Drag to select a cell range. Ctrl/Cmd+V pastes tab-separated values. Drag the fill handle (or Ctrl/Cmd+D) to fill down from the top row of the selection.
+Drag to select a cell range. Ctrl/Cmd+C copies TSV; Ctrl/Cmd+V pastes. Shift+Arrows extend the range; Escape clears it. Drag the fill handle (or Ctrl/Cmd+D) to fill down. Tab in an editor commits and moves to the next editable cell.
 
 ### Infinite scroll (SSRM-style)
 

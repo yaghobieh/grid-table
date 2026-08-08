@@ -77,6 +77,9 @@ export interface KeyboardNavConfig {
   enabled?: boolean;
   enableCellFocus?: boolean;
   enableEditOnEnter?: boolean;
+  enableEditOnF2?: boolean;
+  tabCommitsAndMoves?: boolean;
+  selectOnEditFocus?: boolean;
   wrap?: boolean;
 }
 
@@ -196,6 +199,7 @@ export interface ColumnGroupConfig {
 export interface RangeSelectionConfig {
   enabled?: boolean;
   enablePaste?: boolean;
+  enableCopy?: boolean;
   fillHandle?: boolean;
   onRangeChange?: (range: CellRange | null) => void;
 }

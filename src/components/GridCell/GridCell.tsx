@@ -37,6 +37,8 @@ export function GridCell<T extends RowData = RowData>({
   onClick,
   enableCellEdit,
   onCellSave,
+  onEditNavigate,
+  selectOnEditFocus = true,
   colIndex,
   showFillHandle = false,
   onRangeMouseDown,
@@ -140,6 +142,14 @@ export function GridCell<T extends RowData = RowData>({
     [onCellSave, rowId],
   );
 
+  const handleNavigateAfterCommit = useCallback(
+    (direction: 1 | -1) => {
+      if (colIndex == null) return;
+      onEditNavigate?.(rowIndex, colIndex, direction);
+    },
+    [colIndex, onEditNavigate, rowIndex],
+  );
+
   const renderValueNode = (): ReactNode => {
     const valueNode = (
       <span ref={valueRef} className={valueClassName}>
@@ -232,6 +242,8 @@ export function GridCell<T extends RowData = RowData>({
           columnId={column.id}
           config={editConfig}
           onSave={handleCellSave}
+          onNavigateAfterCommit={onEditNavigate ? handleNavigateAfterCommit : undefined}
+          selectOnFocus={selectOnEditFocus}
         >
           {innerContent}
         </EditableCell>

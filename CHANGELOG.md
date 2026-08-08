@@ -5,6 +5,31 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2026-08-08
+
+### Fixed
+
+- **Virtualization** — main `GridBody` now renders sliced `bodyRows` when `virtualize` is enabled (spacers + windowed DOM). Absolute `rowIndexOffset` keeps range/fill/selection indexes aligned with full `displayData`.
+
+### Added
+
+- **Range clipboard copy** — Ctrl/Cmd+C copies the selected cell range as TSV; context menu “Copy range”; `rangeSelection.enableCopy` (default on).
+- **Keyboard range extend** — Shift+Arrows grow/shrink the range from the anchor; Escape clears the range when not editing.
+- **Cell editing UX** — Tab commits and moves to the next editable cell; Enter/F2 start edit with select-on-focus (`keyboardNavigation.selectOnEditFocus`, `enableEditOnF2`, `tabCommitsAndMoves`).
+- **Header pin control** — pin toggle in column headers (left → right → unpin) without requiring right-click.
+- **Export utilities** — `resolveExportColumns` / `shouldSkipEmptyExport` exported.
+
+### Changed
+
+- **Export polish** — CSV/Excel/JSON/PDF/copy/print respect column order and skip hidden/invisible columns; empty row sets (including `exportScope="selected"` with no selection) are a no-op (no empty file).
+- **Column pin polish** — `columnState.pinned` drives sticky rendering; stronger pin-edge shadow separators on the last left / first right pinned column.
+
+### Portal
+
+- Enterprise demo copy notes range copy, Shift+Arrows, Escape clear, Tab edit commit, and header pin.
+- Changelog i18n + `CURRENT_VERSION` → 1.1.3.
+- `docs/GRID_TABLE_DOCS.md` refreshed for 1.1.3.
+
 ## [1.1.2] - 2026-07-24
 
 ### Added

@@ -13,6 +13,7 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     data,
     columns,
     columnStates,
+    rowIndexOffset = ZERO,
     className = '',
     style,
     applyHiddenOnMobile = false,
@@ -43,6 +44,8 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     treeIsExpanded,
     enableCellEdit,
     onCellSave,
+    onEditNavigate,
+    selectOnEditFocus,
     onGroupToggle,
     isGroupExpanded,
     getCellClassName,
@@ -76,9 +79,10 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
   return (
     <div className={clsx('grid-body', className)} style={style} role="rowgroup">
       {data.map((row, index) => {
+        const absoluteIndex = index + rowIndexOffset;
         const d = getGridBodyRowDerivedState({
           row,
-          index,
+          index: absoluteIndex,
           getRowId,
           selectedIds,
           expandedIds,
@@ -97,7 +101,7 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
           <GridRow
             key={d.rowId}
             row={row}
-            rowIndex={index}
+            rowIndex={absoluteIndex}
             columns={columns}
             columnStates={columnStates}
             isSelected={d.isSelected}
@@ -126,6 +130,8 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             treeIndent={d.indent}
             enableCellEdit={enableCellEdit}
             onCellSave={onCellSave}
+            onEditNavigate={onEditNavigate}
+            selectOnEditFocus={selectOnEditFocus}
             onGroupToggle={onGroupToggle}
             groupExpanded={(() => {
               const meta = getRowGroupMeta(row);

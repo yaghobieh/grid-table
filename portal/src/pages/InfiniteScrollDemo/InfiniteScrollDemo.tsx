@@ -45,7 +45,7 @@ export const InfiniteScrollDemo: FC = () => {
           <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>
             {t.common.demos}
           </Button>
-          <Badge variant="success">v1.1.2</Badge>
+          <Badge variant="success">v1.1.3</Badge>
         </Flex>
         <Typography variant="h2" className="text-2xl font-bold mb-1">{copy.title}</Typography>
         <Typography variant="body2" className="opacity-50 mb-4">

@@ -20,7 +20,7 @@ function escapeXml(s: string): string {
 }
 
 function getColHeaders<T extends RowData>(columns: ColumnDefinition<T>[]): Array<{ col: ColumnDefinition<T>; label: string }> {
-  return columns.filter(c => !c.hidden).map(c => {
+  return columns.map(c => {
     const h = typeof c.header === 'function' ? c.header() : c.header;
     return { col: c, label: typeof h === 'string' ? h : c.id };
   });
@@ -41,6 +41,7 @@ export function exportToCSV<T extends RowData>(
   columns: ColumnDefinition<T>[],
   fileName = 'grid-table-export',
 ): void {
+  if (data.length === 0) return;
   const cols = getColHeaders(columns);
   const headerRow = cols.map(c => escapeCSV(c.label));
   const rows = data.map(row => cols.map(c => escapeCSV(getCellValue(row, c.col.accessor))));
@@ -54,6 +55,7 @@ export function exportToJSON<T extends RowData>(
   columns: ColumnDefinition<T>[],
   fileName = 'grid-table-export',
 ): void {
+  if (data.length === 0) return;
   const cols = getColHeaders(columns);
   const rows = data.map(row => {
     const obj: Record<string, unknown> = {};
@@ -72,6 +74,7 @@ export function exportToExcel<T extends RowData>(
   columns: ColumnDefinition<T>[],
   fileName = 'grid-table-export',
 ): void {
+  if (data.length === 0) return;
   const cols = getColHeaders(columns);
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -106,6 +109,7 @@ export function exportToPDF<T extends RowData>(
   fileName = 'grid-table-export',
   title?: string,
 ): void {
+  if (data.length === 0) return;
   const cols = getColHeaders(columns);
   const w = window.open('', '_blank');
   if (!w) return;
@@ -149,6 +153,7 @@ export function copyToClipboard<T extends RowData>(
   data: T[],
   columns: ColumnDefinition<T>[],
 ): void {
+  if (data.length === 0) return;
   const cols = getColHeaders(columns);
   const header = cols.map(c => c.label).join('\t');
   const rows = data.map(row => cols.map(c => {
@@ -186,5 +191,6 @@ export function printTable<T extends RowData>(
   columns: ColumnDefinition<T>[],
   title?: string,
 ): void {
+  if (data.length === 0) return;
   exportToPDF(data, columns, 'print', title);
 }

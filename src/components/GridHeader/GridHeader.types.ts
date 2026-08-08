@@ -11,6 +11,7 @@ export interface GridHeaderProps<T extends RowData = RowData> {
   enableFilter?: boolean;
   enableDragDrop?: boolean;
   enableResize?: boolean;
+  enablePinControls?: boolean;
   enableSelection?: boolean;
   enableExpansion?: boolean;
   allSelected?: boolean;
@@ -31,13 +32,17 @@ export interface GridHeaderCellProps<T extends RowData = RowData> {
   enableFilter?: boolean;
   enableDragDrop?: boolean;
   enableResize?: boolean;
+  enablePinControls?: boolean;
   hasFilter?: boolean;
   isDragging?: boolean;
   isDragOver?: boolean;
   isLastColumn?: boolean;
+  isPinEdgeLeft?: boolean;
+  isPinEdgeRight?: boolean;
   isColumnAutoSized?: boolean;
   onSort?: () => void;
   onFilterOpen?: () => void;
+  onPinToggle?: () => void;
   onResizeStart?: (event: React.MouseEvent) => void;
   dragHandleProps?: {
     draggable: boolean;

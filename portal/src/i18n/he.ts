@@ -211,7 +211,7 @@ export const he: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.2',
+    badge: 'v1.1.3',
     title: 'תצוגת תכונות',
     description:
       'גרידים אינטראקטיביים לתפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור מחדש, עץ, ביטול/שחזור, שורות קפואות והדפסה. ל־APIs של 1.1.x יש דמוים ייעודיים.',
@@ -220,7 +220,7 @@ export const he: TranslationStrings = {
     relatedLinks: {
       'enterprise-grid': {
         title: 'גריד ארגוני',
-        summary: 'טווח, fill handle, מסנני set/תאריך, exportScope, flash cells, מחוות מגע.',
+        summary: 'העתקה/הדבקה בטווח, Shift+חיצים, Tab בעריכה, fill handle, exportScope, מחוות מגע.',
       },
       'infinite-scroll': {
         title: 'גלילה אינסופית (SSRM)',
@@ -259,16 +259,16 @@ export const he: TranslationStrings = {
   enterpriseGridDemo: {
     title: 'גריד ארגוני',
     description:
-      'גרירה לבחירת טווח, הדבקה ב־Ctrl/Cmd+V, מילוי עם הידית או Ctrl/Cmd+D, החלפת exportScope ומסנני set/תאריך. מגע: החלקה שמאלה ולחיצה ארוכה לתפריט.',
+      'גרירה לבחירת טווח; העתקה ב־Ctrl/Cmd+C או הדבקה ב־Ctrl/Cmd+V; Shift+חיצים מרחיבים את הטווח; Escape מנקה. Tab מאשר עריכה ועובר לתא הבא. מילוי עם הידית או Ctrl/Cmd+D. Pin בכותרת מקבע עמודות. מגע: החלקה שמאלה ולחיצה ארוכה לתפריט.',
     exportScopeLabel: 'exportScope',
     addRow: 'הוספת שורה (flash)',
-    filtersHint: 'פתחו מסנן Region/Status לרשימת set, או Ship date לטווח from/to.',
+    filtersHint: 'פתחו מסנן Region/Status לרשימת set, או Ship date לטווח from/to. exportScope="selected" בלי בחירה הוא no-op.',
     swipeCopy: 'העתקה',
     swipeDelete: 'מחיקה',
     sections: {
       range: {
         title: 'טווח, fill handle, מסננים ו־exportScope',
-        description: 'בחרו תאים, הדביקו או מלאו, ואז ייצאו/העתיקו לפי ה־scope. Flash cells מדגיש עריכות.',
+        description: 'בחרו תאים, העתיקו/הדביקו או מלאו, ואז ייצאו לפי ה־scope. Flash cells מדגיש עריכות.',
       },
     },
   },
@@ -329,11 +329,11 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.1.2 — Fill handle, מחוות מגע, דמוי enterprise וגלילה אינסופית',
-      'בחירת טווח בגרירה; מילוי למטה Ctrl/Cmd+D; מסנני set/תאריך בפורטל',
-      'דמו קיבוץ עמודות עם colspan אמיתי',
-      'Playwright אינטראקציה לטווח, מסננים ו־exportScope',
-      'API reference מעודכן ל־filterType set ו־hooks של 1.1.x',
+      'v1.1.3 — תיקון virtualize, העתקת טווח, Shift+חיצים, Tab בעריכה, ייצוא ו־pin',
+      'Ctrl/Cmd+C מעתיק טווח; Escape מנקה; pin בכותרת בלי לחיצה ימנית',
+      'ייצוא מכבד סדר/עמודות מוסתרות; selected ריק הוא no-op',
+      'דמו enterprise עודכן למקלדת ועריכה',
+      'docs/GRID_TABLE_DOCS.md ו־changelog ל־1.1.3',
     ],
   },
 
@@ -391,6 +391,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.3': {
+        highlights: [
+          'תיקון virtualize: bodyRows בחלון עם offset אינדקס מוחלט',
+          'העתקת טווח (Ctrl/Cmd+C), Shift+חיצים, Escape מנקה בחירה',
+          'Tab מאשר עריכה ומתקדם; pin בכותרת + צלליות קצה',
+          'ייצוא מכבד סדר/מוסתרות; selected ריק הוא no-op',
+          'פורטל ומסמכים עודכנו ל־1.1.3',
+        ],
+      },
       '1.1.2': {
         highlights: [
           'Fill handle + Ctrl/Cmd+D למילוי למטה בבחירת טווח',

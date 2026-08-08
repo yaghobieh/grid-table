@@ -16,10 +16,16 @@ import {
   GRID_ROW_SELECTED_CLASS,
   GRID_ROW_TREE_PLACEHOLDER_OFFSET,
 } from './GridRow.const';
-import { buildColumnStateIndex, getStickyOffsets, getVisibleColumns } from './GridRow.utils';
+import { buildColumnStateIndex, getVisibleColumns } from './GridRow.utils';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
+import {
+  getPinEdgeColumnIds,
+  getStickyOffsetsFromStates,
+  resolveColumnSticky,
+} from '@/utils/columnSticky.utils';
 import { DRAG_HANDLE_ICON_PATHS, DRAG_HANDLE_ICON_VIEWBOX, TREE_TOGGLE_ICON_PATH, TREE_TOGGLE_ICON_VIEWBOX } from '@constants/images.const';
 import { ZERO } from '@constants/numbers.const';
+import { PIN_EDGE_LEFT_CLASS, PIN_EDGE_RIGHT_CLASS } from '@constants/strings.const';
 import {
   TOUCH_GESTURES_ACTION_CLASS,
   TOUCH_GESTURES_ACTIONS_CLASS,
@@ -68,6 +74,8 @@ export function GridRow<T extends RowData = RowData>({
   expandRowIcon,
   enableCellEdit,
   onCellSave,
+  onEditNavigate,
+  selectOnEditFocus,
   onGroupToggle,
   groupExpanded = true,
   getCellClassName,
@@ -127,7 +135,14 @@ export function GridRow<T extends RowData = RowData>({
     () => getVisibleColumns(columns, columnStateIndex, applyHiddenOnMobile),
     [columns, columnStateIndex, applyHiddenOnMobile],
   );
-  const stickyOffsets = useMemo(() => getStickyOffsets(visibleColumns, columnStateIndex), [visibleColumns, columnStateIndex]);
+  const stickyOffsets = useMemo(
+    () => getStickyOffsetsFromStates(visibleColumns, columnStateIndex),
+    [visibleColumns, columnStateIndex],
+  );
+  const pinEdges = useMemo(
+    () => getPinEdgeColumnIds(visibleColumns, columnStateIndex),
+    [visibleColumns, columnStateIndex],
+  );
 
   const getCellValue = useCallback(
     (col: typeof columns[number]) => {
@@ -277,9 +292,15 @@ export function GridRow<T extends RowData = RowData>({
         {visibleColumns.map((col, colIndex) => {
           const colState = columnStateIndex.get(col.id);
           const width = stackedMobileLayout ? '100%' : colState?.width;
-          
-          const stickyOffset = stickyOffsets.get(col.id) ?? (col.sticky ? GRID_ROW_DEFAULT_STICKY_WIDTH : ZERO);
+          const sticky = resolveColumnSticky(col, colState);
+          const stickyOffset = stickyOffsets.get(col.id) ?? (sticky ? GRID_ROW_DEFAULT_STICKY_WIDTH : ZERO);
           const rangeClass = getCellClassName?.(rowIndex, col.id) ?? '';
+          const pinEdgeClass =
+            col.id === pinEdges.lastLeftId
+              ? PIN_EDGE_LEFT_CLASS
+              : col.id === pinEdges.firstRightId
+                ? PIN_EDGE_RIGHT_CLASS
+                : '';
 
           if (isGroupHeader && colIndex === ZERO) {
             return (
@@ -330,12 +351,18 @@ export function GridRow<T extends RowData = RowData>({
               align={col.align}
               showLabel={stackedMobileLayout && showMobileLabels && col.showLabelOnMobile !== false}
               labelText={typeof col.header === 'string' ? col.header : col.id}
-              className={clsx(stackedMobileLayout ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0', rangeClass)}
-              sticky={col.sticky}
+              className={clsx(
+                stackedMobileLayout ? 'w-full-sm flex-shrink-0' : 'flex-shrink-0',
+                rangeClass,
+                pinEdgeClass,
+              )}
+              sticky={sticky}
               stickyOffset={stickyOffset}
               onClick={onCellClick}
               enableCellEdit={enableCellEdit}
               onCellSave={onCellSave}
+              onEditNavigate={onEditNavigate}
+              selectOnEditFocus={selectOnEditFocus}
               colIndex={colIndex}
               showFillHandle={showFillHandleForCell?.(rowIndex, colIndex) === true}
               onRangeMouseDown={onRangeMouseDown}

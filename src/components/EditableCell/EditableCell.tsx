@@ -1,14 +1,26 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { Select } from '@forgedevstack/bear';
-import type { EditableCellProps } from './EditableCell.types';
+import type { EditableCellNavigateDirection, EditableCellProps } from './EditableCell.types';
 import type { RowData } from '../../types/row.types';
 import { useTableContext } from '../../context';
-import { BOOLEAN_TRUE_VALUE, KEY_ENTER, KEY_ESCAPE } from '@constants/keyboard.const';
+import { BOOLEAN_TRUE_VALUE, KEY_ENTER, KEY_ESCAPE, KEY_TAB } from '@constants/keyboard.const';
 import { EDITABLE_CELL_BOOLEAN_OPTIONS } from './EditableCell.const';
 
+const NAVIGATE_FORWARD: EditableCellNavigateDirection = 1;
+const NAVIGATE_BACKWARD: EditableCellNavigateDirection = -1;
+
 export function EditableCell<T extends RowData>(props: EditableCellProps<T>): ReactNode {
-  const { value, row, columnId, config, onSave, children } = props;
+  const {
+    value,
+    row,
+    columnId,
+    config,
+    onSave,
+    onNavigateAfterCommit,
+    selectOnFocus = true,
+    children,
+  } = props;
   const { state } = useTableContext<T>();
   const { translations } = state;
   const [editing, setEditing] = useState(false);
@@ -19,11 +31,11 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
   useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
-      if (inputRef.current instanceof HTMLInputElement) {
+      if (selectOnFocus && inputRef.current instanceof HTMLInputElement) {
         inputRef.current.select();
       }
     }
-  }, [editing]);
+  }, [editing, selectOnFocus]);
 
   const startEdit = useCallback(() => {
     setDraft(String(value ?? ''));
@@ -42,7 +54,7 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
         const result = config.validate(parsed, row);
         if (result !== true) {
           setError(result);
-          return;
+          return false;
         }
       }
 
@@ -57,6 +69,7 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
         }
         onSave(row, columnId, value, parsed);
       }
+      return true;
     },
     [config, row, columnId, value, onSave],
   );
@@ -65,15 +78,31 @@ export function EditableCell<T extends RowData>(props: EditableCellProps<T>): Re
     let parsed: unknown = draft;
     if (config.type === 'number') parsed = Number(draft);
     if (config.type === 'boolean') parsed = draft === BOOLEAN_TRUE_VALUE;
-    commitParsed(parsed, true);
+    return commitParsed(parsed, true);
   }, [draft, config.type, commitParsed]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === KEY_ENTER) save();
-      if (e.key === KEY_ESCAPE) cancel();
+      if (e.key === KEY_ENTER) {
+        e.preventDefault();
+        save();
+        return;
+      }
+      if (e.key === KEY_ESCAPE) {
+        e.preventDefault();
+        cancel();
+        return;
+      }
+      if (e.key === KEY_TAB) {
+        e.preventDefault();
+        e.stopPropagation();
+        const committed = save();
+        if (committed) {
+          onNavigateAfterCommit?.(e.shiftKey ? NAVIGATE_BACKWARD : NAVIGATE_FORWARD);
+        }
+      }
     },
-    [save, cancel],
+    [save, cancel, onNavigateAfterCommit],
   );
 
   if (!editing) {

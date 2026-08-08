@@ -5,10 +5,27 @@ import type { GridHeaderProps, GridHeaderCellProps } from './GridHeader.types';
 import type { RowData, ColumnDefinition, ColumnState, SortDirection, FilterOperator } from '@/types';
 import { useTableContext } from '@/context';
 import { useDragDrop } from '@/hooks';
-import { EMPTY_STRING, MAX_COLUMN_WIDTH, MIN_COLUMN_WIDTH, ONE, TWO, ZERO } from '@/constants';
+import {
+  EMPTY_STRING,
+  GRID_HEADER_PIN_ARIA,
+  GRID_HEADER_UNPIN_ARIA,
+  MAX_COLUMN_WIDTH,
+  MIN_COLUMN_WIDTH,
+  ONE,
+  PIN_EDGE_LEFT_CLASS,
+  PIN_EDGE_RIGHT_CLASS,
+  TWO,
+  ZERO,
+} from '@/constants';
+import { resolveColumnSticky } from '@/utils/columnSticky.utils';
 import { Checkbox, BearIcons } from '@forgedevstack/bear';
 import { FilterPopup } from '../FilterPopup';
-import { GRID_HEADER_ALIGN_CLASSES, GRID_HEADER_FILTER_ARIA, GRID_HEADER_SELECT_ALL_ARIA } from './GridHeader.const';
+import {
+  GRID_HEADER_ALIGN_CLASSES,
+  GRID_HEADER_FILTER_ARIA,
+  GRID_HEADER_PIN_ACTIVE_CLASS,
+  GRID_HEADER_SELECT_ALL_ARIA,
+} from './GridHeader.const';
 
 function HeaderCell<T extends RowData>({
   column,
@@ -20,12 +37,16 @@ function HeaderCell<T extends RowData>({
   enableFilter = true,
   enableDragDrop = true,
   enableResize = true,
+  enablePinControls = false,
   hasFilter = false,
   isDragging = false,
   isDragOver = false,
+  isPinEdgeLeft = false,
+  isPinEdgeRight = false,
   isColumnAutoSized = false,
   onSort,
   onFilterOpen,
+  onPinToggle,
   onResizeStart,
   dragHandleProps,
   dropTargetProps,
@@ -41,10 +62,12 @@ function HeaderCell<T extends RowData>({
     }
   };
 
+  const stickySide = resolveColumnSticky(column, columnState);
   const isSortable = enableSort && column.sortable !== false;
   const isFilterable = enableFilter && column.filterable !== false;
   const isDraggable = enableDragDrop && column.draggable !== false;
   const isResizable = enableResize && column.resizable !== false;
+  const isPinned = stickySide != null;
 
   const headerContent = useMemo(() => {
     if (typeof column.header === 'function') {
@@ -67,6 +90,14 @@ function HeaderCell<T extends RowData>({
     [onFilterOpen]
   );
 
+  const handlePinClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onPinToggle?.();
+    },
+    [onPinToggle],
+  );
+
   const cellClasses = useMemo(() => {
     return clsx(
       'grid-header-cell',
@@ -75,15 +106,18 @@ function HeaderCell<T extends RowData>({
       isDragging && 'opacity-50',
       isDragOver && 'bg-accent-primary/10',
       sortDirection && 'gt-sorted',
+      stickySide && `sticky-${stickySide}`,
+      isPinEdgeLeft && PIN_EDGE_LEFT_CLASS,
+      isPinEdgeRight && PIN_EDGE_RIGHT_CLASS,
     );
-  }, [column.align, isSortable, isDragging, isDragOver, sortDirection]);
+  }, [column.align, isSortable, isDragging, isDragOver, sortDirection, stickySide, isPinEdgeLeft, isPinEdgeRight]);
 
   const cellStyle = useMemo(() => {
     const base: React.CSSProperties = {
       flexShrink: 0,
-      ...(column.sticky && {
+      ...(stickySide && {
         position: 'sticky',
-        [column.sticky]: 0,
+        [stickySide]: 0,
         zIndex: TWO,
         backgroundColor: 'var(--gt-bg-secondary, #2b2b2b)',
       }),
@@ -99,11 +133,11 @@ function HeaderCell<T extends RowData>({
       base.maxWidth = column.maxWidth || MAX_COLUMN_WIDTH;
     }
     return base;
-  }, [column, columnState.width, isColumnAutoSized]);
+  }, [column, columnState.width, isColumnAutoSized, stickySide]);
 
   return (
     <div
-      className={clsx(cellClasses, column.headerClassName ?? EMPTY_STRING, column.sticky && `sticky-${column.sticky}`)}
+      className={clsx(cellClasses, column.headerClassName ?? EMPTY_STRING)}
       style={cellStyle}
       role="columnheader"
       aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : 'none'}
@@ -131,6 +165,18 @@ function HeaderCell<T extends RowData>({
         </button>
       )}
 
+      {enablePinControls && (
+        <button
+          type="button"
+          onClick={handlePinClick}
+          className={clsx('grid-header-pin', isPinned && GRID_HEADER_PIN_ACTIVE_CLASS)}
+          aria-label={isPinned ? GRID_HEADER_UNPIN_ARIA : GRID_HEADER_PIN_ARIA}
+          title={isPinned ? GRID_HEADER_UNPIN_ARIA : GRID_HEADER_PIN_ARIA}
+        >
+          <BearIcons.MapPinIcon size="xs" className={isPinned ? 'text-accent-primary' : 'text-theme-muted'} />
+        </button>
+      )}
+
       {isResizable && (
         <div
           className="grid-header-resize"
@@ -152,6 +198,7 @@ export function GridHeader<T extends RowData = RowData>({
   enableFilter = true,
   enableDragDrop = true,
   enableResize = true,
+  enablePinControls = true,
   enableSelection = false,
   enableExpansion = false,
   allSelected = false,
@@ -199,6 +246,42 @@ export function GridHeader<T extends RowData = RowData>({
         return (aState?.order ?? ZERO) - (bState?.order ?? ZERO);
       });
   }, [columns, columnStates]);
+
+  const pinEdgeIds = useMemo(() => {
+    let lastLeftId: string | null = null;
+    let firstRightId: string | null = null;
+    for (const col of visibleColumns) {
+      const colState = columnStates.find((cs) => cs.id === col.id);
+      const side = resolveColumnSticky(col, colState);
+      if (side === 'left') lastLeftId = col.id;
+    }
+    for (const col of visibleColumns) {
+      const colState = columnStates.find((cs) => cs.id === col.id);
+      const side = resolveColumnSticky(col, colState);
+      if (side === 'right') {
+        firstRightId = col.id;
+        break;
+      }
+    }
+    return { lastLeftId, firstRightId };
+  }, [visibleColumns, columnStates]);
+
+  const handlePinToggle = useCallback(
+    (columnId: string) => {
+      const colState = columnStates.find((cs) => cs.id === columnId);
+      const current = colState?.pinned ?? null;
+      if (current === 'left') {
+        actions.pinColumn(columnId, 'right');
+        return;
+      }
+      if (current === 'right') {
+        actions.pinColumn(columnId, null);
+        return;
+      }
+      actions.pinColumn(columnId, 'left');
+    },
+    [actions, columnStates],
+  );
 
   const handleResizeStart = useCallback(
     (columnId: string, currentWidth: number) => (event: React.MouseEvent) => {
@@ -279,12 +362,16 @@ export function GridHeader<T extends RowData = RowData>({
               enableFilter={enableFilter}
               enableDragDrop={enableDragDrop}
               enableResize={enableResize}
+              enablePinControls={enablePinControls}
               hasFilter={hasFilter}
               isDragging={dragDrop.draggingColumnId === col.id}
               isDragOver={dragDrop.dragOverColumnId === col.id}
+              isPinEdgeLeft={col.id === pinEdgeIds.lastLeftId}
+              isPinEdgeRight={col.id === pinEdgeIds.firstRightId}
               isColumnAutoSized={state.autoSizedColumnIds.has(col.id)}
               onSort={() => actions.toggleSorting(col.id)}
               onFilterOpen={() => handleFilterClick(col.id)}
+              onPinToggle={() => handlePinToggle(col.id)}
               onResizeStart={handleResizeStart(col.id, colState.width)}
               dragHandleProps={dragDrop.getDragHandleProps(col.id)}
               dropTargetProps={dragDrop.getDropTargetProps(col.id)}

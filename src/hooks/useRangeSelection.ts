@@ -1,6 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { CellCoord, CellRange } from '@/types/features.types';
-import { ZERO } from '@constants/numbers.const';
+import {
+  KEY_ARROW_DOWN,
+  KEY_ARROW_LEFT,
+  KEY_ARROW_RIGHT,
+  KEY_ARROW_UP,
+} from '@constants/keyboard.const';
+import { ONE, ZERO } from '@constants/numbers.const';
 
 function normalizeRange(anchor: CellCoord, focus: CellCoord): CellRange {
   return {
@@ -8,6 +14,13 @@ function normalizeRange(anchor: CellCoord, focus: CellCoord): CellRange {
     endRow: Math.max(anchor.rowIndex, focus.rowIndex),
     startCol: Math.min(anchor.colIndex, focus.colIndex),
     endCol: Math.max(anchor.colIndex, focus.colIndex),
+  };
+}
+
+function clampCoord(coord: CellCoord, maxRow: number, maxCol: number): CellCoord {
+  return {
+    rowIndex: Math.max(ZERO, Math.min(coord.rowIndex, maxRow)),
+    colIndex: Math.max(ZERO, Math.min(coord.colIndex, maxCol)),
   };
 }
 
@@ -23,6 +36,12 @@ export interface UseRangeSelectionReturn {
   beginFillDrag: () => void;
   setFocusCoord: (coord: CellCoord) => void;
   clearRange: () => void;
+  extendWithArrowKey: (
+    key: string,
+    maxRow: number,
+    maxCol: number,
+    fallbackAnchor?: CellCoord | null,
+  ) => CellCoord | null;
 }
 
 export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
@@ -81,6 +100,41 @@ export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
     setIsFilling(false);
   }, []);
 
+  const extendWithArrowKey = useCallback(
+    (
+      key: string,
+      maxRow: number,
+      maxCol: number,
+      fallbackAnchor?: CellCoord | null,
+    ): CellCoord | null => {
+      if (!enabled) return null;
+      const currentAnchor = anchor ?? fallbackAnchor ?? null;
+      const currentFocus = focus ?? currentAnchor;
+      if (!currentAnchor || !currentFocus) return null;
+
+      let nextFocus: CellCoord = currentFocus;
+      if (key === KEY_ARROW_UP) {
+        nextFocus = { rowIndex: currentFocus.rowIndex - ONE, colIndex: currentFocus.colIndex };
+      } else if (key === KEY_ARROW_DOWN) {
+        nextFocus = { rowIndex: currentFocus.rowIndex + ONE, colIndex: currentFocus.colIndex };
+      } else if (key === KEY_ARROW_LEFT) {
+        nextFocus = { rowIndex: currentFocus.rowIndex, colIndex: currentFocus.colIndex - ONE };
+      } else if (key === KEY_ARROW_RIGHT) {
+        nextFocus = { rowIndex: currentFocus.rowIndex, colIndex: currentFocus.colIndex + ONE };
+      } else {
+        return null;
+      }
+
+      const clamped = clampCoord(nextFocus, maxRow, maxCol);
+      if (!anchor) setAnchor(currentAnchor);
+      setFocus(clamped);
+      setIsDragging(false);
+      setIsFilling(false);
+      return clamped;
+    },
+    [enabled, anchor, focus],
+  );
+
   const isCellInRange = useCallback(
     (rowIndex: number, colIndex: number) => {
       if (!range) return false;
@@ -114,6 +168,7 @@ export function useRangeSelection(enabled: boolean): UseRangeSelectionReturn {
     beginFillDrag,
     setFocusCoord,
     clearRange,
+    extendWithArrowKey,
   };
 }
 

@@ -9,6 +9,7 @@ import { ColumnGroupHeader } from '../ColumnGroupHeader';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { applyClipboardToRange, parseClipboardGrid } from '@/utils/transaction.utils';
 import { applyFillDownFromRange, isBottomRightOfRange } from '@/utils/fillRange.utils';
+import { resolveCellCoordFromPoint } from '@/utils/pointerCell.utils';
 import { getFlashCellClassName, scheduleFlashRemoval, buildFlashCellKey } from '@/utils/flashCells.utils';
 import { RANGE_SELECTION_ACTIVE_CLASS, RANGE_SELECTION_ANCHOR_CLASS } from '@constants/rangeSelection.const';
 import { FILL_HANDLE_KEY } from '@constants/fillHandle.const';
@@ -176,6 +177,10 @@ function GridTableContent<T extends RowData>({
   const rangeRowsRef = useRef<T[]>([]);
   const visibleColsRef = useRef(visibleCols);
   visibleColsRef.current = visibleCols;
+  const rangeApiRef = useRef(rangeApi);
+  rangeApiRef.current = rangeApi;
+  const fillPointerRef = useRef({ x: ZERO, y: ZERO });
+  const fillAppliedRef = useRef(false);
   const undoRedo = useUndoRedo(
     undoRedoConfig?.maxHistory,
     (e: EditHistoryEntry) => {
@@ -288,6 +293,8 @@ function GridTableContent<T extends RowData>({
   const handleFillHandleMouseDown = useCallback((rowIndex: number, colIndex: number, event: React.MouseEvent) => {
     if (!rangeSelection?.enabled || rangeSelection.fillHandle === false) return;
     if (event.button !== 0) return;
+    fillPointerRef.current = { x: event.clientX, y: event.clientY };
+    fillAppliedRef.current = false;
     rangeApi.beginFillDrag();
     rangeApi.setFocusCoord({ rowIndex, colIndex });
   }, [rangeSelection, rangeApi]);
@@ -354,6 +361,35 @@ function GridTableContent<T extends RowData>({
     },
     [getRowId, data]
   );
+
+  const applyFillFromCurrentRange = useCallback(() => {
+    const range = rangeApiRef.current.range;
+    if (!range || !enableCellEdit) return;
+    applyFillDownFromRange(rangeRowsRef.current, visibleColsRef.current, range, (row, columnId, value) => {
+      const rowId = getRowIdFn(row);
+      onCellEditRef.current?.(rowId, columnId, value);
+      if (flashCells?.enabled !== false) {
+        scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
+      }
+    });
+  }, [enableCellEdit, flashCells, activeFlashes, getRowIdFn]);
+
+  const finishRangePointer = useCallback(() => {
+    const api = rangeApiRef.current;
+    if (api.isFilling && rangeSelection?.fillHandle !== false && !fillAppliedRef.current) {
+      fillAppliedRef.current = true;
+      applyFillFromCurrentRange();
+    }
+    api.handleMouseUp();
+  }, [applyFillFromCurrentRange, rangeSelection]);
+
+  const syncFillFocusFromPointer = useCallback(() => {
+    const api = rangeApiRef.current;
+    if (!api.isFilling) return;
+    const coord = resolveCellCoordFromPoint(fillPointerRef.current.x, fillPointerRef.current.y);
+    if (!coord) return;
+    api.handleCellMouseEnter(coord);
+  }, []);
 
   const exportData = useMemo(
     () =>
@@ -559,8 +595,11 @@ function GridTableContent<T extends RowData>({
       if (virtualizationEnabled) {
         virtualWindow.onScroll();
       }
+      if (rangeApiRef.current.isFilling) {
+        requestAnimationFrame(syncFillFocusFromPointer);
+      }
     },
-    [infiniteApi, virtualizationEnabled, virtualWindow],
+    [infiniteApi, virtualizationEnabled, virtualWindow, syncFillFocusFromPointer],
   );
 
   useEffect(() => {
@@ -620,13 +659,7 @@ function GridTableContent<T extends RowData>({
 
       if (event.key.toLowerCase() === FILL_HANDLE_KEY && rangeSelection.fillHandle !== false) {
         event.preventDefault();
-        applyFillDownFromRange(displayData, visibleCols, rangeApi.range, (row, columnId, value) => {
-          const rowId = getRowIdFn(row);
-          onCellEditRef.current?.(rowId, columnId, value);
-          if (flashCells?.enabled !== false) {
-            scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
-          }
-        });
+        applyFillFromCurrentRange();
       }
     };
     window.addEventListener('keydown', handleRangeKeys);
@@ -643,24 +676,25 @@ function GridTableContent<T extends RowData>({
     kbIsEditing,
     focusedCell,
     setFocusedCell,
+    applyFillFromCurrentRange,
   ]);
 
   useEffect(() => {
-    if (!rangeSelection?.enabled || !rangeApi.isFilling || !rangeApi.range || !enableCellEdit) return;
-    if (rangeSelection.fillHandle === false) return;
+    if (!rangeSelection?.enabled) return;
     const onUp = () => {
-      applyFillDownFromRange(displayData, visibleCols, rangeApi.range!, (row, columnId, value) => {
-        const rowId = getRowIdFn(row);
-        onCellEditRef.current?.(rowId, columnId, value);
-        if (flashCells?.enabled !== false) {
-          scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
-        }
-      });
-      rangeApi.handleMouseUp();
+      finishRangePointer();
+    };
+    const onMove = (event: MouseEvent) => {
+      fillPointerRef.current = { x: event.clientX, y: event.clientY };
+      syncFillFocusFromPointer();
     };
     window.addEventListener('mouseup', onUp);
-    return () => window.removeEventListener('mouseup', onUp);
-  }, [rangeSelection, rangeApi.isFilling, rangeApi.range, enableCellEdit, visibleCols, displayData, getRowIdFn, flashCells, activeFlashes, rangeApi]);
+    window.addEventListener('mousemove', onMove);
+    return () => {
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('mousemove', onMove);
+    };
+  }, [rangeSelection?.enabled, finishRangePointer, syncFillFocusFromPointer]);
   useEffect(() => {
     rangeSelection?.onRangeChange?.(rangeApi.range);
   }, [rangeSelection, rangeApi.range]);
@@ -739,7 +773,7 @@ function GridTableContent<T extends RowData>({
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
-      onMouseUp={rangeSelection?.enabled ? rangeApi.handleMouseUp : undefined}
+      onMouseUp={rangeSelection?.enabled ? finishRangePointer : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
 

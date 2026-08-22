@@ -9,6 +9,8 @@ import {
   EMPTY_STRING,
   GRID_HEADER_PIN_ARIA,
   GRID_HEADER_UNPIN_ARIA,
+  COLUMN_RESIZE_DOUBLE_CLICK_MS,
+  GRID_HEADER_AUTOSIZE_ARIA,
   MAX_COLUMN_WIDTH,
   MIN_COLUMN_WIDTH,
   ONE,
@@ -17,6 +19,7 @@ import {
   TWO,
   ZERO,
 } from '@/constants';
+import { measureColumnContentWidth } from '@/utils/columnAutosize.utils';
 import { resolveColumnSticky } from '@/utils/columnSticky.utils';
 import { Checkbox, BearIcons } from '@forgedevstack/bear';
 import { FilterPopup } from '../FilterPopup';
@@ -48,6 +51,7 @@ function HeaderCell<T extends RowData>({
   onFilterOpen,
   onPinToggle,
   onResizeStart,
+  onResizeAutoSize,
   dragHandleProps,
   dropTargetProps,
 }: GridHeaderCellProps<T>): ReactNode {
@@ -180,7 +184,16 @@ function HeaderCell<T extends RowData>({
       {isResizable && (
         <div
           className="grid-header-resize"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label={GRID_HEADER_AUTOSIZE_ARIA}
+          title={GRID_HEADER_AUTOSIZE_ARIA}
           onMouseDown={onResizeStart}
+          onDoubleClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onResizeAutoSize?.(event);
+          }}
           onClick={(e) => e.stopPropagation()}
         />
       )}
@@ -208,13 +221,14 @@ export function GridHeader<T extends RowData = RowData>({
   onFilterOpen,
   getSortDirection,
 }: GridHeaderProps<T>): ReactNode {
-  const { state, actions } = useTableContext();
+  const { state, actions, computed } = useTableContext();
   const dragDrop = useDragDrop();
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
   const [activeFilterColumn, setActiveFilterColumn] = useState<string | null>(null);
   const filterButtonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const resizeStartX = useRef<number>(0);
   const resizeStartWidth = useRef<number>(0);
+  const lastResizeDownAt = useRef<number>(0);
 
   const handleFilterClick = useCallback((columnId: string) => {
     setActiveFilterColumn(activeFilterColumn === columnId ? null : columnId);
@@ -283,9 +297,27 @@ export function GridHeader<T extends RowData = RowData>({
     [actions, columnStates],
   );
 
+  const autoSizeColumn = useCallback(
+    (columnId: string) => {
+      const column = columns.find((col) => col.id === columnId);
+      if (!column) return;
+      const width = measureColumnContentWidth(computed.sortedData as T[], column);
+      actions.resizeColumn(columnId, width);
+    },
+    [actions, columns, computed.sortedData],
+  );
+
   const handleResizeStart = useCallback(
     (columnId: string, currentWidth: number) => (event: React.MouseEvent) => {
       event.preventDefault();
+      event.stopPropagation();
+      const now = Date.now();
+      if (now - lastResizeDownAt.current <= COLUMN_RESIZE_DOUBLE_CLICK_MS) {
+        lastResizeDownAt.current = ZERO;
+        autoSizeColumn(columnId);
+        return;
+      }
+      lastResizeDownAt.current = now;
       setResizingColumn(columnId);
       resizeStartX.current = event.clientX;
       resizeStartWidth.current = currentWidth;
@@ -308,7 +340,7 @@ export function GridHeader<T extends RowData = RowData>({
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     },
-    [actions]
+    [actions, autoSizeColumn]
   );
 
   const headerClasses = useMemo(
@@ -373,6 +405,7 @@ export function GridHeader<T extends RowData = RowData>({
               onFilterOpen={() => handleFilterClick(col.id)}
               onPinToggle={() => handlePinToggle(col.id)}
               onResizeStart={handleResizeStart(col.id, colState.width)}
+              onResizeAutoSize={() => autoSizeColumn(col.id)}
               dragHandleProps={dragDrop.getDragHandleProps(col.id)}
               dropTargetProps={dragDrop.getDropTargetProps(col.id)}
             />

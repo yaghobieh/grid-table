@@ -211,7 +211,7 @@ export const he: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'תצוגת תכונות',
     description:
       'גרידים אינטראקטיביים לתפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור מחדש, עץ, ביטול/שחזור, שורות קפואות והדפסה. ל־APIs של 1.1.x יש דמוים ייעודיים.',
@@ -329,7 +329,7 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.1.3 — תיקון virtualize, העתקת טווח, Shift+חיצים, Tab בעריכה, ייצוא ו־pin',
+      'v1.1.4 — דאבל־קליק על מפריד העמודה מתאים לרוחב הטקסט; fill handle מיושר עם virtualize',
       'Ctrl/Cmd+C מעתיק טווח; Escape מנקה; pin בכותרת בלי לחיצה ימנית',
       'ייצוא מכבד סדר/עמודות מוסתרות; selected ריק הוא no-op',
       'דמו enterprise עודכן למקלדת ועריכה',
@@ -391,6 +391,13 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'דאבל־קליק על מפריד הכותרת מתאים את העמודה למחרוזת הארוכה ביותר',
+          'Fill handle עם virtualize כותב לשורות המוחלטות הנכונות אחרי גלילה',
+          'יומן שינויים ומסמכים ל־1.1.4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'תיקון virtualize: bodyRows בחלון עם offset אינדקס מוחלט',

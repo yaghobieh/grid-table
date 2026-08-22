@@ -44,6 +44,7 @@ export interface GridHeaderCellProps<T extends RowData = RowData> {
   onFilterOpen?: () => void;
   onPinToggle?: () => void;
   onResizeStart?: (event: React.MouseEvent) => void;
+  onResizeAutoSize?: (event: React.MouseEvent) => void;
   dragHandleProps?: {
     draggable: boolean;
     onDragStart: (event: React.DragEvent) => void;

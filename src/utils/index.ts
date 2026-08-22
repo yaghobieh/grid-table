@@ -33,4 +33,6 @@ export {
   getCellAccessorValue,
   isBottomRightOfRange,
 } from './fillRange.utils';
+export { resolveCellCoordFromPoint } from './pointerCell.utils';
+export { measureColumnContentWidth } from './columnAutosize.utils';
 

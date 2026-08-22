@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.4', date: '2026-08-22' },
   { version: '1.1.3', date: '2026-08-08' },
   { version: '1.1.2', date: '2026-07-24' },
   { version: '1.1.1', date: '2026-07-11' },

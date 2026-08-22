@@ -6,6 +6,8 @@ export * from './strings.const';
 export * from './exportScope.const';
 export * from './touchGestures.const';
 export * from './fillHandle.const';
+export * from './pointerCell.const';
+export * from './columnAutosize.const';
 export * from './rangeSelection.const';
 export * from './savedViews.const';
 

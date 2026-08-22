@@ -217,7 +217,7 @@ export const es: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'Escaparate de funciones',
     description:
       'Grids interactivos para menú contextual, barra de estado, exportación, teclado, reordenar, árbol, deshacer/rehacer, filas congeladas e impresión. Las APIs 1.1.x tienen demos dedicados.',
@@ -335,7 +335,7 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.1.3 — Fix virtualize, copia de rango, Shift+flechas, Tab al editar, export + pin',
+      'v1.1.4 — Doble clic en el divisor ajusta el ancho; fill handle alineado con virtualize',
       'Ctrl/Cmd+C copia el rango; Escape limpia; pin en encabezado sin clic derecho',
       'Export respeta orden/columnas ocultas; selected vacío es no-op',
       'Demo enterprise actualizado para teclado y edición',
@@ -397,6 +397,13 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'Doble clic en el divisor del encabezado ajusta la columna al texto más largo',
+          'Fill handle con virtualize escribe las filas absolutas correctas tras el scroll',
+          'Portal changelog y docs para 1.1.4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'Fix virtualize: bodyRows en ventana con offset de índice absoluto',

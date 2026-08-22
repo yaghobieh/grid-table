@@ -234,7 +234,7 @@ export const en: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'Feature showcase',
     description:
       'Interactive grids for context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, and print. Dedicated demos cover 1.1.x enterprise APIs.',
@@ -352,7 +352,7 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.1.3 — Virtualize fix, range copy, Shift+Arrows, Tab edit commit, export + pin polish',
+      'v1.1.4 — Double-click column divider autosize; fill handle stays aligned with virtualize',
       'Ctrl/Cmd+C copies selected range; Escape clears; header pin without right-click',
       'Export respects column order/hidden columns; empty selected scope is a no-op',
       'Enterprise demo updated for keyboard range + edit UX',
@@ -415,6 +415,13 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'Double-click the header resize divider to fit the longest header or cell string',
+          'Fill handle with virtualize writes the correct absolute rows after scroll',
+          'Portal changelog and docs for 1.1.4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'Fix virtualize to render sliced bodyRows with absolute row index offset',

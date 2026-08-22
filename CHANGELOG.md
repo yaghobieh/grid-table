@@ -5,6 +5,20 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2026-08-22
+
+### Added
+
+- **Column autosize** — double-click the header resize divider to fit the column to the longest header or cell string (Excel / AG Grid), clamped to min/max width.
+
+### Fixed
+
+- **Fill handle + virtualize** — fill-down applies once on mouseup against absolute `displayData` indexes, and the fill focus follows the pointer after scroll so recycled rows do not write the wrong cells.
+
+### Portal
+
+- Changelog i18n + `CURRENT_VERSION` → 1.1.4.
+
 ## [1.1.3] - 2026-08-08
 
 ### Fixed

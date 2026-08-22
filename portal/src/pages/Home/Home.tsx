@@ -8,7 +8,6 @@ import {
   Card,
   CardBody,
   Badge,
-  GradientText,
   CodeBlock,
   BearIcons,
   Carousel,
@@ -27,8 +26,6 @@ import { useTypewriter } from '@/hooks';
 import {
   FEATURE_ICONS,
   DEMO_ICONS,
-  GRADIENT_PRIMARY,
-  GRADIENT_SECONDARY,
   SHOWCASE_CARDS,
   ECO_PACKAGES,
 } from './Home.const';
@@ -69,9 +66,7 @@ export const Home: FC = () => {
           </Flex>
 
           <Typography variant="h1" className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            <GradientText colors={GRADIENT_PRIMARY} className="text-5xl md:text-7xl font-extrabold">
-              {t.home.title}
-            </GradientText>
+            {t.home.title}
           </Typography>
 
           <Typography variant="h2" className="text-2xl md:text-3xl font-medium mb-2" style={{ color: 'var(--text-primary)', opacity: 0.85 }}>
@@ -89,8 +84,8 @@ export const Home: FC = () => {
           <Flex justify="center" gap={8} wrap="wrap" className="mb-12">
             {STATS.map((stat, index) => (
               <div key={index} className="text-center">
-                <Typography variant="h3" className="text-3xl font-bold">
-                  <GradientText colors={GRADIENT_PRIMARY}>{stat.value}</GradientText>
+                <Typography variant="body1" className="text-3xl font-bold">
+                  {stat.value}
                 </Typography>
                 <Typography variant="body2" style={{ color: 'var(--text-secondary)' }}>{statLabels[index]}</Typography>
               </div>
@@ -145,7 +140,7 @@ export const Home: FC = () => {
             </Typography>
             <HomeSectionHashTitle sectionId="built-for-every-data-scenario" className="mb-4">
               <Typography variant="h2" className="text-3xl md:text-5xl font-extrabold">
-                <GradientText colors={GRADIENT_PRIMARY}>{t.home.showcaseTitle}</GradientText>
+                {t.home.showcaseTitle}
               </Typography>
             </HomeSectionHashTitle>
             <Typography style={{ color: 'var(--text-secondary)' }} className="max-w-xl mx-auto text-lg">
@@ -222,7 +217,7 @@ export const Home: FC = () => {
           <div className="text-center mb-12">
             <HomeSectionHashTitle sectionId="demos-and-examples" className="mb-4">
               <Typography variant="h2" className="text-3xl md:text-4xl font-bold">
-                <GradientText colors={GRADIENT_PRIMARY}>{t.home.demosAndExamples}</GradientText>
+                {t.home.demosAndExamples}
               </Typography>
             </HomeSectionHashTitle>
             <Typography style={{ color: 'var(--text-secondary)' }}>{t.home.exploreExamples}</Typography>
@@ -304,7 +299,7 @@ export const Home: FC = () => {
             <div className="flex flex-wrap items-baseline justify-center gap-x-3 gap-y-2">
               <HomeSectionHashTitle sectionId="feature-rich-data-grid" className="inline-flex">
                 <Typography variant="h2" className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-center">
-                  <GradientText colors={GRADIENT_SECONDARY}>{t.home.featureRichDataGrid}</GradientText>
+                  {t.home.featureRichDataGrid}
                 </Typography>
               </HomeSectionHashTitle>
               <span className="hidden sm:inline select-none opacity-40" style={{ color: 'var(--text-secondary)' }} aria-hidden>·</span>
@@ -374,7 +369,7 @@ export const Home: FC = () => {
                   {t.home.forgeStackEcosystem}
                 </Typography>
                 <Typography variant="h2" className="text-3xl md:text-4xl font-bold mb-3">
-                  <GradientText colors={GRADIENT_PRIMARY}>{t.home.worksWith}</GradientText>
+                  {t.home.worksWith}
                 </Typography>
                 <Typography style={{ color: 'var(--text-secondary)' }} className="max-w-lg mx-auto">
                   {t.home.ecosystemBanner}

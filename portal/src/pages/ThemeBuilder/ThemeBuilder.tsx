@@ -7,7 +7,6 @@ import {
   Card,
   CardBody,
   Badge,
-  GradientText,
   CodeBlock,
   BearIcons,
 } from '@forgedevstack/bear';
@@ -29,7 +28,6 @@ import {
   MAX_SPACING,
 } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
-import { GRADIENT_PRIMARY } from './ThemeBuilder.const';
 import type { PreviewRow } from './ThemeBuilder.types';
 
 // ── Preview data ─────────────────────────────────────
@@ -165,7 +163,7 @@ export const ThemeBuilder: FC = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <Typography variant="h1" className="text-4xl md:text-5xl font-extrabold mb-4">
-              <GradientText colors={GRADIENT_PRIMARY}>{t.themeBuilderPage.title}</GradientText>
+              {t.themeBuilderPage.title}
             </Typography>
             <Typography className="opacity-50 max-w-xl mx-auto text-lg">
               {t.themeBuilderPage.description}

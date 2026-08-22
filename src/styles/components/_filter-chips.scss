@@ -1,0 +1,33 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+.gt-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.gt-filter-chip,
+.gt-filter-chips-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.12));
+  background: var(--gt-bg-secondary, #f5f5f5);
+  color: var(--gt-text-primary, #262626);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.gt-filter-chip-remove {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.gt-filter-chips-clear {
+  background: transparent;
+}

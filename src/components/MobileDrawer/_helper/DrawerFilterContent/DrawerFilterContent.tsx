@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import { useCallback } from 'react';
 import { Button } from '@forgedevstack/bear';
 import { useTableContext } from '@/context';
-import { DRAWER_FILTERS_ACTIVE_SUFFIX, DRAWER_ZERO } from '../../MobileDrawer.const';
+import { DRAWER_FILTERS_ACTIVE_SUFFIX } from '../../MobileDrawer.const';
 import { EMPTY_STRING } from '@/constants';
+import { ZERO } from '@constants/numbers.const';
 
 export function DrawerFilterContent(): ReactNode {
   const { state, actions } = useTableContext();
@@ -19,7 +20,7 @@ export function DrawerFilterContent(): ReactNode {
         <span className="text-sm text-theme-muted">
           {filters.length} {translations.filter} {DRAWER_FILTERS_ACTIVE_SUFFIX}
         </span>
-        {filters.length > DRAWER_ZERO && (
+        {filters.length > ZERO && (
           <Button onClick={handleClearAll} className="text-sm" variant="ghost" size="sm">
             {translations.clearAll}
           </Button>

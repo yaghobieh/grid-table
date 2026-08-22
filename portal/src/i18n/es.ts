@@ -119,6 +119,11 @@ export const es: TranslationStrings = {
       description:
         'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
     },
+    'release-1-1-4': {
+      title: 'Novedades 1.1.4',
+      description:
+        'Autosize del divisor, autosize-all, size-to-fit, chips de filtro, menú de columna, selector, filtros flotantes, cortar, series y búsqueda.',
+    },
     'enterprise-grid': {
       title: 'Grid empresarial',
       description:
@@ -217,13 +222,17 @@ export const es: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'Escaparate de funciones',
     description:
       'Grids interactivos para menú contextual, barra de estado, exportación, teclado, reordenar, árbol, deshacer/rehacer, filas congeladas e impresión. Las APIs 1.1.x tienen demos dedicados.',
     relatedTitle: 'Explorar demos dedicados',
     relatedDescription: 'Las superficies 1.1.x ya enviadas tienen rutas propias — ábrelas en lugar de tratarlas como “planificadas”.',
     relatedLinks: {
+      'release-1-1-4': {
+        title: 'Novedades 1.1.4',
+        summary: 'Autosize, chips, menú/selector de columnas, filtros flotantes, cortar, series y búsqueda.',
+      },
       'enterprise-grid': {
         title: 'Grid empresarial',
         summary: 'Copia/pega de rango, Shift+flechas, Tab al editar, fill handle, exportScope, gestos táctiles.',
@@ -259,6 +268,19 @@ export const es: TranslationStrings = {
         title: 'Filas congeladas e impresión',
         description: 'Fija filas resumen al fondo. Usa el icono de impresión en la barra para una vista imprimible.',
       },
+    ],
+  },
+
+  release114Demo: {
+    title: 'Laboratorio 1.1.4',
+    description:
+      'Paquete local — prueba las superficies 1.1.4. El portal resuelve @forgedevstack/grid-table desde el código fuente.',
+    bullets: [
+      'Doble clic en el divisor, o Autosize all / Size to fit en la barra.',
+      'Filtra Región o Estado (busca en la lista set). Los chips aparecen encima.',
+      'Menú ⋮ del encabezado: autosize, pin, ocultar. El botón Columns cambia visibilidad.',
+      'Fila de filtros flotantes. Ctrl/Cmd+F enfoca la búsqueda.',
+      'Selecciona Qty y arrastra el fill handle para 10, 20, 30… Corta con Ctrl/Cmd+X.',
     ],
   },
 
@@ -326,6 +348,7 @@ export const es: TranslationStrings = {
     themePlayground: 'Copiar — boceto de integración',
     enterpriseGrid: 'Copiar — grid empresarial (rango, fill, exportScope)',
     infiniteScroll: 'Copiar — infiniteScroll por bloques',
+    release114: 'Copiar — novedades 1.1.4 (autosize, chips, cortar, series)',
   },
 
   demosIndex: {
@@ -335,7 +358,7 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.1.3 — Fix virtualize, copia de rango, Shift+flechas, Tab al editar, export + pin',
+      'v1.1.4 — Doble clic en el divisor ajusta el ancho; fill handle alineado con virtualize',
       'Ctrl/Cmd+C copia el rango; Escape limpia; pin en encabezado sin clic derecho',
       'Export respeta orden/columnas ocultas; selected vacío es no-op',
       'Demo enterprise actualizado para teclado y edición',
@@ -397,6 +420,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'Doble clic en el divisor del encabezado ajusta la columna al texto más largo',
+          'Autosize all, size-to-fit, chips, menú de columna y selector de columnas',
+          'Filtros flotantes, buscar con Ctrl/Cmd+F, búsqueda set, corte y series',
+          'Fill handle con virtualize escribe las filas absolutas correctas tras el scroll',
+          'Demo del portal en /demos/release-1-1-4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'Fix virtualize: bodyRows en ventana con offset de índice absoluto',

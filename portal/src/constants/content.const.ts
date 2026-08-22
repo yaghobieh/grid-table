@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.4', date: '2026-08-22' },
   { version: '1.1.3', date: '2026-08-08' },
   { version: '1.1.2', date: '2026-07-24' },
   { version: '1.1.1', date: '2026-07-11' },
@@ -31,6 +32,7 @@ export const VERSIONS: VersionInfo[] = [
 ];
 
 export const DEMOS: DemoMeta[] = [
+  { id: 'release-1-1-4', icon: 'SparklesIcon', path: '/demos/release-1-1-4', tag: 'New' },
   { id: 'enterprise-grid', icon: 'SparklesIcon', path: '/demos/enterprise-grid', tag: 'New' },
   { id: 'infinite-scroll', icon: 'LoaderIcon', path: '/demos/infinite-scroll', tag: 'New' },
   { id: 'features', icon: 'SparklesIcon', path: '/demos/features', tag: 'Popular' },

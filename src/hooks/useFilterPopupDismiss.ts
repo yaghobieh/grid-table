@@ -1,5 +1,5 @@
 import { useEffect, type RefObject } from 'react';
-import { FILTER_POPUP_KEY_ESCAPE } from '@components/FilterPopup/FilterPopup.const';
+import { KEY_ESCAPE } from '@constants/keyboard.const';
 
 /**
  * Registers outside-click and escape handlers for filter popup dismissal.
@@ -16,7 +16,7 @@ export function useFilterPopupDismiss(
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === FILTER_POPUP_KEY_ESCAPE) {
+      if (event.key === KEY_ESCAPE) {
         onClose();
       }
     };

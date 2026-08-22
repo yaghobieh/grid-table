@@ -294,6 +294,11 @@ export function TableProvider<T extends RowData>({
           col.id === columnId ? { ...col, width } : col
         );
         dispatch({ type: TABLE_ACTION.SET_COLUMN_STATES, payload: newStates });
+        if (state.autoSizedColumnIds.has(columnId)) {
+          const next = new Set(state.autoSizedColumnIds);
+          next.delete(columnId);
+          dispatch({ type: TABLE_ACTION.SET_AUTO_SIZED_COLUMN_IDS, payload: next });
+        }
       },
 
       toggleColumnVisibility: (columnId: string) => {

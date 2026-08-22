@@ -1,0 +1,9 @@
+export const SKELETON_CLASS = 'grid-skeleton';
+export const SKELETON_HEADER_CLASS = 'grid-skeleton-header';
+export const SKELETON_BODY_CLASS = 'grid-skeleton-body';
+export const SKELETON_ROW_CLASS = 'grid-skeleton-row';
+export const SKELETON_HEADER_CELL_CLASS = 'px-4 py-3 flex-shrink-0';
+export const SKELETON_ARIA_LABEL = 'Loading';
+export const SKELETON_ANIMATION_PULSE = 'pulse';
+export const SKELETON_ANIMATION_NONE = 'none';
+export const SKELETON_HEADER_WIDTH = '60%';

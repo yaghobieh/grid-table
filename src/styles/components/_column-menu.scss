@@ -1,0 +1,51 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+.gt-column-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.gt-column-menu-trigger {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.125rem 0.25rem;
+  color: var(--gt-text-secondary, #595959);
+  border-radius: 0.25rem;
+  line-height: 1;
+}
+
+.gt-column-menu-trigger:hover {
+  background-color: var(--gt-bg-hover, #e0e0e0);
+}
+
+.gt-column-menu-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 40;
+  min-width: 8rem;
+  background: var(--gt-bg-primary, #fff);
+  border: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.12));
+  border-radius: 0.375rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 0.25rem;
+}
+
+.gt-column-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--gt-text-primary, #262626);
+  border-radius: 0.25rem;
+}
+
+.gt-column-menu-item:hover {
+  background-color: var(--gt-bg-hover, #e0e0e0);
+}

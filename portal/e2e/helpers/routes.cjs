@@ -3,6 +3,7 @@ const PORTAL_ROUTES = [
   '/demos',
   '/demos/features',
   '/demos/enterprise-grid',
+  '/demos/release-1-1-4',
   '/demos/infinite-scroll',
   '/demos/saved-views',
   '/demos/advanced-filter-builder',

@@ -115,6 +115,10 @@ export const he: TranslationStrings = {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
     },
+    'release-1-1-4': {
+      title: 'תכונות 1.1.4',
+      description: 'Autosize, שיבולת, תפריט עמודה, בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
+    },
     'enterprise-grid': {
       title: 'גריד ארגוני',
       description: 'בחירת טווח, fill handle, מסנני set/תאריך, exportScope, flash cells ומחוות מגע.',
@@ -211,13 +215,17 @@ export const he: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'תצוגת תכונות',
     description:
       'גרידים אינטראקטיביים לתפריט הקשר, שורת מצב, ייצוא, מקלדת, סידור מחדש, עץ, ביטול/שחזור, שורות קפואות והדפסה. ל־APIs של 1.1.x יש דמוים ייעודיים.',
     relatedTitle: 'דמוים ייעודיים',
     relatedDescription: 'תכונות שכבר שוחררו ב־1.1.x זמינות בנתיבים נפרדים — לא כ"מתוכנן".',
     relatedLinks: {
+      'release-1-1-4': {
+        title: 'תכונות 1.1.4',
+        summary: 'Autosize, שיבולת, תפריט/בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
+      },
       'enterprise-grid': {
         title: 'גריד ארגוני',
         summary: 'העתקה/הדבקה בטווח, Shift+חיצים, Tab בעריכה, fill handle, exportScope, מחוות מגע.',
@@ -253,6 +261,18 @@ export const he: TranslationStrings = {
         title: 'שורות קפואות ומצב הדפסה',
         description: 'הצמדת שורות סיכום לתחתית. סמל הדפסה בסרגל לתצוגה להדפסה.',
       },
+    ],
+  },
+
+  release114Demo: {
+    title: 'מעבדת 1.1.4',
+    description: 'קישור מקומי — בדקו את משטחי 1.1.4. הפורטל טוען את הספרייה מהמקור.',
+    bullets: [
+      'דאבל־קליק על מפריד, או Autosize all / Size to fit בסרגל.',
+      'סננו Region או Status (חיפוש ברשימת set). שיבולת מופיעה מעל הגריד.',
+      'תפריט ⋮: autosize, pin, הסתרה. כפתור Columns משנה נראות.',
+      'שורת מסננים צפה. Ctrl/Cmd+F ממקד חיפוש.',
+      'בחרו Qty וגררו את ידית המילוי ל־10, 20, 30… גזירה ב־Ctrl/Cmd+X.',
     ],
   },
 
@@ -320,6 +340,7 @@ export const he: TranslationStrings = {
     themePlayground: 'העתקה — שלד אינטגרציה',
     enterpriseGrid: 'העתקה — גריד ארגוני (טווח, fill, exportScope)',
     infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
+    release114: 'העתקה — תכונות 1.1.4',
   },
 
   demosIndex: {
@@ -329,7 +350,7 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.1.3 — תיקון virtualize, העתקת טווח, Shift+חיצים, Tab בעריכה, ייצוא ו־pin',
+      'v1.1.4 — דאבל־קליק על מפריד העמודה מתאים לרוחב הטקסט; fill handle מיושר עם virtualize',
       'Ctrl/Cmd+C מעתיק טווח; Escape מנקה; pin בכותרת בלי לחיצה ימנית',
       'ייצוא מכבד סדר/עמודות מוסתרות; selected ריק הוא no-op',
       'דמו enterprise עודכן למקלדת ועריכה',
@@ -391,6 +412,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'דאבל־קליק על מפריד הכותרת מתאים את העמודה למחרוזת הארוכה ביותר',
+          'Autosize all, size-to-fit, שיבולת, תפריט עמודה ובורר עמודות',
+          'מסננים צפים, חיפוש Ctrl/Cmd+F, חיפוש ב־set, גזירת טווח וסדרת מילוי',
+          'Fill handle עם virtualize כותב לשורות המוחלטות הנכונות אחרי גלילה',
+          'דמו פורטל ב־/demos/release-1-1-4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'תיקון virtualize: bodyRows בחלון עם offset אינדקס מוחלט',

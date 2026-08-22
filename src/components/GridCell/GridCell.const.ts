@@ -1,5 +1,3 @@
-import { EMPTY_STRING } from '@/constants';
-
 export const GRID_CELL_ALIGN_CLASSES = {
   left: 'text-left justify-start',
   center: 'text-center justify-center',
@@ -16,4 +14,3 @@ export const GRID_CELL_SUBCELL_TRIGGER_DOUBLE_CLICK = 'doubleClick';
 export const GRID_CELL_SUBCELL_TRIGGER_BOTH = 'both';
 export const GRID_CELL_TRUNCATE_CLASS = 'grid-cell-value--truncate';
 export const GRID_CELL_TOOLTIP_DELAY = 200;
-export const GRID_CELL_EMPTY_STRING = EMPTY_STRING;

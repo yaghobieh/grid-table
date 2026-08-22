@@ -1,0 +1,10 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+.gt-column-chooser {
+  position: relative;
+}
+
+.gt-column-chooser-checkbox {
+  pointer-events: none;
+}

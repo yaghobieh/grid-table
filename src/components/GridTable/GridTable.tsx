@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './GridTable.types';
 import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
@@ -9,6 +9,8 @@ import { ColumnGroupHeader } from '../ColumnGroupHeader';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
 import { applyClipboardToRange, parseClipboardGrid } from '@/utils/transaction.utils';
 import { applyFillDownFromRange, isBottomRightOfRange } from '@/utils/fillRange.utils';
+import { autoSizeVisibleColumns, sizeVisibleColumnsToFit } from '@/utils/columnFit.utils';
+import { resolveCellCoordFromPoint } from '@/utils/pointerCell.utils';
 import { getFlashCellClassName, scheduleFlashRemoval, buildFlashCellKey } from '@/utils/flashCells.utils';
 import { RANGE_SELECTION_ACTIVE_CLASS, RANGE_SELECTION_ANCHOR_CLASS } from '@constants/rangeSelection.const';
 import { FILL_HANDLE_KEY } from '@constants/fillHandle.const';
@@ -30,13 +32,28 @@ import { StatusBar } from '../StatusBar';
 import { copyToClipboard, exportToCSV, exportToExcel, exportToJSON, exportToPDF, printTable } from '@/utils/export.utils';
 import { resolveExportData } from '@/utils/exportScope.utils';
 import { resolveExportColumns } from '@/utils/exportColumns.utils';
-import { copyRangeToClipboard } from '@/utils/rangeClipboard.utils';
+import { clearRangeCells, copyRangeToClipboard } from '@/utils/rangeClipboard.utils';
+import { FilterChips } from '../FilterChips';
+import { ColumnChooser } from '../ColumnChooser';
+import { FloatingFilterRow } from '../FloatingFilterRow';
 import { DEFAULT_EXPORT_SCOPE } from '@constants/exportScope.const';
 import {
   RANGE_COPY_MENU_ID,
   RANGE_COPY_MENU_LABEL,
   RANGE_COPY_SHORTCUT,
+  RANGE_CUT_MENU_ID,
+  RANGE_CUT_MENU_LABEL,
+  RANGE_CUT_SHORTCUT,
 } from '@constants/rangeSelection.const';
+import {
+  COLUMN_FIT_AUTOSIZE_ALL_ARIA,
+  COLUMN_FIT_AUTOSIZE_ALL_TITLE,
+  COLUMN_FIT_SIZE_TO_FIT_ARIA,
+  COLUMN_FIT_SIZE_TO_FIT_TITLE,
+} from '@constants/columnFit.const';
+import { FILL_MODE_COPY, FILL_MODE_SERIES } from '@constants/fillSeries.const';
+import { FIND_INPUT_ID, FIND_KEY } from '@constants/find.const';
+import { COLUMN_CHOOSER_DEFAULT_LABEL } from '../ColumnChooser/ColumnChooser.const';
 import {
   CONTEXT_MENU_COPY_CELL,
   CONTEXT_MENU_FILTER_VALUE,
@@ -52,8 +69,9 @@ import {
   KEY_C,
   KEY_ESCAPE,
   KEY_V,
+  KEY_X,
 } from '@constants/keyboard.const';
-import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, ZERO } from '@constants/numbers.const';
+import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, SKELETON_ROWS, ZERO } from '@constants/numbers.const';
 import { resolveTableEffects } from './GridTable.utils';
 
 function GridTableContent<T extends RowData>({
@@ -76,6 +94,11 @@ function GridTableContent<T extends RowData>({
   showPagination = true,
   showFilter = true,
   showGlobalFilter = true,
+  showColumnToggle = true,
+  showFilterChips = true,
+  floatingFilters = false,
+  enableColumnMenu = true,
+  enableFind = true,
   onRowClick,
   onRowDoubleClick,
   onCellClick,
@@ -120,7 +143,7 @@ function GridTableContent<T extends RowData>({
   onUndo,
   onRedo,
   printConfig,
-  autoFit: _autoFit,
+  autoFit,
   enableCopy,
   mobileLayout = 'scroll',
   savedViews,
@@ -176,6 +199,13 @@ function GridTableContent<T extends RowData>({
   const rangeRowsRef = useRef<T[]>([]);
   const visibleColsRef = useRef(visibleCols);
   visibleColsRef.current = visibleCols;
+  const rangeApiRef = useRef(rangeApi);
+  rangeApiRef.current = rangeApi;
+  const fillPointerRef = useRef({ x: ZERO, y: ZERO });
+  const fillAppliedRef = useRef(false);
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
+  const autoFitMountedRef = useRef(false);
+  const [columnChooserOpen, setColumnChooserOpen] = useState(false);
   const undoRedo = useUndoRedo(
     undoRedoConfig?.maxHistory,
     (e: EditHistoryEntry) => {
@@ -207,6 +237,26 @@ function GridTableContent<T extends RowData>({
         shortcut: RANGE_COPY_SHORTCUT,
         onClick: () => {
           copyRangeToClipboard(rangeRowsRef.current, visibleColsRef.current, rangeApi.range);
+        },
+      });
+    }
+    if (rangeSelection?.enabled && rangeSelection.enableCut !== false && enableCellEdit) {
+      acts.push({
+        id: RANGE_CUT_MENU_ID,
+        label: RANGE_CUT_MENU_LABEL,
+        shortcut: RANGE_CUT_SHORTCUT,
+        onClick: () => {
+          const range = rangeApi.range;
+          if (!range) return;
+          copyRangeToClipboard(rangeRowsRef.current, visibleColsRef.current, range);
+          clearRangeCells(rangeRowsRef.current, visibleColsRef.current, range, (row, columnId, value) => {
+            const rowId = getRowId
+              ? getRowId(row)
+              : 'id' in row
+                ? (row.id as string | number)
+                : rangeRowsRef.current.indexOf(row);
+            onCellEditRef.current?.(rowId, columnId, value);
+          });
         },
       });
     }
@@ -249,7 +299,7 @@ function GridTableContent<T extends RowData>({
       });
     }
     return [...acts, ...(contextMenuConfig?.actions ?? [])];
-  }, [contextMenuConfig, actions, state.columnStates, rangeSelection, rangeApi.range]);
+  }, [contextMenuConfig, actions, state.columnStates, rangeSelection, rangeApi.range, enableCellEdit, getRowId]);
 
   const openContextMenuAt = useCallback((row: T, rowIndex: number, x: number, y: number, columnId = '') => {
     if (!contextMenuConfig?.enabled) return;
@@ -288,6 +338,8 @@ function GridTableContent<T extends RowData>({
   const handleFillHandleMouseDown = useCallback((rowIndex: number, colIndex: number, event: React.MouseEvent) => {
     if (!rangeSelection?.enabled || rangeSelection.fillHandle === false) return;
     if (event.button !== 0) return;
+    fillPointerRef.current = { x: event.clientX, y: event.clientY };
+    fillAppliedRef.current = false;
     rangeApi.beginFillDrag();
     rangeApi.setFocusCoord({ rowIndex, colIndex });
   }, [rangeSelection, rangeApi]);
@@ -354,6 +406,41 @@ function GridTableContent<T extends RowData>({
     },
     [getRowId, data]
   );
+
+  const applyFillFromCurrentRange = useCallback(() => {
+    const range = rangeApiRef.current.range;
+    if (!range || !enableCellEdit) return;
+    applyFillDownFromRange(
+      rangeRowsRef.current,
+      visibleColsRef.current,
+      range,
+      (row, columnId, value) => {
+        const rowId = getRowIdFn(row);
+        onCellEditRef.current?.(rowId, columnId, value);
+        if (flashCells?.enabled !== false) {
+          scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
+        }
+      },
+      rangeSelection?.fillSeries === false ? FILL_MODE_COPY : FILL_MODE_SERIES,
+    );
+  }, [enableCellEdit, flashCells, activeFlashes, getRowIdFn, rangeSelection?.fillSeries]);
+
+  const finishRangePointer = useCallback(() => {
+    const api = rangeApiRef.current;
+    if (api.isFilling && rangeSelection?.fillHandle !== false && !fillAppliedRef.current) {
+      fillAppliedRef.current = true;
+      applyFillFromCurrentRange();
+    }
+    api.handleMouseUp();
+  }, [applyFillFromCurrentRange, rangeSelection]);
+
+  const syncFillFocusFromPointer = useCallback(() => {
+    const api = rangeApiRef.current;
+    if (!api.isFilling) return;
+    const coord = resolveCellCoordFromPoint(fillPointerRef.current.x, fillPointerRef.current.y);
+    if (!coord) return;
+    api.handleCellMouseEnter(coord);
+  }, []);
 
   const exportData = useMemo(
     () =>
@@ -559,8 +646,11 @@ function GridTableContent<T extends RowData>({
       if (virtualizationEnabled) {
         virtualWindow.onScroll();
       }
+      if (rangeApiRef.current.isFilling) {
+        requestAnimationFrame(syncFillFocusFromPointer);
+      }
     },
-    [infiniteApi, virtualizationEnabled, virtualWindow],
+    [infiniteApi, virtualizationEnabled, virtualWindow, syncFillFocusFromPointer],
   );
 
   useEffect(() => {
@@ -601,6 +691,15 @@ function GridTableContent<T extends RowData>({
         return;
       }
 
+      if (event.key.toLowerCase() === KEY_X && rangeSelection.enableCut !== false && enableCellEdit) {
+        event.preventDefault();
+        copyRangeToClipboard(displayData, visibleCols, rangeApi.range);
+        clearRangeCells(displayData, visibleCols, rangeApi.range, (row, columnId, value) => {
+          onCellEditRef.current?.(getRowIdFn(row), columnId, value);
+        });
+        return;
+      }
+
       if (!enableCellEdit) return;
 
       if (event.key.toLowerCase() === KEY_V && rangeSelection.enablePaste !== false) {
@@ -620,13 +719,7 @@ function GridTableContent<T extends RowData>({
 
       if (event.key.toLowerCase() === FILL_HANDLE_KEY && rangeSelection.fillHandle !== false) {
         event.preventDefault();
-        applyFillDownFromRange(displayData, visibleCols, rangeApi.range, (row, columnId, value) => {
-          const rowId = getRowIdFn(row);
-          onCellEditRef.current?.(rowId, columnId, value);
-          if (flashCells?.enabled !== false) {
-            scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
-          }
-        });
+        applyFillFromCurrentRange();
       }
     };
     window.addEventListener('keydown', handleRangeKeys);
@@ -643,24 +736,47 @@ function GridTableContent<T extends RowData>({
     kbIsEditing,
     focusedCell,
     setFocusedCell,
+    applyFillFromCurrentRange,
   ]);
 
   useEffect(() => {
-    if (!rangeSelection?.enabled || !rangeApi.isFilling || !rangeApi.range || !enableCellEdit) return;
-    if (rangeSelection.fillHandle === false) return;
+    if (!enableFind || !showGlobalFilter) return;
+    const handleFind = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey)) return;
+      if (event.key.toLowerCase() !== FIND_KEY) return;
+      event.preventDefault();
+      const input = document.getElementById(FIND_INPUT_ID);
+      if (input instanceof HTMLInputElement) {
+        input.focus();
+        input.select();
+      }
+    };
+    window.addEventListener('keydown', handleFind);
+    return () => window.removeEventListener('keydown', handleFind);
+  }, [enableFind, showGlobalFilter]);
+
+  useEffect(() => {
+    if (!autoFit?.enabled || !autoFit.onMount || autoFitMountedRef.current) return;
+    autoFitMountedRef.current = true;
+    autoSizeVisibleColumns(computed.sortedData, visibleCols, actions.resizeColumn, autoFit);
+  }, [autoFit, computed.sortedData, visibleCols, actions.resizeColumn]);
+
+  useEffect(() => {
+    if (!rangeSelection?.enabled) return;
     const onUp = () => {
-      applyFillDownFromRange(displayData, visibleCols, rangeApi.range!, (row, columnId, value) => {
-        const rowId = getRowIdFn(row);
-        onCellEditRef.current?.(rowId, columnId, value);
-        if (flashCells?.enabled !== false) {
-          scheduleFlashRemoval([buildFlashCellKey(rowId, columnId)], activeFlashes, setActiveFlashes, flashCells?.durationMs);
-        }
-      });
-      rangeApi.handleMouseUp();
+      finishRangePointer();
+    };
+    const onMove = (event: MouseEvent) => {
+      fillPointerRef.current = { x: event.clientX, y: event.clientY };
+      syncFillFocusFromPointer();
     };
     window.addEventListener('mouseup', onUp);
-    return () => window.removeEventListener('mouseup', onUp);
-  }, [rangeSelection, rangeApi.isFilling, rangeApi.range, enableCellEdit, visibleCols, displayData, getRowIdFn, flashCells, activeFlashes, rangeApi]);
+    window.addEventListener('mousemove', onMove);
+    return () => {
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('mousemove', onMove);
+    };
+  }, [rangeSelection?.enabled, finishRangePointer, syncFillFocusFromPointer]);
   useEffect(() => {
     rangeSelection?.onRangeChange?.(rangeApi.range);
   }, [rangeSelection, rangeApi.range]);
@@ -719,7 +835,7 @@ function GridTableContent<T extends RowData>({
     return (
       <div className={`grid-table-loading ${classNames.root || ''} ${className}`} style={containerStyle}>
         <Skeleton
-          rows={5}
+          rows={SKELETON_ROWS}
           columns={columns.length}
           columnWidths={columnWidths}
           showHeader={true}
@@ -739,7 +855,7 @@ function GridTableContent<T extends RowData>({
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
-      onMouseUp={rangeSelection?.enabled ? rangeApi.handleMouseUp : undefined}
+      onMouseUp={rangeSelection?.enabled ? finishRangePointer : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
 
@@ -784,6 +900,7 @@ function GridTableContent<T extends RowData>({
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
+              id={FIND_INPUT_ID}
               type="text"
               value={state.globalFilter}
               onChange={(e) => actions.setGlobalFilter(e.target.value)}
@@ -856,6 +973,43 @@ function GridTableContent<T extends RowData>({
             </div>
           )}
 
+          {autoFit?.enabled && (
+            <>
+              <button
+                type="button"
+                className="toolbar-action-button"
+                aria-label={COLUMN_FIT_AUTOSIZE_ALL_ARIA}
+                title={COLUMN_FIT_AUTOSIZE_ALL_TITLE}
+                onClick={() => autoSizeVisibleColumns(computed.sortedData, visibleCols, actions.resizeColumn, autoFit)}
+              >
+                {COLUMN_FIT_AUTOSIZE_ALL_TITLE}
+              </button>
+              <button
+                type="button"
+                className="toolbar-action-button"
+                aria-label={COLUMN_FIT_SIZE_TO_FIT_ARIA}
+                title={COLUMN_FIT_SIZE_TO_FIT_TITLE}
+                onClick={() => {
+                  const width = tableContainerRef.current?.clientWidth ?? ZERO;
+                  sizeVisibleColumnsToFit(visibleCols, width, actions.resizeColumn, autoFit);
+                }}
+              >
+                {COLUMN_FIT_SIZE_TO_FIT_TITLE}
+              </button>
+            </>
+          )}
+
+          {showColumnToggle && !shouldShowMobileView && (
+            <ColumnChooser
+              columns={columns}
+              columnStates={state.columnStates}
+              open={columnChooserOpen}
+              onToggle={() => setColumnChooserOpen((open) => !open)}
+              onToggleColumn={actions.toggleColumnVisibility}
+              label={state.translations.columns || COLUMN_CHOOSER_DEFAULT_LABEL}
+            />
+          )}
+
           {enableCopy && (
             <button
               onClick={() => copyToClipboard(exportData, exportColumns)}
@@ -911,7 +1065,7 @@ function GridTableContent<T extends RowData>({
             </div>
           )}
 
-          {state.filters.length > 0 && (
+          {state.filters.length > 0 && !showFilterChips && (
             <button
               onClick={() => actions.clearFilters()}
               className="filter-badge"
@@ -957,8 +1111,23 @@ function GridTableContent<T extends RowData>({
         </div>
       )}
 
+      {showFilterChips && (
+        <FilterChips
+          filters={state.filters}
+          columns={columns}
+          onRemove={actions.removeFilter}
+          onClearAll={actions.clearFilters}
+          clearAllLabel={state.translations.clearFilter}
+        />
+      )}
+
       <div
-        ref={virtualizationEnabled ? virtualWindow.scrollRef : undefined}
+        ref={(node) => {
+          tableContainerRef.current = node;
+          if (virtualizationEnabled) {
+            virtualWindow.scrollRef(node);
+          }
+        }}
         className="grid-table-container overflow-auto"
         style={virtualizationEnabled ? { maxHeight: dimensions?.maxHeight ? undefined : '480px' } : undefined}
         onScroll={handleContainerScroll}
@@ -983,6 +1152,7 @@ function GridTableContent<T extends RowData>({
             enableFilter={showFilter}
             enableDragDrop={enableDragDrop}
             enableResize={enableColumnResize}
+            enableColumnMenu={enableColumnMenu}
             enableSelection={enableRowSelection}
             enableExpansion={enableRowExpansion}
             allSelected={computed.allSelected}
@@ -993,6 +1163,17 @@ function GridTableContent<T extends RowData>({
               const sort = state.sorting.find((s) => s.columnId === colId);
               return sort?.direction ?? null;
             }}
+          />
+        )}
+        {showTableHeader && floatingFilters && (
+          <FloatingFilterRow
+            columns={columns}
+            columnStates={state.columnStates}
+            filters={state.filters}
+            enableSelection={enableRowSelection}
+            enableExpansion={enableRowExpansion}
+            onFilterChange={(columnId, value) => actions.setFilter(columnId, value, 'contains')}
+            onFilterClear={actions.removeFilter}
           />
         )}
 

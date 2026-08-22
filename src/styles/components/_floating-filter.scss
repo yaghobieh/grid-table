@@ -1,0 +1,36 @@
+@import '../base/variables';
+@import '../base/mixins';
+
+.gt-floating-filter-row {
+  display: flex;
+  width: 100%;
+  min-width: 100%;
+  background: var(--gt-bg-primary, #fff);
+  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.08));
+}
+
+.gt-floating-filter-cell {
+  flex-shrink: 0;
+  padding: 0.25rem 0.4rem;
+  box-sizing: border-box;
+}
+
+.gt-floating-filter-input {
+  width: 100%;
+  border: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.12));
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.75rem;
+  background: var(--gt-bg-secondary, #f5f5f5);
+  color: var(--gt-text-primary, #262626);
+}
+
+.gt-floating-filter-spacer {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.filter-popup-set-search {
+  margin-bottom: 0.5rem;
+}

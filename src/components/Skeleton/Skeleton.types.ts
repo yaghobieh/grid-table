@@ -10,16 +10,3 @@ export interface SkeletonProps {
   showHeader?: boolean;
   animate?: boolean;
 }
-
-export interface SkeletonRowProps {
-  columns: number;
-  columnWidths?: (number | string)[];
-  height?: number;
-  animate?: boolean;
-}
-
-export interface SkeletonCellProps {
-  width?: number | string;
-  height?: number;
-  animate?: boolean;
-}

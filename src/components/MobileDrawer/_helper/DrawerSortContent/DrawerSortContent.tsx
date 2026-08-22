@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 import clsx from 'clsx';
 import { Button } from '@forgedevstack/bear';
 import { useTableContext } from '@/context';
-import { DRAWER_FILTERS_ACTIVE_SUFFIX, DRAWER_ZERO } from '../../MobileDrawer.const';
+import { DRAWER_FILTERS_ACTIVE_SUFFIX } from '../../MobileDrawer.const';
+import { ZERO } from '@constants/numbers.const';
 
 export function DrawerSortContent(): ReactNode {
   const { state, actions } = useTableContext();
@@ -19,7 +20,7 @@ export function DrawerSortContent(): ReactNode {
         <span className="text-sm text-theme-muted">
           {sorting.length} {translations.sort} {DRAWER_FILTERS_ACTIVE_SUFFIX}
         </span>
-        {sorting.length > DRAWER_ZERO && (
+        {sorting.length > ZERO && (
           <Button onClick={handleClearAll} className="text-sm" variant="ghost" size="sm">
             {translations.clearAll}
           </Button>

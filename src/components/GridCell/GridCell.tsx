@@ -7,10 +7,10 @@ import { Tooltip, Typography } from '@forgedevstack/bear';
 import { useTableContext } from '@/context';
 import { highlightMatch } from '@/utils';
 import { EditableCell } from '../EditableCell';
+import { EMPTY_STRING } from '@/constants';
 import {
   GRID_CELL_ALIGN_CLASSES,
   GRID_CELL_COLLAPSE_ARIA,
-  GRID_CELL_EMPTY_STRING,
   GRID_CELL_EXPAND_ARIA,
   GRID_CELL_STICKY_BACKGROUND,
   GRID_CELL_SUBCELL_TRIGGER_BOTH,
@@ -118,7 +118,7 @@ export function GridCell<T extends RowData = RowData>({
   );
 
   const alignClass = GRID_CELL_ALIGN_CLASSES[align];
-  const stickyClass = sticky ? `sticky-${sticky}` : GRID_CELL_EMPTY_STRING;
+  const stickyClass = sticky ? `sticky-${sticky}` : EMPTY_STRING;
   const valueClassName = clsx('grid-cell-value', !isAutoSized && GRID_CELL_TRUNCATE_CLASS);
   const mergedCellStyle = useMemo(() => ({ ...cellStyle, ...column.cellStyle }), [cellStyle, column.cellStyle]);
 

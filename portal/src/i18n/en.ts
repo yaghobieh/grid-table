@@ -136,6 +136,11 @@ export const en: TranslationStrings = {
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
     },
+    'release-1-1-4': {
+      title: '1.1.4 features',
+      description:
+        'Divider autosize, autosize-all, size-to-fit, filter chips, column menu, column chooser, floating filters, cut, fill series, find, and set-filter search.',
+    },
     'enterprise-grid': {
       title: 'Enterprise grid',
       description:
@@ -234,13 +239,17 @@ export const en: TranslationStrings = {
   },
 
   featuresDemo: {
-    badge: 'v1.1.3',
+    badge: 'v1.1.4',
     title: 'Feature showcase',
     description:
       'Interactive grids for context menu, status bar, export, keyboard navigation, row reorder, tree data, undo/redo, frozen rows, and print. Dedicated demos cover 1.1.x enterprise APIs.',
     relatedTitle: 'Explore dedicated demos',
     relatedDescription: 'Shipped 1.1.x surfaces live on their own routes — open them instead of treating them as “planned”.',
     relatedLinks: {
+      'release-1-1-4': {
+        title: '1.1.4 features',
+        summary: 'Autosize, chips, column menu/chooser, floating filters, cut, fill series, find, set-filter search.',
+      },
       'enterprise-grid': {
         title: 'Enterprise grid',
         summary: 'Range copy/paste, Shift+Arrows, Tab edit, fill handle, exportScope, flash cells, touch gestures.',
@@ -276,6 +285,19 @@ export const en: TranslationStrings = {
         title: 'Frozen Rows & Print Mode',
         description: 'Pin summary rows to the bottom of the table. Click the print icon in the toolbar to generate a styled printable view.',
       },
+    ],
+  },
+
+  release114Demo: {
+    title: '1.1.4 feature lab',
+    description:
+      'Local package link — try the new 1.1.4 surfaces on this grid. Portal resolves @forgedevstack/grid-table from the library source.',
+    bullets: [
+      'Double-click a column divider, or use Autosize all / Size to fit in the toolbar.',
+      'Filter Region or Status (search inside the set list). Chips appear above the grid.',
+      'Header ⋮ menu: autosize, pin, hide. Columns button toggles visibility.',
+      'Floating filter row under headers. Ctrl/Cmd+F focuses find.',
+      'Select Qty cells and drag the fill handle for 10, 20, 30… Cut with Ctrl/Cmd+X.',
     ],
   },
 
@@ -343,6 +365,7 @@ export const en: TranslationStrings = {
     themePlayground: 'Copy — integration sketch',
     enterpriseGrid: 'Copy — enterprise grid (range, fill, exportScope)',
     infiniteScroll: 'Copy — infiniteScroll block loading',
+    release114: 'Copy — 1.1.4 features (autosize, chips, cut, series)',
   },
 
   demosIndex: {
@@ -352,7 +375,7 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.1.3 — Virtualize fix, range copy, Shift+Arrows, Tab edit commit, export + pin polish',
+      'v1.1.4 — Double-click column divider autosize; fill handle stays aligned with virtualize',
       'Ctrl/Cmd+C copies selected range; Escape clears; header pin without right-click',
       'Export respects column order/hidden columns; empty selected scope is a no-op',
       'Enterprise demo updated for keyboard range + edit UX',
@@ -415,6 +438,15 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.4': {
+        highlights: [
+          'Double-click the header resize divider to fit the longest header or cell string',
+          'Autosize all, size-to-fit, filter chips, header column menu, and column chooser',
+          'Floating filters, Ctrl/Cmd+F find, set-filter search, range cut, numeric fill series',
+          'Fill handle with virtualize writes the correct absolute rows after scroll',
+          'Portal demo at /demos/release-1-1-4',
+        ],
+      },
       '1.1.3': {
         highlights: [
           'Fix virtualize to render sliced bodyRows with absolute row index offset',

@@ -32,6 +32,7 @@ export const VERSIONS: VersionInfo[] = [
 ];
 
 export const DEMOS: DemoMeta[] = [
+  { id: 'release-1-1-4', icon: 'SparklesIcon', path: '/demos/release-1-1-4', tag: 'New' },
   { id: 'enterprise-grid', icon: 'SparklesIcon', path: '/demos/enterprise-grid', tag: 'New' },
   { id: 'infinite-scroll', icon: 'LoaderIcon', path: '/demos/infinite-scroll', tag: 'New' },
   { id: 'features', icon: 'SparklesIcon', path: '/demos/features', tag: 'Popular' },

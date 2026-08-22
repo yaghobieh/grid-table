@@ -136,6 +136,11 @@ export const en: TranslationStrings = {
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
     },
+    'release-1-1-4': {
+      title: '1.1.4 features',
+      description:
+        'Divider autosize, autosize-all, size-to-fit, filter chips, column menu, column chooser, floating filters, cut, fill series, find, and set-filter search.',
+    },
     'enterprise-grid': {
       title: 'Enterprise grid',
       description:
@@ -241,6 +246,10 @@ export const en: TranslationStrings = {
     relatedTitle: 'Explore dedicated demos',
     relatedDescription: 'Shipped 1.1.x surfaces live on their own routes — open them instead of treating them as “planned”.',
     relatedLinks: {
+      'release-1-1-4': {
+        title: '1.1.4 features',
+        summary: 'Autosize, chips, column menu/chooser, floating filters, cut, fill series, find, set-filter search.',
+      },
       'enterprise-grid': {
         title: 'Enterprise grid',
         summary: 'Range copy/paste, Shift+Arrows, Tab edit, fill handle, exportScope, flash cells, touch gestures.',
@@ -276,6 +285,19 @@ export const en: TranslationStrings = {
         title: 'Frozen Rows & Print Mode',
         description: 'Pin summary rows to the bottom of the table. Click the print icon in the toolbar to generate a styled printable view.',
       },
+    ],
+  },
+
+  release114Demo: {
+    title: '1.1.4 feature lab',
+    description:
+      'Local package link — try the new 1.1.4 surfaces on this grid. Portal resolves @forgedevstack/grid-table from the library source.',
+    bullets: [
+      'Double-click a column divider, or use Autosize all / Size to fit in the toolbar.',
+      'Filter Region or Status (search inside the set list). Chips appear above the grid.',
+      'Header ⋮ menu: autosize, pin, hide. Columns button toggles visibility.',
+      'Floating filter row under headers. Ctrl/Cmd+F focuses find.',
+      'Select Qty cells and drag the fill handle for 10, 20, 30… Cut with Ctrl/Cmd+X.',
     ],
   },
 
@@ -343,6 +365,7 @@ export const en: TranslationStrings = {
     themePlayground: 'Copy — integration sketch',
     enterpriseGrid: 'Copy — enterprise grid (range, fill, exportScope)',
     infiniteScroll: 'Copy — infiniteScroll block loading',
+    release114: 'Copy — 1.1.4 features (autosize, chips, cut, series)',
   },
 
   demosIndex: {
@@ -418,8 +441,10 @@ export const en: TranslationStrings = {
       '1.1.4': {
         highlights: [
           'Double-click the header resize divider to fit the longest header or cell string',
+          'Autosize all, size-to-fit, filter chips, header column menu, and column chooser',
+          'Floating filters, Ctrl/Cmd+F find, set-filter search, range cut, numeric fill series',
           'Fill handle with virtualize writes the correct absolute rows after scroll',
-          'Portal changelog and docs for 1.1.4',
+          'Portal demo at /demos/release-1-1-4',
         ],
       },
       '1.1.3': {

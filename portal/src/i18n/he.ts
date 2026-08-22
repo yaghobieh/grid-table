@@ -115,6 +115,10 @@ export const he: TranslationStrings = {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
     },
+    'release-1-1-4': {
+      title: 'תכונות 1.1.4',
+      description: 'Autosize, שיבולת, תפריט עמודה, בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
+    },
     'enterprise-grid': {
       title: 'גריד ארגוני',
       description: 'בחירת טווח, fill handle, מסנני set/תאריך, exportScope, flash cells ומחוות מגע.',
@@ -218,6 +222,10 @@ export const he: TranslationStrings = {
     relatedTitle: 'דמוים ייעודיים',
     relatedDescription: 'תכונות שכבר שוחררו ב־1.1.x זמינות בנתיבים נפרדים — לא כ"מתוכנן".',
     relatedLinks: {
+      'release-1-1-4': {
+        title: 'תכונות 1.1.4',
+        summary: 'Autosize, שיבולת, תפריט/בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
+      },
       'enterprise-grid': {
         title: 'גריד ארגוני',
         summary: 'העתקה/הדבקה בטווח, Shift+חיצים, Tab בעריכה, fill handle, exportScope, מחוות מגע.',
@@ -253,6 +261,18 @@ export const he: TranslationStrings = {
         title: 'שורות קפואות ומצב הדפסה',
         description: 'הצמדת שורות סיכום לתחתית. סמל הדפסה בסרגל לתצוגה להדפסה.',
       },
+    ],
+  },
+
+  release114Demo: {
+    title: 'מעבדת 1.1.4',
+    description: 'קישור מקומי — בדקו את משטחי 1.1.4. הפורטל טוען את הספרייה מהמקור.',
+    bullets: [
+      'דאבל־קליק על מפריד, או Autosize all / Size to fit בסרגל.',
+      'סננו Region או Status (חיפוש ברשימת set). שיבולת מופיעה מעל הגריד.',
+      'תפריט ⋮: autosize, pin, הסתרה. כפתור Columns משנה נראות.',
+      'שורת מסננים צפה. Ctrl/Cmd+F ממקד חיפוש.',
+      'בחרו Qty וגררו את ידית המילוי ל־10, 20, 30… גזירה ב־Ctrl/Cmd+X.',
     ],
   },
 
@@ -320,6 +340,7 @@ export const he: TranslationStrings = {
     themePlayground: 'העתקה — שלד אינטגרציה',
     enterpriseGrid: 'העתקה — גריד ארגוני (טווח, fill, exportScope)',
     infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
+    release114: 'העתקה — תכונות 1.1.4',
   },
 
   demosIndex: {
@@ -394,8 +415,10 @@ export const he: TranslationStrings = {
       '1.1.4': {
         highlights: [
           'דאבל־קליק על מפריד הכותרת מתאים את העמודה למחרוזת הארוכה ביותר',
+          'Autosize all, size-to-fit, שיבולת, תפריט עמודה ובורר עמודות',
+          'מסננים צפים, חיפוש Ctrl/Cmd+F, חיפוש ב־set, גזירת טווח וסדרת מילוי',
           'Fill handle עם virtualize כותב לשורות המוחלטות הנכונות אחרי גלילה',
-          'יומן שינויים ומסמכים ל־1.1.4',
+          'דמו פורטל ב־/demos/release-1-1-4',
         ],
       },
       '1.1.3': {

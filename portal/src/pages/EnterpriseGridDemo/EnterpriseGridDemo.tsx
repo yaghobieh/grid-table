@@ -7,6 +7,7 @@ import { Layout } from '@/components/Layout';
 import { DemoCodeSection } from '@/components/DemoCodeSection';
 import { useDemoNavigation, useGridTableThemeMode } from '@/hooks';
 import { useI18n } from '@/i18n';
+import { CURRENT_VERSION } from '@/constants/numbers.const';
 import {
   DEFAULT_EXPORT_SCOPE,
   ENTERPRISE_DEMO_COLUMNS,
@@ -33,7 +34,7 @@ export const EnterpriseGridDemo: FC = () => {
           <Button variant="ghost" size="xs" leftIcon={<BearIcons.ArrowLeftIcon size="xs" />} onClick={openDemosIndex}>
             {t.common.demos}
           </Button>
-          <Badge variant="success">v1.1.3</Badge>
+          <Badge variant="success">v{CURRENT_VERSION}</Badge>
         </Flex>
         <Typography variant="h2" className="text-2xl font-bold mb-1">{copy.title}</Typography>
         <Typography variant="body2" className="opacity-50 mb-6">

@@ -2,16 +2,13 @@ import type { ReactNode } from 'react';
 import { Typography, Flex } from '@forgedevstack/bear';
 import type { EmptyStateProps } from './EmptyState.types';
 import { useTableContext } from '@/context';
-import { EMPTY_STATE_STROKE_WIDTH } from './EmptyState.const';
+import { ONE } from '@constants/numbers.const';
+import { EMPTY_STRING } from '@constants/strings.const';
 import { EMPTY_STATE_ICON_PATH, EMPTY_STATE_ICON_VIEWBOX } from '@constants/images.const';
 
 export function EmptyState(props: EmptyStateProps): ReactNode {
-  const { title, description, icon, action, className = '', style } = props;
+  const { title, description, icon, action, className = EMPTY_STRING, style } = props;
   const { state } = useTableContext();
-  const { translations } = state;
-
-  const displayTitle = title ?? translations.empty;
-  const displayDescription = description ?? translations.noResults;
 
   return (
     <Flex
@@ -37,7 +34,7 @@ export function EmptyState(props: EmptyStateProps): ReactNode {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={EMPTY_STATE_STROKE_WIDTH}
+              strokeWidth={ONE}
               d={EMPTY_STATE_ICON_PATH}
             />
           </svg>
@@ -45,12 +42,12 @@ export function EmptyState(props: EmptyStateProps): ReactNode {
       )}
 
       <Typography variant="h4" className="grid-empty-title">
-        {displayTitle}
+        {title ?? state.translations.empty}
       </Typography>
 
-      {displayDescription && (
+      {(description ?? state.translations.noResults) && (
         <Typography variant="body2" className="grid-empty-description">
-          {displayDescription}
+          {description ?? state.translations.noResults}
         </Typography>
       )}
 

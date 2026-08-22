@@ -21,7 +21,8 @@ export { captureTableViewSnapshot, createDefaultViewSnapshot } from './savedView
 export { resolveConditionalCellFormat } from './conditionalFormat.utils';
 export { resolveExportData } from './exportScope.utils';
 export { resolveExportColumns, shouldSkipEmptyExport } from './exportColumns.utils';
-export { buildRangeClipboardText, copyRangeToClipboard } from './rangeClipboard.utils';
+export { buildRangeClipboardText, copyRangeToClipboard, clearRangeCells } from './rangeClipboard.utils';
+export { autoSizeVisibleColumns, sizeVisibleColumnsToFit } from './columnFit.utils';
 export {
   resolveColumnSticky,
   getStickyOffsetsFromStates,

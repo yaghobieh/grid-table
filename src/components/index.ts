@@ -1,7 +1,7 @@
 export { GridTable } from './GridTable';
 export type { GridTableComponentProps } from './GridTable';
 
-export { GridHeader } from './GridHeader';
+export { GridHeader, HeaderCell } from './GridHeader';
 export type { GridHeaderProps, GridHeaderCellProps } from './GridHeader';
 
 export { GridBody } from './GridBody';
@@ -36,4 +36,16 @@ export type { StatusBarProps } from './StatusBar';
 
 export { FilterBuilder } from './FilterBuilder';
 export type { FilterBuilderProps } from './FilterBuilder';
+
+export { FilterChips } from './FilterChips';
+export type { FilterChipsProps } from './FilterChips';
+
+export { ColumnMenu } from './ColumnMenu';
+export type { ColumnMenuProps } from './ColumnMenu';
+
+export { ColumnChooser } from './ColumnChooser';
+export type { ColumnChooserProps } from './ColumnChooser';
+
+export { FloatingFilterRow } from './FloatingFilterRow';
+export type { FloatingFilterRowProps } from './FloatingFilterRow';
 

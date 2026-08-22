@@ -1,0 +1,13 @@
+export const COLUMN_MENU_CLASS = 'gt-column-menu';
+export const COLUMN_MENU_TRIGGER_CLASS = 'gt-column-menu-trigger';
+export const COLUMN_MENU_PANEL_CLASS = 'gt-column-menu-panel';
+export const COLUMN_MENU_ITEM_CLASS = 'gt-column-menu-item';
+export const COLUMN_MENU_TRIGGER_LABEL = 'Column menu';
+export const COLUMN_MENU_AUTOSIZE = 'Autosize';
+export const COLUMN_MENU_PIN_LEFT = 'Pin left';
+export const COLUMN_MENU_PIN_RIGHT = 'Pin right';
+export const COLUMN_MENU_HIDE = 'Hide';
+export const COLUMN_MENU_ITEM_AUTOSIZE_ID = 'autosize';
+export const COLUMN_MENU_ITEM_PIN_LEFT_ID = 'pin-left';
+export const COLUMN_MENU_ITEM_PIN_RIGHT_ID = 'pin-right';
+export const COLUMN_MENU_ITEM_HIDE_ID = 'hide';

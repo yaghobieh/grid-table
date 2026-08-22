@@ -6,6 +6,7 @@ export type { GridTableComponentProps } from './components';
 
 export {
   GridHeader,
+  HeaderCell,
   GridBody,
   GridRow,
   GridCell,
@@ -16,6 +17,10 @@ export {
   ContextMenu,
   StatusBar,
   FilterBuilder,
+  FilterChips,
+  ColumnMenu,
+  ColumnChooser,
+  FloatingFilterRow,
 } from './components';
 
 export { EditableCell } from './components/EditableCell';
@@ -32,6 +37,10 @@ export type {
   ContextMenuProps,
   StatusBarProps,
   FilterBuilderProps,
+  FilterChipsProps,
+  ColumnMenuProps,
+  ColumnChooserProps,
+  FloatingFilterRowProps,
 } from './components';
 
 // Context and Provider
@@ -232,6 +241,9 @@ export {
   shouldSkipEmptyExport,
   buildRangeClipboardText,
   copyRangeToClipboard,
+  clearRangeCells,
+  autoSizeVisibleColumns,
+  sizeVisibleColumnsToFit,
   buildColumnGroupHeaderCells,
   applyTransaction,
   parseClipboardGrid,

@@ -8,6 +8,9 @@ export * from './touchGestures.const';
 export * from './fillHandle.const';
 export * from './pointerCell.const';
 export * from './columnAutosize.const';
+export * from './columnFit.const';
+export * from './fillSeries.const';
+export * from './find.const';
 export * from './rangeSelection.const';
 export * from './savedViews.const';
 

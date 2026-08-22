@@ -4,3 +4,6 @@ export const RANGE_SELECTION_FILLING_CLASS = 'gt-cell-range-filling';
 export const RANGE_COPY_MENU_ID = 'copy-range';
 export const RANGE_COPY_MENU_LABEL = 'Copy range';
 export const RANGE_COPY_SHORTCUT = '⌘C';
+export const RANGE_CUT_MENU_ID = 'cut-range';
+export const RANGE_CUT_MENU_LABEL = 'Cut range';
+export const RANGE_CUT_SHORTCUT = '⌘X';

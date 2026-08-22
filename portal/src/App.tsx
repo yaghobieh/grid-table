@@ -17,6 +17,7 @@ import { SavedViewsDemo } from './pages/SavedViewsDemo';
 import { AdvancedFilterBuilderDemo } from './pages/AdvancedFilterBuilderDemo';
 import { EnterpriseGridDemo } from './pages/EnterpriseGridDemo';
 import { InfiniteScrollDemo } from './pages/InfiniteScrollDemo';
+import { Release114Demo } from './pages/Release114Demo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
 import { DocsPage } from './pages/DocsPage';
@@ -32,6 +33,7 @@ const routes = [
   { path: '/demos/basic', name: 'demos-basic', component: BasicDemo },
   { path: '/demos/features', name: 'demos-features', component: FeaturesDemo },
   { path: '/demos/enterprise-grid', name: 'demos-enterprise-grid', component: EnterpriseGridDemo },
+  { path: '/demos/release-1-1-4', name: 'demos-release-1-1-4', component: Release114Demo },
   { path: '/demos/infinite-scroll', name: 'demos-infinite-scroll', component: InfiniteScrollDemo },
   { path: '/demos/theme-playground', name: 'demos-theme-playground', component: ThemePlaygroundDemo },
   { path: '/demos/accessibility', name: 'demos-accessibility', component: AccessibilityDemo },

@@ -1,5 +1,3 @@
-import { EMPTY_STRING } from './strings.const';
-
 export const TOUCH_LONG_PRESS_MS = 500;
 export const TOUCH_SWIPE_THRESHOLD_PX = 64;
 export const TOUCH_SWIPE_MAX_VERTICAL_PX = 40;
@@ -15,4 +13,3 @@ export const TOUCH_SWIPE_ACTION_COPY_LABEL = 'Copy';
 export const TOUCH_SWIPE_ACTION_DELETE_LABEL = 'Delete';
 export const TOUCH_POINTER_TYPE_TOUCH = 'touch';
 export const TOUCH_EVENT_CONTEXTMENU = 'contextmenu';
-export const EMPTY_TRANSFORM = EMPTY_STRING;

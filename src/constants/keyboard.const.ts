@@ -12,4 +12,5 @@ export const KEY_PAGE_UP = 'PageUp';
 export const KEY_PAGE_DOWN = 'PageDown';
 export const KEY_C = 'c';
 export const KEY_V = 'v';
+export const KEY_X = 'x';
 export const BOOLEAN_TRUE_VALUE = 'true';

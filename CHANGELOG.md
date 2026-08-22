@@ -5,6 +5,37 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2026-08-22
+
+### Added
+
+- **Column autosize** — double-click the header resize divider to fit the column to the longest header or cell string (Excel / AG Grid), clamped to min/max width.
+- **Autosize all + size to fit** — `autoFit.enabled` toolbar actions; `autoFit.onMount` sizes columns after first paint.
+- **Filter chips** — `showFilterChips` (default on) lists active column filters with remove / clear all.
+- **Column menu** — header kebab (`enableColumnMenu`) for autosize, pin left/right, hide.
+- **Column chooser** — desktop `showColumnToggle` panel to show/hide columns.
+- **Floating filters** — `floatingFilters` input row under headers.
+- **Find** — Ctrl/Cmd+F focuses the global search input (`enableFind`).
+- **Set-filter search** — typeahead inside `filterType="set"` lists.
+- **Cut + fill series** — Ctrl/Cmd+X / context menu cut; fill handle increments numeric sequences (`rangeSelection.fillSeries`).
+
+### Changed
+
+- **Column chooser** — Bear `Dropdown` + aligned checkboxes; row click toggles visibility (checkbox is display-only so the menu button receives the click).
+- **Bear** — library and portal use `@forgedevstack/bear` 1.3.0.
+- **Code quality** — FilterPopup/FilterChips/FilterBuilder/EditableCell/HeaderCell/Skeleton follow grid-code-quality (hooks, helpers, one component per file, no const-of-const).
+
+### Fixed
+
+- **Fill handle + virtualize** — fill-down applies once on mouseup against absolute `displayData` indexes, and the fill focus follows the pointer after scroll so recycled rows do not write the wrong cells.
+- **Column chooser toggle** — checking a column in the Columns menu now hides/shows it.
+
+### Portal
+
+- Changelog i18n + `CURRENT_VERSION` → 1.1.4.
+- New demo `/demos/release-1-1-4` for the 1.1.4 surfaces.
+- Dev link stays `file:..` until 1.1.4 is on npm.
+
 ## [1.1.3] - 2026-08-08
 
 ### Fixed

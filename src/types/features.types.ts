@@ -200,7 +200,9 @@ export interface RangeSelectionConfig {
   enabled?: boolean;
   enablePaste?: boolean;
   enableCopy?: boolean;
+  enableCut?: boolean;
   fillHandle?: boolean;
+  fillSeries?: boolean;
   onRangeChange?: (range: CellRange | null) => void;
 }
 

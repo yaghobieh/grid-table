@@ -165,6 +165,12 @@ export interface TranslationStrings {
     relatedLinks: Record<string, { title: string; summary: string }>;
   };
 
+  release114Demo: {
+    title: string;
+    description: string;
+    bullets: string[];
+  };
+
   enterpriseGridDemo: {
     title: string;
     description: string;
@@ -217,6 +223,7 @@ export interface TranslationStrings {
     themePlayground: string;
     enterpriseGrid: string;
     infiniteScroll: string;
+    release114: string;
   };
 
   savedViewsDemo: {

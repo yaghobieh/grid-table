@@ -3,7 +3,7 @@
 **@forgedevstack/grid-table** is a feature-rich React data grid: cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, saved views, virtualization, range selection, infinite scroll, column groups, and more. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.com).
 
 - **Live site:** [grid-table.com](https://grid-table.com/)
-- **npm:** `@forgedevstack/grid-table` · **Version:** 1.1.3
+- **npm:** `@forgedevstack/grid-table` · **Version:** 1.1.4
 - **License:** MIT
 - **Repo:** [yaghobieh/grid-table](https://github.com/yaghobieh/grid-table)
 
@@ -12,7 +12,7 @@
 ## Table of Contents
 
 1. [What We Have](#what-we-have)
-2. [New in 1.1.3](#new-in-113)
+2. [New in 1.1.4](#new-in-114)
 3. [Highlights by release](#highlights-by-release)
 4. [Quick Start](#quick-start)
 5. [Links & Resources](#links--resources)
@@ -29,7 +29,7 @@
 | **Filtering** | Column + global filters; `filterType` text/number/date/select/**set**. |
 | **Sorting / pagination** | Client or manual (server) modes. |
 | **Selection / expansion** | Row selection, expansion, master-detail panels. |
-| **Drag & drop** | Column reorder, row reorder, column resize, auto-fit. |
+| **Drag & drop** | Column reorder, row reorder, column resize, double-click divider autosize. |
 
 ### Enterprise / 1.1.x
 
@@ -45,6 +45,13 @@
 | **Virtualize / lazyLoad** | Window virtualization (sliced body rows) or in-memory batch reveal. |
 
 ---
+
+## New in 1.1.4
+
+Release: **2026-08-22**.
+
+- Double-click the column resize divider to fit max header/cell string width
+- Fix fill handle with virtualize: absolute indexes + pointer retarget after scroll
 
 ## New in 1.1.3
 

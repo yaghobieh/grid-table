@@ -41,3 +41,20 @@ export function copyRangeToClipboard<T extends RowData>(
   void navigator.clipboard?.writeText(text);
   return true;
 }
+
+export function clearRangeCells<T extends RowData>(
+  rows: T[],
+  columns: ColumnDefinition<T>[],
+  range: CellRange,
+  onCellUpdate: (row: T, columnId: string, value: unknown) => void,
+): void {
+  for (let rowIndex = range.startRow; rowIndex <= range.endRow; rowIndex += ONE) {
+    const row = rows[rowIndex];
+    if (!row) continue;
+    for (let colIndex = range.startCol; colIndex <= range.endCol; colIndex += ONE) {
+      const column = columns[colIndex];
+      if (!column) continue;
+      onCellUpdate(row, column.id, EMPTY_STRING);
+    }
+  }
+}

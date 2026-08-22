@@ -72,6 +72,10 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   showFilter?: boolean;
   showGlobalFilter?: boolean;
   showColumnToggle?: boolean;
+  showFilterChips?: boolean;
+  floatingFilters?: boolean;
+  enableColumnMenu?: boolean;
+  enableFind?: boolean;
   showSortIndicator?: boolean;
   paginationConfig?: PaginationConfig;
   filterConfig?: FilterConfig;

@@ -1,17 +1,22 @@
 import type { ReactNode } from 'react';
 import clsx from 'clsx';
-import { Button, Flex, Input, Select, Typography } from '@forgedevstack/bear';
+import { Button, Flex, Select, Typography } from '@forgedevstack/bear';
 import type { FilterBuilderProps } from './FilterBuilder.types';
 import type { FilterTreeGroup, FilterTreeRule } from '@/types/filter.types';
 import {
-  FILTER_BUILDER_DEFAULT_RULE_OP,
+  FILTER_BUILDER_ACTIONS_CLASS,
+  FILTER_BUILDER_CLASS,
   FILTER_BUILDER_DEFAULT_TRANSLATIONS,
   FILTER_BUILDER_EMPTY_GROUP,
   FILTER_BUILDER_GROUP_OP_OPTIONS,
-  FILTER_BUILDER_RULE_OP_OPTIONS,
+  FILTER_BUILDER_HEADER_CLASS,
+  FILTER_BUILDER_RULES_CLASS,
 } from './FilterBuilder.const';
 import { isFilterTreeGroup } from '@/utils/filterTree.utils';
 import { EMPTY_STRING } from '@constants/strings.const';
+import { FILTER_OP_CONTAINS } from '@constants/filterOperators.const';
+import { TWO, ZERO } from '@constants/numbers.const';
+import { FilterBuilderRule } from './helpers';
 
 export function FilterBuilder(props: FilterBuilderProps): ReactNode {
   const { value, fields, onChange, onApply, className = EMPTY_STRING, translations: translationsProp } = props;
@@ -29,7 +34,7 @@ export function FilterBuilder(props: FilterBuilderProps): ReactNode {
       ...group,
       rules: [
         ...rules,
-        { field: fields[0]?.id ?? EMPTY_STRING, op: FILTER_BUILDER_DEFAULT_RULE_OP, value: EMPTY_STRING },
+        { field: fields[ZERO]?.id ?? EMPTY_STRING, op: FILTER_OP_CONTAINS, value: EMPTY_STRING },
       ],
     });
   };
@@ -39,8 +44,8 @@ export function FilterBuilder(props: FilterBuilderProps): ReactNode {
   };
 
   return (
-    <div className={clsx('gt-filter-builder', className)}>
-      <Flex align="center" justify="between" className="gt-filter-builder__header">
+    <div className={clsx(FILTER_BUILDER_CLASS, className)}>
+      <Flex align="center" justify="between" className={FILTER_BUILDER_HEADER_CLASS}>
         <Typography variant="body2">{t.title}</Typography>
         <Select
           value={group.op}
@@ -52,32 +57,23 @@ export function FilterBuilder(props: FilterBuilderProps): ReactNode {
         />
       </Flex>
 
-      <div className="gt-filter-builder__rules">
+      <div className={FILTER_BUILDER_RULES_CLASS}>
         {rules.map((rule, index) => (
-          <Flex key={`${rule.field}-${index}`} gap={2} className="gt-filter-builder__rule">
-            <Select
-              value={rule.field}
-              onChange={(field) => updateRule(index, { field })}
-              options={fields.map((item) => ({ value: item.id, label: item.label }))}
-            />
-            <Select
-              value={rule.op}
-              onChange={(op) => updateRule(index, { op: op as FilterTreeRule['op'] })}
-              options={FILTER_BUILDER_RULE_OP_OPTIONS.map((item) => ({
-                value: item.value,
-                label: t[item.labelKey],
-              }))}
-            />
-            <Input
-              value={String(rule.value ?? EMPTY_STRING)}
-              onChange={(event) => updateRule(index, { value: event.target.value })}
-              placeholder={t.valuePlaceholder}
-            />
-          </Flex>
+          <FilterBuilderRule
+            key={`${rule.field}-${index}`}
+            field={rule.field}
+            op={rule.op}
+            value={rule.value}
+            fieldOptions={fields.map((item) => ({ value: item.id, label: item.label }))}
+            translations={t}
+            onFieldChange={(field) => updateRule(index, { field })}
+            onOpChange={(nextOp) => updateRule(index, { op: nextOp as FilterTreeRule['op'] })}
+            onValueChange={(nextValue) => updateRule(index, { value: nextValue })}
+          />
         ))}
       </div>
 
-      <Flex gap={2} className="gt-filter-builder__actions">
+      <Flex gap={TWO} className={FILTER_BUILDER_ACTIONS_CLASS}>
         <Button size="sm" variant="outline" onClick={addRule}>{t.addRule}</Button>
         <Button size="sm" variant="ghost" onClick={clearRules}>{t.clear}</Button>
         {onApply && (

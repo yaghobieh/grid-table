@@ -1,4 +1,9 @@
 export const EMPTY_STRING = '';
+export const VALUE_SEPARATOR = ': ';
+export const LIST_SEPARATOR = ', ';
+export const VERTICAL_MENU_GLYPH = '⋮';
+export const ELLIPSIS = '...';
+export const PERCENT_HUNDRED = '100%';
 export const PIN_EDGE_LEFT_CLASS = 'gt-pin-edge-left';
 export const PIN_EDGE_RIGHT_CLASS = 'gt-pin-edge-right';
 export const GRID_HEADER_PIN_ARIA = 'Pin column';

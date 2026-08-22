@@ -5,6 +5,16 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5] - Unreleased
+
+### Added
+
+- Sprint opened: group drop-zone, merge/span, row height, cell comments, pivot-lite, Bear density, RTL, a11y, remaining quality.
+
+### Portal
+
+- Depends on published `@forgedevstack/grid-table@^1.1.4` instead of `file:..`.
+
 ## [1.1.4] - 2026-08-22
 
 ### Added
@@ -34,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changelog i18n + `CURRENT_VERSION` → 1.1.4.
 - New demo `/demos/release-1-1-4` for the 1.1.4 surfaces.
-- Dev link stays `file:..` until 1.1.4 is on npm.
 
 ## [1.1.3] - 2026-08-08
 

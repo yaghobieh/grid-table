@@ -37,6 +37,7 @@ export interface TranslationStrings {
     worksWith: string;
     showcaseTitle: string;
     showcaseDescription: string;
+    trailerTitle: string;
     showcase: {
       finance: { title: string; description: string };
       hr: { title: string; description: string };
@@ -224,6 +225,23 @@ export interface TranslationStrings {
     enterpriseGrid: string;
     infiniteScroll: string;
     release114: string;
+    release115: string;
+    touchGestures: string;
+  };
+
+  release115Demo: {
+    title: string;
+    description: string;
+    bullets: string[];
+    pivotToggle: string;
+  };
+
+  touchGesturesDemo: {
+    title: string;
+    description: string;
+    steps: string[];
+    swipeCopy: string;
+    swipeDelete: string;
   };
 
   savedViewsDemo: {

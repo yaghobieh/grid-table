@@ -72,3 +72,26 @@ code, pre {
     border-color: var(--border-color);
   }
 }
+
+.gt-brand-mark {
+  display: block;
+  object-fit: contain;
+}
+
+.gt-home-trailer {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.gt-home-demos-rail {
+  padding: 0 3rem 2.5rem;
+}
+
+.gt-home-demos-rail .rail-pagination-bullet-active,
+.gt-home-demos-rail .Bear-RailPagination__bullet--active {
+  background: var(--grid-accent);
+}
+
+.gt-home-demo-card {
+  height: 100%;
+}

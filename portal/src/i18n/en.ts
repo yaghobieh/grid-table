@@ -41,8 +41,9 @@ export const en: TranslationStrings = {
     builtForReal: 'Built for real-world applications — every feature is customizable via props.',
     forgeStackEcosystem: 'ForgeStack Ecosystem',
     worksWith: 'Part of the Full ForgeStack',
-    showcaseTitle: 'Built for Every Data Scenario',
-    showcaseDescription: 'Finance, HR, effects, lazy loading — everything in one powerful grid.',
+    showcaseTitle: 'See it play',
+    showcaseDescription: 'Pivot, group, comment, and fill — 1.1.5 in motion.',
+    trailerTitle: 'Grid Table 1.1.5',
     showcase: {
       finance: { title: 'Finance Mode', description: 'Real-time tickers, sparklines, live P&L — data that never sleeps.' },
       hr: { title: 'HR & Tree Data', description: 'Org charts, expand/collapse, hierarchy — visualize your organization.' },
@@ -135,6 +136,15 @@ export const en: TranslationStrings = {
       title: 'Column group headers',
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
+    },
+    'release-1-1-5': {
+      title: '1.1.5 features',
+      description:
+        'Pivot-lite, group drop-zone, cell comments, row height, cell span, Bear density, RTL, and range/fill announcements.',
+    },
+    'touch-gestures': {
+      title: 'Touch gestures',
+      description: 'Swipe actions and long-press context menu, plus how to simulate them on a desktop pointer.',
     },
     'release-1-1-4': {
       title: '1.1.4 features',
@@ -336,7 +346,35 @@ export const en: TranslationStrings = {
       'Keep filter and toolbar actions as real button elements (Bear handles this).',
       'Do not remove focus outlines without replacing them with a high-contrast custom ring.',
       'For row expansion, ensure the expand control has an accessible name (toggle state in your copy).',
+      'Range selection announces size in a live region; fill completes with Ctrl/Cmd+D as the keyboard alternative to the handle.',
     ],
+  },
+
+  release115Demo: {
+    title: '1.1.5 features',
+    description:
+      'Group by dropping a header, pivot client-side, leave cell notes, grow row height, and hear range/fill announcements. Switch locale to Hebrew to check RTL.',
+    bullets: [
+      'Drop Region or Product on the group zone — chips remove a grouping field.',
+      'Toggle pivot to cross-tab Region × Quarter with summed Amount (client-side only).',
+      'Green corner marks a comment; click to edit. Notes wrap with auto row height.',
+      'Select a range — a live region announces the cell count. Fill with Ctrl/Cmd+D.',
+    ],
+    pivotToggle: 'Pivot-lite',
+  },
+
+  touchGesturesDemo: {
+    title: 'Touch gestures',
+    description:
+      'Swipe a row to reveal actions. Long-press opens the context menu. On desktop, open DevTools device mode or use a pointer that sends touch events.',
+    steps: [
+      'Chrome: DevTools → Toggle device toolbar → pick a phone → swipe the row left.',
+      'Safari: Develop → Enter Responsive Design Mode, then drag with a touch simulation.',
+      'Long-press (~500ms) on a row to open the same context menu as right-click.',
+      'Enterprise demo also ships swipe + long-press; this route is the focused QA walkthrough.',
+    ],
+    swipeCopy: 'Copy',
+    swipeDelete: 'Delete',
   },
 
   themePlaygroundPage: {
@@ -366,6 +404,8 @@ export const en: TranslationStrings = {
     enterpriseGrid: 'Copy — enterprise grid (range, fill, exportScope)',
     infiniteScroll: 'Copy — infiniteScroll block loading',
     release114: 'Copy — 1.1.4 features (autosize, chips, cut, series)',
+    release115: 'Copy — 1.1.5 features (pivot, groups, comments)',
+    touchGestures: 'Copy — touch gestures',
   },
 
   demosIndex: {
@@ -438,6 +478,15 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.5': {
+        highlights: [
+          'Pivot-lite: client-side row × column aggregations (sum/avg/count/min/max)',
+          'Drag a header onto the group drop-zone; chips remove grouping fields',
+          'Cell comments, auto/resizable row height, and optional col/row span',
+          'Bear density when density is omitted; RTL polish for swipe, pins, and fill handle',
+          'Range/fill live region + Ctrl/Cmd+D; dedicated touch-gestures demo',
+        ],
+      },
       '1.1.4': {
         highlights: [
           'Double-click the header resize divider to fit the longest header or cell string',

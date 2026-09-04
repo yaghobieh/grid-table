@@ -1,5 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
-import type { RowData, ColumnDefinition, ColumnState, RowDragHandleProps, TouchGesturesConfig } from '@/types';
+import type { RowData, ColumnDefinition, ColumnState, RowDragHandleProps, TouchGesturesConfig, CellSpanConfig, CellCommentsConfig, RowHeightConfig } from '@/types';
 import type { CellClickEvent } from '../GridCell/GridCell.types';
 
 export interface GridBodyProps<T extends RowData = RowData> {
@@ -48,6 +48,10 @@ export interface GridBodyProps<T extends RowData = RowData> {
   onRangeMouseEnter?: (rowIndex: number, colIndex: number) => void;
   onFillHandleMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
   showFillHandleForCell?: (rowIndex: number, colIndex: number) => boolean;
+  cellSpan?: CellSpanConfig<T>;
+  cellComments?: CellCommentsConfig;
+  rowHeight?: RowHeightConfig;
+  allRows?: T[];
 }
 
 export interface GridBodyRowDerivedState {

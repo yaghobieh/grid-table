@@ -1,0 +1,118 @@
+.gt-range-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gt-group-drop-zone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--gt-border-color, rgba(255, 255, 255, 0.08));
+}
+
+.gt-group-drop-zone--active {
+  outline: 2px dashed var(--gt-accent, #16a34a);
+}
+
+.gt-group-drop-zone__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.gt-group-drop-zone__hint {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.gt-cell-comment-indicator {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.gt-cell-comment-indicator button {
+  width: 0.5rem;
+  height: 0.5rem;
+  min-width: 0.5rem;
+  padding: 0;
+  border: none;
+  background: #16a34a;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.gt-cell-comment-popover {
+  position: absolute;
+  top: 0.75rem;
+  inset-inline-end: 0;
+  z-index: 6;
+  min-width: 12rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  background: var(--gt-bg-primary, #fff);
+  border: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.12));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.gt-cell--has-comment {
+  position: relative;
+}
+
+.gt-row-height-handle {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 4px;
+  border: none;
+  padding: 0;
+  cursor: row-resize;
+  background: transparent;
+}
+
+.gt-row-auto-height .grid-cell-inner {
+  white-space: normal;
+  overflow: visible;
+}
+
+.grid-cell[style*='--gt-span-rows'] {
+  z-index: 1;
+  height: calc(var(--gt-span-rows) * var(--gt-row-height, 2.5rem));
+}
+
+.grid-cell:focus-visible,
+.grid-cell.gt-cell-focused {
+  outline: 2px solid var(--gt-accent, #16a34a);
+  outline-offset: -2px;
+}
+
+[dir='rtl'] .gt-touch-swipe-actions {
+  right: auto;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+[dir='rtl'] .gt-pin-edge-left {
+  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.28);
+}
+
+[dir='rtl'] .gt-pin-edge-right {
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.28);
+}
+
+[dir='rtl'] .gt-fill-handle {
+  right: auto;
+  left: 0;
+}

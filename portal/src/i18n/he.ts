@@ -41,8 +41,9 @@ export const he: TranslationStrings = {
     builtForReal: 'נבנה לאפליקציות אמיתיות — כל תכונה ניתנת להתאמה ב־props.',
     forgeStackEcosystem: 'אקוסיסטם ForgeStack',
     worksWith: 'חלק מ־ForgeStack המלא',
-    showcaseTitle: 'נבנה לכל תרחיש נתונים',
-    showcaseDescription: 'פיננסים, HR, אפקטים, טעינה עצלה — הכול בגריד אחד.',
+    showcaseTitle: 'תראו',
+    showcaseDescription: 'Pivot, קיבוץ, הערות ומילוי — 1.1.5 בתנועה.',
+    trailerTitle: 'Grid Table 1.1.5',
     showcase: {
       finance: { title: 'מצב פיננסי', description: 'מחירים בזמן אמת, גרפים קטנים, P&L חי.' },
       hr: { title: 'HR ונתוני עץ', description: 'תרשימי ארגון, הרחבה/כיווץ, היררכיה.' },
@@ -114,6 +115,15 @@ export const he: TranslationStrings = {
     'column-grouping': {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
+    },
+    'release-1-1-5': {
+      title: 'יכולות 1.1.5',
+      description:
+        'Pivot, אזור קיבוץ, הערות תא, גובה שורה, span, צפיפות Bear, RTL והכרזות טווח.',
+    },
+    'touch-gestures': {
+      title: 'מחוות מגע',
+      description: 'החלקה לפעולות ולחיצה ארוכה לתפריט, כולל סימולציה במחשב.',
     },
     'release-1-1-4': {
       title: 'תכונות 1.1.4',
@@ -314,6 +324,33 @@ export const he: TranslationStrings = {
     ],
   },
 
+  release115Demo: {
+    title: 'יכולות 1.1.5',
+    description:
+      'קבצו בגרירת כותרת, pivot בצד הלקוח, הערות תא וגובה שורה. החליפו לעברית לבדיקת RTL.',
+    bullets: [
+      'גררו Region או Product לאזור הקיבוץ — צ׳יפים מסירים שדה.',
+      'הפעילו pivot לטבלת Region × Quarter עם סכום Amount.',
+      'פינה ירוקה היא הערה. הערות גדלות עם גובה אוטומטי.',
+      'בחרו טווח — האזור החי מכריז על מספר התאים. מלאו ב-Ctrl/Cmd+D.',
+    ],
+    pivotToggle: 'Pivot-lite',
+  },
+
+  touchGesturesDemo: {
+    title: 'מחוות מגע',
+    description:
+      'החליקו שורה לפעולות. לחיצה ארוכה פותחת תפריט. במחשב השתמשו במצב מכשיר ב-DevTools.',
+    steps: [
+      'Chrome: DevTools → סרגל מכשיר → בחרו טלפון → החליקו שמאלה.',
+      'Safari: Develop → Responsive Design Mode.',
+      'לחיצה ארוכה (~500ms) פותחת את אותו תפריט כמו קליק ימני.',
+      'דמו Enterprise כולל גם מחוות; כאן המסלול הייעודי ל-QA.',
+    ],
+    swipeCopy: 'העתק',
+    swipeDelete: 'מחק',
+  },
+
   themePlaygroundPage: {
     title: 'בונה ערכת נושא ומתחם ניסוי',
     description:
@@ -341,6 +378,8 @@ export const he: TranslationStrings = {
     enterpriseGrid: 'העתקה — גריד ארגוני (טווח, fill, exportScope)',
     infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
     release114: 'העתקה — תכונות 1.1.4',
+    release115: 'העתקה — תכונות 1.1.5',
+    touchGestures: 'העתקה — מחוות מגע',
   },
 
   demosIndex: {
@@ -412,6 +451,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.5': {
+        highlights: [
+          'Pivot-lite בצד הלקוח',
+          'גרירת כותרת לאזור קיבוץ',
+          'הערות, גובה שורה אוטומטי ו-span',
+          'צפיפות Bear, RTL והכרזות טווח',
+          'דמו ייעודי למחוות מגע',
+        ],
+      },
       '1.1.4': {
         highlights: [
           'דאבל־קליק על מפריד הכותרת מתאים את העמודה למחרוזת הארוכה ביותר',

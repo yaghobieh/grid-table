@@ -1,0 +1,1 @@
+export { TouchGesturesDemo } from './TouchGesturesDemo';

@@ -70,12 +70,12 @@ export function FilterPopup(props: FilterPopupProps): ReactNode {
       </div>
 
       <div className={FILTER_POPUP_FOOTER_CLASS}>
-        <button onClick={popup.handleClear} className={FILTER_POPUP_CLEAR_CLASS}>
+        <Button variant="ghost" size="sm" onClick={popup.handleClear} className={FILTER_POPUP_CLEAR_CLASS}>
           {popup.translations.clearFilter}
-        </button>
-        <button onClick={popup.handleApply} className={FILTER_POPUP_APPLY_CLASS}>
+        </Button>
+        <Button size="sm" onClick={popup.handleApply} className={FILTER_POPUP_APPLY_CLASS}>
           {popup.translations.apply}
-        </button>
+        </Button>
       </div>
     </div>
   );

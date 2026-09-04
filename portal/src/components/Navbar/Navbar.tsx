@@ -10,7 +10,9 @@ import {
   useBear,
   Marquee,
 } from '@forgedevstack/bear';
+import { BrandMark } from '@/components/BrandMark';
 import { NAV_ITEMS } from '@/constants';
+import { NAV_BRAND_MARK_PX } from '@/constants/brand.const';
 import { CURRENT_VERSION } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
 import type { Locale } from '@/i18n';
@@ -60,9 +62,7 @@ export const Navbar: FC = () => {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center">
           <Flex align="center" gap={4} className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                <BearIcons.TableIcon size="sm" color="#fff" />
-              </div>
+              <BrandMark alt={t.nav.gridTable} sizePx={NAV_BRAND_MARK_PX} />
               <Typography variant="h5" className="font-bold">{t.nav.gridTable}</Typography>
             </Link>
             <Badge variant="success" className="hidden md:inline-flex text-xs font-mono">

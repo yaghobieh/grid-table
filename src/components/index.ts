@@ -49,3 +49,12 @@ export type { ColumnChooserProps } from './ColumnChooser';
 export { FloatingFilterRow } from './FloatingFilterRow';
 export type { FloatingFilterRowProps } from './FloatingFilterRow';
 
+export { GroupDropZone } from './GroupDropZone';
+export type { GroupDropZoneProps } from './GroupDropZone';
+
+export { RangeLiveRegion } from './RangeLiveRegion';
+export type { RangeLiveRegionProps } from './RangeLiveRegion';
+
+export { CellComment } from './CellComment';
+export type { CellCommentProps } from './CellComment';
+

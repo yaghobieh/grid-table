@@ -36,4 +36,11 @@ export {
 } from './fillRange.utils';
 export { resolveCellCoordFromPoint } from './pointerCell.utils';
 export { measureColumnContentWidth } from './columnAutosize.utils';
+export { buildPivotTable, isPivotEnabled } from './pivot.utils';
+export { resolveTableDensity, mapBearDensity } from './density.utils';
+export { countRangeCells, formatRangeAnnouncement } from './rangeAnnounce.utils';
+export { resolveCellComment, buildCellCommentKey } from './cellComments.utils';
+export { resolveColSpan, resolveRowSpan, isCellCoveredBySpan } from './cellSpan.utils';
+export { addRowGroupField, removeRowGroupField, isRowGroupDropZoneEnabled } from './rowGroupsDrop.utils';
+export { clampRowHeight, resolveDefaultRowHeight } from './rowHeight.utils';
 

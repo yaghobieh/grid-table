@@ -39,7 +39,12 @@ export const DEMO_ICONS: Record<string, React.ReactNode> = {
   ServerIcon: React.createElement(BearIcons.ServerIcon, { size: 'lg', color: 'var(--grid-accent)' }),
   GridIcon: React.createElement(BearIcons.GridIcon, { size: 'lg', color: 'var(--grid-accent)' }),
   LoaderIcon: React.createElement(BearIcons.LoaderIcon, { size: 'lg', color: 'var(--grid-accent)' }),
+  FilterIcon: React.createElement(BearIcons.FilterIcon, { size: 'lg', color: 'var(--grid-accent)' }),
 };
+
+export const SHOWCASE_SECTION_ID = 'see-it-play';
+export const DEMOS_SECTION_ID = 'demos-and-examples';
+export const FEATURES_SECTION_ID = 'feature-rich-data-grid';
 
 // ── Showcase cards (mesh of capabilities) ────────────
 export interface ShowcaseCard {

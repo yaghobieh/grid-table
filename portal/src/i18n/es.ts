@@ -41,8 +41,9 @@ export const es: TranslationStrings = {
     builtForReal: 'Construido para aplicaciones reales — cada función es personalizable vía props.',
     forgeStackEcosystem: 'Ecosistema ForgeStack',
     worksWith: 'Parte del ForgeStack Completo',
-    showcaseTitle: 'Diseñado para Cada Escenario de Datos',
-    showcaseDescription: 'Finanzas, RRHH, efectos, carga diferida — todo en un solo grid poderoso.',
+    showcaseTitle: 'Míralo',
+    showcaseDescription: 'Pivot, grupos, notas y fill — 1.1.5 en movimiento.',
+    trailerTitle: 'Grid Table 1.1.5',
     showcase: {
       finance: { title: 'Modo Finanzas', description: 'Cotizaciones en tiempo real, gráficos, P&L en vivo — datos que nunca duermen.' },
       hr: { title: 'RRHH y Datos Jerárquicos', description: 'Organigramas, expandir/contraer, jerarquía — visualiza tu organización.' },
@@ -119,7 +120,16 @@ export const es: TranslationStrings = {
       description:
         'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
     },
-    'release-1-1-4': {
+    'release-1-1-5': {
+      title: 'Funciones 1.1.5',
+      description:
+        'Pivot-lite, zona de agrupación, comentarios, altura de fila, span, densidad Bear, RTL y anuncios de rango.',
+    },
+    'touch-gestures': {
+      title: 'Gestos táctiles',
+      description: 'Acciones al deslizar y menú con pulsación larga, más cómo simularlos en escritorio.',
+    },
+        'release-1-1-4': {
       title: 'Novedades 1.1.4',
       description:
         'Autosize del divisor, autosize-all, size-to-fit, chips de filtro, menú de columna, selector, filtros flotantes, cortar, series y búsqueda.',
@@ -322,6 +332,34 @@ export const es: TranslationStrings = {
     ],
   },
 
+  release115Demo: {
+    title: 'Funciones 1.1.5',
+    description:
+      'Agrupa soltando un encabezado, pivota en el cliente, deja notas y escucha el anuncio de rango. Prueba hebreo para RTL.',
+    bullets: [
+      'Suelta Región o Producto en la zona — las chips quitan el campo.',
+      'Activa pivot para Región × Trimestre con suma de Amount.',
+      'La esquina verde es un comentario. Las notas crecen con auto height.',
+      'Selecciona un rango — la región viva anuncia el recuento. Rellena con Ctrl/Cmd+D.',
+    ],
+    pivotToggle: 'Pivot-lite',
+  },
+
+  touchGesturesDemo: {
+    title: 'Gestos táctiles',
+    description:
+      'Desliza una fila para ver acciones. Pulsación larga abre el menú. En escritorio usa el modo dispositivo de DevTools.',
+    steps: [
+      'Chrome: DevTools → barra de dispositivo → elige un teléfono → desliza a la izquierda.',
+      'Safari: Develop → Responsive Design Mode y arrastra como toque.',
+      'Pulsación larga (~500 ms) abre el mismo menú que el clic derecho.',
+      'El demo enterprise también incluye gestos; esta ruta es la guía de QA.',
+    ],
+    swipeCopy: 'Copiar',
+    swipeDelete: 'Eliminar',
+  },
+
+
   themePlaygroundPage: {
     title: 'Theme Builder y Playground',
     description:
@@ -349,6 +387,8 @@ export const es: TranslationStrings = {
     enterpriseGrid: 'Copiar — grid empresarial (rango, fill, exportScope)',
     infiniteScroll: 'Copiar — infiniteScroll por bloques',
     release114: 'Copiar — novedades 1.1.4 (autosize, chips, cortar, series)',
+    release115: 'Copiar — novedades 1.1.5',
+    touchGestures: 'Copiar — gestos táctiles',
   },
 
   demosIndex: {
@@ -420,6 +460,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.5': {
+        highlights: [
+          'Pivot-lite: agregaciones cliente filas × columnas',
+          'Arrastra un encabezado a la zona de grupos',
+          'Comentarios, altura automática y span de celdas',
+          'Densidad Bear, RTL y región viva de rango/relleno',
+          'Demo dedicada de gestos táctiles',
+        ],
+      },
       '1.1.4': {
         highlights: [
           'Doble clic en el divisor del encabezado ajusta la columna al texto más largo',

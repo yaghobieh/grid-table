@@ -21,6 +21,9 @@ export {
   ColumnMenu,
   ColumnChooser,
   FloatingFilterRow,
+  GroupDropZone,
+  RangeLiveRegion,
+  CellComment,
 } from './components';
 
 export { EditableCell } from './components/EditableCell';
@@ -41,6 +44,9 @@ export type {
   ColumnMenuProps,
   ColumnChooserProps,
   FloatingFilterRowProps,
+  GroupDropZoneProps,
+  RangeLiveRegionProps,
+  CellCommentProps,
 } from './components';
 
 // Context and Provider
@@ -193,6 +199,12 @@ export type {
   InfiniteScrollConfig,
   FlashCellsConfig,
   BulkEditConfig,
+  PivotConfig,
+  PivotValueField,
+  CellSpanConfig,
+  RowHeightConfig,
+  CellCommentsConfig,
+  RowGroupDropZoneConfig,
   RowTransaction,
   CellRange,
   CellCoord,
@@ -251,4 +263,11 @@ export {
   buildFlashCellKey,
   scheduleFlashRemoval,
   getFlashCellClassName,
+  buildPivotTable,
+  isPivotEnabled,
+  resolveTableDensity,
+  resolveCellComment,
+  buildCellCommentKey,
+  addRowGroupField,
+  removeRowGroupField,
 } from './utils';

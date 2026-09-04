@@ -8,6 +8,10 @@ import { useTableContext } from '@/context';
 import { highlightMatch } from '@/utils';
 import { EditableCell } from '../EditableCell';
 import { EMPTY_STRING } from '@/constants';
+import { CellComment } from '../CellComment';
+import { CELL_COMMENT_HAS_CLASS } from '@constants/cellComments.const';
+import { ONE } from '@constants/numbers.const';
+import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
 import {
   GRID_CELL_ALIGN_CLASSES,
   GRID_CELL_COLLAPSE_ARIA,
@@ -44,6 +48,15 @@ export function GridCell<T extends RowData = RowData>({
   onRangeMouseDown,
   onRangeMouseEnter,
   onFillHandleMouseDown,
+  colSpan = ONE,
+  rowSpan = ONE,
+  comment = EMPTY_STRING,
+  commentLabel,
+  commentSaveLabel,
+  commentClearLabel,
+  onCommentSave,
+  onCommentClear,
+  fillHandleLabel,
 }: GridCellProps<T>): ReactNode {
   const valueRef = useRef<HTMLSpanElement>(null);
   const [overflowTitle, setOverflowTitle] = useState<string | undefined>(undefined);
@@ -224,8 +237,13 @@ export function GridCell<T extends RowData = RowData>({
         isAutoSized && 'grid-cell--auto-sized',
         column.cellClassName,
         className,
+        comment && CELL_COMMENT_HAS_CLASS,
       )}
-      style={mergedCellStyle}
+      style={{
+        ...mergedCellStyle,
+        ...(colSpan > ONE ? { flexGrow: colSpan } : {}),
+        ...(rowSpan > ONE ? { ['--gt-span-rows' as string]: String(rowSpan) } : {}),
+      }}
       role="cell"
       data-column-id={column.id}
       data-row-index={rowIndex}
@@ -259,8 +277,18 @@ export function GridCell<T extends RowData = RowData>({
         <button
           type="button"
           className="gt-fill-handle"
-          aria-label="Fill handle"
+          aria-label={fillHandleLabel ?? DEFAULT_TRANSLATIONS.fillHandle}
           onMouseDown={handleFillHandleMouseDown}
+        />
+      )}
+      {onCommentSave && (
+        <CellComment
+          comment={comment}
+          label={commentLabel ?? DEFAULT_TRANSLATIONS.cellComment}
+          saveLabel={commentSaveLabel ?? DEFAULT_TRANSLATIONS.cellCommentSave}
+          clearLabel={commentClearLabel ?? DEFAULT_TRANSLATIONS.cellCommentClear}
+          onSave={onCommentSave}
+          onClear={onCommentClear ?? (() => undefined)}
         />
       )}
     </div>

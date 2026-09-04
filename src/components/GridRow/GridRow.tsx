@@ -18,6 +18,12 @@ import {
 } from './GridRow.const';
 import { buildColumnStateIndex, getVisibleColumns } from './GridRow.utils';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
+import { isCellCoveredBySpan, resolveColSpan, resolveRowSpan } from '@/utils/cellSpan.utils';
+import { resolveCellComment } from '@/utils/cellComments.utils';
+import { ROW_HEIGHT_HANDLE_CLASS } from '@constants/rowHeight.const';
+import { useRowHeightResize } from './hooks';
+import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
+import { ONE } from '@constants/numbers.const';
 import {
   getPinEdgeColumnIds,
   getStickyOffsetsFromStates,
@@ -84,8 +90,13 @@ export function GridRow<T extends RowData = RowData>({
   onRangeMouseEnter,
   onFillHandleMouseDown,
   showFillHandleForCell,
+  cellSpan,
+  cellComments,
+  rowHeight,
+  allRows,
 }: GridRowProps<T>): ReactNode {
   const [isHovered, setIsHovered] = useState(false);
+  const rowResize = useRowHeightResize(rowHeight);
   const groupMeta = getRowGroupMeta(row);
   const isGroupHeader = groupMeta?.isGroupHeader === true;
 
@@ -178,6 +189,8 @@ export function GridRow<T extends RowData = RowData>({
         )}
         style={{
           ...style,
+          position: 'relative',
+          ...(rowHeight ? { minHeight: rowResize.height, height: rowHeight.auto ? undefined : rowResize.height } : {}),
           ...(touchEnabled && touch.offsetX !== ZERO
             ? { transform: `translateX(${touch.offsetX}px)` }
             : {}),
@@ -290,6 +303,13 @@ export function GridRow<T extends RowData = RowData>({
         )}
 
         {visibleColumns.map((col, colIndex) => {
+          const columnIds = visibleColumns.map((item) => item.id);
+          const spanRows = allRows ?? [row];
+          if (isCellCoveredBySpan(cellSpan, spanRows, columnIds, rowIndex, colIndex)) {
+            return null;
+          }
+          const colSpan = resolveColSpan(cellSpan, row, col.id, rowIndex);
+          const rowSpan = resolveRowSpan(cellSpan, row, col.id, rowIndex);
           const colState = columnStateIndex.get(col.id);
           const width = stackedMobileLayout ? '100%' : colState?.width;
           const sticky = resolveColumnSticky(col, colState);
@@ -301,6 +321,7 @@ export function GridRow<T extends RowData = RowData>({
               : col.id === pinEdges.firstRightId
                 ? PIN_EDGE_RIGHT_CLASS
                 : '';
+          const comment = resolveCellComment(cellComments, getRowId(row), col.id);
 
           if (isGroupHeader && colIndex === ZERO) {
             return (
@@ -368,9 +389,34 @@ export function GridRow<T extends RowData = RowData>({
               onRangeMouseDown={onRangeMouseDown}
               onRangeMouseEnter={onRangeMouseEnter}
               onFillHandleMouseDown={onFillHandleMouseDown}
+              colSpan={colSpan}
+              rowSpan={rowSpan}
+              comment={comment}
+              commentLabel={DEFAULT_TRANSLATIONS.cellComment}
+              commentSaveLabel={DEFAULT_TRANSLATIONS.cellCommentSave}
+              commentClearLabel={DEFAULT_TRANSLATIONS.cellCommentClear}
+              onCommentSave={
+                cellComments?.onCommentChange
+                  ? (next) => cellComments.onCommentChange?.(getRowId(row), col.id, next)
+                  : undefined
+              }
+              onCommentClear={
+                cellComments?.onCommentChange
+                  ? () => cellComments.onCommentChange?.(getRowId(row), col.id, null)
+                  : undefined
+              }
+              fillHandleLabel={DEFAULT_TRANSLATIONS.fillHandle}
             />
           );
         })}
+        {rowHeight?.resizable && (
+          <button
+            type="button"
+            className={ROW_HEIGHT_HANDLE_CLASS}
+            aria-label="Resize row"
+            onPointerDown={rowResize.onHandlePointerDown}
+          />
+        )}
       </div>
 
       {isExpanded && renderExpansion && (

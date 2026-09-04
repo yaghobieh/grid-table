@@ -5,15 +5,29 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.5] - Unreleased
+## [1.1.5] - 2026-09-04
 
 ### Added
 
-- Sprint opened: group drop-zone, merge/span, row height, cell comments, pivot-lite, Bear density, RTL, a11y, remaining quality.
+- **Pivot-lite** — optional `pivot` with `rowFields`, `columnFields`, and `valueFields` (sum/avg/count/min/max). Client-side only.
+- **Group drop-zone** — `rowGroupDropZone` plus `onRowGroupsChange`; drop a header to group, chips remove a field.
+- **Cell comments** — `cellComments` with corner indicator and Bear popover (controlled get/set).
+- **Row height** — `rowHeight` config for default/min/max, `auto` wrap, and a resize handle.
+- **Cell span** — optional `cellSpan.getColSpan` / `getRowSpan` (row-span across a virtualize window is out of scope).
+- **Bear density** — when `density` is omitted, inherit BearProvider compact/comfortable.
+- **Range a11y** — polite live region for selection size and fill complete; fill handle documents Ctrl/Cmd+D.
+- **RTL** — swipe actions, pin-edge shadows, and fill handle follow `dir="rtl"`.
+
+### Changed
+
+- **FilterPopup** — Clear / Apply use Bear `Button`.
 
 ### Portal
 
-- Depends on published `@forgedevstack/grid-table@^1.1.4` instead of `file:..`.
+- `/demos/release-1-1-5` and `/demos/touch-gestures`.
+- Home trailer via Torch; Demos & Examples via Rail carousel.
+- New mark, lockup, favicon, and 1.1.5 badge.
+- Changelog i18n + `CURRENT_VERSION` → 1.1.5 (en/es/he).
 
 ## [1.1.4] - 2026-08-22
 

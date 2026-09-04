@@ -12,6 +12,8 @@ export const TEN = 10;
 export const TWENTY = 20;
 export const FIFTY = 50;
 export const HUNDRED = 100;
+export const TWO_HUNDRED = 200;
+export const FORTY_EIGHT = 48;
 export const DEFAULT_UNDO_HISTORY_MAX = FIFTY;
 
 export const DEFAULT_PAGE_SIZE = TEN;

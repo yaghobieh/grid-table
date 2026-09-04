@@ -601,6 +601,8 @@ Live: [Infinite scroll demo](/demos/infinite-scroll)
 
 Swipe left to reveal row actions; long-press opens the context menu on touch devices.
 
+Dedicated walkthrough: [Touch gestures demo](/demos/touch-gestures) (desktop pointer simulation included).
+
 ### Multi-row column group headers
 
 Pass \`columnGroups\` with \`alignColumnGroups\` (default \`true\`) to render a real colspan header row above column labels.
@@ -610,6 +612,43 @@ Live: [Column grouping demo](/demos/column-grouping)
 ### Delta updates and flash cells
 
 \`applyTransaction({ add, update, remove })\` mutates row arrays in place. \`flashCells\` highlights changed cells after paste or programmatic edits.`;
+
+export const DOC_RELEASE_115 = `# Grid Table 1.1.5
+
+Pivot-lite, grouping drop-zone, comments, row height, span, Bear density, RTL, and range announcements.
+
+Live: [1.1.5 demo](/demos/release-1-1-5) · [Touch gestures](/demos/touch-gestures)
+
+## Pivot (client-side)
+
+\`\`\`tsx
+pivot={{
+  enabled: true,
+  rowFields: ['region'],
+  columnFields: ['quarter'],
+  valueFields: [{ field: 'amount', type: 'sum' }],
+}}
+\`\`\`
+
+Server pivot is out of scope.
+
+## Group drop-zone
+
+Enable \`rowGroupDropZone\` and pass \`onRowGroupsChange\`. Drag a column header (same MIME as column reorder: \`text/plain\`) onto the zone.
+
+## Comments, height, span
+
+- \`cellComments\` — controlled map + \`onCommentChange\`
+- \`rowHeight={{ auto: true, resizable: true }}\`
+- \`cellSpan.getColSpan\` / \`getRowSpan\` — row-span across a virtualize window is not applied
+
+## Density and RTL
+
+Omit \`density\` to inherit Bear compact/comfortable. Hebrew locale sets \`dir="rtl"\` on the document; swipe, pin shadows, and the fill handle follow.
+
+## Accessibility
+
+Range selection announces cell count. Fill complete announces after the handle or Ctrl/Cmd+D.`;
 
 export const DOC_CONTENT_MAP: Record<string, string> = {
   'getting-started': DOC_GETTING_STARTED,
@@ -629,4 +668,5 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'export-scope': DOC_EXPORT_SCOPE,
   'enterprise-grid': DOC_ENTERPRISE_GRID,
   'advanced-patterns': DOC_ADVANCED_PATTERNS,
+  'release-1-1-5': DOC_RELEASE_115,
 };

@@ -33,6 +33,14 @@ export const DEFAULT_TRANSLATIONS = {
   editYes: 'Yes',
   editNo: 'No',
   doubleClickToEdit: 'Double-click to edit',
+  rangeSelected: 'Selected {count} cells',
+  fillComplete: 'Filled {count} cells',
+  fillHandle: 'Fill handle. Drag or press Ctrl+D',
+  groupDropZone: 'Row groups',
+  groupDropHint: 'Drop a column header here to group',
+  cellComment: 'Cell comment',
+  cellCommentSave: 'Save comment',
+  cellCommentClear: 'Clear comment',
 } as const;
 
 export const DEFAULT_THEME = {

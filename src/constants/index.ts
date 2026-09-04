@@ -13,4 +13,10 @@ export * from './fillSeries.const';
 export * from './find.const';
 export * from './rangeSelection.const';
 export * from './savedViews.const';
+export * from './pivot.const';
+export * from './cellComments.const';
+export * from './groupDropZone.const';
+export * from './rowHeight.const';
+export * from './density.const';
+export * from './rangeAnnounce.const';
 

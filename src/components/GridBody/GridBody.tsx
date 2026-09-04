@@ -54,6 +54,10 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     onRangeMouseEnter,
     onFillHandleMouseDown,
     showFillHandleForCell,
+    cellSpan,
+    cellComments,
+    rowHeight,
+    allRows,
   } = props;
 
   const handleRowSelect = useCallback(
@@ -143,6 +147,10 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             onRangeMouseEnter={onRangeMouseEnter}
             onFillHandleMouseDown={onFillHandleMouseDown}
             showFillHandleForCell={showFillHandleForCell}
+            cellSpan={cellSpan}
+            cellComments={cellComments}
+            rowHeight={rowHeight}
+            allRows={allRows ?? data}
           />
         );
       })}

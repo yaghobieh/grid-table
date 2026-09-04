@@ -6,7 +6,9 @@ import {
   Button,
   BearIcons,
 } from '@forgedevstack/bear';
+import { BrandMark } from '@/components/BrandMark';
 import { FOOTER_LINKS } from '@/constants';
+import { FOOTER_BRAND_MARK_PX } from '@/constants/brand.const';
 import { useI18n } from '@/i18n';
 import { FOOTER_LINK_ICONS } from './Footer.const';
 
@@ -19,12 +21,7 @@ export const Footer: FC = () => {
         <Flex direction={{ base: 'column', md: 'row' }} align="center" justify="between" gap={8}>
           {/* Logo */}
           <Flex align="center" gap={3}>
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
-            >
-              <BearIcons.TableIcon size="xs" color="#fff" />
-            </div>
+            <BrandMark alt={t.nav.gridTable} sizePx={FOOTER_BRAND_MARK_PX} />
             <div>
               <Typography variant="h5" className="font-bold">{t.nav.gridTable}</Typography>
               <Typography variant="caption" style={{ color: 'var(--text-muted)' }}>{t.footer.partOfForgeStack}</Typography>

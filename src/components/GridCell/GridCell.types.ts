@@ -32,6 +32,15 @@ export interface GridCellProps<T extends RowData = RowData> {
   onRangeMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
   onRangeMouseEnter?: (rowIndex: number, colIndex: number) => void;
   onFillHandleMouseDown?: (rowIndex: number, colIndex: number, event: React.MouseEvent) => void;
+  colSpan?: number;
+  rowSpan?: number;
+  comment?: string;
+  commentLabel?: string;
+  commentSaveLabel?: string;
+  commentClearLabel?: string;
+  onCommentSave?: (comment: string) => void;
+  onCommentClear?: () => void;
+  fillHandleLabel?: string;
 }
 
 export interface GridCellRenderProps {

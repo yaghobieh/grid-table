@@ -242,6 +242,43 @@ export interface BulkEditConfig {
   applyToSelection?: boolean;
 }
 
+export interface PivotValueField {
+  field: string;
+  type: AggregationType;
+  label?: string;
+}
+
+export interface PivotConfig {
+  enabled?: boolean;
+  rowFields: string[];
+  columnFields: string[];
+  valueFields: PivotValueField[];
+}
+
+export interface CellSpanConfig<T extends RowData = RowData> {
+  getColSpan?: (row: T, columnId: string, rowIndex: number) => number | undefined;
+  getRowSpan?: (row: T, columnId: string, rowIndex: number) => number | undefined;
+}
+
+export interface RowHeightConfig {
+  defaultHeight?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  resizable?: boolean;
+  auto?: boolean;
+}
+
+export interface CellCommentsConfig {
+  enabled?: boolean;
+  comments?: Record<string, string>;
+  getComment?: (rowId: string | number, columnId: string) => string | undefined;
+  onCommentChange?: (rowId: string | number, columnId: string, comment: string | null) => void;
+}
+
+export interface RowGroupDropZoneConfig {
+  enabled?: boolean;
+}
+
 export interface ConditionalFormatRule<T extends RowData = RowData> {
   id?: string;
   columnId?: string;

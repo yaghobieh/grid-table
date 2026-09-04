@@ -22,7 +22,7 @@ import {
 } from './GridTable.display.utils';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
-import { Pagination as BearPagination, Typography, Select, BearProvider } from '@forgedevstack/bear';
+import { Pagination as BearPagination, Typography, Select, BearProvider, useBearDensityOptional } from '@forgedevstack/bear';
 import { Skeleton } from '../Skeleton';
 import { TableStudioPanel } from '../TableStudioPanel';
 import { EmptyState } from '../EmptyState';
@@ -36,6 +36,15 @@ import { clearRangeCells, copyRangeToClipboard } from '@/utils/rangeClipboard.ut
 import { FilterChips } from '../FilterChips';
 import { ColumnChooser } from '../ColumnChooser';
 import { FloatingFilterRow } from '../FloatingFilterRow';
+import { GroupDropZone } from '../GroupDropZone';
+import { RangeLiveRegion } from '../RangeLiveRegion';
+import { buildPivotTable, isPivotEnabled } from '@/utils/pivot.utils';
+import { resolveTableDensity } from '@/utils/density.utils';
+import { countRangeCells, formatRangeAnnouncement } from '@/utils/rangeAnnounce.utils';
+import { isRowGroupDropZoneEnabled } from '@/utils/rowGroupsDrop.utils';
+import { resolveDefaultRowHeight } from '@/utils/rowHeight.utils';
+import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
+import type { RowGroupConfig } from '@/types';
 import { DEFAULT_EXPORT_SCOPE } from '@constants/exportScope.const';
 import {
   RANGE_COPY_MENU_ID,
@@ -155,7 +164,7 @@ function GridTableContent<T extends RowData>({
   conditionalFormat: _conditionalFormat,
   masterDetail,
   virtualize,
-  density = 'comfortable',
+  density: densityProp,
   columnStatePersistence,
   touchGestures,
   rangeSelection,
@@ -163,13 +172,24 @@ function GridTableContent<T extends RowData>({
   flashCells,
   bulkEdit: _bulkEdit,
   alignColumnGroups = true,
+  pivot,
+  cellSpan,
+  rowHeight,
+  cellComments,
+  rowGroupDropZone,
+  onRowGroupsChange,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'> & {
   advancedFilterWhere?: import('@/types/filter.types').FilterTreeGroup | null;
   onAdvancedFilterChange?: (where: import('@/types/filter.types').FilterTreeGroup | null) => void;
 }): ReactNode {
   const { state, actions, computed } = useTableContext<T>();
+  const { density: bearDensity } = useBearDensityOptional();
+  const density = resolveTableDensity(densityProp, bearDensity);
   const savedViewsApi = useSavedViews(savedViews);
-  const rowGroupExpansion = useRowGroupExpansion(rowGroups);
+  const [internalRowGroups, setInternalRowGroups] = useState<RowGroupConfig[]>(rowGroups ?? []);
+  const activeRowGroups = onRowGroupsChange ? (rowGroups ?? []) : internalRowGroups;
+  const rowGroupExpansion = useRowGroupExpansion(activeRowGroups);
+  const [rangeLiveMessage, setRangeLiveMessage] = useState('');
   const rangeApi = useRangeSelection(rangeSelection?.enabled === true);
   const infiniteApi = useInfiniteScroll(infiniteScroll, computed.paginatedData);
   const [activeFlashes, setActiveFlashes] = useState<Set<string>>(new Set());
@@ -410,6 +430,7 @@ function GridTableContent<T extends RowData>({
   const applyFillFromCurrentRange = useCallback(() => {
     const range = rangeApiRef.current.range;
     if (!range || !enableCellEdit) return;
+    const filledCount = countRangeCells(range);
     applyFillDownFromRange(
       rangeRowsRef.current,
       visibleColsRef.current,
@@ -423,7 +444,26 @@ function GridTableContent<T extends RowData>({
       },
       rangeSelection?.fillSeries === false ? FILL_MODE_COPY : FILL_MODE_SERIES,
     );
-  }, [enableCellEdit, flashCells, activeFlashes, getRowIdFn, rangeSelection?.fillSeries]);
+    setRangeLiveMessage(
+      formatRangeAnnouncement(
+        state.translations.fillComplete ?? DEFAULT_TRANSLATIONS.fillComplete,
+        filledCount,
+      ),
+    );
+  }, [enableCellEdit, flashCells, activeFlashes, getRowIdFn, rangeSelection?.fillSeries, state.translations.fillComplete]);
+
+  useEffect(() => {
+    if (!rangeSelection?.enabled) return;
+    const count = countRangeCells(rangeApi.range);
+    if (count > ZERO && !rangeApi.isFilling) {
+      setRangeLiveMessage(
+        formatRangeAnnouncement(
+          state.translations.rangeSelected ?? DEFAULT_TRANSLATIONS.rangeSelected,
+          count,
+        ),
+      );
+    }
+  }, [rangeApi.range, rangeApi.isFilling, rangeSelection?.enabled, state.translations.rangeSelected]);
 
   const finishRangePointer = useCallback(() => {
     const api = rangeApiRef.current;
@@ -543,16 +583,23 @@ function GridTableContent<T extends RowData>({
   const isEmpty = computed.paginatedData.length === 0;
 
   const sourceRows = infiniteScroll?.enabled ? infiniteApi.rows : computed.paginatedData;
+  const pivotActive = isPivotEnabled(pivot);
+  const pivotResult = useMemo(() => {
+    if (!pivotActive || !pivot) return null;
+    return buildPivotTable(sourceRows, columns, pivot);
+  }, [pivotActive, pivot, sourceRows, columns]);
+  const tableColumns = pivotResult?.columns ?? columns;
+  const pipelineRows = pivotResult?.rows ?? sourceRows;
 
   const displayPipeline = useMemo(
     () => buildDisplayRows({
-      rows: sourceRows,
-      columns,
-      rowGroups,
+      rows: pipelineRows,
+      columns: tableColumns,
+      rowGroups: pivotActive ? undefined : activeRowGroups,
       collapsedGroupKeys: rowGroupExpansion.collapsedKeys,
-      defaultGroupExpanded: rowGroups?.[0]?.defaultExpanded,
+      defaultGroupExpanded: activeRowGroups[0]?.defaultExpanded,
     }),
-    [sourceRows, columns, rowGroups, rowGroupExpansion.collapsedKeys],
+    [pipelineRows, tableColumns, pivotActive, activeRowGroups, rowGroupExpansion.collapsedKeys],
   );
 
   const displayData = useMemo(() => {
@@ -850,14 +897,33 @@ function GridTableContent<T extends RowData>({
   const tableContent = (
     <div
       ref={kbConfig?.enabled ? kbRef as React.RefObject<HTMLDivElement> : undefined}
-      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} gt-density-${density} ${touchGestures?.enabled ? 'gt-touch-gestures' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
-      style={containerStyle}
+      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} gt-density-${density} ${rowHeight?.auto ? 'gt-row-auto-height' : ''} ${touchGestures?.enabled ? 'gt-touch-gestures' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
+      style={{
+        ...containerStyle,
+        ...(rowHeight ? { ['--gt-row-height' as string]: `${resolveDefaultRowHeight(rowHeight)}px` } : {}),
+      }}
       role="table"
       tabIndex={kbConfig?.enabled ? 0 : undefined}
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
       onMouseUp={rangeSelection?.enabled ? finishRangePointer : undefined}
     >
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
+      <RangeLiveRegion message={rangeLiveMessage} />
+      {isRowGroupDropZoneEnabled(rowGroupDropZone, activeRowGroups) && !pivotActive && (
+        <GroupDropZone
+          groups={activeRowGroups}
+          columns={columns}
+          label={state.translations.groupDropZone ?? DEFAULT_TRANSLATIONS.groupDropZone}
+          hint={state.translations.groupDropHint ?? DEFAULT_TRANSLATIONS.groupDropHint}
+          onChange={(next) => {
+            if (onRowGroupsChange) {
+              onRowGroupsChange(next);
+              return;
+            }
+            setInternalRowGroups(next);
+          }}
+        />
+      )}
 
       {savedViews?.showViewSwitcher && savedViewsApi.views.length > 0 && (
         <div className="grid-table-view-switcher">
@@ -1219,8 +1285,12 @@ function GridTableContent<T extends RowData>({
 
             <GridBody
               data={treeConfig?.enabled ? tree.flatRows.map(r => r.data) : bodyRows}
-              columns={columns}
+              columns={tableColumns}
               columnStates={state.columnStates}
+              cellSpan={cellSpan}
+              cellComments={cellComments}
+              rowHeight={rowHeight}
+              allRows={displayData}
               rowIndexOffset={treeConfig?.enabled ? ZERO : rowIndexOffset}
               className={classNames.body}
               style={styles.body}

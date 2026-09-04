@@ -42,6 +42,7 @@ export const AccessibilityDemo: FC = () => {
             stickyHeader
             showPagination={false}
             keyboardNavigation={{ enabled: true, enableEditOnEnter: true }}
+            rangeSelection={{ enabled: true, fillHandle: true }}
             enableCellEdit
             onCellEdit={() => {}}
             tableEffects={{ hover: true }}

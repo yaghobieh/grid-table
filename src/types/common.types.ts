@@ -99,6 +99,14 @@ export interface Translations {
   editYes: string;
   editNo: string;
   doubleClickToEdit: string;
+  rangeSelected?: string;
+  fillComplete?: string;
+  fillHandle?: string;
+  groupDropZone?: string;
+  groupDropHint?: string;
+  cellComment?: string;
+  cellCommentSave?: string;
+  cellCommentClear?: string;
 }
 
 export interface ClassNames {

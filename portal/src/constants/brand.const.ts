@@ -1,0 +1,9 @@
+export const BRAND_MARK_SRC = '/logo-mark.png';
+export const BRAND_LOCKUP_DARK_SRC = '/logo-lockup-dark.png';
+export const BRAND_LOCKUP_LIGHT_SRC = '/logo-lockup-light.png';
+export const TRAILER_SRC = '/grid-table-1-1-5.mp4';
+export const TRAILER_POSTER_SRC = '/logo-lockup-dark.png';
+export const GRID_ACCENT_HEX = '#22c55e';
+export const NAV_BRAND_MARK_PX = 32;
+export const FOOTER_BRAND_MARK_PX = 32;
+export const HERO_BRAND_MARK_PX = 80;

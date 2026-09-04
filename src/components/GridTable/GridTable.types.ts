@@ -23,6 +23,11 @@ import type {
   InfiniteScrollConfig,
   FlashCellsConfig,
   BulkEditConfig,
+  PivotConfig,
+  CellSpanConfig,
+  RowHeightConfig,
+  CellCommentsConfig,
+  RowGroupDropZoneConfig,
   RowTransaction,
   CellRange,
   CellCoord,
@@ -144,5 +149,11 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   flashCells?: FlashCellsConfig;
   bulkEdit?: BulkEditConfig;
   alignColumnGroups?: boolean;
+  pivot?: PivotConfig;
+  cellSpan?: CellSpanConfig<T>;
+  rowHeight?: RowHeightConfig;
+  cellComments?: CellCommentsConfig;
+  rowGroupDropZone?: boolean | RowGroupDropZoneConfig;
+  onRowGroupsChange?: (groups: RowGroupConfig[]) => void;
 }
 

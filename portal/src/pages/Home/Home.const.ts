@@ -41,10 +41,6 @@ export const DEMO_ICONS: Record<string, React.ReactNode> = {
   LoaderIcon: React.createElement(BearIcons.LoaderIcon, { size: 'lg', color: 'var(--grid-accent)' }),
 };
 
-// ── Gradient colors ──────────────────────────────────
-export const GRADIENT_PRIMARY: [string, string] = ['#22c55e', '#16a34a'];
-export const GRADIENT_SECONDARY: [string, string] = ['#22c55e', '#4ade80'];
-
 // ── Showcase cards (mesh of capabilities) ────────────
 export interface ShowcaseCard {
   id: string;

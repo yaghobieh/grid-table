@@ -7,14 +7,13 @@ import {
   Card,
   CardBody,
   Badge,
-  GradientText,
   BearIcons,
 } from '@forgedevstack/bear';
 import { Layout } from '@/components/Layout';
 import { DEMOS } from '@/constants';
 import { CURRENT_VERSION } from '@/constants/numbers.const';
 import { useI18n } from '@/i18n';
-import { DEMO_ICONS, TAG_VARIANT, GRADIENT_PRIMARY } from './DemosIndex.const';
+import { DEMO_ICONS, TAG_VARIANT } from './DemosIndex.const';
 
 const ICON_BG = 'linear-gradient(135deg, rgba(34,197,94,0.15), rgba(22,163,74,0.08))';
 
@@ -29,7 +28,7 @@ export const DemosIndex: FC = () => {
           <div className="text-center mb-12">
             <Flex align="center" justify="center" gap={3} className="mb-4">
               <Typography variant="h1" className="text-4xl md:text-5xl font-extrabold">
-                <GradientText colors={GRADIENT_PRIMARY}>{t.demosIndex.title}</GradientText>
+                {t.demosIndex.title}
               </Typography>
               <Badge variant="info" className="text-xs">{CURRENT_VERSION}</Badge>
             </Flex>

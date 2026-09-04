@@ -9,7 +9,6 @@ import {
   CardBody,
   Badge,
   BearIcons,
-  GradientText,
   CodeBlock,
 } from '@forgedevstack/bear';
 import { GridTable } from '@forgedevstack/grid-table';
@@ -18,8 +17,6 @@ import { Layout } from '@/components/Layout';
 import { useI18n } from '@/i18n';
 import { TOGGLE_OPTIONS, EFFECT_OPTIONS, DEFAULT_PLAYGROUND_ROWS } from './Playground.const';
 import type { PlaygroundRow, PlaygroundConfig } from './Playground.types';
-
-const GRADIENT: [string, string] = ['#22c55e', '#16a34a'];
 
 const generateData = (count: number): PlaygroundRow[] =>
   Array.from({ length: count }, (_, i) => ({
@@ -107,7 +104,7 @@ export const Playground: FC = () => {
             </Link>
           </Flex>
           <Typography variant="h1" className="text-4xl md:text-5xl font-extrabold mb-3">
-            <GradientText colors={GRADIENT}>{t.playground.title}</GradientText>
+            {t.playground.title}
           </Typography>
           <Typography style={{ color: 'var(--text-secondary)' }}>
             {t.playground.description}

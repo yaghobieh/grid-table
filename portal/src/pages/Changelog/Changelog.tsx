@@ -7,14 +7,11 @@ import {
   Card,
   CardBody,
   BearIcons,
-  GradientText,
 } from '@forgedevstack/bear';
 import { Layout } from '@/components/Layout';
 import { VERSIONS } from '@/constants';
 import { useI18n } from '@/i18n';
 import { CURRENT_VERSION } from '@/constants/numbers.const';
-
-const GRADIENT: [string, string] = ['#22c55e', '#16a34a'];
 
 export const Changelog: FC = () => {
   const { t } = useI18n();
@@ -27,7 +24,7 @@ export const Changelog: FC = () => {
             v{CURRENT_VERSION}
           </Badge>
           <Typography variant="h1" className="text-4xl md:text-5xl font-extrabold mb-4">
-            <GradientText colors={GRADIENT}>{t.changelog.title}</GradientText>
+            {t.changelog.title}
           </Typography>
           <Typography style={{ color: 'var(--text-secondary)' }} className="text-lg">
             {t.changelog.description}

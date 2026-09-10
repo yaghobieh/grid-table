@@ -16,7 +16,7 @@ export const he: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'תצוגות שמורות, מסננים, קבוצות, נוסחאות, וירטואליזציה',
+    badgeText: 'GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
     title: 'Grid Table',
     subtitle: 'גריד הנתונים של React ל־ForgeStack',
     typewriterTexts: [
@@ -42,8 +42,8 @@ export const he: TranslationStrings = {
     forgeStackEcosystem: 'אקוסיסטם ForgeStack',
     worksWith: 'חלק מ־ForgeStack המלא',
     showcaseTitle: 'תראו',
-    showcaseDescription: 'Pivot, קיבוץ, הערות ומילוי — 1.1.5 בתנועה.',
-    trailerTitle: 'Grid Table 1.1.5',
+    showcaseDescription: 'ערכת נושא לכותרת, לכל העמודות או ל-col[1] ו-col[4] — 1.1.6 בתנועה.',
+    trailerTitle: 'Grid Table 1.1.6',
     showcase: {
       finance: { title: 'מצב פיננסי', description: 'מחירים בזמן אמת, גרפים קטנים, P&L חי.' },
       hr: { title: 'HR ונתוני עץ', description: 'תרשימי ארגון, הרחבה/כיווץ, היררכיה.' },
@@ -60,7 +60,7 @@ export const he: TranslationStrings = {
     ecosystemBanner: 'תואם במלואו לאקוסיסטם ForgeStack.',
     visitForgeStack: 'לאתר ForgeStack',
     marqueeItems: [
-      'עימוד בשרת ידני ו־effectiveTotalItems',
+      '1.1.6 — GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
       'טבלה עם גלילה ניידת כברירת מחדל · פריסת כרטיסים אופציונלית',
       'lazyLoad באצוות לגלילות ארוכות',
       'MIT · @forgedevstack/grid-table · TypeScript קודם',
@@ -115,6 +115,11 @@ export const he: TranslationStrings = {
     'column-grouping': {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
+    },
+    'release-1-1-6': {
+      title: 'ערכת נושא 1.1.6',
+      description:
+        'GridTableTheme עצמאי ו-theme על GridTable — כותרת, כל העמודות ועמודות בודדות כמו col[1, 4].',
     },
     'release-1-1-5': {
       title: 'יכולות 1.1.5',
@@ -324,6 +329,18 @@ export const he: TranslationStrings = {
     ],
   },
 
+  release116Demo: {
+    title: 'ערכת נושא 1.1.6',
+    description:
+      'מראה הגריד עצמאי. עטפו טבלאות ב-GridTableTheme או העבירו theme ב-GridTable. כותרת, כל העמודות ו-col[1] / col[4] עם טוקנים משלהם.',
+    bullets: [
+      'GridTableTheme מגדיר טוקנים לכל טבלה בתוך ה-provider.',
+      'אותו אובייקט עובד ב-GridTable theme — גובר על ה-provider.',
+      'header מעצב כל תא כותרת; columns מעצב את גוף הטבלה.',
+      'col[1] ו-col[4] הן עמודות נראות 1-based (SKU ו-Amount בדמו זה).',
+    ],
+  },
+
   release115Demo: {
     title: 'יכולות 1.1.5',
     description:
@@ -379,6 +396,7 @@ export const he: TranslationStrings = {
     infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
     release114: 'העתקה — תכונות 1.1.4',
     release115: 'העתקה — תכונות 1.1.5',
+    release116: 'העתקה — ערכת נושא 1.1.6 (GridTableTheme, header, col[1, 4])',
     touchGestures: 'העתקה — מחוות מגע',
   },
 
@@ -389,11 +407,11 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.1.4 — דאבל־קליק על מפריד העמודה מתאים לרוחב הטקסט; fill handle מיושר עם virtualize',
-      'Ctrl/Cmd+C מעתיק טווח; Escape מנקה; pin בכותרת בלי לחיצה ימנית',
-      'ייצוא מכבד סדר/עמודות מוסתרות; selected ריק הוא no-op',
-      'דמו enterprise עודכן למקלדת ועריכה',
-      'docs/GRID_TABLE_DOCS.md ו־changelog ל־1.1.3',
+      'ספק GridTableTheme — צבעי הגריד כבר לא עוטפים BearProvider',
+      'theme ב-GridTable מקבל header, columns וטוקני col[n]',
+      'טוקנים 1-based: col[1] ו-col[4] מעצבים עמודה נראית אחת',
+      'themeOverride.colors עדיין ממופה למשתני --gt-*',
+      'דמו /demos/release-1-1-6 ותיעוד ערכת נושא',
     ],
   },
 
@@ -451,6 +469,15 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.6': {
+        highlights: [
+          'ספק GridTableTheme — צבעי הגריד כבר לא עוטפים BearProvider',
+          'theme ב-GridTable מקבל header, columns וטוקני col[n]',
+          'טוקנים 1-based: col[1], col[4] מעצבים עמודה נראית אחת',
+          'themeOverride.colors עדיין ממופה למשתני --gt-*',
+          'תיעוד ערכת נושא ו-/demos/release-1-1-6',
+        ],
+      },
       '1.1.5': {
         highlights: [
           'Pivot-lite בצד הלקוח',

@@ -11,6 +11,7 @@ import {
   COLUMN_MENU_PIN_RIGHT,
 } from '@/components/ColumnMenu';
 import { GRID_HEADER_FILTER_ARIA, GRID_HEADER_PIN_ACTIVE_CLASS } from '../GridHeader.const';
+import { DATA_COL_ATTR } from '@constants/theme.const';
 import type { GridHeaderCellProps } from './HeaderCell.types';
 import {
   HEADER_CELL_CONTENT_CLASS,
@@ -36,6 +37,7 @@ export function HeaderCell<T extends RowData>(props: GridHeaderCellProps<T>): Re
       role="columnheader"
       aria-sort={cell.ariaSort}
       onClick={cell.handleClick}
+      {...(props.colIndex != null ? { [DATA_COL_ATTR]: props.colIndex + ONE } : {})}
       {...cell.dragDropProps}
     >
       <span className={HEADER_CELL_CONTENT_CLASS}>{cell.headerContent}</span>

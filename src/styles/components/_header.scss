@@ -24,7 +24,7 @@
 // Grid Header
 .grid-header {
   display: flex;
-  background-color: var(--gt-bg-secondary, #f5f5f5);
+  background-color: var(--gt-header-bg, var(--gt-bg-secondary, #f5f5f5));
   width: 100%;
   min-width: 100%;
 }
@@ -37,16 +37,17 @@
   padding: 0.75rem 1rem;
   font-weight: 500;
   font-size: 0.875rem;
-  color: var(--gt-text-secondary, #595959);
+  color: var(--gt-this-col-text, var(--gt-header-text, var(--gt-text-secondary, #595959)));
+  background-color: var(--gt-this-col-bg, var(--gt-header-bg, var(--gt-bg-secondary, #f5f5f5)));
   user-select: none;
-  border-bottom: 1px solid var(--gt-border-color, rgba(0, 0, 0, 0.06));
+  border-bottom: 1px solid var(--gt-this-col-border, var(--gt-header-border, var(--gt-border-color, rgba(0, 0, 0, 0.06))));
   @include transition(color, background-color, box-shadow);
   flex-shrink: 0;
   min-width: 0;
 
   &:hover {
-    color: var(--gt-text-primary, #262626);
-    background-color: var(--gt-bg-hover, #e0e0e0);
+    color: var(--gt-this-col-text, var(--gt-header-text, var(--gt-text-primary, #262626)));
+    background-color: var(--gt-this-col-hover, var(--gt-header-hover, var(--gt-bg-hover, #e0e0e0)));
   }
 
   &.sticky-left,

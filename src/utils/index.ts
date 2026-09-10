@@ -43,4 +43,13 @@ export { resolveCellComment, buildCellCommentKey } from './cellComments.utils';
 export { resolveColSpan, resolveRowSpan, isCellCoveredBySpan } from './cellSpan.utils';
 export { addRowGroupField, removeRowGroupField, isRowGroupDropZoneEnabled } from './rowGroupsDrop.utils';
 export { clampRowHeight, resolveDefaultRowHeight } from './rowHeight.utils';
+export {
+  mergeThemeTokens,
+  themeOverrideToTokens,
+  themeToCssVars,
+  resolveColumnNumber,
+  buildColumnThemeVars,
+  hasThemeCssVars,
+  toTableTheme,
+} from './gridTableTheme.utils';
 

@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.6', date: '2026-09-10' },
   { version: '1.1.5', date: '2026-09-04' },
   { version: '1.1.4', date: '2026-08-22' },
   { version: '1.1.3', date: '2026-08-08' },
@@ -33,8 +34,9 @@ export const VERSIONS: VersionInfo[] = [
 ];
 
 export const DEMOS: DemoMeta[] = [
-  { id: 'release-1-1-5', icon: 'SparklesIcon', path: '/demos/release-1-1-5', tag: 'New' },
-  { id: 'touch-gestures', icon: 'SparklesIcon', path: '/demos/touch-gestures', tag: 'New' },
+  { id: 'release-1-1-6', icon: 'PaletteIcon', path: '/demos/release-1-1-6', tag: 'New' },
+  { id: 'release-1-1-5', icon: 'SparklesIcon', path: '/demos/release-1-1-5' },
+  { id: 'touch-gestures', icon: 'SparklesIcon', path: '/demos/touch-gestures' },
   { id: 'release-1-1-4', icon: 'SparklesIcon', path: '/demos/release-1-1-4' },
   { id: 'enterprise-grid', icon: 'SparklesIcon', path: '/demos/enterprise-grid' },
   { id: 'infinite-scroll', icon: 'LoaderIcon', path: '/demos/infinite-scroll', tag: 'New' },
@@ -255,7 +257,6 @@ export const DOC_SECTIONS: DocSection[] = [
   { id: 'virtualization', title: 'Virtualization', path: '/docs/virtualization', icon: 'LoaderIcon' },
   { id: 'export-scope', title: 'Export Scope', path: '/docs/export-scope', icon: 'DownloadIcon' },
   { id: 'enterprise-grid', title: 'Enterprise Grid', path: '/docs/enterprise-grid', icon: 'LayersIcon' },
-  { id: 'release-1-1-5', title: '1.1.5', path: '/docs/release-1-1-5', icon: 'SparklesIcon' },
   { id: 'advanced-patterns', title: 'Advanced patterns', path: '/docs/advanced-patterns', icon: 'LayersIcon' },
   { id: 'api-reference', title: 'API Reference', path: '/docs/api-reference', icon: 'CodeIcon' },
 ];
@@ -270,8 +271,9 @@ export const API_SECTIONS: ApiSection[] = [
       { name: 'columns', type: 'ColumnDefinition<T>[]', default: '—', description: 'Column definitions array.', required: true },
       { name: 'loading', type: 'boolean', default: 'false', description: 'Show skeleton loading state.' },
       { name: 'error', type: 'Error | string | null', default: 'null', description: 'Display an error state.' },
-      { name: 'themeMode', type: "'light' | 'dark' | 'system'", default: "'system'", description: 'Force a specific theme mode.' },
-      { name: 'themeOverride', type: 'Record<string, unknown>', default: '{}', description: 'Override theme colors and styles.' },
+      { name: 'themeMode', type: "'light' | 'dark' | 'system'", default: "'system'", description: 'Force a specific theme mode. Also accepted on GridTableTheme.' },
+      { name: 'theme', type: 'GridTableThemeTokens', default: '—', description: 'Standalone grid theme: colors, header, columns, and col[n] part tokens. Does not wrap BearProvider.' },
+      { name: 'themeOverride', type: 'Record<string, unknown>', default: '{}', description: 'Legacy color override mapped to --gt-* CSS variables. Prefer theme or GridTableTheme.' },
       { name: 'pivot', type: 'PivotConfig', default: '—', description: 'Client-side pivot: rowFields × columnFields → value aggregations.' },
       { name: 'rowGroupDropZone', type: 'boolean | RowGroupDropZoneConfig', default: '—', description: 'Show a drop-zone to add row groups from column headers.' },
       { name: 'onRowGroupsChange', type: '(groups: RowGroupConfig[]) => void', default: '—', description: 'Controlled row-groups after drop-zone or chip remove.' },

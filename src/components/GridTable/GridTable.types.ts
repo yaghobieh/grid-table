@@ -46,6 +46,7 @@ import type {
   TableEffects,
   Theme,
   Translations,
+  GridTableThemeTokens,
   TreeConfig,
   UndoRedoConfig,
 } from '@/types';
@@ -59,7 +60,7 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   emptyContent?: ReactNode;
   loadingContent?: ReactNode;
   errorContent?: ReactNode | ((error: Error | string) => ReactNode);
-  theme?: Partial<Theme>;
+  theme?: Partial<Theme> | GridTableThemeTokens;
   translations?: Partial<Translations>;
   dimensions?: Dimensions;
   classNames?: ClassNames;

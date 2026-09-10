@@ -3,6 +3,7 @@ import type { ColumnDefinition, ColumnState, RowData, SortDirection } from '@/ty
 export interface GridHeaderCellProps<T extends RowData = RowData> {
   column: ColumnDefinition<T>;
   columnState: ColumnState;
+  colIndex?: number;
   sortDirection?: SortDirection;
   sortIndex?: number;
   isMultiSort?: boolean;

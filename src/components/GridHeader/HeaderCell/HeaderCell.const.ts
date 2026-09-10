@@ -25,7 +25,7 @@ export const HEADER_CELL_DRAG_OVER_CLASS = 'bg-accent-primary/10';
 export const HEADER_CELL_SORT_INDEX_CLASS = 'text-xs text-theme-muted';
 export const HEADER_CELL_ICON_ACTIVE_CLASS = 'text-accent-primary';
 export const HEADER_CELL_ICON_MUTED_CLASS = 'text-theme-muted';
-export const HEADER_CELL_STICKY_BACKGROUND = 'var(--gt-bg-secondary, #2b2b2b)';
+export const HEADER_CELL_STICKY_BACKGROUND = 'var(--gt-this-col-bg, var(--gt-header-bg, var(--gt-bg-secondary, #2b2b2b)))';
 
 export const ARIA_SORT_BY_DIRECTION: Record<Exclude<SortDirection, null>, 'ascending' | 'descending'> = {
   [SORT_DIRECTION_ASC]: ARIA_SORT_ASCENDING,

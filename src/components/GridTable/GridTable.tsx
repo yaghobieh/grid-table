@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './GridTable.types';
 import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
@@ -22,7 +22,16 @@ import {
 } from './GridTable.display.utils';
 import { GridHeader } from '../GridHeader';
 import { GridBody } from '../GridBody';
-import { Pagination as BearPagination, Typography, Select, BearProvider, useBearDensityOptional } from '@forgedevstack/bear';
+import { Pagination as BearPagination, Typography, Select, useBearDensityOptional } from '@forgedevstack/bear';
+import { useGridTableTheme } from '@/context';
+import {
+  hasThemeCssVars,
+  mergeThemeTokens,
+  themeOverrideToTokens,
+  themeToCssVars,
+  toTableTheme,
+} from '@/utils/gridTableTheme.utils';
+import type { GridTableThemeTokens } from '@/types/theme.types';
 import { Skeleton } from '../Skeleton';
 import { TableStudioPanel } from '../TableStudioPanel';
 import { EmptyState } from '../EmptyState';
@@ -370,7 +379,7 @@ function GridTableContent<T extends RowData>({
   }, [rangeSelection, enableCellEdit, rangeApi.range]);
 
   const themeClass = themeMode === 'dark' ? 'dark' : themeMode === 'light' ? 'light' : undefined;
-  const hasGridThemeVars = gridThemeVars && Object.keys(gridThemeVars).length > 0;
+  const hasGridThemeVars = hasThemeCssVars(gridThemeVars);
 
   const fx = useMemo(() => resolveTableEffects(tableEffects), [tableEffects]);
 
@@ -1513,6 +1522,12 @@ export function GridTable<T extends RowData = RowData>({
   const [studioData, setStudioData] = useState(data);
   const [studioOpen, setStudioOpen] = useState(true);
   const [advancedFilterWhere, setAdvancedFilterWhere] = useState(advancedFilter?.where ?? null);
+  const contextTheme = useGridTableTheme();
+  const mergedTheme = mergeThemeTokens(
+    contextTheme,
+    themeOverrideToTokens(themeOverride),
+    theme as GridTableThemeTokens | undefined,
+  );
 
   const effectiveFilterConfig = useMemo(
     () => ({
@@ -1527,22 +1542,9 @@ export function GridTable<T extends RowData = RowData>({
 
   const effectiveData = studio ? studioData : data;
 
-  const gridThemeVars = useMemo((): CSSProperties => {
-    if (!themeOverride || typeof themeOverride !== 'object') return {};
-    const c = (themeOverride as Record<string, unknown>).colors as Record<string, Record<string, string>> | undefined;
-    if (!c) return {};
-    const vars: Record<string, string> = {};
-    if (c.text?.primary) vars['--gt-text-primary' as string] = c.text.primary;
-    if (c.text?.secondary) vars['--gt-text-secondary' as string] = c.text.secondary;
-    if (c.text?.muted) vars['--gt-text-muted' as string] = c.text.muted;
-    if (c.background?.primary) vars['--gt-bg-primary' as string] = c.background.primary;
-    if (c.background?.secondary) vars['--gt-bg-secondary' as string] = c.background.secondary;
-    if (c.background?.tertiary) vars['--gt-bg-tertiary' as string] = c.background.tertiary;
-    if (c.background?.hover) vars['--gt-bg-hover' as string] = c.background.hover;
-    if (c.border?.default) vars['--gt-border-color' as string] = c.border.default;
-    if (c.accent?.primary) vars['--gt-accent-primary' as string] = c.accent.primary;
-    return vars as CSSProperties;
-  }, [themeOverride]);
+  const gridThemeVars = themeToCssVars(mergedTheme);
+  const resolvedThemeMode = themeMode ?? mergedTheme.mode;
+  const resolvedDensity = props.density ?? mergedTheme.density;
 
   const tableContent = (
     <TableProvider
@@ -1550,7 +1552,7 @@ export function GridTable<T extends RowData = RowData>({
       columns={columns}
       loading={loading}
       error={error}
-      theme={theme}
+      theme={toTableTheme(theme)}
       translations={translations}
       mobileBreakpoint={mobileBreakpoint}
       paginationConfig={paginationConfig}
@@ -1571,9 +1573,11 @@ export function GridTable<T extends RowData = RowData>({
         loading={loading}
         error={error}
         getRowId={getRowId}
-        themeMode={themeMode}
+        {...props}
+        themeMode={resolvedThemeMode}
         paginationConfig={paginationConfig}
         gridThemeVars={gridThemeVars}
+        density={resolvedDensity}
         advancedFilter={advancedFilter}
         advancedFilterWhere={advancedFilterWhere}
         onAdvancedFilterChange={(where) => {
@@ -1581,26 +1585,15 @@ export function GridTable<T extends RowData = RowData>({
           advancedFilter?.onChange?.(where);
         }}
         columnStatePersistence={columnStatePersistence}
-        {...props}
       />
     </TableProvider>
   );
-
-  const hasThemeOverride = themeOverride && Object.keys(themeOverride).length > 0;
-  const withTheme =
-    hasThemeOverride ? (
-      <BearProvider theme={themeOverride as Record<string, unknown>} defaultMode={themeMode === 'dark' ? 'dark' : 'light'}>
-        {tableContent}
-      </BearProvider>
-    ) : (
-      tableContent
-    );
 
   if (studio) {
     return (
       <>
         <div className="grid-table-studio-main" style={{ width: '100%' }}>
-          {withTheme}
+          {tableContent}
         </div>
         <TableStudioPanel
           data={studioData}
@@ -1621,6 +1614,6 @@ export function GridTable<T extends RowData = RowData>({
     );
   }
 
-  return withTheme;
+  return tableContent;
 }
 

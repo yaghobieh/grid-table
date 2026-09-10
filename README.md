@@ -5,17 +5,17 @@
 </p>
 
 <p align="center">
-  <img src="docs/brand/badge-1-1-5.png" alt="1.1.5" height="28" />
+  <img src="docs/brand/badge-1-1-5.png" alt="1.1.6" height="28" />
 </p>
 
-**@forgedevstack/grid-table** v1.1.5 — A powerful, feature-rich data grid for React with 40+ features including **pivot-lite**, **row group drop-zone**, **cell span**, **row height**, **cell comments**, **Bear density sync**, **RTL**, **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + copy/paste + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.1.6 — A powerful, feature-rich data grid for React with 40+ features including **GridTableTheme**, **part tokens** (header / columns / col[n]), **pivot-lite**, **row group drop-zone**, **cell span**, **row height**, **cell comments**, **RTL**, **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + copy/paste + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 
 ### Core
 - **Server-driven pagination** — `paginationConfig.manualPagination` + `totalRowCount`: pass one page in `data` and load more in `onPageChange` (see portal **Server-driven** demo).
 - **Cell Editing** — Double-click to edit inline with validation (text, number, select, date, boolean)
-- **Dark/Light Theme** — Built-in theme support with customizable colors
+- **Dark/Light Theme** — Standalone `GridTableTheme` or `theme` on `GridTable` (header, columns, col[n]) — not BearProvider
 - **Filtering** — Column-level and global filtering with multiple operators
 - **Sorting** — Single and multi-column sorting with custom sort functions
 - **Drag & Drop** — Reorder columns by dragging

@@ -319,46 +319,95 @@ Use \`minWidth\` and \`maxWidth\` on column definitions:
 
 export const DOC_THEMING = `## Theming
 
-Grid Table supports full theming via CSS variables and the \`themeOverride\` prop.
+Grid Table ships its own theme. Visual tokens do not wrap BearProvider. Use \`<GridTableTheme>\` around one or more tables, or pass the same tokens on \`<GridTable theme>\`. Table props win over the provider. Live: [1.1.6 theme demo](/demos/release-1-1-6).
 
-### Theme Mode
+### GridTableTheme
 
 \`\`\`tsx
-<GridTable themeMode="dark" />
-<GridTable themeMode="light" />
+import { GridTable, GridTableTheme } from '@forgedevstack/grid-table';
+
+<GridTableTheme
+  theme={{
+    mode: 'dark',
+    colors: {
+      background: { primary: '#0a1f14', secondary: '#052e16', hover: '#14532d' },
+      text: { primary: '#e2e8f0', secondary: '#86efac', muted: '#4ade80' },
+      border: { default: 'rgba(34,197,94,0.35)' },
+      accent: { primary: '#22c55e' },
+    },
+    header: { background: '#052e16', text: '#bbf7d0' },
+    columns: { background: '#0a1f14', text: '#e2e8f0' },
+    col: {
+      1: { background: '#14532d', text: '#86efac' },
+      4: { background: '#022c22', text: '#4ade80' },
+    },
+  }}
+>
+  <GridTable data={data} columns={columns} />
+</GridTableTheme>
 \`\`\`
 
-### Custom Theme Override
+### Theme on GridTable
+
+The same object works on the table. Use this for a single grid without a provider.
 
 \`\`\`tsx
 <GridTable
-  themeOverride={{
-    colors: {
-      background: { primary: '#0a0a14', secondary: '#111122', tertiary: '#1a1a2e', hover: '#222240' },
-      text: { primary: '#f8fafc', secondary: '#94a3b8', muted: '#64748b' },
-      border: { default: 'rgba(255,255,255,0.06)', hover: 'rgba(255,255,255,0.12)' },
-      accent: { primary: '#22c55e', success: '#22c55e', warning: '#eab308', error: '#ef4444' },
-    },
+  data={data}
+  columns={columns}
+  themeMode="dark"
+  theme={{
+    header: { background: '#052e16', text: '#bbf7d0' },
+    columns: { background: '#0a1f14' },
+    col: { 1: { background: '#14532d' }, 4: { text: '#4ade80' } },
   }}
 />
 \`\`\`
 
-### CSS Variables
+### Parts
 
-Override at the CSS level:
+| Token | Applies to |
+| --- | --- |
+| \`colors\` | Table-wide \`--gt-bg-*\`, \`--gt-text-*\`, border, accent |
+| \`header\` | All header cells |
+| \`columns\` | All body cells |
+| \`col[n]\` | Column n, **1-based** (SKU is \`col[1]\`, Amount is \`col[4]\` in the demo). Wins over header/columns for that column |
+
+Each part accepts \`background\`, \`text\`, \`border\`, and \`hover\`.
+
+### Theme mode
+
+\`\`\`tsx
+<GridTable themeMode="dark" />
+<GridTable themeMode="light" />
+<GridTableTheme theme={{ mode: 'system' }}>
+  <GridTable data={data} columns={columns} />
+</GridTableTheme>
+\`\`\`
+
+\`themeMode\` on the table wins over \`theme.mode\` on the provider.
+
+### CSS variables
 
 \`\`\`css
 .grid-table {
   --gt-bg-primary: #0a0a14;
   --gt-text-primary: #f8fafc;
   --gt-accent-primary: #22c55e;
-  --gt-border-color: rgba(255,255,255,0.06);
+  --gt-header-bg: #052e16;
+  --gt-column-bg: #0a1f14;
+  --gt-col-1-bg: #14532d;
+  --gt-col-4-text: #4ade80;
 }
 \`\`\`
 
-### Use the Theme Builder
+### Legacy themeOverride
 
-Visit the [Theme Builder](/theme-builder) to create and export custom themes interactively.`;
+\`themeOverride.colors\` still maps to the same \`--gt-*\` variables. Prefer \`theme\` or \`<GridTableTheme>\`. Grid look is no longer applied through a nested BearProvider.
+
+### Theme Builder
+
+Visit the [Theme Builder](/theme-builder) to export color tokens, then paste them into \`theme.colors\`.`;
 
 export const DOC_TREE_DATA = `## Tree Data
 
@@ -613,43 +662,6 @@ Live: [Column grouping demo](/demos/column-grouping)
 
 \`applyTransaction({ add, update, remove })\` mutates row arrays in place. \`flashCells\` highlights changed cells after paste or programmatic edits.`;
 
-export const DOC_RELEASE_115 = `# Grid Table 1.1.5
-
-Pivot-lite, grouping drop-zone, comments, row height, span, Bear density, RTL, and range announcements.
-
-Live: [1.1.5 demo](/demos/release-1-1-5) · [Touch gestures](/demos/touch-gestures)
-
-## Pivot (client-side)
-
-\`\`\`tsx
-pivot={{
-  enabled: true,
-  rowFields: ['region'],
-  columnFields: ['quarter'],
-  valueFields: [{ field: 'amount', type: 'sum' }],
-}}
-\`\`\`
-
-Server pivot is out of scope.
-
-## Group drop-zone
-
-Enable \`rowGroupDropZone\` and pass \`onRowGroupsChange\`. Drag a column header (same MIME as column reorder: \`text/plain\`) onto the zone.
-
-## Comments, height, span
-
-- \`cellComments\` — controlled map + \`onCommentChange\`
-- \`rowHeight={{ auto: true, resizable: true }}\`
-- \`cellSpan.getColSpan\` / \`getRowSpan\` — row-span across a virtualize window is not applied
-
-## Density and RTL
-
-Omit \`density\` to inherit Bear compact/comfortable. Hebrew locale sets \`dir="rtl"\` on the document; swipe, pin shadows, and the fill handle follow.
-
-## Accessibility
-
-Range selection announces cell count. Fill complete announces after the handle or Ctrl/Cmd+D.`;
-
 export const DOC_CONTENT_MAP: Record<string, string> = {
   'getting-started': DOC_GETTING_STARTED,
   'installation': DOC_INSTALLATION,
@@ -668,5 +680,4 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'export-scope': DOC_EXPORT_SCOPE,
   'enterprise-grid': DOC_ENTERPRISE_GRID,
   'advanced-patterns': DOC_ADVANCED_PATTERNS,
-  'release-1-1-5': DOC_RELEASE_115,
 };

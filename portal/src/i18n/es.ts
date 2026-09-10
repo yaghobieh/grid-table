@@ -16,7 +16,7 @@ export const es: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Vistas guardadas, filtros, grupos, fórmulas, virtualización',
+    badgeText: 'GridTableTheme, encabezado, columnas, col[1] y col[4]',
     title: 'Grid Table',
     subtitle: 'El Data Grid de React para ForgeStack',
     typewriterTexts: [
@@ -42,8 +42,8 @@ export const es: TranslationStrings = {
     forgeStackEcosystem: 'Ecosistema ForgeStack',
     worksWith: 'Parte del ForgeStack Completo',
     showcaseTitle: 'Míralo',
-    showcaseDescription: 'Pivot, grupos, notas y fill — 1.1.5 en movimiento.',
-    trailerTitle: 'Grid Table 1.1.5',
+    showcaseDescription: 'Tema el encabezado, todas las columnas o col[1] y col[4] — 1.1.6 en movimiento.',
+    trailerTitle: 'Grid Table 1.1.6',
     showcase: {
       finance: { title: 'Modo Finanzas', description: 'Cotizaciones en tiempo real, gráficos, P&L en vivo — datos que nunca duermen.' },
       hr: { title: 'RRHH y Datos Jerárquicos', description: 'Organigramas, expandir/contraer, jerarquía — visualiza tu organización.' },
@@ -60,7 +60,7 @@ export const es: TranslationStrings = {
     ecosystemBanner: 'Totalmente compatible con todo el ecosistema ForgeStack.',
     visitForgeStack: 'Visitar ForgeStack',
     marqueeItems: [
-      'Paginación manual en servidor y effectiveTotalItems',
+      '1.1.6 — GridTableTheme, encabezado, columnas, col[1] y col[4]',
       'Tabla con scroll móvil por defecto · apilado opcional',
       'lazyLoad por lotes en regiones largas',
       'MIT · @forgedevstack/grid-table · TypeScript primero',
@@ -119,6 +119,11 @@ export const es: TranslationStrings = {
       title: 'Cabeceras de grupo de columnas',
       description:
         'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
+    },
+    'release-1-1-6': {
+      title: 'Tema 1.1.6',
+      description:
+        'GridTableTheme independiente y theme en GridTable — encabezado, todas las columnas y columnas sueltas como col[1, 4].',
     },
     'release-1-1-5': {
       title: 'Funciones 1.1.5',
@@ -332,6 +337,18 @@ export const es: TranslationStrings = {
     ],
   },
 
+  release116Demo: {
+    title: 'Tema 1.1.6',
+    description:
+      'El aspecto del grid es independiente. Envuelve tablas con GridTableTheme o pasa theme en GridTable. El encabezado, todas las columnas y col[1] / col[4] tienen tokens propios.',
+    bullets: [
+      'GridTableTheme aplica tokens a cada tabla dentro del provider.',
+      'El mismo objeto funciona en GridTable theme — gana sobre el provider.',
+      'header estiliza cada celda de encabezado; columns estiliza el cuerpo.',
+      'col[1] y col[4] son columnas visibles 1-based (SKU e Amount en este demo).',
+    ],
+  },
+
   release115Demo: {
     title: 'Funciones 1.1.5',
     description:
@@ -388,6 +405,7 @@ export const es: TranslationStrings = {
     infiniteScroll: 'Copiar — infiniteScroll por bloques',
     release114: 'Copiar — novedades 1.1.4 (autosize, chips, cortar, series)',
     release115: 'Copiar — novedades 1.1.5',
+    release116: 'Copiar — tema 1.1.6 (GridTableTheme, header, col[1, 4])',
     touchGestures: 'Copiar — gestos táctiles',
   },
 
@@ -398,11 +416,11 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'v1.1.4 — Doble clic en el divisor ajusta el ancho; fill handle alineado con virtualize',
-      'Ctrl/Cmd+C copia el rango; Escape limpia; pin en encabezado sin clic derecho',
-      'Export respeta orden/columnas ocultas; selected vacío es no-op',
-      'Demo enterprise actualizado para teclado y edición',
-      'docs/GRID_TABLE_DOCS.md y changelog para 1.1.3',
+      'Provider GridTableTheme — el color del grid ya no envuelve BearProvider',
+      'theme en GridTable acepta header, columns y tokens col[n]',
+      'Tokens 1-based: col[1] y col[4] estilizan una columna visible',
+      'themeOverride.colors sigue mapeando a variables --gt-*',
+      'Demo /demos/release-1-1-6 y docs de theming',
     ],
   },
 
@@ -460,6 +478,15 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.6': {
+        highlights: [
+          'Provider GridTableTheme — el color del grid ya no envuelve BearProvider',
+          'theme en GridTable acepta header, columns y tokens col[n]',
+          'Tokens 1-based: col[1], col[4] estilizan una columna visible',
+          'themeOverride.colors sigue mapeando a variables --gt-*',
+          'Docs de theming y /demos/release-1-1-6',
+        ],
+      },
       '1.1.5': {
         highlights: [
           'Pivot-lite: agregaciones cliente filas × columnas',

@@ -72,7 +72,7 @@ export const DemosIndex: FC = () => {
                 align="center"
                 gap={2}
                 style={{ cursor: 'pointer' }}
-                onClick={() => openDemo('/demos/features')}
+                onClick={() => openDemo('/demos/release-1-1-6')}
               >
                 <Typography variant="body2" style={{ color: 'var(--grid-accent)' }} className="font-medium">
                   {t.demosIndex.seeAllFeatures}

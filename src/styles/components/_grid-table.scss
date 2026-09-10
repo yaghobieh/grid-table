@@ -62,7 +62,7 @@
   }
 
   .grid-header-cell {
-    background-color: var(--gt-bg-secondary);
+    background-color: var(--gt-this-col-bg, var(--gt-header-bg, var(--gt-bg-secondary)));
   }
 
   .grid-row {

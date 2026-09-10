@@ -226,7 +226,14 @@ export interface TranslationStrings {
     infiniteScroll: string;
     release114: string;
     release115: string;
+    release116: string;
     touchGestures: string;
+  };
+
+  release116Demo: {
+    title: string;
+    description: string;
+    bullets: string[];
   };
 
   release115Demo: {

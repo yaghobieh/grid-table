@@ -3,6 +3,8 @@ import type { CSSProperties, ReactNode } from 'react';
 import clsx from 'clsx';
 import type { RowData } from '@/types';
 import { resolveColumnSticky } from '@/utils/columnSticky.utils';
+import { buildColumnThemeVars, resolveColumnNumber } from '@/utils/gridTableTheme.utils';
+import { THEME_PART_HEADER } from '@constants/theme.const';
 import {
   EMPTY_STRING,
   GRID_HEADER_PIN_ARIA,
@@ -62,6 +64,7 @@ export function useHeaderCell<T extends RowData>(props: GridHeaderCellProps<T>):
     isPinEdgeLeft = false,
     isPinEdgeRight = false,
     isColumnAutoSized = false,
+    colIndex,
     onSort,
     onFilterOpen,
     onPinToggle,
@@ -121,6 +124,7 @@ export function useHeaderCell<T extends RowData>(props: GridHeaderCellProps<T>):
   const cellStyle = useMemo(() => {
     const base: CSSProperties = {
       flexShrink: ZERO,
+      ...buildColumnThemeVars(resolveColumnNumber(colIndex), THEME_PART_HEADER),
       ...(stickySide && {
         position: HEADER_CELL_POSITION_STICKY,
         [stickySide]: 0,
@@ -139,7 +143,7 @@ export function useHeaderCell<T extends RowData>(props: GridHeaderCellProps<T>):
     base.minWidth = column.minWidth || MIN_COLUMN_WIDTH;
     base.maxWidth = column.maxWidth || MAX_COLUMN_WIDTH;
     return base;
-  }, [column, columnState.width, isColumnAutoSized, stickySide]);
+  }, [colIndex, column, columnState.width, isColumnAutoSized, stickySide]);
 
   return {
     isSortable,

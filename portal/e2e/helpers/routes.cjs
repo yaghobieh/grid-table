@@ -5,6 +5,7 @@ const PORTAL_ROUTES = [
   '/demos/enterprise-grid',
   '/demos/release-1-1-4',
   '/demos/release-1-1-5',
+  '/demos/release-1-1-6',
   '/demos/touch-gestures',
   '/demos/infinite-scroll',
   '/demos/saved-views',
@@ -28,7 +29,7 @@ const PORTAL_ROUTES = [
   '/docs/getting-started',
   '/docs/api-reference',
   '/docs/enterprise-grid',
-  '/docs/release-1-1-5',
+  '/docs/theming',
 ];
 
 const DARK_MODE_SAMPLE_ROUTES = [

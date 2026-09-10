@@ -7,3 +7,5 @@ export type {
   TableOptions,
   SubCellExpandTrigger,
 } from './TableContext.types';
+export { GridTableTheme, GridTableThemeContext, useGridTableTheme } from './GridTableTheme';
+export type { GridTableThemeProps } from './GridTableTheme';

@@ -5,6 +5,24 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.6] - 2026-09-10
+
+### Added
+
+- **GridTableTheme** — standalone provider for grid visual tokens. Same object works on \`<GridTable theme>\`.
+- **Part tokens** — \`header\`, \`columns\`, and \`col[n]\` (1-based) for background, text, border, and hover.
+- Theme CSS variables \`--gt-header-*\`, \`--gt-column-*\`, and \`--gt-col-{n}-*\`.
+
+### Changed
+
+- Grid look no longer wraps a nested BearProvider. \`themeOverride.colors\` still maps to \`--gt-*\` variables.
+- Portal current version, demos, and changelog badges are 1.1.6.
+
+### Portal
+
+- \`/demos/release-1-1-6\` and \`/docs/theming\` cover GridTableTheme and column parts. Version-specific doc pages for 1.1.5 and 1.1.6 are removed.
+- \`CURRENT_VERSION\` → 1.1.6 (en/es/he).
+
 ## [1.1.5] - 2026-09-04
 
 ### Added

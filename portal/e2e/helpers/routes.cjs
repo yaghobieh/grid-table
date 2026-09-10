@@ -29,8 +29,6 @@ const PORTAL_ROUTES = [
   '/docs/getting-started',
   '/docs/api-reference',
   '/docs/enterprise-grid',
-  '/docs/release-1-1-5',
-  '/docs/release-1-1-6',
   '/docs/theming',
 ];
 

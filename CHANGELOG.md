@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Portal
 
-- \`/demos/release-1-1-6\` and \`/docs/theming\` cover GridTableTheme and column parts.
+- \`/demos/release-1-1-6\` and \`/docs/theming\` cover GridTableTheme and column parts. Version-specific doc pages for 1.1.5 and 1.1.6 are removed.
 - \`CURRENT_VERSION\` → 1.1.6 (en/es/he).
 
 ## [1.1.5] - 2026-09-04

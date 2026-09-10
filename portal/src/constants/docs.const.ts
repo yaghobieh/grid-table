@@ -662,75 +662,6 @@ Live: [Column grouping demo](/demos/column-grouping)
 
 \`applyTransaction({ add, update, remove })\` mutates row arrays in place. \`flashCells\` highlights changed cells after paste or programmatic edits.`;
 
-export const DOC_RELEASE_115 = `# Grid Table 1.1.5
-
-Pivot-lite, grouping drop-zone, comments, row height, span, Bear density, RTL, and range announcements.
-
-Live: [1.1.5 demo](/demos/release-1-1-5) · [Touch gestures](/demos/touch-gestures)
-
-## Pivot (client-side)
-
-\`\`\`tsx
-pivot={{
-  enabled: true,
-  rowFields: ['region'],
-  columnFields: ['quarter'],
-  valueFields: [{ field: 'amount', type: 'sum' }],
-}}
-\`\`\`
-
-Server pivot is out of scope.
-
-## Group drop-zone
-
-Enable \`rowGroupDropZone\` and pass \`onRowGroupsChange\`. Drag a column header (same MIME as column reorder: \`text/plain\`) onto the zone.
-
-## Comments, height, span
-
-- \`cellComments\` — controlled map + \`onCommentChange\`
-- \`rowHeight={{ auto: true, resizable: true }}\`
-- \`cellSpan.getColSpan\` / \`getRowSpan\` — row-span across a virtualize window is not applied
-
-## Density and RTL
-
-Omit \`density\` to inherit Bear compact/comfortable. Hebrew locale sets \`dir="rtl"\` on the document; swipe, pin shadows, and the fill handle follow.
-
-## Accessibility
-
-Range selection announces cell count. Fill complete announces after the handle or Ctrl/Cmd+D.`;
-
-export const DOC_RELEASE_116 = `# Grid Table 1.1.6
-
-Standalone grid theming. Visual tokens no longer wrap BearProvider.
-
-Live: [1.1.6 demo](/demos/release-1-1-6) · [Theming docs](/docs/theming)
-
-## GridTableTheme
-
-Wrap any number of tables:
-
-\`\`\`tsx
-<GridTableTheme theme={{ header: { background: '#052e16' }, col: { 1: { text: '#86efac' }, 4: { text: '#4ade80' } } }}>
-  <GridTable data={data} columns={columns} />
-</GridTableTheme>
-\`\`\`
-
-Or pass the same object on \`<GridTable theme>\`. Table tokens win over the provider.
-
-## Parts
-
-- \`header\` — every header cell
-- \`columns\` — every body cell
-- \`col[n]\` — column n, 1-based (first visible column is 1)
-
-Each part: \`background\`, \`text\`, \`border\`, \`hover\`.
-
-## What changed
-
-- Nested BearProvider for \`themeOverride\` is removed
-- \`themeOverride.colors\` still becomes \`--gt-*\` CSS variables
-- Portal current version is 1.1.6`;
-
 export const DOC_CONTENT_MAP: Record<string, string> = {
   'getting-started': DOC_GETTING_STARTED,
   'installation': DOC_INSTALLATION,
@@ -741,7 +672,6 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'selection': DOC_SELECTION,
   'drag-drop': DOC_DRAG_DROP,
   'theming': DOC_THEMING,
-  'release-1-1-6': DOC_RELEASE_116,
   'tree-data': DOC_TREE_DATA,
   'saved-views': DOC_SAVED_VIEWS,
   'advanced-filters': DOC_ADVANCED_FILTERS,
@@ -750,5 +680,4 @@ export const DOC_CONTENT_MAP: Record<string, string> = {
   'export-scope': DOC_EXPORT_SCOPE,
   'enterprise-grid': DOC_ENTERPRISE_GRID,
   'advanced-patterns': DOC_ADVANCED_PATTERNS,
-  'release-1-1-5': DOC_RELEASE_115,
 };

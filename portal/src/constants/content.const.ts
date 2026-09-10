@@ -257,8 +257,6 @@ export const DOC_SECTIONS: DocSection[] = [
   { id: 'virtualization', title: 'Virtualization', path: '/docs/virtualization', icon: 'LoaderIcon' },
   { id: 'export-scope', title: 'Export Scope', path: '/docs/export-scope', icon: 'DownloadIcon' },
   { id: 'enterprise-grid', title: 'Enterprise Grid', path: '/docs/enterprise-grid', icon: 'LayersIcon' },
-  { id: 'release-1-1-6', title: '1.1.6', path: '/docs/release-1-1-6', icon: 'SparklesIcon' },
-  { id: 'release-1-1-5', title: '1.1.5', path: '/docs/release-1-1-5', icon: 'SparklesIcon' },
   { id: 'advanced-patterns', title: 'Advanced patterns', path: '/docs/advanced-patterns', icon: 'LayersIcon' },
   { id: 'api-reference', title: 'API Reference', path: '/docs/api-reference', icon: 'CodeIcon' },
 ];

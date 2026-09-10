@@ -7,4 +7,5 @@ export * from './pagination.types';
 export * from './table.types';
 export * from './features.types';
 export * from './hooks.types';
+export * from './theme.types';
 

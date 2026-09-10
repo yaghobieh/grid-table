@@ -1,0 +1,1 @@
+export { useGridTableTheme } from './useGridTableTheme';

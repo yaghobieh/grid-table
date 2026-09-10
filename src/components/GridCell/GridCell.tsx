@@ -11,6 +11,8 @@ import { EMPTY_STRING } from '@/constants';
 import { CellComment } from '../CellComment';
 import { CELL_COMMENT_HAS_CLASS } from '@constants/cellComments.const';
 import { ONE } from '@constants/numbers.const';
+import { DATA_COL_ATTR, THEME_PART_COLUMN } from '@constants/theme.const';
+import { buildColumnThemeVars, resolveColumnNumber } from '@/utils/gridTableTheme.utils';
 import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
 import {
   GRID_CELL_ALIGN_CLASSES,
@@ -240,6 +242,7 @@ export function GridCell<T extends RowData = RowData>({
         comment && CELL_COMMENT_HAS_CLASS,
       )}
       style={{
+        ...buildColumnThemeVars(resolveColumnNumber(colIndex), THEME_PART_COLUMN),
         ...mergedCellStyle,
         ...(colSpan > ONE ? { flexGrow: colSpan } : {}),
         ...(rowSpan > ONE ? { ['--gt-span-rows' as string]: String(rowSpan) } : {}),
@@ -248,6 +251,7 @@ export function GridCell<T extends RowData = RowData>({
       data-column-id={column.id}
       data-row-index={rowIndex}
       data-col-index={colIndex}
+      {...(colIndex != null ? { [DATA_COL_ATTR]: colIndex + ONE } : {})}
       onClick={onClick ? handleClick : undefined}
       onDoubleClick={!isEditable ? handleDoubleClick : undefined}
       onMouseDown={onRangeMouseDown ? handleRangeMouseDown : undefined}

@@ -42,8 +42,8 @@ export const en: TranslationStrings = {
     forgeStackEcosystem: 'ForgeStack Ecosystem',
     worksWith: 'Part of the Full ForgeStack',
     showcaseTitle: 'See it play',
-    showcaseDescription: 'Pivot, group, comment, and fill — 1.1.5 in motion.',
-    trailerTitle: 'Grid Table 1.1.5',
+    showcaseDescription: 'Theme the header, every column, or col[1] and col[4] — 1.1.6 in motion.',
+    trailerTitle: 'Grid Table 1.1.6',
     showcase: {
       finance: { title: 'Finance Mode', description: 'Real-time tickers, sparklines, live P&L — data that never sleeps.' },
       hr: { title: 'HR & Tree Data', description: 'Org charts, expand/collapse, hierarchy — visualize your organization.' },
@@ -136,6 +136,11 @@ export const en: TranslationStrings = {
       title: 'Column group headers',
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
+    },
+    'release-1-1-6': {
+      title: '1.1.6 theme',
+      description:
+        'Standalone GridTableTheme and theme on GridTable — header, all columns, and individual columns such as col[1, 4].',
     },
     'release-1-1-5': {
       title: '1.1.5 features',
@@ -350,6 +355,18 @@ export const en: TranslationStrings = {
     ],
   },
 
+  release116Demo: {
+    title: '1.1.6 theme',
+    description:
+      'Grid look is standalone. Wrap tables in GridTableTheme or pass theme on GridTable. Header, all columns, and col[1] / col[4] use their own tokens.',
+    bullets: [
+      'GridTableTheme sets tokens for every table inside the provider.',
+      'The same object works on GridTable theme — table tokens win over the provider.',
+      'header styles every header cell; columns styles every body cell.',
+      'col[1] and col[4] are 1-based visible columns (SKU and Amount in this demo).',
+    ],
+  },
+
   release115Demo: {
     title: '1.1.5 features',
     description:
@@ -405,6 +422,7 @@ export const en: TranslationStrings = {
     infiniteScroll: 'Copy — infiniteScroll block loading',
     release114: 'Copy — 1.1.4 features (autosize, chips, cut, series)',
     release115: 'Copy — 1.1.5 features (pivot, groups, comments)',
+    release116: 'Copy — 1.1.6 theme (GridTableTheme, header, col[1, 4])',
     touchGestures: 'Copy — touch gestures',
   },
 
@@ -478,6 +496,15 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.6': {
+        highlights: [
+          'GridTableTheme provider — grid colors no longer wrap BearProvider',
+          'theme on GridTable accepts header, columns, and col[n] part tokens',
+          '1-based column tokens: col[1], col[4] style a single visible column',
+          'themeOverride.colors still maps to --gt-* CSS variables',
+          'Theming docs and /demos/release-1-1-6',
+        ],
+      },
       '1.1.5': {
         highlights: [
           'Pivot-lite: client-side row × column aggregations (sum/avg/count/min/max)',

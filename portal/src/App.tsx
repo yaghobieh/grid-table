@@ -19,6 +19,7 @@ import { EnterpriseGridDemo } from './pages/EnterpriseGridDemo';
 import { InfiniteScrollDemo } from './pages/InfiniteScrollDemo';
 import { Release114Demo } from './pages/Release114Demo';
 import { Release115Demo } from './pages/Release115Demo';
+import { Release116Demo } from './pages/Release116Demo';
 import { TouchGesturesDemo } from './pages/TouchGesturesDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
@@ -37,6 +38,7 @@ const routes = [
   { path: '/demos/enterprise-grid', name: 'demos-enterprise-grid', component: EnterpriseGridDemo },
   { path: '/demos/release-1-1-4', name: 'demos-release-1-1-4', component: Release114Demo },
   { path: '/demos/release-1-1-5', name: 'demos-release-1-1-5', component: Release115Demo },
+  { path: '/demos/release-1-1-6', name: 'demos-release-1-1-6', component: Release116Demo },
   { path: '/demos/touch-gestures', name: 'demos-touch-gestures', component: TouchGesturesDemo },
   { path: '/demos/infinite-scroll', name: 'demos-infinite-scroll', component: InfiniteScrollDemo },
   { path: '/demos/theme-playground', name: 'demos-theme-playground', component: ThemePlaygroundDemo },

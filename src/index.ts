@@ -50,7 +50,7 @@ export type {
 } from './components';
 
 // Context and Provider
-export { TableProvider, TableContext, useTableContext } from './context';
+export { TableProvider, TableContext, useTableContext, GridTableTheme, useGridTableTheme } from './context';
 export type {
   TableContextState,
   TableContextActions,
@@ -58,6 +58,7 @@ export type {
   TableProviderProps,
   TableOptions,
   SubCellExpandTrigger,
+  GridTableThemeProps,
 } from './context';
 
 // Hooks
@@ -115,6 +116,11 @@ export type {
   Dimensions,
   ThemeColors,
   Theme,
+  GridTablePartTheme,
+  GridTableColumnThemeMap,
+  GridTableThemeColors,
+  GridTableThemeMode,
+  GridTableThemeTokens,
   Translations,
   ClassNames,
   Styles,

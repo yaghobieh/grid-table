@@ -64,6 +64,7 @@ export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T
             <HeaderCell
               column={column}
               columnState={columnState}
+              colIndex={index}
               sortDirection={props.getSortDirection ? props.getSortDirection(column.id) : null}
               sortIndex={header.state.sorting.findIndex((item) => item.columnId === column.id)}
               isMultiSort={header.state.sorting.length > ONE}

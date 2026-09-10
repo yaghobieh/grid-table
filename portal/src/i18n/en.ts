@@ -16,7 +16,7 @@ export const en: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'Saved Views, Filter Builder, Row Groups, Formulas, Virtualization',
+    badgeText: 'GridTableTheme, header, columns, col[1] and col[4]',
     title: 'Grid Table',
     subtitle: 'The React Data Grid for ForgeStack',
     typewriterTexts: [
@@ -60,7 +60,7 @@ export const en: TranslationStrings = {
     ecosystemBanner: 'Fully compatible with the entire ForgeStack ecosystem.',
     visitForgeStack: 'Visit ForgeStack',
     marqueeItems: [
-      'Manual server pagination & effectiveTotalItems',
+      '1.1.6 — GridTableTheme, header, columns, col[1] and col[4]',
       'Pinned row groups · formula engine · saved views · advanced filter builder',
       'lazyLoad batches for long scroll regions',
       'MIT · @forgedevstack/grid-table · TypeScript-first',
@@ -433,11 +433,11 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'v1.1.4 — Double-click column divider autosize; fill handle stays aligned with virtualize',
-      'Ctrl/Cmd+C copies selected range; Escape clears; header pin without right-click',
-      'Export respects column order/hidden columns; empty selected scope is a no-op',
-      'Enterprise demo updated for keyboard range + edit UX',
-      'docs/GRID_TABLE_DOCS.md and changelog for 1.1.3',
+      'GridTableTheme provider — grid colors no longer wrap BearProvider',
+      'theme on GridTable accepts header, columns, and col[n] part tokens',
+      '1-based column tokens: col[1] and col[4] style a single visible column',
+      'themeOverride.colors still maps to --gt-* CSS variables',
+      'Live demo /demos/release-1-1-6 and theming docs',
     ],
   },
 

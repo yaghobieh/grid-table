@@ -16,7 +16,7 @@ export const he: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'תצוגות שמורות, מסננים, קבוצות, נוסחאות, וירטואליזציה',
+    badgeText: 'GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
     title: 'Grid Table',
     subtitle: 'גריד הנתונים של React ל־ForgeStack',
     typewriterTexts: [
@@ -60,7 +60,7 @@ export const he: TranslationStrings = {
     ecosystemBanner: 'תואם במלואו לאקוסיסטם ForgeStack.',
     visitForgeStack: 'לאתר ForgeStack',
     marqueeItems: [
-      'עימוד בשרת ידני ו־effectiveTotalItems',
+      '1.1.6 — GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
       'טבלה עם גלילה ניידת כברירת מחדל · פריסת כרטיסים אופציונלית',
       'lazyLoad באצוות לגלילות ארוכות',
       'MIT · @forgedevstack/grid-table · TypeScript קודם',
@@ -407,11 +407,11 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'v1.1.4 — דאבל־קליק על מפריד העמודה מתאים לרוחב הטקסט; fill handle מיושר עם virtualize',
-      'Ctrl/Cmd+C מעתיק טווח; Escape מנקה; pin בכותרת בלי לחיצה ימנית',
-      'ייצוא מכבד סדר/עמודות מוסתרות; selected ריק הוא no-op',
-      'דמו enterprise עודכן למקלדת ועריכה',
-      'docs/GRID_TABLE_DOCS.md ו־changelog ל־1.1.3',
+      'ספק GridTableTheme — צבעי הגריד כבר לא עוטפים BearProvider',
+      'theme ב-GridTable מקבל header, columns וטוקני col[n]',
+      'טוקנים 1-based: col[1] ו-col[4] מעצבים עמודה נראית אחת',
+      'themeOverride.colors עדיין ממופה למשתני --gt-*',
+      'דמו /demos/release-1-1-6 ותיעוד ערכת נושא',
     ],
   },
 

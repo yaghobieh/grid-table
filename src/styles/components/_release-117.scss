@@ -1,0 +1,78 @@
+.gt-frame {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.gt-frame-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.gt-tool-panel {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--gt-bg-secondary, #2b2b2b);
+  border-inline-start: 1px solid var(--gt-border, rgba(255, 255, 255, 0.08));
+  font-size: 13px;
+}
+
+.gt-tool-panel--left {
+  border-inline-start: 0;
+  border-inline-end: 1px solid var(--gt-border, rgba(255, 255, 255, 0.08));
+}
+
+.gt-tool-panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gt-tool-panel-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.gt-tool-panel-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.gt-tool-panel-actions button {
+  min-width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--gt-border, rgba(255, 255, 255, 0.16));
+  background: transparent;
+  color: inherit;
+}
+
+.gt-tool-panel-actions button[aria-pressed='true'] {
+  background: var(--gt-accent, #22c55e);
+  color: #06210f;
+}
+
+.gt-responsive-details {
+  display: grid;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.gt-responsive-details-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gt-feature-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

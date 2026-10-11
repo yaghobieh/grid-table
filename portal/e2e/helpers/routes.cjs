@@ -6,6 +6,7 @@ const PORTAL_ROUTES = [
   '/demos/release-1-1-4',
   '/demos/release-1-1-5',
   '/demos/release-1-1-6',
+  '/demos/release-1-1-7',
   '/demos/touch-gestures',
   '/demos/infinite-scroll',
   '/demos/saved-views',

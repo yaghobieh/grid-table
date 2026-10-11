@@ -47,12 +47,17 @@ import { ColumnChooser } from '../ColumnChooser';
 import { FloatingFilterRow } from '../FloatingFilterRow';
 import { GroupDropZone } from '../GroupDropZone';
 import { RangeLiveRegion } from '../RangeLiveRegion';
+import { ColumnToolPanel } from '../ColumnToolPanel';
+import { ResponsiveDetails } from '../ResponsiveDetails';
 import { buildPivotTable, isPivotEnabled } from '@/utils/pivot.utils';
 import { resolveTableDensity } from '@/utils/density.utils';
 import { countRangeCells, formatRangeAnnouncement } from '@/utils/rangeAnnounce.utils';
 import { isRowGroupDropZoneEnabled } from '@/utils/rowGroupsDrop.utils';
 import { resolveDefaultRowHeight } from '@/utils/rowHeight.utils';
 import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
+import { TOOL_PANEL_SIDE_LEFT, TOOL_PANEL_SIDE_RIGHT } from '@constants/responsive.const';
+import { formatPaginationInfo } from '@/utils/paginationInfo.utils';
+import { resolveCollapsedColumnIds } from '@/utils/responsiveColumns.utils';
 import type { RowGroupConfig } from '@/types';
 import { DEFAULT_EXPORT_SCOPE } from '@constants/exportScope.const';
 import {
@@ -89,7 +94,7 @@ import {
   KEY_V,
   KEY_X,
 } from '@constants/keyboard.const';
-import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, SKELETON_ROWS, ZERO } from '@constants/numbers.const';
+import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, SKELETON_ROWS, TABLET_BREAKPOINT, ZERO } from '@constants/numbers.const';
 import { resolveTableEffects } from './GridTable.utils';
 
 function GridTableContent<T extends RowData>({
@@ -187,6 +192,9 @@ function GridTableContent<T extends RowData>({
   cellComments,
   rowGroupDropZone,
   onRowGroupsChange,
+  responsive,
+  columnToolPanel,
+  features,
 }: Omit<GridTableComponentProps<T>, 'theme' | 'translations' | 'mobileBreakpoint' | 'filterConfig' | 'sortConfig'> & {
   advancedFilterWhere?: import('@/types/filter.types').FilterTreeGroup | null;
   onAdvancedFilterChange?: (where: import('@/types/filter.types').FilterTreeGroup | null) => void;
@@ -212,13 +220,19 @@ function GridTableContent<T extends RowData>({
     visible: false, x: 0, y: 0, context: null,
   });
 
+  const [frameWidth, setFrameWidth] = useState(ZERO);
+  const collapsedIds = useMemo(() => {
+    const enabled = typeof responsive === 'object' ? responsive.enabled !== false : responsive === true;
+    const breakpoint = typeof responsive === 'object' ? (responsive.breakpoint ?? TABLET_BREAKPOINT) : TABLET_BREAKPOINT;
+    return resolveCollapsedColumnIds(columns, frameWidth, enabled, breakpoint);
+  }, [columns, frameWidth, responsive]);
   const visibleCols = useMemo(
     () =>
       resolveExportColumns({
         columns,
         columnStates: state.columnStates,
-      }),
-    [columns, state.columnStates],
+      }).filter((column) => !collapsedIds.includes(column.id)),
+    [columns, state.columnStates, collapsedIds],
   );
   const { focusedCell, setFocusedCell, handleKeyDown: kbHandleKeyDown, containerRef: kbRef, isEditing: kbIsEditing } =
     useKeyboardNavigation(computed.paginatedData.length, visibleCols.length, kbConfig);
@@ -233,6 +247,15 @@ function GridTableContent<T extends RowData>({
   const fillPointerRef = useRef({ x: ZERO, y: ZERO });
   const fillAppliedRef = useRef(false);
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const node = tableContainerRef.current;
+    if (!node) return undefined;
+    const observer = new ResizeObserver((entries) => {
+      setFrameWidth(entries[0]?.contentRect.width ?? ZERO);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [loading, error, data.length]);
   const autoFitMountedRef = useRef(false);
   const [columnChooserOpen, setColumnChooserOpen] = useState(false);
   const undoRedo = useUndoRedo(
@@ -658,9 +681,37 @@ function GridTableContent<T extends RowData>({
     [displayData.length, visibleCols, setFocusedCell],
   );
 
-  const effectiveRowExpansion = masterDetail?.enabled && masterDetail.renderPanel
-    ? (row: T, rowId: string | number) => masterDetail.renderPanel?.(row) ?? null
-    : renderRowExpansion;
+  const collapsedColumns = columns.filter((column) => collapsedIds.includes(column.id));
+  const showRowExpansion = enableRowExpansion || collapsedColumns.length > ZERO;
+  const effectiveRowExpansion = (row: T, rowId: string | number) => {
+    const userPanel = masterDetail?.enabled && masterDetail.renderPanel
+      ? masterDetail.renderPanel(row)
+      : renderRowExpansion?.(row, rowId);
+    if (collapsedColumns.length === ZERO) return userPanel ?? null;
+    return (
+      <div className="gt-expansion-stack">
+        <ResponsiveDetails columns={collapsedColumns} row={row} label={state.translations.responsiveDetails} />
+        {userPanel}
+      </div>
+    );
+  };
+  const selectedRows = data.filter((row) => state.selectedIds.has(getRowIdFn(row)));
+  const toolPanelSettings = typeof columnToolPanel === 'object' ? columnToolPanel : { enabled: columnToolPanel === true };
+  const showToolPanel = toolPanelSettings.enabled === true;
+  const toolPanelSide = toolPanelSettings.side ?? TOOL_PANEL_SIDE_RIGHT;
+  const toolPanelNode = showToolPanel ? (
+    <ColumnToolPanel
+      columns={columns}
+      columnStates={state.columnStates}
+      label={state.translations.toolPanel}
+      pinLeftLabel={state.translations.pinLeft}
+      pinRightLabel={state.translations.pinRight}
+      unpinLabel={state.translations.unpin}
+      side={toolPanelSide}
+      onToggleColumn={actions.toggleColumnVisibility}
+      onPinColumn={actions.pinColumn}
+    />
+  ) : null;
 
   const mergedRowClassName = useCallback(
     (row: T, index: number) => {
@@ -906,7 +957,7 @@ function GridTableContent<T extends RowData>({
   const tableContent = (
     <div
       ref={kbConfig?.enabled ? kbRef as React.RefObject<HTMLDivElement> : undefined}
-      className={`grid-table rounded-lg border overflow-hidden ${mobileRootClass} gt-density-${density} ${rowHeight?.auto ? 'gt-row-auto-height' : ''} ${touchGestures?.enabled ? 'gt-touch-gestures' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
+      className={`grid-table rounded-lg border overflow-hidden ${showToolPanel ? 'gt-frame' : ''} ${mobileRootClass} gt-density-${density} ${rowHeight?.auto ? 'gt-row-auto-height' : ''} ${touchGestures?.enabled ? 'gt-touch-gestures' : ''} ${fx.sort ? 'gt-sort-animated' : ''} ${fx.row ? 'gt-row-animated' : ''} ${fx.hover ? 'gt-hover-effect' : ''} ${fx.className} ${classNames.root || ''} ${className}`}
       style={{
         ...containerStyle,
         ...(rowHeight ? { ['--gt-row-height' as string]: `${resolveDefaultRowHeight(rowHeight)}px` } : {}),
@@ -916,6 +967,8 @@ function GridTableContent<T extends RowData>({
       onKeyDown={kbConfig?.enabled ? kbHandleKeyDown : undefined}
       onMouseUp={rangeSelection?.enabled ? finishRangePointer : undefined}
     >
+      {showToolPanel && toolPanelSide === TOOL_PANEL_SIDE_LEFT && toolPanelNode}
+      <div className="gt-frame-main">
       {renderHeader && <div className="grid-table-custom-header">{renderHeader()}</div>}
       <RangeLiveRegion message={rangeLiveMessage} />
       {isRowGroupDropZoneEnabled(rowGroupDropZone, activeRowGroups) && !pivotActive && (
@@ -1074,6 +1127,14 @@ function GridTableContent<T extends RowData>({
             </>
           )}
 
+          {features?.map((feature) => (
+            feature.toolbar ? (
+              <div key={feature.id} className="gt-feature-slot">
+                {feature.toolbar({ data, selectedRows })}
+              </div>
+            ) : null
+          ))}
+
           {showColumnToggle && !shouldShowMobileView && (
             <ColumnChooser
               columns={columns}
@@ -1213,7 +1274,7 @@ function GridTableContent<T extends RowData>({
             visibleColumns={visibleCols}
             columnStates={state.columnStates}
             enableSelection={enableRowSelection}
-            enableExpansion={enableRowExpansion}
+            enableExpansion={showRowExpansion}
           />
         )}
         {showTableHeader && (
@@ -1229,7 +1290,7 @@ function GridTableContent<T extends RowData>({
             enableResize={enableColumnResize}
             enableColumnMenu={enableColumnMenu}
             enableSelection={enableRowSelection}
-            enableExpansion={enableRowExpansion}
+            enableExpansion={showRowExpansion}
             allSelected={computed.allSelected}
             someSelected={computed.someSelected}
             onSelectAll={handleSelectAll}
@@ -1246,7 +1307,7 @@ function GridTableContent<T extends RowData>({
             columnStates={state.columnStates}
             filters={state.filters}
             enableSelection={enableRowSelection}
-            enableExpansion={enableRowExpansion}
+            enableExpansion={showRowExpansion}
             onFilterChange={(columnId, value) => actions.setFilter(columnId, value, 'contains')}
             onFilterClear={actions.removeFilter}
           />
@@ -1276,7 +1337,7 @@ function GridTableContent<T extends RowData>({
                 stackedMobileLayout={stackedMobile}
                 showMobileLabels={showMobileLabels}
                 enableSelection={enableRowSelection}
-                enableExpansion={enableRowExpansion}
+                enableExpansion={showRowExpansion}
                 selectedIds={state.selectedIds}
                 expandedIds={state.expandedIds}
                 onRowClick={onRowClick}
@@ -1307,7 +1368,7 @@ function GridTableContent<T extends RowData>({
               stackedMobileLayout={stackedMobile}
               showMobileLabels={showMobileLabels}
               enableSelection={enableRowSelection}
-              enableExpansion={enableRowExpansion}
+              enableExpansion={showRowExpansion}
               selectedIds={state.selectedIds}
               expandedIds={state.expandedIds}
               onRowClick={onRowClick}
@@ -1388,7 +1449,7 @@ function GridTableContent<T extends RowData>({
                 stackedMobileLayout={stackedMobile}
                 showMobileLabels={showMobileLabels}
                 enableSelection={enableRowSelection}
-                enableExpansion={enableRowExpansion}
+                enableExpansion={showRowExpansion}
                 selectedIds={state.selectedIds}
                 expandedIds={state.expandedIds}
                 onRowClick={onRowClick}
@@ -1411,7 +1472,12 @@ function GridTableContent<T extends RowData>({
         <div className={`grid-pagination ${classNames.pagination ?? ''}`} style={styles.pagination} role="navigation" aria-label="Pagination">
           <div className="grid-pagination-info">
             <Typography component="span" variant="body2" color="secondary">
-              {(state.page - 1) * state.pageSize + 1}-{Math.min(state.page * state.pageSize, computed.effectiveTotalItems)} {state.translations.of} {computed.effectiveTotalItems}
+              {formatPaginationInfo(
+                paginationConfig?.info ?? state.translations.info,
+                (state.page - ONE) * state.pageSize + ONE,
+                Math.min(state.page * state.pageSize, computed.effectiveTotalItems),
+                computed.effectiveTotalItems,
+              )}
             </Typography>
             <Typography component="span" variant="caption" color="secondary" className="bear-sr-only">{state.translations.rowsPerPage}</Typography>
             <Select
@@ -1442,6 +1508,14 @@ function GridTableContent<T extends RowData>({
         </div>
       )}
 
+      {features?.map((feature) => (
+        feature.status ? (
+          <div key={feature.id} className="gt-feature-slot">
+            {feature.status({ data, selectedRows })}
+          </div>
+        ) : null
+      ))}
+
       {statusBarConfig?.enabled && (
         <StatusBar
           config={statusBarConfig}
@@ -1457,6 +1531,7 @@ function GridTableContent<T extends RowData>({
               : computed.sortedData.length
           }
           selectedCount={state.selectedIds.size}
+          selectedData={selectedRows}
           columns={columns}
           className={classNames.footer}
         />
@@ -1482,6 +1557,8 @@ function GridTableContent<T extends RowData>({
           onClose={() => setCtxMenu(prev => ({ ...prev, visible: false }))}
         />
       )}
+      </div>
+      {showToolPanel && toolPanelSide !== TOOL_PANEL_SIDE_LEFT && toolPanelNode}
     </div>
   );
 
@@ -1502,6 +1579,7 @@ export function GridTable<T extends RowData = RowData>({
   error = null,
   theme,
   translations,
+  locale,
   mobileBreakpoint = 'tablet',
   paginationConfig,
   filterConfig,
@@ -1554,6 +1632,7 @@ export function GridTable<T extends RowData = RowData>({
       error={error}
       theme={toTableTheme(theme)}
       translations={translations}
+      locale={locale}
       mobileBreakpoint={mobileBreakpoint}
       paginationConfig={paginationConfig}
       filterConfig={effectiveFilterConfig}

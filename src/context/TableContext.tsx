@@ -19,6 +19,7 @@ import type {
 import { tableReducer } from './tableReducer';
 import { TABLE_ACTION } from './TableContext.constants';
 import { DEFAULT_THEME, DEFAULT_TRANSLATIONS, DEFAULT_TABLE_CONFIG } from '../constants';
+import { resolveGridLocale } from '../i18n/gridLocales';
 import { ZERO, ONE, MOBILE_BREAKPOINT, DESKTOP_BREAKPOINT } from '../constants';
 import { evaluateFilterTree } from '../utils/filterTree.utils';
 
@@ -32,6 +33,7 @@ export function TableProvider<T extends RowData>({
   error = null,
   theme,
   translations,
+  locale,
   mobileBreakpoint = 'tablet',
   paginationConfig,
   filterConfig,
@@ -70,8 +72,8 @@ export function TableProvider<T extends RowData>({
   );
 
   const mergedTranslations = useMemo(
-    () => ({ ...DEFAULT_TRANSLATIONS, ...translations }),
-    [translations]
+    () => ({ ...DEFAULT_TRANSLATIONS, ...resolveGridLocale(locale), ...translations }),
+    [locale, translations]
   );
 
   const initialState: TableContextState<T> = {
@@ -110,6 +112,10 @@ export function TableProvider<T extends RowData>({
   useEffect(() => {
     dispatch({ type: TABLE_ACTION.SET_DATA, payload: data });
   }, [data]);
+
+  useEffect(() => {
+    dispatch({ type: TABLE_ACTION.SET_TRANSLATIONS, payload: mergedTranslations });
+  }, [mergedTranslations]);
 
   useEffect(() => {
     dispatch({ type: TABLE_ACTION.SET_LOADING, payload: loading });

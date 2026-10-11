@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <img src="docs/brand/badge-1-1-5.png" alt="1.1.6" height="28" />
+  <img src="docs/brand/badge-1-1-5.png" alt="1.1.7" height="28" />
 </p>
 
-**@forgedevstack/grid-table** v1.1.6 — A powerful, feature-rich data grid for React with 40+ features including **GridTableTheme**, **part tokens** (header / columns / col[n]), **pivot-lite**, **row group drop-zone**, **cell span**, **row height**, **cell comments**, **RTL**, **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + copy/paste + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
+**@forgedevstack/grid-table** v1.1.7 — A powerful, feature-rich data grid for React with 40+ features including **paging summary**, **en/es/he locale packs**, **responsive column collapse**, **column tool panel**, **selection-scoped status sums**, **sparklines**, **feature plugins**, **GridTableTheme**, **part tokens** (header / columns / col[n]), **pivot-lite**, **row group drop-zone**, **cell span**, **row height**, **cell comments**, **RTL**, **saved views**, **advanced filter builder**, **pinned row groups**, **column formulas**, **window virtualization**, **range selection + copy/paste + fill handle**, **touch swipe actions**, **infinite scroll**, cell editing, multi-format export, keyboard navigation, context menu, tree data, row reordering, frozen rows, undo/redo, print mode, and **server-driven (manual) pagination**. Zero-config SCSS styling. Part of [ForgeStack](https://forgedevstack.dev).
 
 ## Features
 

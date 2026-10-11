@@ -14,6 +14,7 @@ import type {
   FilterConfig,
   SortConfig,
 } from '../types';
+import type { GridLocaleId } from '../i18n/gridLocales';
 import { TABLE_ACTION } from './TableContext.constants';
 
 export interface TableContextState<T extends RowData = RowData> {
@@ -123,6 +124,7 @@ export interface TableProviderProps<T extends RowData = RowData> {
   error?: Error | string | null;
   theme?: Partial<Theme>;
   translations?: Partial<Translations>;
+  locale?: GridLocaleId;
   mobileBreakpoint?: Breakpoint;
   paginationConfig?: PaginationConfig;
   filterConfig?: FilterConfig;
@@ -159,4 +161,5 @@ export type TableReducerAction<T extends RowData = RowData> =
   | { type: typeof TABLE_ACTION.SET_ACTIVE_FILTER_COLUMN; payload: string | null }
   | { type: typeof TABLE_ACTION.SET_CURRENT_BREAKPOINT; payload: 'mobile' | 'tablet' | 'desktop' }
   | { type: typeof TABLE_ACTION.SET_MOBILE_DRAWER; payload: { show: boolean; content: 'filter' | 'sort' | 'columns' | null } }
-  | { type: typeof TABLE_ACTION.RESET; payload: Partial<TableContextState<T>> };
+  | { type: typeof TABLE_ACTION.RESET; payload: Partial<TableContextState<T>> }
+  | { type: typeof TABLE_ACTION.SET_TRANSLATIONS; payload: Translations };

@@ -44,16 +44,20 @@ export interface TranslationStrings {
       effects: { title: string; description: string };
       lazyLoad: { title: string; description: string };
     };
-    demoPreview: {
-      finance: string;
-      hr: string;
-      basic: string;
-      themeBuilder: string;
-    };
+    demoPreview: Record<string, string>;
     viewLive: string;
     ecosystemBanner: string;
     visitForgeStack: string;
     marqueeItems: string[];
+    staff: {
+      i18n: string;
+      renderers: string;
+      paging: string;
+      language: string;
+      multiSort: string;
+      selection: string;
+      search: string;
+    };
   };
 
   stats: {
@@ -227,7 +231,16 @@ export interface TranslationStrings {
     release114: string;
     release115: string;
     release116: string;
+    release117: string;
     touchGestures: string;
+  };
+
+  release117Demo: {
+    title: string;
+    description: string;
+    bullets: string[];
+    selectedSum: string;
+    toolPanel: string;
   };
 
   release116Demo: {

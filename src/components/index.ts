@@ -58,3 +58,12 @@ export type { RangeLiveRegionProps } from './RangeLiveRegion';
 export { CellComment } from './CellComment';
 export type { CellCommentProps } from './CellComment';
 
+export { Sparkline } from './Sparkline';
+export type { SparklineProps } from './Sparkline';
+
+export { ColumnToolPanel } from './ColumnToolPanel';
+export type { ColumnToolPanelProps } from './ColumnToolPanel';
+
+export { ResponsiveDetails } from './ResponsiveDetails';
+export type { ResponsiveDetailsProps } from './ResponsiveDetails';
+

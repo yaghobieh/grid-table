@@ -43,6 +43,9 @@ export { resolveCellComment, buildCellCommentKey } from './cellComments.utils';
 export { resolveColSpan, resolveRowSpan, isCellCoveredBySpan } from './cellSpan.utils';
 export { addRowGroupField, removeRowGroupField, isRowGroupDropZoneEnabled } from './rowGroupsDrop.utils';
 export { clampRowHeight, resolveDefaultRowHeight } from './rowHeight.utils';
+export { formatPaginationInfo } from './paginationInfo.utils';
+export { resolveCollapsedColumnIds, readColumnValue } from './responsiveColumns.utils';
+export { renderDetailValue } from './responsiveDetails.utils';
 export {
   mergeThemeTokens,
   themeOverrideToTokens,

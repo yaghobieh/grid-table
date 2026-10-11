@@ -1,4 +1,4 @@
-export const CURRENT_VERSION = '1.1.6';
+export const CURRENT_VERSION = '1.1.7';
 export const INITIAL_VERSION = '1.0.0';
 
 export const TOTAL_FEATURES = 40;

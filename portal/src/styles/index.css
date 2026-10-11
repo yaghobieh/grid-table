@@ -95,3 +95,126 @@ code, pre {
 .gt-home-demo-card {
   height: 100%;
 }
+
+.staff-hero {
+  width: 100%;
+  text-align: start;
+}
+
+.staff-hero-lang {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.staff-hero-lang button {
+  min-width: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: inherit;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+.staff-hero-lang button[aria-pressed='true'] {
+  background: var(--grid-accent);
+  color: #06210f;
+}
+
+.staff-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.staff-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: #334155;
+  color: #f8fafc;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.staff-pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.staff-ext {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home-actions > a {
+  display: flex;
+  min-width: 15.5rem;
+}
+
+.home-actions button {
+  width: 100%;
+  min-height: 3.25rem;
+  justify-content: center;
+}
+
+.staff-callouts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin-top: 8px;
+}
+
+.staff-callout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  color: var(--text-primary);
+}
+
+.staff-callout-arrow {
+  width: 72px;
+  height: 48px;
+}
+
+.staff-callout-label {
+  margin: 0;
+  font-family: 'Caveat', cursive;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.staff-callout:nth-child(3n + 2) {
+  align-items: center;
+}
+
+.staff-callout:nth-child(3n) {
+  align-items: flex-end;
+}
+
+@media (max-width: 800px) {
+  .home-actions > a {
+    min-width: 100%;
+  }
+
+  .staff-callouts {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-callout,
+  .staff-callout:nth-child(3n),
+  .staff-callout:nth-child(3n + 2) {
+    align-items: flex-start;
+  }
+}

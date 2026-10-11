@@ -5,6 +5,24 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.7] - 2026-10-11
+
+### Added
+
+- **Paging summary** — `Showing {from} to {to} of {total}` via `translations.info` or `paginationConfig.info`.
+- **Language packs** — `locale` accepts `en`, `es`, or `he` for the grid chrome.
+- **Responsive collapse** — `responsive` hides lower-priority columns under the breakpoint and lists them in the row expansion. Set `column.responsivePriority` (higher collapses first).
+- **Column tool panel** — `columnToolPanel` shows, hides, and pins columns from a side panel.
+- **Selection sums** — status bar aggregations accept `scope: 'selected'`.
+- **Sparklines** — `column.sparkline` draws a numeric array. `Sparkline` is exported.
+- **Plugins** — the `features` prop adds toolbar and status UI from a `GridFeature` object.
+
+### Portal
+
+- Home replaces the App.tsx sample with a staff grid, office pills, and six callouts.
+- `/demos/release-1-1-7`.
+- `CURRENT_VERSION` → 1.1.7 (en/es/he).
+
 ## [1.1.6] - 2026-09-10
 
 ### Added

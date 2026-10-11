@@ -20,4 +20,5 @@ export * from './rowHeight.const';
 export * from './density.const';
 export * from './rangeAnnounce.const';
 export * from './theme.const';
+export * from './responsive.const';
 

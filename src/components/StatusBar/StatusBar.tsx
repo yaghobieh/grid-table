@@ -13,6 +13,7 @@ export function StatusBar<T extends RowData>(props: StatusBarProps<T>): ReactNod
     filteredCount,
     selectedCount,
     columns,
+    selectedData = [],
     className = EMPTY_STRING,
     labels,
   } = props;
@@ -21,7 +22,8 @@ export function StatusBar<T extends RowData>(props: StatusBarProps<T>): ReactNod
   const aggregations = config.aggregations?.map(agg => {
     const col = columns.find(c => c.id === agg.columnId);
     if (!col) return null;
-    const value = computeAggregation(data, col, agg.type);
+    const source = agg.scope === 'selected' ? selectedData : data;
+    const value = computeAggregation(source, col, agg.type);
     const formatted = agg.format ? agg.format(value) : value.toLocaleString();
     const label = agg.label || `${agg.type.toUpperCase()} ${typeof col.header === 'string' ? col.header : col.id}`;
     return { label, formatted };

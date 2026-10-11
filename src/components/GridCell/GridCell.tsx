@@ -9,6 +9,7 @@ import { highlightMatch } from '@/utils';
 import { EditableCell } from '../EditableCell';
 import { EMPTY_STRING } from '@/constants';
 import { CellComment } from '../CellComment';
+import { Sparkline } from '../Sparkline';
 import { CELL_COMMENT_HAS_CLASS } from '@constants/cellComments.const';
 import { ONE } from '@constants/numbers.const';
 import { DATA_COL_ATTR, THEME_PART_COLUMN } from '@constants/theme.const';
@@ -166,6 +167,19 @@ export function GridCell<T extends RowData = RowData>({
   );
 
   const renderValueNode = (): ReactNode => {
+    if (column.sparkline && Array.isArray(value) && value.every((item) => typeof item === 'number')) {
+      const options = typeof column.sparkline === 'object' ? column.sparkline : {};
+      return (
+        <Sparkline
+          data={value as number[]}
+          width={options.width}
+          height={options.height}
+          color={options.color}
+          negativeColor={options.negativeColor}
+        />
+      );
+    }
+
     const valueNode = (
       <span ref={valueRef} className={valueClassName}>
         <Typography component="span" variant="body2" className="grid-cell-value-text">

@@ -107,6 +107,12 @@ export interface Translations {
   cellComment?: string;
   cellCommentSave?: string;
   cellCommentClear?: string;
+  info: string;
+  toolPanel: string;
+  pinLeft: string;
+  pinRight: string;
+  unpin: string;
+  responsiveDetails: string;
 }
 
 export interface ClassNames {

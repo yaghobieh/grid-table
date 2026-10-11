@@ -35,6 +35,27 @@ export interface ContextMenuConfig<T extends RowData = RowData> {
 // ---- Status Bar ----
 export type AggregationType = 'sum' | 'avg' | 'min' | 'max' | 'count';
 
+export interface GridFeatureApi<T extends RowData = RowData> {
+  data: T[];
+  selectedRows: T[];
+}
+
+export interface GridFeature<T extends RowData = RowData> {
+  id: string;
+  toolbar?: (api: GridFeatureApi<T>) => ReactNode;
+  status?: (api: GridFeatureApi<T>) => ReactNode;
+}
+
+export interface ResponsiveCollapseConfig {
+  enabled?: boolean;
+  breakpoint?: number;
+}
+
+export interface ColumnToolPanelConfig {
+  enabled?: boolean;
+  side?: 'left' | 'right';
+}
+
 export interface StatusBarConfig {
   enabled?: boolean;
   showRowCount?: boolean;
@@ -45,6 +66,7 @@ export interface StatusBarConfig {
     type: AggregationType;
     label?: string;
     format?: (value: number) => string;
+    scope?: 'all' | 'selected';
   }>;
   customContent?: ReactNode;
 }

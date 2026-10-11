@@ -41,6 +41,12 @@ export const DEFAULT_TRANSLATIONS = {
   cellComment: 'Cell comment',
   cellCommentSave: 'Save comment',
   cellCommentClear: 'Clear comment',
+  info: 'Showing {from} to {to} of {total}',
+  toolPanel: 'Columns',
+  pinLeft: 'Pin left',
+  pinRight: 'Pin right',
+  unpin: 'Unpin',
+  responsiveDetails: 'More columns',
 } as const;
 
 export const DEFAULT_THEME = {

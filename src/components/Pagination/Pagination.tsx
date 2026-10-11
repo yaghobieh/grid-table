@@ -4,6 +4,8 @@ import type { PaginationProps } from './Pagination.types';
 import { useTableContext } from '@/context';
 import { EMPTY_STRING, FIVE, ONE, ZERO } from '@/constants';
 import { getPaginationDerivedState } from './Pagination.utils';
+import { formatPaginationInfo } from '@/utils/paginationInfo.utils';
+import { DEFAULT_TRANSLATIONS } from '@constants/defaults.const';
 
 export function Pagination(props: PaginationProps): ReactNode {
   const {
@@ -103,7 +105,7 @@ export function Pagination(props: PaginationProps): ReactNode {
     >
       <div className="grid-pagination-info">
         <div className="grid-pagination-range">
-          {startItem}-{endItem} {translations.of} {totalItems}
+          {formatPaginationInfo(translations.info ?? DEFAULT_TRANSLATIONS.info, startItem, endItem, totalItems)}
         </div>
 
         <div className="grid-pagination-size">

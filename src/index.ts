@@ -24,6 +24,9 @@ export {
   GroupDropZone,
   RangeLiveRegion,
   CellComment,
+  Sparkline,
+  ColumnToolPanel,
+  ResponsiveDetails,
 } from './components';
 
 export { EditableCell } from './components/EditableCell';
@@ -47,6 +50,9 @@ export type {
   GroupDropZoneProps,
   RangeLiveRegionProps,
   CellCommentProps,
+  SparklineProps,
+  ColumnToolPanelProps,
+  ResponsiveDetailsProps,
 } from './components';
 
 // Context and Provider
@@ -126,6 +132,7 @@ export type {
   Styles,
   RenderFunction,
   ColumnDefinition,
+  SparklineColumnOptions,
   CellEditConfig,
   FilterOption,
   ColumnState,
@@ -214,7 +221,14 @@ export type {
   RowTransaction,
   CellRange,
   CellCoord,
+  GridFeature,
+  GridFeatureApi,
+  ResponsiveCollapseConfig,
+  ColumnToolPanelConfig,
 } from './types';
+
+export { GRID_LOCALES, GRID_LOCALE_IDS, resolveGridLocale } from './i18n/gridLocales';
+export type { GridLocaleId } from './i18n/gridLocales';
 
 // Constants
 export {
@@ -276,4 +290,6 @@ export {
   buildCellCommentKey,
   addRowGroupField,
   removeRowGroupField,
+  formatPaginationInfo,
+  resolveCollapsedColumnIds,
 } from './utils';

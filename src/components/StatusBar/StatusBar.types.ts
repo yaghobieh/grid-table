@@ -13,6 +13,7 @@ export interface StatusBarProps<T extends RowData = RowData> {
   filteredCount: number;
   selectedCount: number;
   columns: ColumnDefinition<T>[];
+  selectedData?: T[];
   className?: string;
   labels?: StatusBarLabels;
 }

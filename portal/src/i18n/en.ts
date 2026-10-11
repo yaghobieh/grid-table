@@ -16,7 +16,7 @@ export const en: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'GridTableTheme, header, columns, col[1] and col[4]',
+    badgeText: 'Paging summary, languages, sparklines, column panel',
     title: 'Grid Table',
     subtitle: 'The React Data Grid for ForgeStack',
     typewriterTexts: [
@@ -42,8 +42,8 @@ export const en: TranslationStrings = {
     forgeStackEcosystem: 'ForgeStack Ecosystem',
     worksWith: 'Part of the Full ForgeStack',
     showcaseTitle: 'See it play',
-    showcaseDescription: 'Theme the header, every column, or col[1] and col[4] — 1.1.6 in motion.',
-    trailerTitle: 'Grid Table 1.1.6',
+    showcaseDescription: 'A staff grid with office pills, paging, and a language pack — 1.1.7.',
+    trailerTitle: 'Grid Table 1.1.7',
     showcase: {
       finance: { title: 'Finance Mode', description: 'Real-time tickers, sparklines, live P&L — data that never sleeps.' },
       hr: { title: 'HR & Tree Data', description: 'Org charts, expand/collapse, hierarchy — visualize your organization.' },
@@ -55,12 +55,40 @@ export const en: TranslationStrings = {
       hr: 'CEO → VP Eng → Sr. Dev → Jr. Dev',
       basic: 'Sort · Filter · Paginate · Select · Drag',
       themeBuilder: '🎨  bg · accent · border · radius',
+      'theme-playground': 'Colors · type · spacing · live grid',
+      'release-1-1-7': 'Locale · paging · sparkline · column panel',
+      'release-1-1-6': 'Header · columns · col[1] · col[4]',
+      'release-1-1-5': 'Pivot · comments · row height · span',
+      'release-1-1-4': 'Autosize · chips · find · fill series',
+      'touch-gestures': 'Swipe actions · long-press menu',
+      'enterprise-grid': 'Range · copy · fill · export scope',
+      'infinite-scroll': 'Blocks of rows · total count',
+      features: 'Selection · status · export · frozen row',
+      'pinned-row-groups': 'Group headers · sum · avg footers',
+      'column-formula-engine': 'profit = revenue - cost',
+      'saved-views': 'Sort · filters · widths · page',
+      'advanced-filter-builder': 'AND / OR groups',
+      accessibility: 'Arrows · Enter · Escape · live region',
+      'master-detail': 'Expand a row · nested lines',
+      'persisted-state': 'Page restored from storage',
+      'server-driven': 'One page in · total count out',
+      'column-grouping': 'Colspan headers',
+      virtualization: 'Windowed rows · lazy batches',
     },
     viewLive: 'View Live →',
     ecosystemBanner: 'Fully compatible with the entire ForgeStack ecosystem.',
     visitForgeStack: 'Visit ForgeStack',
+    staff: {
+      i18n: 'Fully internationalisable',
+      renderers: 'Easy to use renderers',
+      paging: 'Super fast paging',
+      language: 'Language',
+      multiSort: 'Multi-column ordering',
+      selection: 'Select any rows',
+      search: 'Search every column',
+    },
     marqueeItems: [
-      '1.1.6 — GridTableTheme, header, columns, col[1] and col[4]',
+      '1.1.7 — languages, paging summary, sparklines, column panel',
       'Pinned row groups · formula engine · saved views · advanced filter builder',
       'lazyLoad batches for long scroll regions',
       'MIT · @forgedevstack/grid-table · TypeScript-first',
@@ -137,13 +165,17 @@ export const en: TranslationStrings = {
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
     },
+    'release-1-1-7': {
+      title: 'Languages, paging, and panels',
+      description: 'Language packs, paging summary, responsive collapse, column panel, selection sums, sparklines, and plugins.',
+    },
     'release-1-1-6': {
-      title: '1.1.6 theme',
+      title: 'Header and column colors',
       description:
         'Standalone GridTableTheme and theme on GridTable — header, all columns, and individual columns such as col[1, 4].',
     },
     'release-1-1-5': {
-      title: '1.1.5 features',
+      title: 'Pivot, comments, and row height',
       description:
         'Pivot-lite, group drop-zone, cell comments, row height, cell span, Bear density, RTL, and range/fill announcements.',
     },
@@ -152,7 +184,7 @@ export const en: TranslationStrings = {
       description: 'Swipe actions and long-press context menu, plus how to simulate them on a desktop pointer.',
     },
     'release-1-1-4': {
-      title: '1.1.4 features',
+      title: 'Autosize, chips, and filters',
       description:
         'Divider autosize, autosize-all, size-to-fit, filter chips, column menu, column chooser, floating filters, cut, fill series, find, and set-filter search.',
     },
@@ -262,7 +294,7 @@ export const en: TranslationStrings = {
     relatedDescription: 'Shipped 1.1.x surfaces live on their own routes — open them instead of treating them as “planned”.',
     relatedLinks: {
       'release-1-1-4': {
-        title: '1.1.4 features',
+        title: 'Autosize, chips, and filters',
         summary: 'Autosize, chips, column menu/chooser, floating filters, cut, fill series, find, set-filter search.',
       },
       'enterprise-grid': {
@@ -304,7 +336,7 @@ export const en: TranslationStrings = {
   },
 
   release114Demo: {
-    title: '1.1.4 feature lab',
+    title: 'Autosize, chips, and filters',
     description:
       'Local package link — try the new 1.1.4 surfaces on this grid. Portal resolves @forgedevstack/grid-table from the library source.',
     bullets: [
@@ -355,8 +387,22 @@ export const en: TranslationStrings = {
     ],
   },
 
+  release117Demo: {
+    title: 'Languages, paging, and panels',
+    description: 'Language packs, a paging sentence, columns that collapse on a narrow screen, a column panel, selection sums, sparklines, and a plugin slot.',
+    bullets: [
+      'locale="es" or locale="he" replaces the grid chrome, including Showing {from} to {to} of {total}.',
+      'responsive hides lower-priority columns and lists them under the row.',
+      'columnToolPanel pins and shows columns from a side panel.',
+      'statusBar aggregations can use scope: "selected".',
+      'column.sparkline draws a numeric array. The features prop adds toolbar or status UI.',
+    ],
+    selectedSum: 'Selected salary',
+    toolPanel: 'Column panel',
+  },
+
   release116Demo: {
-    title: '1.1.6 theme',
+    title: 'Header and column colors',
     description:
       'Grid look is standalone. Wrap tables in GridTableTheme or pass theme on GridTable. Header, all columns, and col[1] / col[4] use their own tokens.',
     bullets: [
@@ -368,7 +414,7 @@ export const en: TranslationStrings = {
   },
 
   release115Demo: {
-    title: '1.1.5 features',
+    title: 'Pivot, comments, and row height',
     description:
       'Group by dropping a header, pivot client-side, leave cell notes, grow row height, and hear range/fill announcements. Switch locale to Hebrew to check RTL.',
     bullets: [
@@ -420,9 +466,10 @@ export const en: TranslationStrings = {
     themePlayground: 'Copy — integration sketch',
     enterpriseGrid: 'Copy — enterprise grid (range, fill, exportScope)',
     infiniteScroll: 'Copy — infiniteScroll block loading',
-    release114: 'Copy — 1.1.4 features (autosize, chips, cut, series)',
-    release115: 'Copy — 1.1.5 features (pivot, groups, comments)',
-    release116: 'Copy — 1.1.6 theme (GridTableTheme, header, col[1, 4])',
+    release114: 'Copy — Autosize, chips, and filters (autosize, chips, cut, series)',
+    release115: 'Copy — Pivot, comments, and row height (pivot, groups, comments)',
+    release116: 'Copy — Header and column colors (GridTableTheme, header, col[1, 4])',
+    release117: 'Copy — locale, panel, sparkline, features',
     touchGestures: 'Copy — touch gestures',
   },
 
@@ -433,11 +480,11 @@ export const en: TranslationStrings = {
     whatsNew: "What's in",
     seeAllFeatures: 'See all features in action',
     releaseHighlights: [
-      'GridTableTheme provider — grid colors no longer wrap BearProvider',
-      'theme on GridTable accepts header, columns, and col[n] part tokens',
-      '1-based column tokens: col[1] and col[4] style a single visible column',
-      'themeOverride.colors still maps to --gt-* CSS variables',
-      'Live demo /demos/release-1-1-6 and theming docs',
+      'Paging summary and en / es / he language packs',
+      'Responsive collapse for lower-priority columns',
+      'Column tool panel with show, hide, and pin',
+      'Selection sums, sparkline cells, and feature plugins',
+      'Home staff table and /demos/release-1-1-7',
     ],
   },
 
@@ -496,6 +543,17 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.7': {
+        highlights: [
+          'Paging summary: Showing {from} to {to} of {total}',
+          'Language packs for en, es, and he via the locale prop',
+          'Responsive collapse for lower-priority columns',
+          'Column tool panel with show, hide, and pin',
+          'Status bar sums can run on the selected rows',
+          'Sparkline cells and feature plugins',
+          'Home staff table and /demos/release-1-1-7',
+        ],
+      },
       '1.1.6': {
         highlights: [
           'GridTableTheme provider — grid colors no longer wrap BearProvider',

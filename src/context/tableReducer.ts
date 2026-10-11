@@ -50,6 +50,8 @@ export function tableReducer<T extends RowData>(
       };
     case TABLE_ACTION.RESET:
       return { ...state, ...action.payload };
+    case TABLE_ACTION.SET_TRANSLATIONS:
+      return { ...state, translations: action.payload };
     default:
       return state;
   }

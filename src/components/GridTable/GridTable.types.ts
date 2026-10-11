@@ -28,9 +28,9 @@ import type {
   RowHeightConfig,
   CellCommentsConfig,
   RowGroupDropZoneConfig,
-  RowTransaction,
-  CellRange,
-  CellCoord,
+  ResponsiveCollapseConfig,
+  ColumnToolPanelConfig,
+  GridFeature,
   GridTableRef,
   KeyboardNavConfig,
   LazyLoadConfig,
@@ -51,6 +51,7 @@ import type {
   UndoRedoConfig,
 } from '@/types';
 import type { SubCellExpandTrigger } from '@/context/TableContext.types';
+import type { GridLocaleId } from '@/i18n/gridLocales';
 
 export interface GridTableComponentProps<T extends RowData = RowData> {
   data: T[];
@@ -156,5 +157,9 @@ export interface GridTableComponentProps<T extends RowData = RowData> {
   cellComments?: CellCommentsConfig;
   rowGroupDropZone?: boolean | RowGroupDropZoneConfig;
   onRowGroupsChange?: (groups: RowGroupConfig[]) => void;
+  locale?: GridLocaleId;
+  responsive?: boolean | ResponsiveCollapseConfig;
+  columnToolPanel?: boolean | ColumnToolPanelConfig;
+  features?: GridFeature<T>[];
 }
 

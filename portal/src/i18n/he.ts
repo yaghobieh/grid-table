@@ -16,7 +16,7 @@ export const he: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
+    badgeText: 'סיכום עמודים, שפות, ספארקליין, פאנל עמודות',
     title: 'Grid Table',
     subtitle: 'גריד הנתונים של React ל־ForgeStack',
     typewriterTexts: [
@@ -42,8 +42,8 @@ export const he: TranslationStrings = {
     forgeStackEcosystem: 'אקוסיסטם ForgeStack',
     worksWith: 'חלק מ־ForgeStack המלא',
     showcaseTitle: 'תראו',
-    showcaseDescription: 'ערכת נושא לכותרת, לכל העמודות או ל-col[1] ו-col[4] — 1.1.6 בתנועה.',
-    trailerTitle: 'Grid Table 1.1.6',
+    showcaseDescription: 'טבלת צוות עם משרדים, עימוד וחבילת שפה — 1.1.7.',
+    trailerTitle: 'Grid Table 1.1.7',
     showcase: {
       finance: { title: 'מצב פיננסי', description: 'מחירים בזמן אמת, גרפים קטנים, P&L חי.' },
       hr: { title: 'HR ונתוני עץ', description: 'תרשימי ארגון, הרחבה/כיווץ, היררכיה.' },
@@ -55,12 +55,40 @@ export const he: TranslationStrings = {
       hr: 'מנכ״ל ← סמנכ״ל הנדסה ← מפתח בכיר',
       basic: 'מיון · סינון · עימוד · בחירה · גרירה',
       themeBuilder: '🎨  רקע · הדגשה · גבול · רדיוס',
+      'theme-playground': 'צבע · גופן · מרווח · גריד חי',
+      'release-1-1-7': 'שפה · עימוד · sparkline · פאנל',
+      'release-1-1-6': 'כותרת · עמודות · col[1] · col[4]',
+      'release-1-1-5': 'Pivot · הערות · גובה · span',
+      'release-1-1-4': 'התאמה · צ׳יפים · חיפוש · סדרה',
+      'touch-gestures': 'החלקה · לחיצה ארוכה',
+      'enterprise-grid': 'טווח · העתקה · מילוי · ייצוא',
+      'infinite-scroll': 'בלוקי שורות · סך הכל',
+      features: 'בחירה · סטטוס · ייצוא · שורה קבועה',
+      'pinned-row-groups': 'קבוצות · סכום · ממוצע',
+      'column-formula-engine': 'profit = revenue - cost',
+      'saved-views': 'מיון · סינון · רוחב · עמוד',
+      'advanced-filter-builder': 'קבוצות AND / OR',
+      accessibility: 'חצים · Enter · Escape',
+      'master-detail': 'הרחבת שורה · שורות פנימיות',
+      'persisted-state': 'עמוד שנשמר',
+      'server-driven': 'עמוד אחד · סך מהשרת',
+      'column-grouping': 'כותרות colspan',
+      virtualization: 'חלון שורות · אצוות',
     },
     viewLive: 'תצוגה חיה →',
     ecosystemBanner: 'תואם במלואו לאקוסיסטם ForgeStack.',
     visitForgeStack: 'לאתר ForgeStack',
+    staff: {
+      i18n: 'ניתן לתרגום מלא',
+      renderers: 'תצוגות תא פשוטות',
+      paging: 'עימוד מהיר',
+      language: 'שפה',
+      multiSort: 'מיון לפי כמה עמודות',
+      selection: 'בחירת שורות',
+      search: 'חיפוש בכל עמודה',
+    },
     marqueeItems: [
-      '1.1.6 — GridTableTheme, כותרת, עמודות, col[1] ו-col[4]',
+      '1.1.7 — שפות, סיכום עימוד, ספארקליין, פאנל עמודות',
       'טבלה עם גלילה ניידת כברירת מחדל · פריסת כרטיסים אופציונלית',
       'lazyLoad באצוות לגלילות ארוכות',
       'MIT · @forgedevstack/grid-table · TypeScript קודם',
@@ -116,13 +144,17 @@ export const he: TranslationStrings = {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
     },
+    'release-1-1-7': {
+      title: 'שפות, עימוד ופאנלים',
+      description: 'שפות, סיכום עימוד, עמודות שנעלמות במסך צר, פאנל, סכומי בחירה, ספארקליין ותוספים.',
+    },
     'release-1-1-6': {
-      title: 'ערכת נושא 1.1.6',
+      title: 'צבעי כותרת ועמודות',
       description:
         'GridTableTheme עצמאי ו-theme על GridTable — כותרת, כל העמודות ועמודות בודדות כמו col[1, 4].',
     },
     'release-1-1-5': {
-      title: 'יכולות 1.1.5',
+      title: 'פיבוט, הערות וגובה שורה',
       description:
         'Pivot, אזור קיבוץ, הערות תא, גובה שורה, span, צפיפות Bear, RTL והכרזות טווח.',
     },
@@ -131,7 +163,7 @@ export const he: TranslationStrings = {
       description: 'החלקה לפעולות ולחיצה ארוכה לתפריט, כולל סימולציה במחשב.',
     },
     'release-1-1-4': {
-      title: 'תכונות 1.1.4',
+      title: 'התאמת רוחב, צ׳יפים וסינון',
       description: 'Autosize, שיבולת, תפריט עמודה, בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
     },
     'enterprise-grid': {
@@ -238,7 +270,7 @@ export const he: TranslationStrings = {
     relatedDescription: 'תכונות שכבר שוחררו ב־1.1.x זמינות בנתיבים נפרדים — לא כ"מתוכנן".',
     relatedLinks: {
       'release-1-1-4': {
-        title: 'תכונות 1.1.4',
+        title: 'התאמת רוחב, צ׳יפים וסינון',
         summary: 'Autosize, שיבולת, תפריט/בורר עמודות, מסננים צפים, גזירה, סדרה וחיפוש.',
       },
       'enterprise-grid': {
@@ -280,7 +312,7 @@ export const he: TranslationStrings = {
   },
 
   release114Demo: {
-    title: 'מעבדת 1.1.4',
+    title: 'התאמת רוחב, צ׳יפים וסינון',
     description: 'קישור מקומי — בדקו את משטחי 1.1.4. הפורטל טוען את הספרייה מהמקור.',
     bullets: [
       'דאבל־קליק על מפריד, או Autosize all / Size to fit בסרגל.',
@@ -329,8 +361,22 @@ export const he: TranslationStrings = {
     ],
   },
 
+  release117Demo: {
+    title: 'שפות, עימוד ופאנלים',
+    description: 'חבילות שפה, משפט עימוד, עמודות שמתקפלות במסך צר, פאנל צד, סכומי בחירה, ספארקליין ותוסף.',
+    bullets: [
+      'locale="es" או locale="he" מחליף את טקסט הגריד, כולל מציג {from} עד {to} מתוך {total}.',
+      'responsive מסתיר עמודות בעדיפות נמוכה ומציג אותן מתחת לשורה.',
+      'columnToolPanel מציג, מסתיר ונועץ עמודות.',
+      'אגרגציות ב-statusBar יכולות להשתמש ב-scope: "selected".',
+      'column.sparkline מצייר מערך מספרים. prop features מוסיף ממשק לסרגל או לסטטוס.',
+    ],
+    selectedSum: 'שכר נבחר',
+    toolPanel: 'פאנל עמודות',
+  },
+
   release116Demo: {
-    title: 'ערכת נושא 1.1.6',
+    title: 'צבעי כותרת ועמודות',
     description:
       'מראה הגריד עצמאי. עטפו טבלאות ב-GridTableTheme או העבירו theme ב-GridTable. כותרת, כל העמודות ו-col[1] / col[4] עם טוקנים משלהם.',
     bullets: [
@@ -342,7 +388,7 @@ export const he: TranslationStrings = {
   },
 
   release115Demo: {
-    title: 'יכולות 1.1.5',
+    title: 'פיבוט, הערות וגובה שורה',
     description:
       'קבצו בגרירת כותרת, pivot בצד הלקוח, הערות תא וגובה שורה. החליפו לעברית לבדיקת RTL.',
     bullets: [
@@ -394,9 +440,10 @@ export const he: TranslationStrings = {
     themePlayground: 'העתקה — שלד אינטגרציה',
     enterpriseGrid: 'העתקה — גריד ארגוני (טווח, fill, exportScope)',
     infiniteScroll: 'העתקה — infiniteScroll לפי בלוקים',
-    release114: 'העתקה — תכונות 1.1.4',
+    release114: 'העתקה — התאמת רוחב, צ׳יפים וסינון',
     release115: 'העתקה — תכונות 1.1.5',
-    release116: 'העתקה — ערכת נושא 1.1.6 (GridTableTheme, header, col[1, 4])',
+    release116: 'העתקה — צבעי כותרת ועמודות (GridTableTheme, header, col[1, 4])',
+    release117: 'העתקה — יכולות 1.1.7 (locale, פאנל, sparkline, תוסף)',
     touchGestures: 'העתקה — מחוות מגע',
   },
 
@@ -407,11 +454,11 @@ export const he: TranslationStrings = {
     whatsNew: 'מה חדש ב־',
     seeAllFeatures: 'לראות את כל התכונות בפעולה',
     releaseHighlights: [
-      'ספק GridTableTheme — צבעי הגריד כבר לא עוטפים BearProvider',
-      'theme ב-GridTable מקבל header, columns וטוקני col[n]',
-      'טוקנים 1-based: col[1] ו-col[4] מעצבים עמודה נראית אחת',
-      'themeOverride.colors עדיין ממופה למשתני --gt-*',
-      'דמו /demos/release-1-1-6 ותיעוד ערכת נושא',
+      'סיכום עימוד וחבילות שפה en / es / he',
+      'עמודות בעדיפות נמוכה מתקפלות במסך צר',
+      'פאנל עמודות להצגה, הסתרה ונעיצה',
+      'סכומי בחירה, ספארקליין ותוספי features',
+      'טבלת צוות בדף הבית ו-/demos/release-1-1-7',
     ],
   },
 
@@ -469,6 +516,17 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.7': {
+        highlights: [
+          'סיכום עימוד: מציג {from} עד {to} מתוך {total}',
+          'חבילות שפה en, es ו-he דרך prop locale',
+          'עמודות בעדיפות נמוכה מתקפלות במסך צר',
+          'פאנל עמודות להצגה, הסתרה ונעיצה',
+          'סכומי שורת המצב יכולים לרוץ על השורות שנבחרו',
+          'תאי sparkline ותוספי features',
+          'טבלת צוות בדף הבית ו-/demos/release-1-1-7',
+        ],
+      },
       '1.1.6': {
         highlights: [
           'ספק GridTableTheme — צבעי הגריד כבר לא עוטפים BearProvider',

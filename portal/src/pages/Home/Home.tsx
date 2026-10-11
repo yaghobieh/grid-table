@@ -8,7 +8,6 @@ import {
   Card,
   CardBody,
   Badge,
-  CodeBlock,
   BearIcons,
   Carousel,
 } from '@forgedevstack/bear';
@@ -18,7 +17,6 @@ import { HomeSectionHashTitle } from '@/components/HomeSectionHashTitle';
 import {
   STATS,
   FEATURES,
-  QUICK_START_CODE,
 } from '@/constants';
 import { HERO_BRAND_MARK_PX } from '@/constants/brand.const';
 import { CURRENT_VERSION } from '@/constants/numbers.const';
@@ -31,7 +29,7 @@ import {
   DEMOS_SECTION_ID,
   FEATURES_SECTION_ID,
 } from './Home.const';
-import { HomeDemosRail, HomeTrailer } from './helpers';
+import { HomeDemosRail, HomeTrailer, StaffHero } from './helpers';
 
 export const Home: FC = () => {
   const { t } = useI18n();
@@ -98,7 +96,7 @@ export const Home: FC = () => {
             ))}
           </Flex>
 
-          <Flex justify="center" gap={4} wrap="wrap" className="mb-12">
+          <Flex justify="center" gap={4} wrap="wrap" className="home-actions mb-12">
             <Link to="/demos">
               <Button variant="grid" size="lg" spotlight leftIcon={<BearIcons.PlayIcon size="sm" className="mr-2" />} style={{ gap: '0.5rem' }}>
                 {t.home.viewDemos}
@@ -117,17 +115,9 @@ export const Home: FC = () => {
           </Flex>
 
           {/* Quick start code */}
-          <Flex justify="center" className="mb-16">
-            <div className="w-full max-w-2xl text-left">
-              <CodeBlock
-                code={QUICK_START_CODE}
-                title="App.tsx"
-                language="typescript"
-                copyable
-                showLineNumbers
-              />
-            </div>
-          </Flex>
+          <div className="mb-16 text-left">
+            <StaffHero />
+          </div>
         </Container>
       </section>
 

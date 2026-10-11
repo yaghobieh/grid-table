@@ -10,6 +10,13 @@ export interface CellEditConfig<T = unknown> {
   placeholder?: string;
 }
 
+export interface SparklineColumnOptions {
+  width?: number;
+  height?: number;
+  color?: string;
+  negativeColor?: string;
+}
+
 export interface ColumnDefinition<T = unknown> {
   id: string;
   accessor: string | ((row: T) => unknown);
@@ -46,6 +53,8 @@ export interface ColumnDefinition<T = unknown> {
   editable?: boolean | CellEditConfig<T>;
   formula?: string;
   groupId?: string;
+  responsivePriority?: number;
+  sparkline?: boolean | SparklineColumnOptions;
 }
 
 export interface FilterOption {

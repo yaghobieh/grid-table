@@ -16,7 +16,7 @@ export const es: TranslationStrings = {
   },
 
   home: {
-    badgeText: 'GridTableTheme, encabezado, columnas, col[1] y col[4]',
+    badgeText: 'Resumen de páginas, idiomas, sparklines, panel de columnas',
     title: 'Grid Table',
     subtitle: 'El Data Grid de React para ForgeStack',
     typewriterTexts: [
@@ -42,8 +42,8 @@ export const es: TranslationStrings = {
     forgeStackEcosystem: 'Ecosistema ForgeStack',
     worksWith: 'Parte del ForgeStack Completo',
     showcaseTitle: 'Míralo',
-    showcaseDescription: 'Tema el encabezado, todas las columnas o col[1] y col[4] — 1.1.6 en movimiento.',
-    trailerTitle: 'Grid Table 1.1.6',
+    showcaseDescription: 'Una tabla de personal con oficinas, paginación y un paquete de idioma — 1.1.7.',
+    trailerTitle: 'Grid Table 1.1.7',
     showcase: {
       finance: { title: 'Modo Finanzas', description: 'Cotizaciones en tiempo real, gráficos, P&L en vivo — datos que nunca duermen.' },
       hr: { title: 'RRHH y Datos Jerárquicos', description: 'Organigramas, expandir/contraer, jerarquía — visualiza tu organización.' },
@@ -55,12 +55,40 @@ export const es: TranslationStrings = {
       hr: 'CEO → VP Ing → Sr. Dev → Jr. Dev',
       basic: 'Ordenar · Filtrar · Paginar · Seleccionar · Arrastrar',
       themeBuilder: '🎨  fondo · acento · borde · radio',
+      'theme-playground': 'Color · tipo · espacio · grid en vivo',
+      'release-1-1-7': 'Idioma · páginas · sparkline · panel',
+      'release-1-1-6': 'Encabezado · columnas · col[1] · col[4]',
+      'release-1-1-5': 'Pivot · comentarios · altura · span',
+      'release-1-1-4': 'Autosize · chips · buscar · series',
+      'touch-gestures': 'Deslizar · pulsación larga',
+      'enterprise-grid': 'Rango · copiar · fill · exportar',
+      'infinite-scroll': 'Bloques de filas · total',
+      features: 'Selección · estado · exportar · fila fija',
+      'pinned-row-groups': 'Grupos · suma · promedio',
+      'column-formula-engine': 'profit = revenue - cost',
+      'saved-views': 'Orden · filtros · anchos · página',
+      'advanced-filter-builder': 'Grupos AND / OR',
+      accessibility: 'Flechas · Enter · Escape',
+      'master-detail': 'Expandir fila · líneas anidadas',
+      'persisted-state': 'Página guardada',
+      'server-driven': 'Un página · total en el servidor',
+      'column-grouping': 'Cabeceras colspan',
+      virtualization: 'Filas en ventana · lotes',
     },
     viewLive: 'Ver en Vivo →',
     ecosystemBanner: 'Totalmente compatible con todo el ecosistema ForgeStack.',
     visitForgeStack: 'Visitar ForgeStack',
+    staff: {
+      i18n: 'Totalmente internacionalizable',
+      renderers: 'Renderizadores fáciles',
+      paging: 'Paginación muy rápida',
+      language: 'Idioma',
+      multiSort: 'Orden por varias columnas',
+      selection: 'Selecciona filas',
+      search: 'Busca en cada columna',
+    },
     marqueeItems: [
-      '1.1.6 — GridTableTheme, encabezado, columnas, col[1] y col[4]',
+      '1.1.7 — idiomas, resumen de páginas, sparklines, panel de columnas',
       'Tabla con scroll móvil por defecto · apilado opcional',
       'lazyLoad por lotes en regiones largas',
       'MIT · @forgedevstack/grid-table · TypeScript primero',
@@ -120,13 +148,17 @@ export const es: TranslationStrings = {
       description:
         'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
     },
+    'release-1-1-7': {
+      title: 'Idiomas, páginas y paneles',
+      description: 'Idiomas, resumen de páginas, columnas que se pliegan, panel, sumas de selección, sparklines y plugins.',
+    },
     'release-1-1-6': {
-      title: 'Tema 1.1.6',
+      title: 'Colores de cabecera y columnas',
       description:
         'GridTableTheme independiente y theme en GridTable — encabezado, todas las columnas y columnas sueltas como col[1, 4].',
     },
     'release-1-1-5': {
-      title: 'Funciones 1.1.5',
+      title: 'Pivot, comentarios y altura',
       description:
         'Pivot-lite, zona de agrupación, comentarios, altura de fila, span, densidad Bear, RTL y anuncios de rango.',
     },
@@ -135,7 +167,7 @@ export const es: TranslationStrings = {
       description: 'Acciones al deslizar y menú con pulsación larga, más cómo simularlos en escritorio.',
     },
         'release-1-1-4': {
-      title: 'Novedades 1.1.4',
+      title: 'Autosize, chips y filtros',
       description:
         'Autosize del divisor, autosize-all, size-to-fit, chips de filtro, menú de columna, selector, filtros flotantes, cortar, series y búsqueda.',
     },
@@ -245,7 +277,7 @@ export const es: TranslationStrings = {
     relatedDescription: 'Las superficies 1.1.x ya enviadas tienen rutas propias — ábrelas en lugar de tratarlas como “planificadas”.',
     relatedLinks: {
       'release-1-1-4': {
-        title: 'Novedades 1.1.4',
+        title: 'Autosize, chips y filtros',
         summary: 'Autosize, chips, menú/selector de columnas, filtros flotantes, cortar, series y búsqueda.',
       },
       'enterprise-grid': {
@@ -287,7 +319,7 @@ export const es: TranslationStrings = {
   },
 
   release114Demo: {
-    title: 'Laboratorio 1.1.4',
+    title: 'Autosize, chips y filtros',
     description:
       'Paquete local — prueba las superficies 1.1.4. El portal resuelve @forgedevstack/grid-table desde el código fuente.',
     bullets: [
@@ -337,8 +369,22 @@ export const es: TranslationStrings = {
     ],
   },
 
+  release117Demo: {
+    title: 'Idiomas, páginas y paneles',
+    description: 'Paquetes de idioma, frase de paginación, columnas que se ocultan en pantallas estrechas, panel lateral, sumas de la selección, sparklines y un plugin.',
+    bullets: [
+      'locale="es" o locale="he" cambia los textos del grid, incluido Mostrando {from} a {to} de {total}.',
+      'responsive oculta columnas de menor prioridad y las lista bajo la fila.',
+      'columnToolPanel muestra, oculta y fija columnas.',
+      'Las agregaciones del statusBar pueden usar scope: "selected".',
+      'column.sparkline dibuja un array numérico. La prop features añade UI de barra o estado.',
+    ],
+    selectedSum: 'Salario seleccionado',
+    toolPanel: 'Panel de columnas',
+  },
+
   release116Demo: {
-    title: 'Tema 1.1.6',
+    title: 'Colores de cabecera y columnas',
     description:
       'El aspecto del grid es independiente. Envuelve tablas con GridTableTheme o pasa theme en GridTable. El encabezado, todas las columnas y col[1] / col[4] tienen tokens propios.',
     bullets: [
@@ -350,7 +396,7 @@ export const es: TranslationStrings = {
   },
 
   release115Demo: {
-    title: 'Funciones 1.1.5',
+    title: 'Pivot, comentarios y altura',
     description:
       'Agrupa soltando un encabezado, pivota en el cliente, deja notas y escucha el anuncio de rango. Prueba hebreo para RTL.',
     bullets: [
@@ -406,6 +452,7 @@ export const es: TranslationStrings = {
     release114: 'Copiar — novedades 1.1.4 (autosize, chips, cortar, series)',
     release115: 'Copiar — novedades 1.1.5',
     release116: 'Copiar — tema 1.1.6 (GridTableTheme, header, col[1, 4])',
+    release117: 'Copiar — funciones 1.1.7 (locale, panel, sparkline, plugin)',
     touchGestures: 'Copiar — gestos táctiles',
   },
 
@@ -416,11 +463,11 @@ export const es: TranslationStrings = {
     whatsNew: 'Novedades de',
     seeAllFeatures: 'Ver todas las funciones en acción',
     releaseHighlights: [
-      'Provider GridTableTheme — el color del grid ya no envuelve BearProvider',
-      'theme en GridTable acepta header, columns y tokens col[n]',
-      'Tokens 1-based: col[1] y col[4] estilizan una columna visible',
-      'themeOverride.colors sigue mapeando a variables --gt-*',
-      'Demo /demos/release-1-1-6 y docs de theming',
+      'Resumen de páginas y paquetes de idioma en / es / he',
+      'Columnas de menor prioridad se pliegan en pantallas estrechas',
+      'Panel de columnas para mostrar, ocultar y fijar',
+      'Sumas de selección, sparklines y plugins de features',
+      'Tabla de personal en inicio y /demos/release-1-1-7',
     ],
   },
 
@@ -478,6 +525,17 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.7': {
+        highlights: [
+          'Resumen de paginación: Mostrando {from} a {to} de {total}',
+          'Paquetes de idioma en, es y he con la prop locale',
+          'Columnas de menor prioridad se pliegan en pantallas estrechas',
+          'Panel de columnas para mostrar, ocultar y fijar',
+          'Las sumas de la barra de estado pueden usar las filas seleccionadas',
+          'Celdas sparkline y plugins de features',
+          'Tabla de personal en inicio y /demos/release-1-1-7',
+        ],
+      },
       '1.1.6': {
         highlights: [
           'Provider GridTableTheme — el color del grid ya no envuelve BearProvider',

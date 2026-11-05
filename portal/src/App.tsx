@@ -21,6 +21,7 @@ import { Release114Demo } from './pages/Release114Demo';
 import { Release115Demo } from './pages/Release115Demo';
 import { Release116Demo } from './pages/Release116Demo';
 import { Release117Demo } from './pages/Release117Demo';
+import { Release118Demo } from './pages/Release118Demo';
 import { TouchGesturesDemo } from './pages/TouchGesturesDemo';
 import { DemosIndex } from './pages/DemosIndex';
 import { ThemeBuilder } from './pages/ThemeBuilder';
@@ -39,6 +40,7 @@ const routes = [
   { path: '/demos/enterprise-grid', name: 'demos-enterprise-grid', component: EnterpriseGridDemo },
   { path: '/demos/release-1-1-4', name: 'demos-release-1-1-4', component: Release114Demo },
   { path: '/demos/release-1-1-5', name: 'demos-release-1-1-5', component: Release115Demo },
+  { path: '/demos/release-1-1-8', name: 'demos-release-1-1-8', component: Release118Demo },
   { path: '/demos/release-1-1-7', name: 'demos-release-1-1-7', component: Release117Demo },
   { path: '/demos/release-1-1-6', name: 'demos-release-1-1-6', component: Release116Demo },
   { path: '/demos/touch-gestures', name: 'demos-touch-gestures', component: TouchGesturesDemo },

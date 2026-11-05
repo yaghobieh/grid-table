@@ -18,6 +18,7 @@ export const FOOTER_LINKS: FooterLink[] = [
 ];
 
 export const VERSIONS: VersionInfo[] = [
+  { version: '1.1.8', date: '2026-11-05' },
   { version: '1.1.7', date: '2026-10-11' },
   { version: '1.1.6', date: '2026-09-10' },
   { version: '1.1.5', date: '2026-09-04' },
@@ -35,7 +36,8 @@ export const VERSIONS: VersionInfo[] = [
 ];
 
 export const DEMOS: DemoMeta[] = [
-  { id: 'release-1-1-7', icon: 'SparklesIcon', path: '/demos/release-1-1-7', tag: 'New' },
+  { id: 'release-1-1-8', icon: 'SparklesIcon', path: '/demos/release-1-1-8', tag: 'New' },
+  { id: 'release-1-1-7', icon: 'SparklesIcon', path: '/demos/release-1-1-7' },
   { id: 'release-1-1-6', icon: 'PaletteIcon', path: '/demos/release-1-1-6' },
   { id: 'release-1-1-5', icon: 'SparklesIcon', path: '/demos/release-1-1-5' },
   { id: 'touch-gestures', icon: 'SparklesIcon', path: '/demos/touch-gestures' },

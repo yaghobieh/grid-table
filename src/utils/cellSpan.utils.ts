@@ -24,6 +24,31 @@ export function resolveRowSpan<T extends RowData>(
   return span;
 }
 
+export function resolvePaintedRowSpan<T extends RowData>(
+  config: CellSpanConfig<T> | undefined,
+  rows: T[],
+  columnId: string,
+  rowIndex: number,
+  windowStart: number,
+): number {
+  const own = resolveRowSpan(config, rows[rowIndex], columnId, rowIndex);
+  if (!config) return own;
+
+  for (let prevRow = ZERO; prevRow < rowIndex; prevRow += ONE) {
+    const row = rows[prevRow];
+    if (!row) continue;
+    const span = resolveRowSpan(config, row, columnId, prevRow);
+    if (prevRow + span <= rowIndex) continue;
+    if (prevRow < windowStart && rowIndex === windowStart) {
+      const remaining = prevRow + span - rowIndex;
+      return remaining > ONE ? remaining : ONE;
+    }
+    return ZERO;
+  }
+
+  return own;
+}
+
 export function isCellCoveredBySpan<T extends RowData>(
   config: CellSpanConfig<T> | undefined,
   rows: T[],

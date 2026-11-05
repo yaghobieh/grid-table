@@ -270,11 +270,18 @@ export interface PivotValueField {
   label?: string;
 }
 
+export interface PivotQueryRequest {
+  rowFields: string[];
+  columnFields: string[];
+  valueFields: PivotValueField[];
+}
+
 export interface PivotConfig {
   enabled?: boolean;
   rowFields: string[];
   columnFields: string[];
   valueFields: PivotValueField[];
+  onQuery?: (request: PivotQueryRequest) => { rows: RowData[]; columns: ColumnDefinition<RowData>[] } | null;
 }
 
 export interface CellSpanConfig<T extends RowData = RowData> {
@@ -330,6 +337,8 @@ export interface VirtualizeConfig {
   threshold?: number;
   rowHeight?: number;
   overscan?: number;
+  columnThreshold?: number;
+  columnOverscan?: number;
 }
 
 export interface ColumnStatePersistenceConfig {

@@ -17,6 +17,8 @@ import {
   GRID_HEADER_SELECT_CLASS,
 } from './GridHeader.const';
 import { createFallbackColumnState, findColumnState } from './GridHeader.utils';
+import { COLUMN_PAD_CLASS } from '@/utils/columnWindow.utils';
+import { ZERO } from '@constants/numbers.const';
 import { useGridHeader } from './hooks';
 
 export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T>): ReactNode {
@@ -35,6 +37,8 @@ export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T
     allSelected = false,
     someSelected = false,
     onSelectAll,
+    padLeft = ZERO,
+    padRight = ZERO,
   } = props;
   const header = useGridHeader(props);
 
@@ -53,6 +57,7 @@ export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T
       )}
 
       {enableExpansion && <div className={GRID_HEADER_EXPAND_SPACER_CLASS} aria-hidden />}
+      {padLeft > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padLeft }} aria-hidden />}
 
       {header.visibleColumns.map((column, index) => {
         const columnState = findColumnState(columnStates, column.id) ?? createFallbackColumnState(column.id, index);
@@ -114,6 +119,7 @@ export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T
                 filterOptions={column.filterOptions}
                 currentValue={existingFilter?.value}
                 currentOperator={existingFilter?.operator}
+                renderFilter={column.renderFilter}
                 onApply={(value, operator) => header.handleFilterApply(column.id, value, operator)}
                 onClear={() => header.handleFilterClear(column.id)}
                 onClose={header.handleFilterClose}
@@ -122,6 +128,7 @@ export function GridHeader<T extends RowData = RowData>(props: GridHeaderProps<T
           </div>
         );
       })}
+      {padRight > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padRight }} aria-hidden />}
     </div>
   );
 }

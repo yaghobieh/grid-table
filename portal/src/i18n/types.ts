@@ -232,7 +232,16 @@ export interface TranslationStrings {
     release115: string;
     release116: string;
     release117: string;
+    release118: string;
     touchGestures: string;
+  };
+
+  release118Demo: {
+    title: string;
+    description: string;
+    bullets: string[];
+    pivotTitle: string;
+    savedValue: string;
   };
 
   release117Demo: {

@@ -20,6 +20,8 @@ export interface GridHeaderProps<T extends RowData = RowData> {
   allSelected?: boolean;
   someSelected?: boolean;
   onSelectAll?: () => void;
+  padLeft?: number;
+  padRight?: number;
   onSort?: (columnId: string, direction: SortDirection) => void;
   onFilterOpen?: (columnId: string) => void;
   getSortDirection?: (columnId: string) => SortDirection;

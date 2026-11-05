@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import type { GridTableComponentProps } from './GridTable.types';
-import type { ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
+import type { ColumnDefinition, ContextMenuAction, ContextMenuContext as CtxMenuCtx, EditHistoryEntry, RowData, TableEffects } from '@/types';
 import { TableProvider, useTableContext } from '@/context';
 import { useBreakpoint, useKeyboardNavigation, useRowReorder, useTreeData, useUndoRedo, useSavedViews, useVirtualizedWindow, useRangeSelection, useInfiniteScroll, useRowGroupExpansion } from '@/hooks';
 import { FilterBuilder } from '../FilterBuilder';
@@ -50,6 +50,8 @@ import { RangeLiveRegion } from '../RangeLiveRegion';
 import { ColumnToolPanel } from '../ColumnToolPanel';
 import { ResponsiveDetails } from '../ResponsiveDetails';
 import { buildPivotTable, isPivotEnabled } from '@/utils/pivot.utils';
+import { resolveBulkEditRowIds } from '@/utils/bulkEdit.utils';
+import { resolveColumnWindow } from '@/utils/columnWindow.utils';
 import { resolveTableDensity } from '@/utils/density.utils';
 import { countRangeCells, formatRangeAnnouncement } from '@/utils/rangeAnnounce.utils';
 import { isRowGroupDropZoneEnabled } from '@/utils/rowGroupsDrop.utils';
@@ -94,7 +96,7 @@ import {
   KEY_V,
   KEY_X,
 } from '@constants/keyboard.const';
-import { DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, SKELETON_ROWS, TABLET_BREAKPOINT, ZERO } from '@constants/numbers.const';
+import { DEFAULT_COLUMN_VIRTUAL_OVERSCAN, DEFAULT_LAZY_BATCH_SIZE, DEFAULT_LAZY_INITIAL_ROWS, ONE, SKELETON_ROWS, TABLET_BREAKPOINT, ZERO } from '@constants/numbers.const';
 import { resolveTableEffects } from './GridTable.utils';
 
 function GridTableContent<T extends RowData>({
@@ -184,7 +186,7 @@ function GridTableContent<T extends RowData>({
   rangeSelection,
   infiniteScroll,
   flashCells,
-  bulkEdit: _bulkEdit,
+  bulkEdit,
   alignColumnGroups = true,
   pivot,
   cellSpan,
@@ -221,6 +223,7 @@ function GridTableContent<T extends RowData>({
   });
 
   const [frameWidth, setFrameWidth] = useState(ZERO);
+  const [scrollLeft, setScrollLeft] = useState(ZERO);
   const collapsedIds = useMemo(() => {
     const enabled = typeof responsive === 'object' ? responsive.enabled !== false : responsive === true;
     const breakpoint = typeof responsive === 'object' ? (responsive.breakpoint ?? TABLET_BREAKPOINT) : TABLET_BREAKPOINT;
@@ -533,12 +536,25 @@ function GridTableContent<T extends RowData>({
 
   const handleCellSave = useCallback(
     (rowId: string | number, columnId: string, oldValue: unknown, newValue: unknown) => {
-      if (undoRedoConfig?.enabled) {
-        undoRedo.pushEdit({ rowId, columnId, oldValue, newValue });
-      }
-      onCellEdit?.(rowId, columnId, newValue);
+      const targets = resolveBulkEditRowIds({
+        config: bulkEdit,
+        rowId,
+        columnId,
+        rows: rangeRowsRef.current,
+        selectedIds: state.selectedIds,
+        range: rangeApi.range,
+        columns: visibleCols,
+        getRowId: getRowIdFn,
+      });
+      targets.forEach((targetId) => {
+        const previous = targetId === rowId ? oldValue : undefined;
+        if (undoRedoConfig?.enabled) {
+          undoRedo.pushEdit({ rowId: targetId, columnId, oldValue: previous, newValue });
+        }
+        onCellEdit?.(targetId, columnId, newValue);
+      });
     },
-    [undoRedoConfig?.enabled, undoRedo, onCellEdit],
+    [bulkEdit, state.selectedIds, rangeApi.range, visibleCols, getRowIdFn, undoRedoConfig?.enabled, undoRedo, onCellEdit],
   );
 
   const handleRowSelect = useCallback(
@@ -618,6 +634,12 @@ function GridTableContent<T extends RowData>({
   const pivotActive = isPivotEnabled(pivot);
   const pivotResult = useMemo(() => {
     if (!pivotActive || !pivot) return null;
+    const queried = pivot.onQuery?.({
+      rowFields: pivot.rowFields,
+      columnFields: pivot.columnFields,
+      valueFields: pivot.valueFields,
+    });
+    if (queried) return { rows: queried.rows as T[], columns: queried.columns as ColumnDefinition<T>[] };
     return buildPivotTable(sourceRows, columns, pivot);
   }, [pivotActive, pivot, sourceRows, columns]);
   const tableColumns = pivotResult?.columns ?? columns;
@@ -648,6 +670,18 @@ function GridTableContent<T extends RowData>({
     rowHeight: virtualizeConfig.rowHeight,
     overscan: virtualizeConfig.overscan,
   });
+  const columnWindow = useMemo(
+    () => resolveColumnWindow({
+      columns: tableColumns,
+      states: state.columnStates,
+      scrollLeft,
+      viewportWidth: frameWidth,
+      threshold: stackedMobile ? undefined : virtualizeConfig.columnThreshold,
+      overscan: virtualizeConfig.columnOverscan ?? DEFAULT_COLUMN_VIRTUAL_OVERSCAN,
+      includeIndex: focusedCell?.colIndex,
+    }),
+    [tableColumns, state.columnStates, scrollLeft, frameWidth, stackedMobile, virtualizeConfig.columnThreshold, virtualizeConfig.columnOverscan, focusedCell?.colIndex],
+  );
   const virtualizedRows = useMemo(
     () => sliceVirtualRows(displayData, virtualWindow.startIndex, virtualWindow.endIndex),
     [displayData, virtualWindow.startIndex, virtualWindow.endIndex],
@@ -749,6 +783,7 @@ function GridTableContent<T extends RowData>({
   const handleContainerScroll = useCallback(
     (event: React.UIEvent<HTMLDivElement>) => {
       const target = event.currentTarget;
+      setScrollLeft(target.scrollLeft);
       infiniteApi.handleScroll(target.scrollTop, target.scrollHeight, target.clientHeight);
       if (virtualizationEnabled) {
         virtualWindow.onScroll();
@@ -1271,15 +1306,19 @@ function GridTableContent<T extends RowData>({
         {alignColumnGroups && columnGroups && columnGroups.length > 0 && showTableHeader && (
           <ColumnGroupHeader
             columnGroups={columnGroups}
-            visibleColumns={visibleCols}
+            visibleColumns={columnWindow.columns}
             columnStates={state.columnStates}
             enableSelection={enableRowSelection}
             enableExpansion={showRowExpansion}
+            padLeft={columnWindow.padLeft}
+            padRight={columnWindow.padRight}
           />
         )}
         {showTableHeader && (
           <GridHeader
-            columns={columns}
+            columns={columnWindow.columns}
+            padLeft={columnWindow.padLeft}
+            padRight={columnWindow.padRight}
             columnStates={state.columnStates}
             className={classNames.header}
             style={styles.header}
@@ -1303,7 +1342,9 @@ function GridTableContent<T extends RowData>({
         )}
         {showTableHeader && floatingFilters && (
           <FloatingFilterRow
-            columns={columns}
+            columns={columnWindow.columns}
+            padLeft={columnWindow.padLeft}
+            padRight={columnWindow.padRight}
             columnStates={state.columnStates}
             filters={state.filters}
             enableSelection={enableRowSelection}
@@ -1355,7 +1396,11 @@ function GridTableContent<T extends RowData>({
 
             <GridBody
               data={treeConfig?.enabled ? tree.flatRows.map(r => r.data) : bodyRows}
-              columns={tableColumns}
+              columns={columnWindow.columns}
+              columnIndexById={columnWindow.indexById}
+              spanColumnIds={tableColumns.map((column) => column.id)}
+              padLeft={columnWindow.padLeft}
+              padRight={columnWindow.padRight}
               columnStates={state.columnStates}
               cellSpan={cellSpan}
               cellComments={cellComments}

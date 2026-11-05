@@ -42,8 +42,8 @@ export const en: TranslationStrings = {
     forgeStackEcosystem: 'ForgeStack Ecosystem',
     worksWith: 'Part of the Full ForgeStack',
     showcaseTitle: 'See it play',
-    showcaseDescription: 'A staff grid with office pills, paging, and a language pack — 1.1.7.',
-    trailerTitle: 'Grid Table 1.1.7',
+    showcaseDescription: 'A staff grid with office pills, paging, and a language pack — 1.1.8.',
+    trailerTitle: 'Grid Table 1.1.8',
     showcase: {
       finance: { title: 'Finance Mode', description: 'Real-time tickers, sparklines, live P&L — data that never sleeps.' },
       hr: { title: 'HR & Tree Data', description: 'Org charts, expand/collapse, hierarchy — visualize your organization.' },
@@ -56,6 +56,7 @@ export const en: TranslationStrings = {
       basic: 'Sort · Filter · Paginate · Select · Drag',
       themeBuilder: '🎨  bg · accent · border · radius',
       'theme-playground': 'Colors · type · spacing · live grid',
+      'release-1-1-8': 'Bulk edit · nested headers · custom filter · column window',
       'release-1-1-7': 'Locale · paging · sparkline · column panel',
       'release-1-1-6': 'Header · columns · col[1] · col[4]',
       'release-1-1-5': 'Pivot · comments · row height · span',
@@ -88,7 +89,7 @@ export const en: TranslationStrings = {
       search: 'Search every column',
     },
     marqueeItems: [
-      '1.1.7 — languages, paging summary, sparklines, column panel',
+      '1.1.8 — bulk edit, nested headers, custom filters, column windows',
       'Pinned row groups · formula engine · saved views · advanced filter builder',
       'lazyLoad batches for long scroll regions',
       'MIT · @forgedevstack/grid-table · TypeScript-first',
@@ -164,6 +165,10 @@ export const en: TranslationStrings = {
       title: 'Column group headers',
       description:
         'Native multi-row colspan headers via columnGroups + alignColumnGroups — Catalog and Performance groups span their child columns.',
+    },
+    'release-1-1-8': {
+      title: 'Bulk edit, nested headers, and column windows',
+      description: 'Write one value across a selection, nest column groups, render a custom filter, window wide columns, and load a pivot from the server.',
     },
     'release-1-1-7': {
       title: 'Languages, paging, and panels',
@@ -387,6 +392,20 @@ export const en: TranslationStrings = {
     ],
   },
 
+  release118Demo: {
+    title: 'Bulk edit, nested headers, and column windows',
+    description: 'Save one cell across the selection, nest a parent header, draw your own filter, window extra columns, and return a pivot from onQuery.',
+    bullets: [
+      'bulkEdit writes the saved value across the selected range, or across selected rows.',
+      'columnGroups parentId adds a header row above the group labels.',
+      'filterType custom plus renderFilter replaces the default filter body.',
+      'virtualize.columnThreshold keeps pinned columns and windows the rest.',
+      'pivot.onQuery returns rows and columns and skips the in-memory aggregation.',
+    ],
+    pivotTitle: 'Server pivot',
+    savedValue: 'Last saved value',
+  },
+
   release117Demo: {
     title: 'Languages, paging, and panels',
     description: 'Language packs, a paging sentence, columns that collapse on a narrow screen, a column panel, selection sums, sparklines, and a plugin slot.',
@@ -470,6 +489,7 @@ export const en: TranslationStrings = {
     release115: 'Copy — Pivot, comments, and row height (pivot, groups, comments)',
     release116: 'Copy — Header and column colors (GridTableTheme, header, col[1, 4])',
     release117: 'Copy — locale, panel, sparkline, features',
+    release118: 'Copy — bulk edit, nested headers, custom filter, column window',
     touchGestures: 'Copy — touch gestures',
   },
 
@@ -543,6 +563,17 @@ export const en: TranslationStrings = {
     description: 'Every release, every improvement — tracked here.',
     latest: 'Latest',
     versions: {
+      '1.1.8': {
+        highlights: [
+          'Bulk edit writes one saved value across a range or selected rows',
+          'Nested column groups via parentId',
+          'Custom filter body with renderFilter',
+          'Column virtualization for wide tables',
+          'Row span continues on the first visible virtual row',
+          'pivot.onQuery can return pre-aggregated rows',
+          '/demos/release-1-1-8',
+        ],
+      },
       '1.1.7': {
         highlights: [
           'Paging summary: Showing {from} to {to} of {total}',

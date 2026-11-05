@@ -1,5 +1,5 @@
-import type { CSSProperties } from 'react';
-import type { FilterOperator } from '@/types';
+import type { CSSProperties, ReactNode } from 'react';
+import type { ColumnFilterRenderArgs, FilterOperator } from '@/types';
 
 export type FilterPopupFilterType = 'text' | 'number' | 'date' | 'select' | 'set' | 'boolean' | 'custom';
 
@@ -16,6 +16,7 @@ export interface FilterPopupProps {
   onClose: () => void;
   className?: string;
   style?: CSSProperties;
+  renderFilter?: (args: ColumnFilterRenderArgs) => ReactNode;
 }
 
 export interface FilterPopupSetBodyProps {

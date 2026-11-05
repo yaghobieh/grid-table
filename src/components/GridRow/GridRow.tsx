@@ -18,7 +18,8 @@ import {
 } from './GridRow.const';
 import { buildColumnStateIndex, getVisibleColumns } from './GridRow.utils';
 import { getRowGroupMeta } from '@/utils/rowGroups.utils';
-import { isCellCoveredBySpan, resolveColSpan, resolveRowSpan } from '@/utils/cellSpan.utils';
+import { isCellCoveredBySpan, resolveColSpan, resolvePaintedRowSpan, resolveRowSpan } from '@/utils/cellSpan.utils';
+import { COLUMN_PAD_CLASS } from '@/utils/columnWindow.utils';
 import { resolveCellComment } from '@/utils/cellComments.utils';
 import { ROW_HEIGHT_HANDLE_CLASS } from '@constants/rowHeight.const';
 import { useRowHeightResize } from './hooks';
@@ -94,6 +95,11 @@ export function GridRow<T extends RowData = RowData>({
   cellComments,
   rowHeight,
   allRows,
+  spanWindowStart = ZERO,
+  columnIndexById,
+  spanColumnIds,
+  padLeft = ZERO,
+  padRight = ZERO,
 }: GridRowProps<T>): ReactNode {
   const [isHovered, setIsHovered] = useState(false);
   const rowResize = useRowHeightResize(rowHeight);
@@ -302,14 +308,18 @@ export function GridRow<T extends RowData = RowData>({
           </div>
         )}
 
-        {visibleColumns.map((col, colIndex) => {
-          const columnIds = visibleColumns.map((item) => item.id);
+        {padLeft > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padLeft }} aria-hidden />}
+        {visibleColumns.map((col, mappedIndex) => {
+          const columnIds = spanColumnIds ?? visibleColumns.map((item) => item.id);
+          const colIndex = columnIndexById?.get(col.id) ?? mappedIndex;
           const spanRows = allRows ?? [row];
-          if (isCellCoveredBySpan(cellSpan, spanRows, columnIds, rowIndex, colIndex)) {
+          const paintedRowSpan = resolvePaintedRowSpan(cellSpan, spanRows, col.id, rowIndex, spanWindowStart);
+          const covered = isCellCoveredBySpan(cellSpan, spanRows, columnIds, rowIndex, colIndex);
+          if (paintedRowSpan === ZERO || (covered && paintedRowSpan === resolveRowSpan(cellSpan, spanRows[rowIndex], col.id, rowIndex))) {
             return null;
           }
           const colSpan = resolveColSpan(cellSpan, row, col.id, rowIndex);
-          const rowSpan = resolveRowSpan(cellSpan, row, col.id, rowIndex);
+          const rowSpan = paintedRowSpan;
           const colState = columnStateIndex.get(col.id);
           const width = stackedMobileLayout ? '100%' : colState?.width;
           const sticky = resolveColumnSticky(col, colState);
@@ -409,6 +419,7 @@ export function GridRow<T extends RowData = RowData>({
             />
           );
         })}
+        {padRight > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padRight }} aria-hidden />}
         {rowHeight?.resizable && (
           <button
             type="button"

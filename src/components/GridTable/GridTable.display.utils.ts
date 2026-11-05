@@ -15,6 +15,8 @@ export function resolveVirtualizeConfig(
     threshold: virtualize?.threshold ?? DEFAULT_VIRTUALIZE_THRESHOLD,
     rowHeight: virtualize?.rowHeight,
     overscan: virtualize?.overscan,
+    columnThreshold: virtualize?.columnThreshold,
+    columnOverscan: virtualize?.columnOverscan,
   };
 }
 

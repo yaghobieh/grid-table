@@ -54,4 +54,9 @@ export interface GridRowProps<T extends RowData = RowData> {
   cellComments?: CellCommentsConfig;
   rowHeight?: RowHeightConfig;
   allRows?: T[];
+  spanWindowStart?: number;
+  columnIndexById?: ReadonlyMap<string, number>;
+  spanColumnIds?: string[];
+  padLeft?: number;
+  padRight?: number;
 }

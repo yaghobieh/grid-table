@@ -1,6 +1,11 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { Alignment, FilterOperator, ResponsiveValue, RenderFunction, SortDirection } from './common.types';
 
+export interface ColumnFilterRenderArgs {
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
 export interface CellEditConfig<T = unknown> {
   enabled?: boolean;
   type?: 'text' | 'number' | 'select' | 'date' | 'boolean';
@@ -52,6 +57,7 @@ export interface ColumnDefinition<T = unknown> {
   subCellExpandTrigger?: 'doubleClick' | 'arrow' | 'both';
   editable?: boolean | CellEditConfig<T>;
   formula?: string;
+  renderFilter?: (args: ColumnFilterRenderArgs) => ReactNode;
   groupId?: string;
   responsivePriority?: number;
   sparkline?: boolean | SparklineColumnOptions;

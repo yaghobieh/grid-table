@@ -15,6 +15,7 @@ import {
   FILTER_POPUP_HEADER_CONTENT_CLASS,
   FILTER_POPUP_HEADER_TITLE_CLASS,
   FILTER_POPUP_TOP_OFFSET,
+  FILTER_TYPE_CUSTOM,
 } from './FilterPopup.const';
 import { useFilterPopup } from './hooks';
 import { FilterPopupBody } from './helpers';
@@ -49,6 +50,9 @@ export function FilterPopup(props: FilterPopupProps): ReactNode {
       </div>
 
       <div className={FILTER_POPUP_BODY_CLASS}>
+        {props.filterType === FILTER_TYPE_CUSTOM && props.renderFilter ? (
+          props.renderFilter({ value: popup.value, onValueChange: popup.setValue })
+        ) : (
         <FilterPopupBody
           filterType={popup.filterType}
           filterOptions={props.filterOptions}
@@ -67,6 +71,7 @@ export function FilterPopup(props: FilterPopupProps): ReactNode {
           onDateToChange={popup.setDateTo}
           onKeyDown={popup.handleKeyDown}
         />
+        )}
       </div>
 
       <div className={FILTER_POPUP_FOOTER_CLASS}>

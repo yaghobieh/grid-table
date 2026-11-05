@@ -8,4 +8,6 @@ export interface FloatingFilterRowProps<T extends RowData = RowData> {
   enableExpansion?: boolean;
   onFilterChange: (columnId: string, value: string) => void;
   onFilterClear: (columnId: string) => void;
+  padLeft?: number;
+  padRight?: number;
 }

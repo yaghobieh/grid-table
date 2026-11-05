@@ -5,6 +5,22 @@ All notable changes to grid-table will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.8] - 2026-11-05
+
+### Added
+
+- **Bulk edit** — `bulkEdit.enabled` writes the saved cell value across the selected range, or across selected rows when no range covers that column.
+- **Nested column groups** — `columnGroups[].parentId` renders a parent header row above the group labels.
+- **Custom filter** — `filterType: "custom"` with `column.renderFilter` replaces the default filter body.
+- **Column virtualization** — `virtualize.columnThreshold` windows unpinned columns. Pinned columns stay mounted. `columnOverscan` defaults to 2.
+- **Row span in a virtual window** — a span that starts above the mounted rows continues on the first visible row.
+- **Server pivot** — `pivot.onQuery` can return pre-aggregated `{ rows, columns }` and skip the in-memory aggregation.
+
+### Portal
+
+- `/demos/release-1-1-8`.
+- `CURRENT_VERSION` → 1.1.8 (en/es/he).
+
 ## [1.1.7] - 2026-10-11
 
 ### Added

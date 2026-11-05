@@ -42,8 +42,8 @@ export const he: TranslationStrings = {
     forgeStackEcosystem: 'אקוסיסטם ForgeStack',
     worksWith: 'חלק מ־ForgeStack המלא',
     showcaseTitle: 'תראו',
-    showcaseDescription: 'טבלת צוות עם משרדים, עימוד וחבילת שפה — 1.1.7.',
-    trailerTitle: 'Grid Table 1.1.7',
+    showcaseDescription: 'טבלת צוות עם משרדים, עימוד וחבילת שפה — 1.1.8.',
+    trailerTitle: 'Grid Table 1.1.8',
     showcase: {
       finance: { title: 'מצב פיננסי', description: 'מחירים בזמן אמת, גרפים קטנים, P&L חי.' },
       hr: { title: 'HR ונתוני עץ', description: 'תרשימי ארגון, הרחבה/כיווץ, היררכיה.' },
@@ -56,6 +56,7 @@ export const he: TranslationStrings = {
       basic: 'מיון · סינון · עימוד · בחירה · גרירה',
       themeBuilder: '🎨  רקע · הדגשה · גבול · רדיוס',
       'theme-playground': 'צבע · גופן · מרווח · גריד חי',
+      'release-1-1-8': 'עריכה מרובה · כותרות מקוננות · מסנן מותאם · חלון עמודות',
       'release-1-1-7': 'שפה · עימוד · sparkline · פאנל',
       'release-1-1-6': 'כותרת · עמודות · col[1] · col[4]',
       'release-1-1-5': 'Pivot · הערות · גובה · span',
@@ -88,7 +89,7 @@ export const he: TranslationStrings = {
       search: 'חיפוש בכל עמודה',
     },
     marqueeItems: [
-      '1.1.7 — שפות, סיכום עימוד, ספארקליין, פאנל עמודות',
+      '1.1.8 — עריכה מרובה, כותרות מקוננות, מסנן מותאם, חלון עמודות',
       'טבלה עם גלילה ניידת כברירת מחדל · פריסת כרטיסים אופציונלית',
       'lazyLoad באצוות לגלילות ארוכות',
       'MIT · @forgedevstack/grid-table · TypeScript קודם',
@@ -143,6 +144,10 @@ export const he: TranslationStrings = {
     'column-grouping': {
       title: 'כותרות קבוצת עמודות',
       description: 'כותרות colspan אמיתיות עם columnGroups + alignColumnGroups.',
+    },
+    'release-1-1-8': {
+      title: 'עריכה מרובה, כותרות מקוננות וחלון עמודות',
+      description: 'ערך אחד על הבחירה, קבוצות מקוננות, מסנן משלך, חלון עמודות ופיבוט מהשרת.',
     },
     'release-1-1-7': {
       title: 'שפות, עימוד ופאנלים',
@@ -361,6 +366,20 @@ export const he: TranslationStrings = {
     ],
   },
 
+  release118Demo: {
+    title: 'עריכה מרובה, כותרות מקוננות וחלון עמודות',
+    description: 'שמירת ערך אחד על הבחירה, כותרת אב, מסנן משלך, חלון לעמודות רחבות ופיבוט דרך onQuery.',
+    bullets: [
+      'bulkEdit כותב את הערך שנשמר על הטווח, או על השורות שנבחרו.',
+      'parentId ב-columnGroups מוסיף שורת כותרת מעל התוויות.',
+      'filterType custom ו-renderFilter מחליפים את גוף המסנן.',
+      'virtualize.columnThreshold משאיר עמודות נעוצות וחותך את השאר.',
+      'pivot.onQuery מחזיר שורות ועמודות ומדלג על צבירה בזיכרון.',
+    ],
+    pivotTitle: 'פיבוט שרת',
+    savedValue: 'הערך האחרון שנשמר',
+  },
+
   release117Demo: {
     title: 'שפות, עימוד ופאנלים',
     description: 'חבילות שפה, משפט עימוד, עמודות שמתקפלות במסך צר, פאנל צד, סכומי בחירה, ספארקליין ותוסף.',
@@ -444,6 +463,7 @@ export const he: TranslationStrings = {
     release115: 'העתקה — תכונות 1.1.5',
     release116: 'העתקה — צבעי כותרת ועמודות (GridTableTheme, header, col[1, 4])',
     release117: 'העתקה — יכולות 1.1.7 (locale, פאנל, sparkline, תוסף)',
+    release118: 'העתקה — עריכה מרובה, כותרות, מסנן, חלון עמודות',
     touchGestures: 'העתקה — מחוות מגע',
   },
 
@@ -516,6 +536,17 @@ export const he: TranslationStrings = {
     description: 'כל גרסה ושיפור — מתועד כאן.',
     latest: 'אחרון',
     versions: {
+      '1.1.8': {
+        highlights: [
+          'עריכה מרובה כותבת ערך אחד על טווח או על שורות שנבחרו',
+          'קבוצות עמודות מקוננות עם parentId',
+          'גוף מסנן מותאם עם renderFilter',
+          'וירטואליזציה של עמודות לטבלאות רחבות',
+          'row span ממשיך בשורה הגלויה הראשונה',
+          'pivot.onQuery יכול להחזיר שורות שכבר צוברו',
+          '/demos/release-1-1-8',
+        ],
+      },
       '1.1.7': {
         highlights: [
           'סיכום עימוד: מציג {from} עד {to} מתוך {total}',

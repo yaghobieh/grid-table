@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { EMPTY_STRING } from '@constants/strings.const';
-import { DEFAULT_COLUMN_WIDTH, MAX_COLUMN_WIDTH, MIN_COLUMN_WIDTH } from '@constants/numbers.const';
+import { DEFAULT_COLUMN_WIDTH, MAX_COLUMN_WIDTH, MIN_COLUMN_WIDTH, ZERO } from '@constants/numbers.const';
+import { COLUMN_PAD_CLASS } from '@/utils/columnWindow.utils';
 import type { RowData } from '@/types';
 import type { FloatingFilterRowProps } from './FloatingFilterRow.types';
 import {
@@ -20,6 +21,8 @@ export function FloatingFilterRow<T extends RowData>(props: FloatingFilterRowPro
     enableExpansion = false,
     onFilterChange,
     onFilterClear,
+    padLeft = ZERO,
+    padRight = ZERO,
   } = props;
 
   const visibleColumns = columns.filter((column) => {
@@ -31,6 +34,7 @@ export function FloatingFilterRow<T extends RowData>(props: FloatingFilterRowPro
     <div className={FLOATING_FILTER_ROW_CLASS} role="row">
       {enableSelection && <div className={FLOATING_FILTER_SPACER_CLASS} aria-hidden />}
       {enableExpansion && <div className={FLOATING_FILTER_SPACER_CLASS} aria-hidden />}
+      {padLeft > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padLeft }} aria-hidden />}
       {visibleColumns.map((column) => {
         const state = columnStates.find((item) => item.id === column.id);
         const current = filters.find((filter) => filter.columnId === column.id);
@@ -66,6 +70,7 @@ export function FloatingFilterRow<T extends RowData>(props: FloatingFilterRowPro
           </div>
         );
       })}
+      {padRight > ZERO && <div className={COLUMN_PAD_CLASS} style={{ width: padRight }} aria-hidden />}
     </div>
   );
 }

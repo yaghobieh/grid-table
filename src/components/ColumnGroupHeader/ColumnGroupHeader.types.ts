@@ -9,6 +9,8 @@ export interface ColumnGroupHeaderProps<T extends RowData = RowData> {
   enableSelection?: boolean;
   enableExpansion?: boolean;
   className?: string;
+  padLeft?: number;
+  padRight?: number;
 }
 
 export interface ColumnGroupHeaderCellProps {

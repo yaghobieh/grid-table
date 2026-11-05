@@ -58,6 +58,10 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
     cellComments,
     rowHeight,
     allRows,
+    columnIndexById,
+    spanColumnIds,
+    padLeft,
+    padRight,
   } = props;
 
   const handleRowSelect = useCallback(
@@ -151,6 +155,11 @@ export function GridBody<T extends RowData = RowData>(props: GridBodyProps<T>): 
             cellComments={cellComments}
             rowHeight={rowHeight}
             allRows={allRows ?? data}
+            spanWindowStart={rowIndexOffset}
+            columnIndexById={columnIndexById}
+            spanColumnIds={spanColumnIds}
+            padLeft={padLeft}
+            padRight={padRight}
           />
         );
       })}

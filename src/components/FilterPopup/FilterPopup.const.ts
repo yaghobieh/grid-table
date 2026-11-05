@@ -20,6 +20,7 @@ export const FILTER_TYPE_NUMBER: FilterPopupFilterType = 'number';
 export const FILTER_TYPE_DATE: FilterPopupFilterType = 'date';
 export const FILTER_TYPE_SELECT: FilterPopupFilterType = 'select';
 export const FILTER_TYPE_SET: FilterPopupFilterType = 'set';
+export const FILTER_TYPE_CUSTOM: FilterPopupFilterType = 'custom';
 
 export const FILTER_POPUP_INPUT_TYPE_TEXT = 'text';
 export const FILTER_POPUP_INPUT_TYPE_NUMBER = 'number';

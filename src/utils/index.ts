@@ -14,7 +14,9 @@ export {
 export { evaluateFilterTree } from './filterTree.utils';
 export { evaluateFormula, applyFormulaColumns, applyFormulaColumnsToData } from './formula.utils';
 export { applyRowGroups, getRowGroupMeta } from './rowGroups.utils';
-export { buildColumnGroupHeaderCells } from './columnGroups.utils';
+export { buildColumnGroupHeaderCells, buildColumnGroupHeaderRows } from './columnGroups.utils';
+export { resolveBulkEditRowIds } from './bulkEdit.utils';
+export { resolveColumnWindow } from './columnWindow.utils';
 export { applyTransaction, parseClipboardGrid, applyClipboardToRange } from './transaction.utils';
 export { buildFlashCellKey, scheduleFlashRemoval, getFlashCellClassName } from './flashCells.utils';
 export { captureTableViewSnapshot, createDefaultViewSnapshot } from './savedViews.utils';

@@ -42,8 +42,8 @@ export const es: TranslationStrings = {
     forgeStackEcosystem: 'Ecosistema ForgeStack',
     worksWith: 'Parte del ForgeStack Completo',
     showcaseTitle: 'Míralo',
-    showcaseDescription: 'Una tabla de personal con oficinas, paginación y un paquete de idioma — 1.1.7.',
-    trailerTitle: 'Grid Table 1.1.7',
+    showcaseDescription: 'Una tabla de personal con oficinas, paginación y un paquete de idioma — 1.1.8.',
+    trailerTitle: 'Grid Table 1.1.8',
     showcase: {
       finance: { title: 'Modo Finanzas', description: 'Cotizaciones en tiempo real, gráficos, P&L en vivo — datos que nunca duermen.' },
       hr: { title: 'RRHH y Datos Jerárquicos', description: 'Organigramas, expandir/contraer, jerarquía — visualiza tu organización.' },
@@ -56,6 +56,7 @@ export const es: TranslationStrings = {
       basic: 'Ordenar · Filtrar · Paginar · Seleccionar · Arrastrar',
       themeBuilder: '🎨  fondo · acento · borde · radio',
       'theme-playground': 'Color · tipo · espacio · grid en vivo',
+      'release-1-1-8': 'Edición masiva · cabeceras anidadas · filtro propio · ventana de columnas',
       'release-1-1-7': 'Idioma · páginas · sparkline · panel',
       'release-1-1-6': 'Encabezado · columnas · col[1] · col[4]',
       'release-1-1-5': 'Pivot · comentarios · altura · span',
@@ -88,7 +89,7 @@ export const es: TranslationStrings = {
       search: 'Busca en cada columna',
     },
     marqueeItems: [
-      '1.1.7 — idiomas, resumen de páginas, sparklines, panel de columnas',
+      '1.1.8 — edición masiva, cabeceras anidadas, filtros propios, ventana de columnas',
       'Tabla con scroll móvil por defecto · apilado opcional',
       'lazyLoad por lotes en regiones largas',
       'MIT · @forgedevstack/grid-table · TypeScript primero',
@@ -147,6 +148,10 @@ export const es: TranslationStrings = {
       title: 'Cabeceras de grupo de columnas',
       description:
         'Cabeceras colspan nativas con columnGroups + alignColumnGroups — Catalog y Performance abarcan sus columnas hijas.',
+    },
+    'release-1-1-8': {
+      title: 'Edición masiva, cabeceras anidadas y ventana de columnas',
+      description: 'Un valor en la selección, grupos anidados, filtro propio, columnas en ventana y un pivot desde el servidor.',
     },
     'release-1-1-7': {
       title: 'Idiomas, páginas y paneles',
@@ -369,6 +374,20 @@ export const es: TranslationStrings = {
     ],
   },
 
+  release118Demo: {
+    title: 'Edición masiva, cabeceras anidadas y ventana de columnas',
+    description: 'Guarda un valor en la selección, añade una cabecera padre, dibuja tu filtro, recorta columnas anchas y devuelve un pivot con onQuery.',
+    bullets: [
+      'bulkEdit escribe el valor guardado en el rango, o en las filas seleccionadas.',
+      'parentId en columnGroups añade una fila de cabecera sobre las etiquetas.',
+      'filterType custom y renderFilter sustituyen el cuerpo del filtro.',
+      'virtualize.columnThreshold mantiene las columnas fijadas y recorta el resto.',
+      'pivot.onQuery devuelve filas y columnas y omite la agregación en memoria.',
+    ],
+    pivotTitle: 'Pivot del servidor',
+    savedValue: 'Último valor guardado',
+  },
+
   release117Demo: {
     title: 'Idiomas, páginas y paneles',
     description: 'Paquetes de idioma, frase de paginación, columnas que se ocultan en pantallas estrechas, panel lateral, sumas de la selección, sparklines y un plugin.',
@@ -453,6 +472,7 @@ export const es: TranslationStrings = {
     release115: 'Copiar — novedades 1.1.5',
     release116: 'Copiar — tema 1.1.6 (GridTableTheme, header, col[1, 4])',
     release117: 'Copiar — funciones 1.1.7 (locale, panel, sparkline, plugin)',
+    release118: 'Copiar — edición masiva, cabeceras, filtro propio, ventana de columnas',
     touchGestures: 'Copiar — gestos táctiles',
   },
 
@@ -525,6 +545,17 @@ export const es: TranslationStrings = {
     description: 'Cada versión, cada mejora — registrada aquí.',
     latest: 'Última',
     versions: {
+      '1.1.8': {
+        highlights: [
+          'La edición masiva escribe un valor en un rango o en las filas seleccionadas',
+          'Grupos de columnas anidados con parentId',
+          'Cuerpo de filtro propio con renderFilter',
+          'Virtualización de columnas en tablas anchas',
+          'El row span continúa en la primera fila visible',
+          'pivot.onQuery puede devolver filas ya agregadas',
+          '/demos/release-1-1-8',
+        ],
+      },
       '1.1.7': {
         highlights: [
           'Resumen de paginación: Mostrando {from} a {to} de {total}',

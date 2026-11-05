@@ -565,7 +565,13 @@ Grid Table ships two strategies for large datasets:
 
 Export \`useVirtualizedWindow\` for custom table layouts.
 
-Live: [Virtualization demo](/demos/virtualization)`;
+### Column window
+
+Set \`virtualize.columnThreshold\` to mount only the unpinned columns that fit the viewport. Pinned columns stay outside the window. \`columnOverscan\` defaults to 2.
+
+A row span that begins above the mounted rows continues on the first visible row, so the visible cells do not leave a hole.
+
+Live: [Virtualization demo](/demos/virtualization) and [1.1.8 demo](/demos/release-1-1-8)`;
 
 export const DOC_EXPORT_SCOPE = `## Export scope
 
@@ -596,7 +602,11 @@ Grid Table 1.1.x adds AG Grid–style capabilities for dense data apps.
 
 ### Set and date column filters
 
-On \`ColumnDefinition\`, set \`filterType: 'set'\` with \`filterOptions\` for checkbox filters (uses \`in\` operator). Set \`filterType: 'date'\` for a from/to date range (\`between\`).
+On \`ColumnDefinition\`, set \`filterType: 'set'\` with \`filterOptions\` for checkbox filters (uses \`in\` operator). Set \`filterType: 'date'\` for a from/to date range (\`between\`). Set \`filterType: 'custom'\` and \`renderFilter\` to draw your own filter body.
+
+\`bulkEdit={{ enabled: true }}\` writes one saved value across the selected range, or across selected rows when the range does not cover that column.
+
+\`pivot.onQuery\` can return pre-aggregated \`{ rows, columns }\` and skip the in-memory pivot.
 
 Live: [Enterprise grid demo](/demos/enterprise-grid)
 
@@ -654,7 +664,7 @@ Dedicated walkthrough: [Touch gestures demo](/demos/touch-gestures) (desktop poi
 
 ### Multi-row column group headers
 
-Pass \`columnGroups\` with \`alignColumnGroups\` (default \`true\`) to render a real colspan header row above column labels.
+Pass \`columnGroups\` with \`alignColumnGroups\` (default \`true\`) to render a real colspan header row above column labels. Set \`parentId\` on a group to add a parent header row above those labels.
 
 Live: [Column grouping demo](/demos/column-grouping)
 

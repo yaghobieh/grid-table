@@ -52,6 +52,10 @@ export interface GridBodyProps<T extends RowData = RowData> {
   cellComments?: CellCommentsConfig;
   rowHeight?: RowHeightConfig;
   allRows?: T[];
+  columnIndexById?: ReadonlyMap<string, number>;
+  spanColumnIds?: string[];
+  padLeft?: number;
+  padRight?: number;
 }
 
 export interface GridBodyRowDerivedState {
